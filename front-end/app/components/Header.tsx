@@ -3,7 +3,7 @@ import { useState } from "react";
 import BurgerMenu from "./BurgerMenu";
 
 export default function Header() {
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
 
   const handleClick = () => {
     setShow(!show);
