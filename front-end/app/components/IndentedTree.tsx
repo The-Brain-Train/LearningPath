@@ -32,7 +32,7 @@ const IndentedTree = ({ data }: IndentedTreeProps) => {
         label: "Size",
         value: (d) => d.value,
         format,
-        x: 430,
+        x: screenWidth - 50,
       },
       {
         label: "Count",
