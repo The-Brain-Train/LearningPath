@@ -1,4 +1,14 @@
+"use client"
+import { useState } from "react";
+import BurgerMenu from "./BurgerMenu";
+
 export default function Header() {
+  const [show, setShow] = useState(true);
+
+  const handleClick = () => {
+    setShow(!show);
+  }
+
   return (
    <>
     <header className="bg-white">
@@ -101,6 +111,7 @@ export default function Header() {
 
               <div className="block md:hidden">
                 <button
+                  onClick={handleClick}
                   className="rounded bg-gray-100 p-2 text-gray-600 transition hover:text-gray-600/75"
                 >
                   <svg
@@ -124,6 +135,7 @@ export default function Header() {
         </div>
       </div>
     </header>
+    <BurgerMenu show={show}/>
    </>
   )
 }
