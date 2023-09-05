@@ -1,7 +1,7 @@
 .burgermenu {
     position: absolute;
     top: 60px;
-    right: 0;
+    left: 0;
     height: 100%;
     width: 0%;
     z-index: 10;

@@ -12,7 +12,7 @@ function BurgerMenu({show} : BurgerMenuPorps) {
       <li>
         <a
           href=""
-          className="flex items-center gap-2 rounded-lg bg-gray-100 px-4 py-2 text-gray-700"
+          className="flex items-center justify-end gap-2 rounded-lg bg-gray-100 px-4 py-2 text-gray-700"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -41,7 +41,7 @@ function BurgerMenu({show} : BurgerMenuPorps) {
       <li>
         <a
           href=""
-          className="flex items-center gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+          className="flex items-center justify-end gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -65,7 +65,7 @@ function BurgerMenu({show} : BurgerMenuPorps) {
       <li>
         <a
           href=""
-          className="flex items-center gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+          className="flex items-center justify-end gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -89,7 +89,7 @@ function BurgerMenu({show} : BurgerMenuPorps) {
       <li>
         <a
           href=""
-          className="flex items-center gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+          className="flex items-center justify-end gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -113,7 +113,7 @@ function BurgerMenu({show} : BurgerMenuPorps) {
       <li>
         <a
           href=""
-          className="flex items-center gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+          className="flex items-center justify-end gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
