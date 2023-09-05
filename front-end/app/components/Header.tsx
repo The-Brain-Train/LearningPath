@@ -4,7 +4,7 @@ import BurgerMenu from "./BurgerMenu";
 
 export default function Header() {
   const [show, setShow] = useState(false);
-  const genericHamburgerLine = `h-1 w-6 my-1 rounded-full bg-black transition ease transform duration-300`;
+  const genericHamburgerLine = `h-0.5 w-6 my-1 rounded-full bg-black transition ease transform duration-300`;
 
   const handleClick = () => {
     setShow(!show);
@@ -114,12 +114,12 @@ export default function Header() {
 
                 <div className="block md:hidden">
                   <button
-                    className="flex flex-col h-12 w-12 border-2 border-black rounded justify-center items-center group"
+                    className="flex flex-col h-12 w-12 justify-center items-center group"
                     onClick={() => setShow(!show)}
                   >
                     <div
                       className={`${genericHamburgerLine} ${show
-                          ? "rotate-45 translate-y-3 opacity-50 group-hover:opacity-100"
+                          ? "rotate-45 translate-y-2.5 opacity-50 group-hover:opacity-100"
                           : "opacity-50 group-hover:opacity-100"
                         }`}
                     />
@@ -129,7 +129,7 @@ export default function Header() {
                     />
                     <div
                       className={`${genericHamburgerLine} ${show
-                          ? "-rotate-45 -translate-y-3 opacity-50 group-hover:opacity-100"
+                          ? "-rotate-45 -translate-y-2.5 opacity-50 group-hover:opacity-100"
                           : "opacity-50 group-hover:opacity-100"
                         }`}
                     />
