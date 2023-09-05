@@ -12,7 +12,7 @@ const IndentedTree = ({ data }: IndentedTreeProps) => {
 
   useEffect(() => {
     const format = d3.format(",");
-    const nodeSize = 17;
+    const nodeSize = 21;
     const root = d3.hierarchy(data).eachBefore(
       (
         (i) => (d) =>
@@ -32,13 +32,7 @@ const IndentedTree = ({ data }: IndentedTreeProps) => {
         label: "Size",
         value: (d) => d.value,
         format,
-        x: screenWidth - 50,
-      },
-      {
-        label: "Count",
-        value: (d) => (d.children ? 0 : 1),
-        format: (value, d) => (d.children ? format(value) : "-"),
-        x: 480,
+        x: screenWidth - 25,
       },
     ];
 
@@ -49,7 +43,7 @@ const IndentedTree = ({ data }: IndentedTreeProps) => {
       .attr("viewBox", [-nodeSize / 2, (-nodeSize * 3) / 2, width, height])
       .attr(
         "style",
-        "max-width: 100%; height: auto; font: 10px sans-serif; overflow: visible;"
+        "max-width: 100%; height: auto; font: 14px sans-serif; overflow: visible;"
       );
 
     const link = svg
