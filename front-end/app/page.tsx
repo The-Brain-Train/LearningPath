@@ -5,7 +5,6 @@ import Link from 'next/link'
 export default function Home() {
   return (
    <main>
-    <Header />
     <section className='flex flex-col p-3 gap-2 mt-5'>
       <div className='bg-white rounded p-5 border'>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. In facere unde ex earum, impedit molestias culpa similique hic maxime mollitia saepe illo voluptatibus necessitatibus exercitationem beatae, quod eveniet! Rem, accusamus.
