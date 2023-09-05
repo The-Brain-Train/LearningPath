@@ -25,7 +25,7 @@ const IndentedTree = ({ data }: IndentedTreeProps) => {
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
     const width = screenWidth;
-    const height = screenHeight;
+    const height = (nodes.length + 1) * nodeSize;
 
     const columns = [
       {
