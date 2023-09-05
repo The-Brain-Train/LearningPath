@@ -8,7 +8,7 @@ type BurgerMenuPorps = {
 function BurgerMenu({show} : BurgerMenuPorps) {
 
   return (
-    <ul className={`space-y-1 ${show && "burgermenu"}`}>
+    <ul className={`space-y-1 burgermenu ${show && "burgermenu_show"}`}>
       <li>
         <a
           href=""
