@@ -34,14 +34,14 @@ function BurgerMenu({show} : BurgerMenuPorps) {
             />
           </svg>
 
-          <span className="text-sm font-medium"> General </span>
+          <span className="text-sm font-medium w-20"> General </span>
         </a>
       </li>
 
       <li>
         <a
           href=""
-          className="flex items-center justify-end gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+          className="flex justify-end gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -58,14 +58,14 @@ function BurgerMenu({show} : BurgerMenuPorps) {
             />
           </svg>
 
-          <span className="text-sm font-medium"> Teams </span>
+          <span className="text-sm font-medium w-20"> Teams </span>
         </a>
       </li>
 
       <li>
         <a
           href=""
-          className="flex items-center justify-end gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+          className="flex  justify-end gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -82,14 +82,14 @@ function BurgerMenu({show} : BurgerMenuPorps) {
             />
           </svg>
 
-          <span className="text-sm font-medium"> Billing </span>
+          <span className="text-sm font-medium w-20"> Billing </span>
         </a>
       </li>
 
       <li>
         <a
           href=""
-          className="flex items-center justify-end gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+          className="flex justify-end gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -106,14 +106,14 @@ function BurgerMenu({show} : BurgerMenuPorps) {
             />
           </svg>
 
-          <span className="text-sm font-medium"> Invoices </span>
+          <span className="text-sm font-medium w-20"> Invoices </span>
         </a>
       </li>
 
       <li>
         <a
           href=""
-          className="flex items-center justify-end gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+          className="flex justify-end gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -130,7 +130,7 @@ function BurgerMenu({show} : BurgerMenuPorps) {
             />
           </svg>
 
-          <span className="text-sm font-medium"> Account </span>
+          <span className="text-sm font-medium w-20"> Account </span>
         </a>
       </li>
     </ul>
