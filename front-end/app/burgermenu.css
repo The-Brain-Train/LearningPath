@@ -1,5 +1,6 @@
 .burgermenu {
-    position: absolute;
+    position: fixed;
+    top: 3.5rem;
     left: 0;
     height: 100%;
     width: 0%;

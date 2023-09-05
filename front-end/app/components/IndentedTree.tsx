@@ -110,7 +110,7 @@ const IndentedTree = ({ data }: IndentedTreeProps) => {
     }
   }, [data]);
 
-  return <svg ref={svgRef}></svg>;
+  return <svg className="overflow-hidden" ref={svgRef}></svg>;
 };
 
 export default IndentedTree;
