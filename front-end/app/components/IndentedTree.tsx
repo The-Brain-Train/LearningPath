@@ -20,8 +20,12 @@ const IndentedTree = ({ data }: IndentedTreeProps) => {
       )(0)
     );
     const nodes = root.descendants();
-    const width = 928;
-    const height = (nodes.length + 1) * nodeSize;
+
+    // Dynamically calculate width and height based on screen dimensions
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+    const width = screenWidth;
+    const height = screenHeight;
 
     const columns = [
       {
