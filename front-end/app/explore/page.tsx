@@ -5,10 +5,10 @@ import SearchIcon from "@mui/icons-material/Search";
 
 export default function Explore() {
   return (
-    <main>
-      <Paper
+    <main className="flex items-center justify-center">
+      <Paper 
         component="form"
-        sx={{ p: "2px 4px", display: "flex", alignItems: "center", width: 400 }}
+        sx={{ m: "20px", p: "2px 4px", display: "flex", alignItems: "center", width: 250 }}
       >
         <InputBase
           sx={{ ml: 1, flex: 1 }}
