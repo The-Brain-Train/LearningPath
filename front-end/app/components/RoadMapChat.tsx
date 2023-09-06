@@ -1,9 +1,12 @@
 import React from 'react'
 import '../roadMapChat.css'
 
-function RoadMapChat() {
+type roadMapChatProps= {
+  showChat: boolean;
+}
+function RoadMapChat({showChat}: roadMapChatProps) {
   return (
-    <div className='chat chat_show'>RoadMapChat</div>
+    <div className={`chat ${showChat && "chat_show"}`}>RoadMapChat</div>
   )
 }
 
