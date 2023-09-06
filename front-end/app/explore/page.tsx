@@ -4,6 +4,7 @@ import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import { enhancedDummyDataTwo } from "../dummyData";
 import { Key, ReactElement, JSXElementConstructor, ReactNode, PromiseLikeOfReactNode, ReactPortal } from "react";
+import Link from "next/link";
 
 export default function Explore() {
   return (
@@ -22,10 +23,10 @@ export default function Explore() {
         </IconButton>
       </Paper>
       <div className="text-center">
-        <ul>
+        <ul >
           {enhancedDummyDataTwo.map((specialty) => (
-            <li key={specialty.id}>
-              <h2>{specialty.name}</h2>
+            <li className="border-2 rounded m-4 p-2" key={specialty.id}>
+              <Link  href={`/explore/${specialty.id}`}>{specialty.name}</Link>
             </li>
           ))}
         </ul>
