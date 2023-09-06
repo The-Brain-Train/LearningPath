@@ -1,3 +1,4 @@
+import IndentedTree from "@/app/components/IndentedTree";
 import { enhancedDummyDataTwo } from "@/app/dummyData";
 
 type Props = {
@@ -16,7 +17,7 @@ export default function specialtyId(props: Props) {
   
   return (
    <main>
-        
+        <IndentedTree data={specificSpecialtyData} />
    </main>
   )
 }
