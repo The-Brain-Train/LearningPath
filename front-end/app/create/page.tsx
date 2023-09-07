@@ -14,8 +14,6 @@ export default function Create() {
 
     return (
       <main>
-
-        
         <RoadMapChat showChat={showChat}/>
         <IndentedTree data={enhancedDummyData} />
         <ChatButton showChat = {showChat} setShowChat={setShowChat}/>
