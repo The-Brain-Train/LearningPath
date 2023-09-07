@@ -16,8 +16,7 @@ export default function Create() {
       <main>
         <RoadMapChat showChat={showChat} toggleChat={toggleChat}/>
         <IndentedTree data={enhancedDummyData} />
-        {showChat ? null : (
-          <ChatButton showChat = {showChat} setShowChat={setShowChat}/>)}
+        <ChatButton showChat = {showChat} setShowChat={setShowChat}/>
       </main>
     );
 }
