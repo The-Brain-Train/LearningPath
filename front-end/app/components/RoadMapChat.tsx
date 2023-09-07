@@ -6,8 +6,11 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 type roadMapChatProps = {
   showChat: boolean;
+  toggleChat: () => void
 }
-function RoadMapChat({ showChat }: roadMapChatProps) {
+function RoadMapChat({ showChat, toggleChat}: roadMapChatProps) {
+
+
   return(
     <div className={`chat ${showChat && "chat_show"}`}>
       <div className="flex-1 p:2 sm:p-6 justify-between flex flex-col h-4/5">
@@ -20,7 +23,7 @@ function RoadMapChat({ showChat }: roadMapChatProps) {
             </div>
           </div>
           <div className="flex items-center space-x-2">
-            <button type="button" className="inline-flex items-center justify-center rounded-lg border h-10 w-10 transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:outline-none">
+            <button onClick={toggleChat} type="button" className="inline-flex items-center justify-center rounded-lg border h-10 w-10 transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:outline-none">
               <KeyboardArrowDownIcon />
             </button>
           </div>

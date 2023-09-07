@@ -9,14 +9,15 @@ import ChatButton from "../components/ChatButton";
 export default function Create() {
 
   const [showChat, setShowChat] = useState(false);
-
+  const toggleChat = () => {setShowChat(!showChat)}
   
 
     return (
       <main>
-        <RoadMapChat showChat={showChat}/>
+        <RoadMapChat showChat={showChat} toggleChat={toggleChat}/>
         <IndentedTree data={enhancedDummyData} />
-        <ChatButton showChat = {showChat} setShowChat={setShowChat}/>
+        {showChat ? null : (
+          <ChatButton showChat = {showChat} setShowChat={setShowChat}/>)}
       </main>
     );
 }
