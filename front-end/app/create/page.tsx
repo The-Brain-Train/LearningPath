@@ -8,7 +8,7 @@ import ChatButton from "../components/ChatButton";
 
 export default function Create() {
 
-  const [showChat, setShowChat] = useState(false);
+  const [showChat, setShowChat] = useState(true);
   const toggleChat = () => {setShowChat(!showChat)}
   const [topic, setTopic] = useState<string | null>(null);
   
