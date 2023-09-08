@@ -6,37 +6,43 @@ import React, { useState } from "react";
 import { getResponseFromOpenAI } from "../openAIChat";
 import { type } from "os";
 
+
 type Message = {
   role: string;
   content: string;
 };
 
+
 type roadMapChatProps = {
   showChat: boolean;
   toggleChat: () => void;
+  setTopic: React.Dispatch<React.SetStateAction<string | null>>
 };
-function RoadMapChat({ showChat, toggleChat }: roadMapChatProps) {
+function RoadMapChat({ showChat, toggleChat, setTopic}: roadMapChatProps) {
   const [userMessage, setUserMessage] = useState<string>("");
   const [assistantMessage, setAssistantMessage] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([{role: 'assistant', content: 'Hello! What would you like to learn about today?'}]);
+
+
   const handleSendMessage = async () => {
-    const chatHistory = [...messages, { role: "user", content: userMessage }];
+    setTopic(userMessage);
+    // const chatHistory = [...messages, { role: "user", content: userMessage }];
 
-    try {
-      const response = await getResponseFromOpenAI(chatHistory);
+    // try {
+    //   const response = await getResponseFromOpenAI(chatHistory);
 
-      console.log(response);
-      if (response.choices && response.choices.length > 0) {
-        console.log(chatHistory);
-        setAssistantMessage(response.choices[0].message.content);
-        setMessages([
-          ...chatHistory,
-          { role: "assistant", content: response.choices[0].message.content },
-        ]);
-      }
-    } catch (error) {
-      console.error("Failed to get response:", error);
-    }
+    //   console.log(response);
+    //   if (response.choices && response.choices.length > 0) {
+    //     console.log(chatHistory);
+    //     setAssistantMessage(response.choices[0].message.content);
+    //     setMessages([
+    //       ...chatHistory,
+    //       { role: "assistant", content: response.choices[0].message.content },
+    //     ]);
+    //   }
+    // } catch (error) {
+    //   console.error("Failed to get response:", error);
+    // }
     console.log(messages)
   };
 

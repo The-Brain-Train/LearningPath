@@ -10,13 +10,14 @@ export default function Create() {
 
   const [showChat, setShowChat] = useState(false);
   const toggleChat = () => {setShowChat(!showChat)}
+  const [topic, setTopic] = useState<string | null>(null);
   
 
     return (
       <main>
-        <RoadMapChat showChat={showChat} toggleChat={toggleChat}/>
-        <IndentedTree data={enhancedDummyData} />
-        <ChatButton showChat = {showChat} setShowChat={setShowChat}/>
+        <RoadMapChat showChat={showChat} toggleChat={toggleChat} setTopic={setTopic} />
+        <IndentedTree  topic={topic}/>
+        <ChatButton showChat={showChat} setShowChat={setShowChat}/>
       </main>
     );
 }
