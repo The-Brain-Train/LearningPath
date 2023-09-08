@@ -26,14 +26,14 @@ function RoadMapChat({ showChat, toggleChat, setTopic}: roadMapChatProps) {
 
   const handleSendMessage = async () => {
     setTopic(userMessage);
-    // const chatHistory = [...messages, { role: "user", content: userMessage }];
+    const chatHistory = [...messages, { role: "user", content: userMessage }];
+
+    setMessages(chatHistory);
+    setUserMessage("");
 
     // try {
     //   const response = await getResponseFromOpenAI(chatHistory);
-
-    //   console.log(response);
     //   if (response.choices && response.choices.length > 0) {
-    //     console.log(chatHistory);
     //     setAssistantMessage(response.choices[0].message.content);
     //     setMessages([
     //       ...chatHistory,
@@ -43,7 +43,6 @@ function RoadMapChat({ showChat, toggleChat, setTopic}: roadMapChatProps) {
     // } catch (error) {
     //   console.error("Failed to get response:", error);
     // }
-    console.log(messages)
   };
 
   return (
@@ -53,7 +52,7 @@ function RoadMapChat({ showChat, toggleChat, setTopic}: roadMapChatProps) {
           <div className="relative flex items-center space-x-4">
             <div className="flex flex-col leading-tight">
               <div className="text-2xl mt-1 flex items-center">
-                <span className="text-gray-700 mr-3">Anderson Vanhron</span>
+                <span className="text-gray-700 mr-3">LearningPath AI</span>
               </div>
             </div>
           </div>
