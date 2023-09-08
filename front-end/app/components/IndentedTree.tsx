@@ -1,16 +1,30 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
+import { getResponseFromOpenAI } from "../openAIChat";
+import data from "../data.json";
 
-type IndentedTreeProps = {
-  data: any;
-};
-
-const IndentedTree = ({ data }: IndentedTreeProps) => {
+const IndentedTree = () => {
+  const [data, setData] = useState({});
   const svgRef = useRef(null);
 
+  const handleSendMessage = async () => {
+    const chatHistory = [{ role: "user", content: `I will provide you with JSON format, Please use it to generate a hirecical roadmap for learning java.  Please only provided the data and nothing else as it will be parsed. { "name": "Java" "children": []` }];
+    console.log("Fetching data");
+    try {
+      const response = await getResponseFromOpenAI(chatHistory);
+      console.log(response);
+      const jsonData = await JSON.parse(response.choices[0].message.content);
+      setData(jsonData);
+      console.log(jsonData)
+    } catch (error) {
+      console.error('Error parsing JSON:', error);
+    }
+  };
+
   useEffect(() => {
+
     const format = d3.format(",");
     const nodeSize = 21;
     const root = d3.hierarchy(data).eachBefore(
@@ -110,7 +124,12 @@ const IndentedTree = ({ data }: IndentedTreeProps) => {
     }
   }, [data]);
 
-  return <svg className="overflow-hidden" ref={svgRef}></svg>;
+  return (
+    <>
+      <button onClick={handleSendMessage}>GENERATE</button>
+      <svg className="overflow-hidden" ref={svgRef}></svg>
+    </>
+  );
 };
 
 export default IndentedTree;
