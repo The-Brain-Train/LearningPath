@@ -10,7 +10,7 @@ type IndentedTreeProps = {
 }
 
 const IndentedTree = ({topic}: IndentedTreeProps) => {
-  const [data, setData] = useState({});
+  const [data, setData] = useState({null});
   const svgRef = useRef(null);
   
 
