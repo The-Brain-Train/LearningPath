@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: 'postgres:10'
+    container_name: 'salt-postgres'
+    networks:
+      - postgres-network
+    environment:
+      - POSTGRES_USER=salt
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=saltdb
+    volumes:
+      - ./data/pgdata:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    restart: always
+  pgadmin:
+    image: dpage/pgadmin4
+    depends_on:
+      - postgres
+    container_name: 'salt-pgadmin'
+    networks:
+      - postgres-network
+    ports:
+      - 5050:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: admin
+    restart: always
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    ports:
+      - 27017:27017
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+networks:
+  postgres-network:
+    driver: bridge
