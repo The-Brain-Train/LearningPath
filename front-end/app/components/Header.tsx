@@ -1,16 +1,10 @@
-"use client"
+"use client";
 import { useState } from "react";
 import BurgerMenu from "./BurgerMenu";
 
 export default function Header() {
   const [show, setShow] = useState(false);
   const genericHamburgerLine = `h-0.5 w-6 my-1 rounded-full bg-black transition ease transform duration-300`;
-
-  const handleClick = () => {
-    setShow(!show);
-  }
-
-
 
   return (
     <>
@@ -118,20 +112,25 @@ export default function Header() {
                     onClick={() => setShow(!show)}
                   >
                     <div
-                      className={`${genericHamburgerLine} ${show
+                      className={`${genericHamburgerLine} ${
+                        show
                           ? "rotate-45 translate-y-2.5 opacity-50 group-hover:opacity-100"
                           : "opacity-50 group-hover:opacity-100"
-                        }`}
+                      }`}
                     />
                     <div
-                      className={`${genericHamburgerLine} ${show ? "opacity-0" : "opacity-50 group-hover:opacity-100"
-                        }`}
+                      className={`${genericHamburgerLine} ${
+                        show
+                          ? "opacity-0"
+                          : "opacity-50 group-hover:opacity-100"
+                      }`}
                     />
                     <div
-                      className={`${genericHamburgerLine} ${show
+                      className={`${genericHamburgerLine} ${
+                        show
                           ? "-rotate-45 -translate-y-2.5 opacity-50 group-hover:opacity-100"
                           : "opacity-50 group-hover:opacity-100"
-                        }`}
+                      }`}
                     />
                   </button>
                 </div>
@@ -142,5 +141,5 @@ export default function Header() {
       </header>
       <BurgerMenu show={show} />
     </>
-  )
+  );
 }

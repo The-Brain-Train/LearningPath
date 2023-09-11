@@ -4,37 +4,40 @@ import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import { getResponseFromOpenAI } from "../openAIChat";
 
-
 type IndentedTreeProps = {
-  topic: string | null ;
-}
+  topic: string | null;
+};
 
-const IndentedTree = ({topic}: IndentedTreeProps) => {
+const IndentedTree = ({ topic }: IndentedTreeProps) => {
   const [data, setData] = useState(null);
   const svgRef = useRef(null);
-  
 
   const handleSendMessage = async () => {
-    const chatHistory = [{ role: "user", content: `I will provide you with JSON format, Please use it to generate a hirecical roadmap for learning ${topic}.  Please only provided the data and nothing else as it will be parsed. { "name": "${topic}" "children": []` }];
+    const chatHistory = [
+      {
+        role: "user",
+        content: `I will provide you with JSON format, Please use it to generate a hirecical roadmap for learning ${topic}.  Please only provided the data and nothing else as it will be parsed. { "name": "${topic}" "children": []`,
+      },
+    ];
     console.log("Fetching data");
     try {
       const response = await getResponseFromOpenAI(chatHistory);
       console.log(response);
       const jsonData = await JSON.parse(response.choices[0].message.content);
       setData(jsonData);
-      console.log(jsonData)
+      console.log(jsonData);
     } catch (error) {
-      console.error('Error parsing JSON:', error);
+      console.error("Error parsing JSON:", error);
     }
   };
   useEffect(() => {
-    if(topic != null){
+    if (topic != null) {
       handleSendMessage();
-    }},[topic]
-    );
+    }
+  }, [topic]);
 
   useEffect(() => {
-    if(data == null) return;
+    if (data == null) return;
     const format = d3.format(",");
     const nodeSize = 21;
     const root = d3.hierarchy(data).eachBefore(
