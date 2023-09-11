@@ -9,9 +9,11 @@ Personalized Learning Plans.
 - [💸 Pitch](#-pitch)
 - [🔌 Usage](#-usage)
 - [🔧 Key Features:](#-key-features)
+- [🚀 Getting Started / Installation](#-getting-started--installation)
 - [📧 Contact Information](#-contact-information)
 
 ### 📱 Tech Stack
+![Docker](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white)
 ![Open-JDK](https://img.shields.io/badge/OpenJDK-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
 ![Spring](https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
 ![Apache Maven](https://img.shields.io/badge/apache_maven-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white)
@@ -40,6 +42,18 @@ Personalized Learning Plans.
 - Visually display the learning path
 - Each learning path should include time to complete and difficulty
 - Store roadmaps on a database with these showing on the frontend in an explore page with search and/or filter functionality.
+
+### 🚀 Getting Started / Installation
+Follow these steps to get the application up and running in your local environment:
+
+1. Clone the repo
+``` git clone https://github.com/The-Brain-Train/LearningPath ```
+
+| Steps                            | Front-end                 | Back-end                  | Database                |
+| ---------------------------------| ------------------------- | ------------------------- |-------------------------|
+| 2. Navigate into repo            | `cd front-end`            | `cd back-end`             |                         |
+| 3. Install Dependencies          | `npm install`             | `mvn install`             |                         |
+| 4. Run the project               | `npm run dev`             | `mvn start`               |                         |
 
 <!--![Home Page](/front-end/public/DisplayImageHome.png)-->
 
