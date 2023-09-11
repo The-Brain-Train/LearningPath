@@ -1,2 +1,6 @@
-package com.braintrain.backend.roadMaps;public interface RoadMapRepository {
+package com.braintrain.backend.roadMaps;
+
+public interface RoadMapRepository {
+
+
 }

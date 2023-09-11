@@ -1,2 +1,8 @@
-package com.braintrain.backend.roadMaps;public class RoadMapClass {
+package com.braintrain.backend.roadMaps;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class RoadMapService {
+
 }
