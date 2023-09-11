@@ -2,10 +2,8 @@ package com.braintrain.backend.roadMaps;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,8 +16,13 @@ public class RoadMapController {
     private RoadMapService service;
 
     @GetMapping
-    public List<RoadMapMeta> getRoadMap(){
-        return List.of();
+    public ResponseEntity<List<RoadMapMeta>> getRoadMap() {
+        return ResponseEntity.ok(service.getAll());
+    }
+
+    @PostMapping
+    public ResponseEntity<RoadMapMeta> createRoadMap(@RequestBody RoadMapMeta roadMapMeta){
+        return ResponseEntity.ok(service.createRoadMapMeta(roadMapMeta));
     }
 
 }
