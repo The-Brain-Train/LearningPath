@@ -6,6 +6,13 @@ public class RoadMapMeta {
     @Id
     private String Id;
 
+    private String name;
+
+
+    public RoadMapMeta(String name) {
+        this.name = name;
+    }
+
     public String getName() {
         return name;
     }
@@ -14,5 +21,4 @@ public class RoadMapMeta {
         this.name = name;
     }
 
-    private String name;
 }
