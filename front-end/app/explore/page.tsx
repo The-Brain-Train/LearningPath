@@ -1,11 +1,22 @@
+"use client"
+
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
-import { enhancedDummyDataTwo } from "../dummyData";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { getRoadmaps } from "../httpRequests";
+import { Roadmap } from "../types";
 
 export default function Explore() {
+
+  const [roadmaps, setRoadmaps] = useState<Roadmap[]>([]);
+
+  useEffect(()=> {
+    getRoadmaps().then(data => setRoadmaps(data));
+  }, [])
+
   return (
     <main className="flex items-center justify-center flex-col">
       <Paper
@@ -29,9 +40,9 @@ export default function Explore() {
       </Paper>
       <div className="text-center">
         <ul>
-          {enhancedDummyDataTwo.map((specialty) => (
-            <li className="border-2 rounded m-4 p-2" key={specialty.id}>
-              <Link href={`/explore/${specialty.id}`}>{specialty.name}</Link>
+          {roadmaps.map((specialty, index) => (
+            <li className="border-2 rounded m-4 p-2" key={index}>
+              <Link key={specialty.id} href={`/explore/${specialty.id}`}>{specialty.name}</Link>
             </li>
           ))}
         </ul>
