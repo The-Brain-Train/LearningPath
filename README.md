@@ -51,9 +51,9 @@ Follow these steps to get the application up and running in your local environme
 
 | Steps                            | Front-end                 | Back-end                  | Database                |
 | ---------------------------------| ------------------------- | ------------------------- |-------------------------|
-| 2. Navigate into repo            | `cd front-end`            | `cd back-end`             |                         |
-| 3. Install Dependencies          | `npm install`             | `mvn install`             |                         |
-| 4. Run the project               | `npm run dev`             | `mvn start`               |                         |
+| 2. Navigate into repo            | `cd front-end`            | `cd back-end`             | root                    |
+| 3. Install Dependencies          | `npm install`             | `mvn install`             | [![Docker-instalation](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)|
+| 4. Run the project               | `npm run dev`             | `mvn start`               | `docker compose up`     |
 
 <!--![Home Page](/front-end/public/DisplayImageHome.png)-->
 
