@@ -13,6 +13,10 @@ public class RoadMapMeta {
         this.name = name;
     }
 
+    public String getId() {
+        return Id;
+    }
+
     public String getName() {
         return name;
     }

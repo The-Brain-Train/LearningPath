@@ -1,5 +1,7 @@
 package com.braintrain.backend.roadMaps;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,23 +16,43 @@ class RoadMapServiceTest {
     @Autowired
     RoadMapService roadMapService;
 
-
-
-    @Test
-    void getAllRoadmapMetas() {
-
+    @BeforeAll
+    static void setup() {
         RoadMapMeta roadMap = new RoadMapMeta("Java");
 
-        roadMapService.createRoadMapMeta(roadMap);
-
-        List<RoadMapMeta> roadmapMetaList = roadMapService.getAll();
-
-
-
-        assertThat(roadmapMetaList).isNotNull();
     }
 
     @Test
-    void createRoadMapMeta() {
+    void getAllRoadmapMetas() {
+//        RoadMapMeta roadMap = new RoadMapMeta("Java");
+
+//        roadMapService.createRoadMapMeta(roadMap);
+
+        List<RoadMapMeta> roadmapMetaList = roadMapService.getAll();
+
+        assertThat(roadmapMetaList.size()).isEqualTo(4);
+    }
+
+//    @Test
+//    void createRoadMapMeta() {
+//        RoadMapMeta roadMap = new RoadMapMeta("Java");
+//
+//        roadMapService.createRoadMapMeta(roadMap);
+//
+//        List<RoadMapMeta> roadmapMetaList = roadMapService.getAll();
+//
+//        assertThat(roadmapMetaList.size()).isEqualTo(5);
+//    }
+
+    @Test
+    void deleteRoadMapMeta() {
+        RoadMapMeta roadMap = new RoadMapMeta("brain-train");
+        roadMapService.createRoadMapMeta(roadMap);
+
+        roadMapService.deleteRoadMapMeta(roadMap.getId());
+
+        List<RoadMapMeta> roadmapMetaList = roadMapService.getAll();
+
+        Assertions.assertFalse(roadmapMetaList.contains(roadMap));
     }
 }
