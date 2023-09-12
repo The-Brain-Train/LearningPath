@@ -35,7 +35,7 @@ class RoadMapServiceTest {
     @AfterEach
     public void tearDown() {
         if(roadMapMeta != null) {
-            roadMapService.deleteRoadMapMeta(roadMapMeta.getId());
+            roadMapService.delete(roadMapMeta);
         }
     }
 
