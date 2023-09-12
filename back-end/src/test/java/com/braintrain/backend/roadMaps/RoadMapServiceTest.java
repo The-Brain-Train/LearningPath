@@ -16,18 +16,8 @@ class RoadMapServiceTest {
     @Autowired
     RoadMapService roadMapService;
 
-//    //@BeforeAll
-//    //static void setup() {
-//        RoadMapMeta roadMap = new RoadMapMeta("Java");
-//
-//    }
-
     @Test
     void getAllRoadmapMetas() {
-//        RoadMapMeta roadMap = new RoadMapMeta("Java");
-
-//        roadMapService.createRoadMapMeta(roadMap);
-
         List<RoadMapMeta> roadmapMetaList = roadMapService.getAll();
 
         assertThat(roadmapMetaList.size()).isEqualTo(4);
@@ -37,7 +27,6 @@ class RoadMapServiceTest {
     @Test
     void deleteRoadMapMeta() {
         RoadMapMeta createdRoadMap = roadMapService.createRoadMapMeta(new RoadMapMeta("brain-train"));
-
         roadMapService.deleteRoadMapMeta(createdRoadMap.getId());
 
         List<RoadMapMeta> roadmapMetaList = roadMapService.getAll();
@@ -49,13 +38,13 @@ class RoadMapServiceTest {
     void createRoadMap(){
         RoadMap roadMap = new RoadMap();
         RoadMap newRoadMap = roadMapService.createRoadMap(roadMap);
+
         assertThat(newRoadMap).isNotNull();
     }
 
     @Test
     void createRoadMapMeta() {
         RoadMapMeta roadMap = new RoadMapMeta("Book writing");
-
         int roadmapMetaListSize = roadMapService.getAll().size();
 
         roadMapService.createRoadMapMeta(roadMap);
