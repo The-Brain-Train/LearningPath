@@ -22,7 +22,6 @@ class RoadMapServiceTest {
     @Autowired
     RoadMapService roadMapService;
 
-
     RoadMapMeta newRoadMap;
     @BeforeEach
     public void setup() throws IOException {
@@ -34,45 +33,14 @@ class RoadMapServiceTest {
         newRoadMap = roadMapService.createRoadMap(new RoadMapDTO("Java", str));
     }
 
-    //    @Test
-//    void getAllRoadmapMetas() {
-//        List<RoadMapMeta> roadmapMetaList = roadMapService.getAllRoadMapsMeta();
-//
-//        assertThat(roadmapMetaList.size()).isEqualTo(4);
-//    }
-//
-//    @Test
-//    void getAllRoadmaps() {
-//        List<RoadMap> roadmapList = roadMapService.getAllRoadMaps();
-//
-//        assertThat(roadmapList.size()).isEqualTo(1);
-//    }
-//
-//
     @Test
-    @Order(2)
-    void deleteRoadMap() {
-        roadMapService.deleteRoadMapMeta(newRoadMap.getId());
-        List<RoadMapMeta> roadmapMetaList = roadMapService.getAllRoadMapsMeta();
-        Assertions.assertFalse(roadmapMetaList.contains(newRoadMap));
+    void getAllRoadmaps() {
+        List<RoadMap> roadmapList = roadMapService.getAllRoadMaps();
+
+        assertThat(roadmapList.size()).isEqualTo(4);
     }
-//
-//    @Test
-//    void createRoadMapMeta() {
-//        RoadMapMeta roadMap = new RoadMapMeta("Book writing");
-//        int roadmapMetaListSize = roadMapService.getAllRoadMapsMeta().size();
-//
-//        roadMapService.createRoadMapMeta(roadMap);
-//
-//        int roadmapMetaSizeAfterCreation = roadMapService.getAllRoadMapsMeta().size();
-//
-//        assertThat(roadmapMetaListSize + 1).isEqualTo(roadmapMetaSizeAfterCreation);
-//
-//        roadMapService.deleteRoadMapMeta(roadMap.getId());
-//    }
 
     @Test
-    @Order(1)
     void createRoadMap() throws IOException {
         Path path = Paths.get("src/test/resources/java.json");
         ObjectMapper objectMapper = new ObjectMapper();
@@ -81,5 +49,12 @@ class RoadMapServiceTest {
         RoadMap roadMap = new RoadMap(str);
         newRoadMap = roadMapService.createRoadMap(new RoadMapDTO("Java", str));
         assertThat(newRoadMap).isNotNull();
+    }
+
+    @Test
+    void deleteRoadMap() {
+        roadMapService.deleteRoadMapMeta(newRoadMap.getId());
+        List<RoadMapMeta> roadmapMetaList = roadMapService.getAllRoadMapsMeta();
+        Assertions.assertFalse(roadmapMetaList.contains(newRoadMap));
     }
 }
