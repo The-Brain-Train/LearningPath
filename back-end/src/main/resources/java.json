@@ -1,0 +1,83 @@
+{
+  "name": "Java",
+  "children": [
+    {
+      "name": "Basics",
+      "children": [
+        {"name": "Syntax", "children": []},
+        {"name": "Data Types", "children": []},
+        {"name": "Operators", "children": []},
+        {"name": "Control Flow", "children": []}
+      ]
+    },
+    {
+      "name": "Object-Oriented Programming (OOP)",
+      "children": [
+        {"name": "Classes and Objects", "children": []},
+        {"name": "Inheritance", "children": []},
+        {"name": "Polymorphism", "children": []},
+        {"name": "Encapsulation", "children": []}
+      ]
+    },
+    {
+      "name": "Advanced Concepts",
+      "children": [
+        {"name": "Error Handling", "children": []},
+        {"name": "Multithreading", "children": []},
+        {"name": "File I/O", "children": []}
+      ]
+    },
+    {
+      "name": "Frameworks and Libraries",
+      "children": [
+        {"name": "Spring Boot", "children": []},
+        {"name": "Hibernate", "children": []}
+      ]
+    },
+    {
+      "name": "Testing",
+      "children": [
+        {"name": "JUnit", "children": []},
+        {"name": "Mockito", "children": []}
+      ]
+    },
+    {
+      "name": "Deployment",
+      "children": [
+        {"name": "Docker", "children": []},
+        {"name": "Jenkins", "children": []}
+      ]
+    },
+    {
+      "name": "Databases",
+      "children": [
+        {"name": "SQL", "children": []},
+        {"name": "JDBC", "children": []},
+        {"name": "PostgreSQL", "children": []}
+      ]
+    },
+    {
+      "name": "Frontend",
+      "children": [
+        {"name": "React", "children": []},
+        {"name": "JavaScript", "children": []}
+      ]
+    },
+    {
+      "name": "Tools",
+      "children": [
+        {"name": "Git", "children": []},
+        {"name": "Maven", "children": []},
+        {"name": "IntelliJ IDEA", "children": []}
+      ]
+    },
+    {
+      "name": "Soft Skills",
+      "children": [
+        {"name": "Communication", "children": []},
+        {"name": "Problem-Solving", "children": []},
+        {"name": "Teamwork", "children": []}
+      ]
+    }
+  ]
+}

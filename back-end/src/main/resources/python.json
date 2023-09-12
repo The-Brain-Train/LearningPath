@@ -1,0 +1,97 @@
+{
+  "name": "Python",
+  "children": [
+    {
+      "name": "Basics",
+      "children": [
+        {"name": "Syntax", "children": []},
+        {"name": "Data Types", "children": []},
+        {"name": "Operators", "children": []},
+        {"name": "Control Flow", "children": []}
+      ]
+    },
+    {
+      "name": "Advanced Concepts",
+      "children": [
+        {"name": "Decorators", "children": []},
+        {"name": "Generators", "children": []},
+        {"name": "Context Managers", "children": []},
+        {"name": "Metaclasses", "children": []}
+      ]
+    },
+    {
+      "name": "Object-Oriented Programming",
+      "children": [
+        {"name": "Classes and Objects", "children": []},
+        {"name": "Inheritance", "children": []},
+        {"name": "Polymorphism", "children": []},
+        {"name": "Encapsulation", "children": []}
+      ]
+    },
+    {
+      "name": "Functional Programming",
+      "children": [
+        {"name": "Lambdas", "children": []},
+        {"name": "Map, Filter, Reduce", "children": []},
+        {"name": "List Comprehensions", "children": []}
+      ]
+    },
+    {
+      "name": "Modules and Packages",
+      "children": [
+        {"name": "Importing Modules", "children": []},
+        {"name": "Creating Modules", "children": []},
+        {"name": "Package Management (pip)", "children": []}
+      ]
+    },
+    {
+      "name": "Frameworks and Libraries",
+      "children": [
+        {"name": "Django", "children": []},
+        {"name": "Flask", "children": []},
+        {"name": "NumPy", "children": []},
+        {"name": "Pandas", "children": []}
+      ]
+    },
+    {
+      "name": "Testing",
+      "children": [
+        {"name": "unittest", "children": []},
+        {"name": "pytest", "children": []}
+      ]
+    },
+    {
+      "name": "Deployment",
+      "children": [
+        {"name": "Docker", "children": []},
+        {"name": "Continuous Integration/Continuous Deployment (CI/CD)", "children": []}
+      ]
+    },
+    {
+      "name": "Databases",
+      "children": [
+        {"name": "SQL", "children": []},
+        {"name": "SQLAlchemy", "children": []},
+        {"name": "Django ORM", "children": []}
+      ]
+    },
+    {
+      "name": "Soft Skills",
+      "children": [
+        {"name": "Communication", "children": []},
+        {"name": "Problem-Solving", "children": []},
+        {"name": "Teamwork", "children": []}
+      ]
+    }
+  ]
+}
+
+
+
+
+
+
+
+
+
+
