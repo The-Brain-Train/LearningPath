@@ -32,6 +32,14 @@ public class RoadMapService {
         return repo.findAll();
     }
 
+    public RoadMap getRoadMapById(String id) {
+        return repo.findById(id).orElse(null);
+    }
+
+    public RoadMapMeta getRoadMapMetaById(String id) {
+        return metaRepo.findById(id).orElse(null);
+    }
+
     public RoadMapMeta createRoadMapMeta(RoadMapMeta roadMapMeta) {
         return metaRepo.save(roadMapMeta);
     }
