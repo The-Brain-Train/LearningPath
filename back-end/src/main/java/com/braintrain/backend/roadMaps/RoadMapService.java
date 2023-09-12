@@ -16,12 +16,9 @@ public class RoadMapService {
     RoadMapRepository repo;
 
     public RoadMapMeta createRoadMap(RoadMapDTO roadMapDTO) {
-
         RoadMap roadMap = repo.save(new RoadMap(roadMapDTO.roadMap()));
-        RoadMapMeta roadMapMeta = metaRepo.save(new RoadMapMeta(roadMapDTO.name(), roadMap.getId()));
 
-        return roadMapMeta;
-
+        return metaRepo.save(new RoadMapMeta(roadMapDTO.name(), roadMap.getId()));
     }
 
     public List<RoadMapMeta> getAllRoadMapsMeta() {
@@ -44,7 +41,16 @@ public class RoadMapService {
         return metaRepo.save(roadMapMeta);
     }
 
+    public void delete(RoadMapMeta roadMapMeta) {
+        repo.deleteById(roadMapMeta.getRoadMapReferenceId());
+        metaRepo.delete(roadMapMeta);
+    }
+
     public void deleteRoadMapMeta(String id) {
         metaRepo.deleteById(id);
+    }
+
+    public void deleteRoadMap(String id) {
+        repo.deleteById(id);
     }
 }

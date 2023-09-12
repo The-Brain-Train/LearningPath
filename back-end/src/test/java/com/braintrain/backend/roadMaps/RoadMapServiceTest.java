@@ -58,7 +58,7 @@ class RoadMapServiceTest {
 
     @Test
     void onDeleteRemoveBothRoadMapAndRoadMapMeta() {
-        roadMapService.deleteRoadMapMeta(roadMapMeta.getId());
+        roadMapService.delete(roadMapMeta);
 
         assertNull(roadMapService.getRoadMapMetaById(roadMapMeta.getId()));
         assertNull(roadMapService.getRoadMapById(roadMapMeta.getRoadMapReferenceId()));
