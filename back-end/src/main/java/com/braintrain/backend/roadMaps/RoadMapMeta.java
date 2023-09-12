@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class RoadMapMeta {
     @Id
-    private String Id;
+    private String id;
 
     private String name;
 
@@ -16,7 +16,7 @@ public class RoadMapMeta {
     }
 
     public String getId() {
-        return Id;
+        return id;
     }
 
     public String getName() {
