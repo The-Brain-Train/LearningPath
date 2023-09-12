@@ -14,6 +14,8 @@ public class RoadMapMeta {
 
     private String roadMapReferenceId;
 
+    public RoadMapMeta(){};
+
     public RoadMapMeta(String name) {
         this.name = name;
     }
