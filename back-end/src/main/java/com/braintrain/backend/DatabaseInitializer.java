@@ -1,12 +1,18 @@
 package com.braintrain.backend;
 
-import com.braintrain.backend.roadMaps.RoadMapMeta;
-import com.braintrain.backend.roadMaps.RoadMapMetaRepository;
+import com.braintrain.backend.roadMaps.*;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
+
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 
 @Configuration
 public class DatabaseInitializer {
@@ -21,13 +27,21 @@ public class DatabaseInitializer {
     }
 
     @Bean
-    CommandLineRunner initDatabase(RoadMapMetaRepository repository) {
+    CommandLineRunner initDatabase(RoadMapService service) {
         mongoTemplate.dropCollection(RoadMapMeta.class);
         return args -> {
-            repository.save(new RoadMapMeta("JavaScript"));
-            repository.save(new RoadMapMeta("Java"));
-            repository.save(new RoadMapMeta("Python"));
-            repository.save(new RoadMapMeta("C++"));
+
+
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            List<String> startingData = List.of("java", "python");
+
+            for (String name : startingData) {
+                String path = String.format("src/main/resources/%s.json", name);
+                JsonNode jsonNode = objectMapper.readTree(new File(path));
+                service.createRoadMap(new RoadMapDTO(name, objectMapper.writeValueAsString(jsonNode)));
+            }
+
         };
     }
 }

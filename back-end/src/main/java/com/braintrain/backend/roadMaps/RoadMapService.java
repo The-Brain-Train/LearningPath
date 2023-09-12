@@ -17,7 +17,6 @@ public class RoadMapService {
 
     public RoadMapMeta createRoadMap(RoadMapDTO roadMapDTO) {
         RoadMap roadMap = repo.save(new RoadMap(roadMapDTO.roadMap()));
-
         return metaRepo.save(new RoadMapMeta(roadMapDTO.name(), roadMap.getId()));
     }
 
