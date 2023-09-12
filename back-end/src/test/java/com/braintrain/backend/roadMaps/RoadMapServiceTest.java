@@ -36,14 +36,13 @@ class RoadMapServiceTest {
 
     @Test
     void deleteRoadMapMeta() {
-        RoadMapMeta roadMap = new RoadMapMeta("brain-train");
-        roadMapService.createRoadMapMeta(roadMap);
+        RoadMapMeta createdRoadMap = roadMapService.createRoadMapMeta(new RoadMapMeta("brain-train"));
 
-        roadMapService.deleteRoadMapMeta(roadMap.getId());
+        roadMapService.deleteRoadMapMeta(createdRoadMap.getId());
 
         List<RoadMapMeta> roadmapMetaList = roadMapService.getAll();
 
-        Assertions.assertFalse(roadmapMetaList.contains(roadMap));
+        Assertions.assertFalse(roadmapMetaList.contains(createdRoadMap));
     }
 
     @Test
