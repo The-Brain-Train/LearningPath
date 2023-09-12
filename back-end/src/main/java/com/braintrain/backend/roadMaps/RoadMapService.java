@@ -15,8 +15,14 @@ public class RoadMapService {
     @Autowired
     RoadMapRepository repo;
 
-    public RoadMap createRoadMap(RoadMap roadMap) {
-        return repo.save(roadMap);}
+    public RoadMapMeta createRoadMap(RoadMapDTO roadMapDTO) {
+
+        RoadMap roadMap = repo.save(new RoadMap(roadMapDTO.roadMap()));
+        RoadMapMeta roadMapMeta = metaRepo.save(new RoadMapMeta(roadMapDTO.name(), roadMap.getId()));
+
+        return roadMapMeta;
+
+    }
 
     public List<RoadMapMeta> getAllRoadMapsMeta() {
         return metaRepo.findAll();
