@@ -35,14 +35,6 @@ class RoadMapServiceTest {
     }
 
     @Test
-    void createRoadMap(){
-        RoadMap roadMap = new RoadMap();
-        RoadMap newRoadMap = roadMapService.createRoadMap(roadMap);
-
-        assertThat(newRoadMap).isNotNull();
-    }
-
-    @Test
     void createRoadMapMeta() {
         RoadMapMeta roadMap = new RoadMapMeta("Book writing");
         int roadmapMetaListSize = roadMapService.getAll().size();
@@ -54,5 +46,13 @@ class RoadMapServiceTest {
         assertThat(roadmapMetaListSize + 1).isEqualTo(roadmapMetaSizeAfterCreation);
 
         roadMapService.deleteRoadMapMeta(roadMap.getId());
+    }
+
+    @Test
+    void createRoadMap(){
+        RoadMap roadMap = new RoadMap();
+        RoadMap newRoadMap = roadMapService.createRoadMap(roadMap);
+
+        assertThat(newRoadMap).isNotNull();
     }
 }

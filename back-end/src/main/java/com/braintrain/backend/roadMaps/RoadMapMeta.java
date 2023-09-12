@@ -1,15 +1,16 @@
 package com.braintrain.backend.roadMaps;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Objects;
 
+@Document(collection = "roadmap_meta")
 public class RoadMapMeta {
     @Id
     private String id;
 
     private String name;
-
 
     public RoadMapMeta(String name) {
         this.name = name;
