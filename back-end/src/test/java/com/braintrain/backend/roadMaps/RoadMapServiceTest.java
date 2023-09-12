@@ -1,9 +1,7 @@
 package com.braintrain.backend.roadMaps;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,20 +39,18 @@ class RoadMapServiceTest {
     }
 
     @Test
-    void getAllRoadmaps() {
+    void roadmapsShouldBeMoreThan0() {
         List<RoadMap> roadmapList = roadMapService.getAllRoadMaps();
         assertThat(roadmapList.size()).isGreaterThan(0);
     }
 
     @Test
-    @Order(1)
-    void createRoadMap() {
+    void canCreateRoadmap() {
         assertThat(newRoadMap).isNotNull();
     }
 
     @Test
-    @Order(2)
-    void deleteRoadMap() {
+    void canDeleteRoadMap() {
         roadMapService.deleteRoadMapMeta(newRoadMap.getId());
         List<RoadMapMeta> roadmapMetaList = roadMapService.getAllRoadMapsMeta();
         Assertions.assertFalse(roadmapMetaList.contains(newRoadMap));
