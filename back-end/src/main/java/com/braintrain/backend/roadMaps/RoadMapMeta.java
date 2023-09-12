@@ -12,8 +12,15 @@ public class RoadMapMeta {
 
     private String name;
 
+    private String roadMapReferenceId;
+
     public RoadMapMeta(String name) {
         this.name = name;
+    }
+
+    public RoadMapMeta(String name, String roadMapReferenceId) {
+        this.name = name;
+        this.roadMapReferenceId = roadMapReferenceId;
     }
 
     public String getId() {
@@ -26,6 +33,14 @@ public class RoadMapMeta {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getRoadMapReferenceId() {
+        return roadMapReferenceId;
+    }
+
+    public void setRoadMapReferenceId(String roadMapReferenceId) {
+        this.roadMapReferenceId = roadMapReferenceId;
     }
 
     @Override
