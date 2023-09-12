@@ -17,7 +17,7 @@ public class RoadMapController {
 
     @GetMapping
     public ResponseEntity<List<RoadMapMeta>> getRoadMap() {
-        return ResponseEntity.ok(service.getAll());
+        return ResponseEntity.ok(service.getAllRoadMapsMeta());
     }
 
     @PostMapping

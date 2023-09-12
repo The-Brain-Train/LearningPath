@@ -18,8 +18,12 @@ public class RoadMapService {
     public RoadMap createRoadMap(RoadMap roadMap) {
         return repo.save(roadMap);}
 
-    public List<RoadMapMeta> getAll() {
+    public List<RoadMapMeta> getAllRoadMapsMeta() {
         return metaRepo.findAll();
+    }
+
+    public List<RoadMap> getAllRoadMaps() {
+        return repo.findAll();
     }
 
     public RoadMapMeta createRoadMapMeta(RoadMapMeta roadMapMeta) {

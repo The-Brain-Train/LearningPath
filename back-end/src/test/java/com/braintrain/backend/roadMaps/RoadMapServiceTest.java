@@ -25,10 +25,17 @@ class RoadMapServiceTest {
 
     @Test
     void getAllRoadmapMetas() {
-        List<RoadMapMeta> roadmapMetaList = roadMapService.getAll();
+        List<RoadMapMeta> roadmapMetaList = roadMapService.getAllRoadMapsMeta();
 
         assertThat(roadmapMetaList.size()).isEqualTo(4);
-    }qq
+    }
+
+    @Test
+    void getAllRoadmaps() {
+        List<RoadMap> roadmapList = roadMapService.getAllRoadMaps();
+
+        assertThat(roadmapList.size()).isEqualTo(1);
+    }
 
 
     @Test
@@ -36,7 +43,7 @@ class RoadMapServiceTest {
         RoadMapMeta createdRoadMap = roadMapService.createRoadMapMeta(new RoadMapMeta("brain-train"));
         roadMapService.deleteRoadMapMeta(createdRoadMap.getId());
 
-        List<RoadMapMeta> roadmapMetaList = roadMapService.getAll();
+        List<RoadMapMeta> roadmapMetaList = roadMapService.getAllRoadMapsMeta();
 
         Assertions.assertFalse(roadmapMetaList.contains(createdRoadMap));
     }
@@ -44,11 +51,11 @@ class RoadMapServiceTest {
     @Test
     void createRoadMapMeta() {
         RoadMapMeta roadMap = new RoadMapMeta("Book writing");
-        int roadmapMetaListSize = roadMapService.getAll().size();
+        int roadmapMetaListSize = roadMapService.getAllRoadMapsMeta().size();
 
         roadMapService.createRoadMapMeta(roadMap);
 
-        int roadmapMetaSizeAfterCreation = roadMapService.getAll().size();
+        int roadmapMetaSizeAfterCreation = roadMapService.getAllRoadMapsMeta().size();
 
         assertThat(roadmapMetaListSize + 1).isEqualTo(roadmapMetaSizeAfterCreation);
 
