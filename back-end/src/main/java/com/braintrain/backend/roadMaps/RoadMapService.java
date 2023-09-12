@@ -19,4 +19,8 @@ public class RoadMapService {
     public RoadMapMeta createRoadMapMeta(RoadMapMeta roadMapMeta) {
         return repo.save(roadMapMeta);
     }
+
+    public void deleteRoadMapMeta(String id) {
+        repo.deleteById(id);
+    }
 }
