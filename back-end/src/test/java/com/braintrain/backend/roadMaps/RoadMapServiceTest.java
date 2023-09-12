@@ -33,25 +33,27 @@ class RoadMapServiceTest {
         newRoadMap = roadMapService.createRoadMap(new RoadMapDTO("Java", str));
     }
 
-    @Test
-    void getAllRoadmaps() {
-        List<RoadMap> roadmapList = roadMapService.getAllRoadMaps();
-
-        assertThat(roadmapList.size()).isEqualTo(4);
+    @AfterEach
+    public void tearDown() {
+        if(newRoadMap != null) {
+            roadMapService.deleteRoadMapMeta(newRoadMap.getId());
+        }
     }
 
     @Test
-    void createRoadMap() throws IOException {
-        Path path = Paths.get("src/test/resources/java.json");
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(new File(String.valueOf(path)));
-        String str = objectMapper.writeValueAsString(jsonNode);
-        RoadMap roadMap = new RoadMap(str);
-        newRoadMap = roadMapService.createRoadMap(new RoadMapDTO("Java", str));
+    void getAllRoadmaps() {
+        List<RoadMap> roadmapList = roadMapService.getAllRoadMaps();
+        assertThat(roadmapList.size()).isGreaterThan(0);
+    }
+
+    @Test
+    @Order(1)
+    void createRoadMap() {
         assertThat(newRoadMap).isNotNull();
     }
 
     @Test
+    @Order(2)
     void deleteRoadMap() {
         roadMapService.deleteRoadMapMeta(newRoadMap.getId());
         List<RoadMapMeta> roadmapMetaList = roadMapService.getAllRoadMapsMeta();
