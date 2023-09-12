@@ -13,6 +13,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @SpringBootTest
 class RoadMapServiceTest {
@@ -52,7 +53,8 @@ class RoadMapServiceTest {
     @Test
     void canDeleteRoadMap() {
         roadMapService.deleteRoadMapMeta(newRoadMap.getId());
-        List<RoadMapMeta> roadmapMetaList = roadMapService.getAllRoadMapsMeta();
-        Assertions.assertFalse(roadmapMetaList.contains(newRoadMap));
+        assertNull(roadMapService.getRoadMapById(newRoadMap.getId()));
     }
+
+
 }
