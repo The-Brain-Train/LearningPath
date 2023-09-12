@@ -21,7 +21,7 @@ class RoadMapServiceTest {
     @Autowired
     RoadMapService roadMapService;
 
-    RoadMapMeta newRoadMap;
+    RoadMapMeta roadMapMeta;
     @BeforeEach
     public void setup() throws IOException {
         Path path = Paths.get("src/test/resources/java.json");
@@ -29,13 +29,13 @@ class RoadMapServiceTest {
         JsonNode jsonNode = objectMapper.readTree(new File(String.valueOf(path)));
         String str = objectMapper.writeValueAsString(jsonNode);
         RoadMap roadMap = new RoadMap(str);
-        newRoadMap = roadMapService.createRoadMap(new RoadMapDTO("Java", str));
+        roadMapMeta = roadMapService.createRoadMap(new RoadMapDTO("Java", str));
     }
 
     @AfterEach
     public void tearDown() {
-        if(newRoadMap != null) {
-            roadMapService.deleteRoadMapMeta(newRoadMap.getId());
+        if(roadMapMeta != null) {
+            roadMapService.deleteRoadMapMeta(roadMapMeta.getId());
         }
     }
 
@@ -47,13 +47,13 @@ class RoadMapServiceTest {
 
     @Test
     void canCreateRoadmap() {
-        assertThat(newRoadMap).isNotNull();
+        assertThat(roadMapMeta).isNotNull();
     }
 
     @Test
     void canDeleteRoadMap() {
-        roadMapService.deleteRoadMapMeta(newRoadMap.getId());
-        assertNull(roadMapService.getRoadMapById(newRoadMap.getId()));
+        roadMapService.deleteRoadMapMeta(roadMapMeta.getId());
+        assertNull(roadMapService.getRoadMapMetaById(roadMapMeta.getId()));
     }
 
 
