@@ -28,7 +28,7 @@ class RoadMapServiceTest {
         List<RoadMapMeta> roadmapMetaList = roadMapService.getAll();
 
         assertThat(roadmapMetaList.size()).isEqualTo(4);
-    }
+    }qq
 
 
     @Test

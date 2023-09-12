@@ -13,6 +13,10 @@ public class RoadMap {
 
     private String obj;
 
+    public RoadMap(String obj) {
+        this.obj = obj;
+    }
+
     public String getId() {
         return id;
     }
