@@ -1,11 +1,18 @@
 package com.braintrain.backend.roadMaps;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -49,8 +56,13 @@ class RoadMapServiceTest {
     }
 
     @Test
-    void createRoadMap(){
-        RoadMap roadMap = new RoadMap();
+    void createRoadMap() throws IOException {
+        Path path = Paths.get("src/test/resources/java.json");
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(new File(String.valueOf(path)));
+        String str = objectMapper.writeValueAsString(jsonNode);
+
+        RoadMap roadMap = new RoadMap(str);
         RoadMap newRoadMap = roadMapService.createRoadMap(roadMap);
 
         assertThat(newRoadMap).isNotNull();
