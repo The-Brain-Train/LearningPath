@@ -13,6 +13,8 @@ public class RoadMap {
 
     private String obj;
 
+    public RoadMap(){};
+
     public RoadMap(String obj) {
         this.obj = obj;
     }
