@@ -3,9 +3,8 @@ package com.braintrain.backend.roadMaps;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.aspectj.lang.annotation.Before;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -23,7 +22,19 @@ class RoadMapServiceTest {
     @Autowired
     RoadMapService roadMapService;
 
-//    @Test
+
+    RoadMapMeta newRoadMap;
+    @BeforeEach
+    public void setup() throws IOException {
+        Path path = Paths.get("src/test/resources/java.json");
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(new File(String.valueOf(path)));
+        String str = objectMapper.writeValueAsString(jsonNode);
+        RoadMap roadMap = new RoadMap(str);
+        newRoadMap = roadMapService.createRoadMap(new RoadMapDTO("Java", str));
+    }
+
+    //    @Test
 //    void getAllRoadmapMetas() {
 //        List<RoadMapMeta> roadmapMetaList = roadMapService.getAllRoadMapsMeta();
 //
@@ -38,15 +49,13 @@ class RoadMapServiceTest {
 //    }
 //
 //
-//    @Test
-//    void deleteRoadMapMeta() {
-//        RoadMapMeta createdRoadMap = roadMapService.createRoadMapMeta(new RoadMapMeta("brain-train"));
-//        roadMapService.deleteRoadMapMeta(createdRoadMap.getId());
-//
-//        List<RoadMapMeta> roadmapMetaList = roadMapService.getAllRoadMapsMeta();
-//
-//        Assertions.assertFalse(roadmapMetaList.contains(createdRoadMap));
-//    }
+    @Test
+    @Order(2)
+    void deleteRoadMap() {
+        roadMapService.deleteRoadMapMeta(newRoadMap.getId());
+        List<RoadMapMeta> roadmapMetaList = roadMapService.getAllRoadMapsMeta();
+        Assertions.assertFalse(roadmapMetaList.contains(newRoadMap));
+    }
 //
 //    @Test
 //    void createRoadMapMeta() {
@@ -63,15 +72,14 @@ class RoadMapServiceTest {
 //    }
 
     @Test
+    @Order(1)
     void createRoadMap() throws IOException {
         Path path = Paths.get("src/test/resources/java.json");
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(new File(String.valueOf(path)));
         String str = objectMapper.writeValueAsString(jsonNode);
-
         RoadMap roadMap = new RoadMap(str);
-        RoadMapMeta newRoadMap = roadMapService.createRoadMap(new RoadMapDTO("Java", str));
-
+        newRoadMap = roadMapService.createRoadMap(new RoadMapDTO("Java", str));
         assertThat(newRoadMap).isNotNull();
     }
 }
