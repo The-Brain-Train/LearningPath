@@ -10,17 +10,23 @@ import java.util.List;
 public class RoadMapService {
 
     @Autowired
+    RoadMapMetaRepository metaRepo;
+
+    @Autowired
     RoadMapRepository repo;
 
+    public RoadMap createRoadMap(RoadMap roadMap) {
+        return repo.save(roadMap);}
+
     public List<RoadMapMeta> getAll() {
-        return repo.findAll();
+        return metaRepo.findAll();
     }
 
     public RoadMapMeta createRoadMapMeta(RoadMapMeta roadMapMeta) {
-        return repo.save(roadMapMeta);
+        return metaRepo.save(roadMapMeta);
     }
 
     public void deleteRoadMapMeta(String id) {
-        repo.deleteById(id);
+        metaRepo.deleteById(id);
     }
 }
