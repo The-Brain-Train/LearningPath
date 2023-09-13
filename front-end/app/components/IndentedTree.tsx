@@ -4,6 +4,8 @@ import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import { getResponseFromOpenAI } from "../openAIChat";
 import SaveButton from "./SaveButton";
+import { postRoadmap } from "../httpRequests";
+import { RoadmapDTO } from "../types";
 
 type IndentedTreeProps = {
   topic: string | null;
@@ -11,8 +13,18 @@ type IndentedTreeProps = {
 
 const IndentedTree = ({ topic }: IndentedTreeProps) => {
   const [data, setData] = useState(null);
-  const [showButton, setShowButton] = useState(false);
   const svgRef = useRef(null);
+
+
+
+  const saveRoadMap = () => {
+    if(topic == null) return
+    const requestData: RoadmapDTO = {
+      name: topic,
+      roadMap: JSON.stringify(data),
+    };
+    postRoadmap(requestData);
+  }
 
   const handleSendMessage = async () => {
     const chatHistory = [
@@ -142,7 +154,7 @@ const IndentedTree = ({ topic }: IndentedTreeProps) => {
   return (
     <>
       <svg className="overflow-hidden" ref={svgRef}></svg>
-      {data == null && <SaveButton showButton={showButton} setShowButton={setShowButton}/>}
+      {data !== null && <SaveButton saveClick={saveRoadMap}/>}
     </>
   );
 };

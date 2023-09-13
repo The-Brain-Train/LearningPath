@@ -2,13 +2,12 @@ import React, { SetStateAction } from "react";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 type saveButtonProps = {
-  showButton: boolean;
-  setShowButton: React.Dispatch<React.SetStateAction<boolean>>;
+  saveClick: () => void;
 };
 
-function SaveButton({ showButton, setShowButton }: saveButtonProps) {
+function SaveButton({saveClick }: saveButtonProps) {
   const handleClick = () => {
-    setShowButton(!showButton);
+    saveClick();
   };
 
   return (
