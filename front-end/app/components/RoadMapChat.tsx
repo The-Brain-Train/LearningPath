@@ -49,7 +49,7 @@ function RoadMapChat({ showChat, toggleChat, setTopic }: roadMapChatProps) {
 
   return (
     <div className={`chat ${showChat && "chat_show"}`}>
-      <div className="flex-1 p:2 sm:p-6 justify-between flex flex-col h-4/5">
+      <div className="flex-1 p:2 sm:p-6 justify-between flex flex-col h-[90vh]">
         <div className="flex sm:items-center justify-around py-3 border-b-2 border-gray-200">
           <div className="relative flex items-center space-x-4">
             <div className="flex flex-col leading-tight">
