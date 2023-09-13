@@ -5,36 +5,12 @@ import * as d3 from "d3";
 import { getResponseFromOpenAI } from "../openAIChat";
 
 type IndentedTreeProps = {
-  roadMapdata: JSON | null;
+  data: JSON | null;
 };
 
-const IndentedTreeWithData = ({ roadMapdata }: IndentedTreeProps) => {
-  const [data, setData] = useState(null);
+const IndentedTreeWithData = ({ data }: IndentedTreeProps) => {
   const svgRef = useRef(null);
 
-  const handleSendMessage = async () => {
-    const chatHistory = [
-      {
-        role: "user",
-        content: `I will provide you with JSON format, Please use it to generate a hirecical roadmap for learning ${topic}.  Please only provided the data and nothing else as it will be parsed. { "name": "${topic}" "children": []`,
-      },
-    ];
-    console.log("Fetching data");
-    try {
-      const response = await getResponseFromOpenAI(chatHistory);
-      console.log(response);
-      const jsonData = await JSON.parse(response.choices[0].message.content);
-      setData(jsonData);
-      console.log(jsonData);
-    } catch (error) {
-      console.error("Error parsing JSON:", error);
-    }
-  };
-  useEffect(() => {
-    if (topic != null) {
-      handleSendMessage();
-    }
-  }, [topic]);
 
   useEffect(() => {
     if (data == null) return;
