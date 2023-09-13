@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import { getResponseFromOpenAI } from "../openAIChat";
+import SaveButton from "./SaveButton";
 
 type IndentedTreeProps = {
   topic: string | null;
@@ -10,6 +11,7 @@ type IndentedTreeProps = {
 
 const IndentedTree = ({ topic }: IndentedTreeProps) => {
   const [data, setData] = useState(null);
+  const [showButton, setShowButton] = useState(true);
   const svgRef = useRef(null);
 
   const handleSendMessage = async () => {
@@ -140,6 +142,7 @@ const IndentedTree = ({ topic }: IndentedTreeProps) => {
   return (
     <>
       <svg className="overflow-hidden" ref={svgRef}></svg>
+      <SaveButton showButton={showButton} setShowButton={setShowButton}/>
     </>
   );
 };
