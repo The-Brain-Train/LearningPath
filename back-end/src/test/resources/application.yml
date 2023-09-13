@@ -1,5 +1,7 @@
 # default connection pool
 debug: true
+server:
+  port: 9999
 spring:
   data:
     mongodb:
