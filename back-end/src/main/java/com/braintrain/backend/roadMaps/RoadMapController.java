@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/roadmaps")
+@RequestMapping("/api/roadmaps")
 @CrossOrigin(origins = "*")
 public class RoadMapController {
 
@@ -18,6 +18,11 @@ public class RoadMapController {
     @GetMapping
     public ResponseEntity<List<RoadMapMeta>> getRoadMap() {
         return ResponseEntity.ok(service.getAllRoadMapsMeta());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<RoadMap> getRoadMap(@PathVariable String id) {
+        return ResponseEntity.ok(service.getRoadMapById(id));
     }
 
     @PostMapping
