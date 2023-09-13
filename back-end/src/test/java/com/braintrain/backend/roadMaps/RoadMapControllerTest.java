@@ -28,7 +28,7 @@ class RoadMapControllerTest {
 
     @Test
     void getRoadMaps() {
-        String uri = "http://localhost:%s/api/roadMaps".formatted(port);
+        String uri = "http://localhost:%s/api/roadmaps".formatted(port);
         ResponseEntity<List<RoadMapMeta>> exchange = restTemplate.exchange(uri, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<List<RoadMapMeta>>() {});
         assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
