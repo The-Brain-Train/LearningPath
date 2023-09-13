@@ -45,7 +45,9 @@ class RoadMapControllerTest {
     @AfterEach
     public void tearDown() {
         if(exchange != null) {
-            //Delete
+            String uri = "http://localhost:%s/api/roadmaps/%s".formatted(port, exchange.getBody().getId());
+            ResponseEntity<Void> exchange = restTemplate.exchange(uri, HttpMethod.DELETE, HttpEntity.EMPTY, Void.class);
+            assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
         }
     }
 
@@ -74,6 +76,9 @@ class RoadMapControllerTest {
     }
 
     @Test
-    void testDeleteRoadMap() {
+    void deleteRoadMap() {
+        String uri = "http://localhost:%s/api/roadmaps/%s".formatted(port, exchange.getBody().getId());
+        ResponseEntity<Void> exchange = restTemplate.exchange(uri, HttpMethod.DELETE, HttpEntity.EMPTY, Void.class);
+        assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }
 }
