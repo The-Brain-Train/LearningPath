@@ -11,7 +11,7 @@ type IndentedTreeProps = {
 
 const IndentedTree = ({ topic }: IndentedTreeProps) => {
   const [data, setData] = useState(null);
-  const [showButton, setShowButton] = useState(true);
+  const [showButton, setShowButton] = useState(false);
   const svgRef = useRef(null);
 
   const handleSendMessage = async () => {
@@ -142,7 +142,7 @@ const IndentedTree = ({ topic }: IndentedTreeProps) => {
   return (
     <>
       <svg className="overflow-hidden" ref={svgRef}></svg>
-      <SaveButton showButton={showButton} setShowButton={setShowButton}/>
+      {data == null && <SaveButton showButton={showButton} setShowButton={setShowButton}/>}
     </>
   );
 };

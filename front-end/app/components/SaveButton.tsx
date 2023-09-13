@@ -1,5 +1,5 @@
 import React, { SetStateAction } from "react";
-import BookmarkIcon from '@mui/icons-material/Bookmark';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 type saveButtonProps = {
   showButton: boolean;
@@ -15,10 +15,10 @@ function SaveButton({ showButton, setShowButton }: saveButtonProps) {
     <>
       <button
         onClick={handleClick}
-        className={`width-1 bg-teal-600 rounded-3xl p-3 z-30 bottom-3 right-3 transition-all duration-700"
+        className={`width-1 bg-teal-600 fixed rounded-3xl p-3 z-30 bottom-3 left-3 transition-all duration-700"
         }`}
       >
-        <BookmarkIcon sx={{ fontSize: 35 }} />
+        <CloudUploadIcon sx={{ fontSize: 35 }} />
       </button>
     </>
   );

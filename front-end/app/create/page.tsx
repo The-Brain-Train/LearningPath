@@ -5,6 +5,7 @@ import IndentedTree from "../components/IndentedTree";
 import RoadMapChat from "../components/RoadMapChat";
 import ChatButton from "../components/ChatButton";
 
+
 export default function Create() {
   const [showChat, setShowChat] = useState(true);
   const toggleChat = () => {
@@ -20,7 +21,7 @@ export default function Create() {
         setTopic={setTopic}
       />
       <IndentedTree topic={topic} />
-      <ChatButton showChat={showChat} setShowChat={setShowChat} />
+      <ChatButton showChat={showChat} setShowChat={setShowChat} /> 
     </main>
   );
 }
