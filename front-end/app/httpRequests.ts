@@ -9,8 +9,8 @@ export const getRoadmaps = async () => {
   return data;
 };
 
-export const getRoadmap = async (id: string) => {
-  const response = await fetch(`http://localhost:8080/api/roadmaps/${id}`);
+export const getRoadmap = async (roadMapId: string) => {
+  const response = await fetch(`http://localhost:8080/api/roadmaps/${roadMapId}`);
   if (!response.ok) {
     throw new Error("Failed to fetch roadmaps");
   }

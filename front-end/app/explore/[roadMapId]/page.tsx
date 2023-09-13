@@ -1,3 +1,4 @@
+"use client"
 import IndentedTreeWithData from "@/app/components/IndentedTreeWithData";
 import { getRoadmap } from "@/app/httpRequests";
 import { useEffect, useState } from "react";
@@ -8,7 +9,7 @@ type Props = {
   };
 };
 
-export default function specialtyId(props: Props) {
+export default function roadMapId(props: Props) {
 
   const [roadMap, setRoadmap] = useState();
 
