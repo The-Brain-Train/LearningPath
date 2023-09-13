@@ -33,6 +33,9 @@ public class RoadMapController {
         return ResponseEntity.created(uri).body(roadMapMeta);
     }
 
-
-
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteRoadMap(@PathVariable String id) {
+        service.delete(service.getRoadMapMetaById(id));
+        return ResponseEntity.noContent().build();
+    }
 }
