@@ -15,8 +15,7 @@ function SaveButton({ showButton, setShowButton }: saveButtonProps) {
     <>
       <button
         onClick={handleClick}
-        className={`width-1 bg-teal-600 rounded-3xl p-3 z-30 bottom-3 right-3 transition-all duration-700 ${
-          showButton ? "opacity-0" : "opacity-100"
+        className={`width-1 bg-teal-600 rounded-3xl p-3 z-30 bottom-3 right-3 transition-all duration-700"
         }`}
       >
         <BookmarkIcon sx={{ fontSize: 35 }} />
