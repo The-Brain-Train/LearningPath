@@ -7,11 +7,11 @@ import SearchIcon from "@mui/icons-material/Search";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { getRoadmaps } from "../httpRequests";
-import { Roadmap } from "../types";
+import { RoadmapMeta } from "../types";
 
 export default function Explore() {
 
-  const [roadmaps, setRoadmaps] = useState<Roadmap[]>([]);
+  const [roadmaps, setRoadmaps] = useState<RoadmapMeta[]>([]);
 
   useEffect(()=> {
     getRoadmaps().then(data => setRoadmaps(data));
@@ -40,9 +40,9 @@ export default function Explore() {
       </Paper>
       <div className="text-center">
         <ul>
-          {roadmaps.map((specialty, index) => (
+          {roadmaps.map((roadMap, index) => (
             <li className="border-2 rounded m-4 p-2" key={index}>
-              <Link key={specialty.id} href={`/explore/${specialty.id}`}>{specialty.name}</Link>
+              <Link key={roadMap.id} href={`/explore/${roadMap.roadMapReferenceId}`}>{roadMap.name}</Link>
             </li>
           ))}
         </ul>
