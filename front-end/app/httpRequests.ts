@@ -25,6 +25,7 @@ export const deleteRoadmap = async (roadMapId: string) => {
   if (!response.ok) {
     throw new Error("Failed to delete roadmap");
   }
+  return roadMapId;
 };
 
 export const postRoadmap = async (roadMap: RoadmapDTO) => {

@@ -18,9 +18,10 @@ export default function Explore() {
     getRoadmaps().then(data => setRoadmaps(data));
   }, [])
 
-  const handleDelete = (id:string) => {deleteRoadmap(id)};
-  const [roadmapToDelete, setRoadmapToDelete] = useState<string | null>(null);
-
+  const handleDelete = (id:string) => {
+    deleteRoadmap(id)
+    .then((id) => setRoadmaps(roadmaps.filter((roadmap) => roadmap.roadMapReferenceId !== id)));
+  };
 
   return (
     <main className="flex items-center justify-center flex-col">
