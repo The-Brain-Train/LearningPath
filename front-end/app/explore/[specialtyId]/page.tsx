@@ -1,24 +1,27 @@
-import IndentedTree from "@/app/components/IndentedTree";
-import { enhancedDummyDataTwo } from "@/app/dummyData";
+import IndentedTreeWithData from "@/app/components/IndentedTreeWithData";
+import { getRoadmap } from "@/app/httpRequests";
+import { useEffect, useState } from "react";
 
 type Props = {
   params: {
-    specialtyId: string;
+    roadMapId: string;
   };
 };
 
 export default function specialtyId(props: Props) {
-  console.log(props.params.specialtyId);
 
-  const specificSpecialtyData = enhancedDummyDataTwo.find(
-    (specialty) => specialty.id.toString() === props.params.specialtyId
-  );
+  const [roadMap, setRoadmap] = useState();
 
-  console.log(specificSpecialtyData);
+  useEffect(()=> {
+    getRoadmap(props.params.roadMapId)
+    .then(data => JSON.parse(data.obj))
+    .then(data => setRoadmap(data));
+  }, [])
+
 
   return (
     <main>
-      <IndentedTree data={specificSpecialtyData} />
+      <IndentedTreeWithData data={roadMap} />
     </main>
   );
 }
