@@ -30,7 +30,7 @@ public class RoadMapController {
     public ResponseEntity<RoadMapMeta> createRoadMap(@RequestBody RoadMapDTO roadMapDTO){
         RoadMapMeta roadMapMeta = service.createRoadMap(roadMapDTO);
         URI uri = URI.create("/api/roadmaps" + roadMapMeta.getRoadMapReferenceId());
-        return ResponseEntity.created(uri).build();
+        return ResponseEntity.created(uri).body(roadMapMeta);
     }
 
 
