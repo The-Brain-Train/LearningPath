@@ -1,5 +1,8 @@
 package com.braintrain.backend.roadMaps;
 
+import com.braintrain.backend.TestHelper;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,9 +31,27 @@ class RoadMapControllerTest {
     @Autowired
     RestTemplate restTemplate;
 
+    private static String BASE_URL = "http://localhost:%s/api/roadmaps";
+
+    ResponseEntity<RoadMapDTO> exchange;
+
+    @BeforeEach
+    public void setup() throws IOException {
+        String uri = BASE_URL.formatted(port);
+        RoadMapDTO dto = TestHelper.createRoadMapDTO("Java", Paths.get("src/test/resources/java.json"));
+        exchange = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(dto), RoadMapDTO.class);
+    }
+
+    @AfterEach
+    public void tearDown() {
+        if(exchange != null) {
+            //Delete
+        }
+    }
+
     @Test
     void getRoadMaps() {
-        String uri = "http://localhost:%s/api/roadmaps".formatted(port);
+        String uri = BASE_URL.formatted(port);
         ResponseEntity<List<RoadMapMeta>> exchange = restTemplate.exchange(uri, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<List<RoadMapMeta>>() {});
         assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -36,10 +59,17 @@ class RoadMapControllerTest {
     }
 
     @Test
-    void testGetRoadMap() {
+    void createRoadMap() throws IOException {
+        assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(exchange.getHeaders().getLocation()).isNotNull();
     }
 
     @Test
-    void createRoadMap() {
+    void testGetRoadMap() {
+
+    }
+
+    @Test
+    void testDeleteRoadMap() {
     }
 }
