@@ -33,13 +33,13 @@ class RoadMapControllerTest {
 
     private static String BASE_URL = "http://localhost:%s/api/roadmaps";
 
-    ResponseEntity<RoadMapDTO> exchange;
+    ResponseEntity<RoadMapMeta> exchange;
 
     @BeforeEach
     public void setup() throws IOException {
         String uri = BASE_URL.formatted(port);
         RoadMapDTO dto = TestHelper.createRoadMapDTO("Java", Paths.get("src/test/resources/java.json"));
-        exchange = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(dto), RoadMapDTO.class);
+        exchange = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(dto), RoadMapMeta.class);
     }
 
     @AfterEach
@@ -65,7 +65,11 @@ class RoadMapControllerTest {
     }
 
     @Test
-    void testGetRoadMap() {
+    void getRoadMap() {
+        String uri = "http://localhost:%s/api/roadmaps/%s".formatted(port, exchange.getBody().getRoadMapReferenceId());
+        ResponseEntity<RoadMap> exchange = restTemplate.exchange(uri, HttpMethod.GET, HttpEntity.EMPTY, RoadMap.class);
+        assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(exchange.hasBody()).isTrue();
 
     }
 
