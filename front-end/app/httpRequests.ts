@@ -1,4 +1,4 @@
-import { Roadmap, RoadmapMeta } from "./types";
+import { Roadmap, RoadmapDTO, RoadmapMeta } from "./types";
 
 export const getRoadmaps = async () => {
   const response = await fetch(`http://localhost:8080/api/roadmaps`);
@@ -16,4 +16,18 @@ export const getRoadmap = async (roadMapId: string) => {
   }
   const data: Roadmap = await response.json();
   return data;
+};
+
+export const postRoadmap = async (roadMap: RoadmapDTO) => {
+  const response = await fetch(`http://localhost:8080/api/roadmaps`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(roadMap),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to add job");
+  }
+
 };
