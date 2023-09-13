@@ -1,5 +1,6 @@
 package com.braintrain.backend.roadMaps;
 
+import com.braintrain.backend.TestHelper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
@@ -20,16 +21,11 @@ class RoadMapServiceTest {
 
     @Autowired
     RoadMapService roadMapService;
-
     RoadMapMeta roadMapMeta;
     @BeforeEach
     public void setup() throws IOException {
-        Path path = Paths.get("src/test/resources/java.json");
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(new File(String.valueOf(path)));
-        String str = objectMapper.writeValueAsString(jsonNode);
-        RoadMap roadMap = new RoadMap(str);
-        roadMapMeta = roadMapService.createRoadMap(new RoadMapDTO("Java", str));
+        RoadMapDTO dto = TestHelper.createRoadMapDTO("Java", Paths.get("src/test/resources/java.json"));
+        roadMapMeta = roadMapService.createRoadMap(dto);
     }
 
     @AfterEach
