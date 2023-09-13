@@ -18,9 +18,9 @@ export default function Explore() {
     getRoadmaps().then(data => setRoadmaps(data));
   }, [])
 
-  const handleDelete = (id:string) => {
-    deleteRoadmap(id)
-    .then((id) => setRoadmaps(roadmaps.filter((roadmap) => roadmap.roadMapReferenceId !== id)));
+  const handleDelete = async (id:string) => {
+    await deleteRoadmap(id);
+    setRoadmaps((prevRoadMaps) => prevRoadMaps.filter((roadmap) => roadmap.id !== id));
   };
 
   return (
