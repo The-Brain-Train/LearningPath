@@ -69,16 +69,16 @@ class RoadMapControllerTest {
     @Test
     void getRoadMap() {
         String uri = "http://localhost:%s/api/roadmaps/%s".formatted(port, exchange.getBody().getRoadMapReferenceId());
-        ResponseEntity<RoadMap> exchange = restTemplate.exchange(uri, HttpMethod.GET, HttpEntity.EMPTY, RoadMap.class);
-        assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(exchange.hasBody()).isTrue();
+        ResponseEntity<RoadMap> response = restTemplate.exchange(uri, HttpMethod.GET, HttpEntity.EMPTY, RoadMap.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.hasBody()).isTrue();
 
     }
 
     @Test
     void deleteRoadMap() {
         String uri = "http://localhost:%s/api/roadmaps/%s".formatted(port, exchange.getBody().getId());
-        ResponseEntity<Void> exchange = restTemplate.exchange(uri, HttpMethod.DELETE, HttpEntity.EMPTY, Void.class);
-        assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        ResponseEntity<Void> response = restTemplate.exchange(uri, HttpMethod.DELETE, HttpEntity.EMPTY, Void.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }
 }
