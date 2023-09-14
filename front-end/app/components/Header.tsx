@@ -1,5 +1,5 @@
 "use client";
-import BurgerMenu1 from "./BurgerMenu1";
+import BurgerMenu from "./BurgerMenu";
 
 export default function Header() {
   return (
@@ -11,7 +11,7 @@ export default function Header() {
                 <span className="sr-only">Home</span>
                 <img src="/learningpath-logo-cropped.png" alt="LP Logo" className="h-10" />
               </a>
-              <BurgerMenu1 />
+              <BurgerMenu />
           </div>
         </div>
       </header>
