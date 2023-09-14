@@ -2,8 +2,9 @@
 
 .console-container {
 
+  padding-top: 30px;
   font-family: Khula;
-  font-size: 3em;
+  font-size: 1.5em;
   text-align: center;
 
   display: block;
