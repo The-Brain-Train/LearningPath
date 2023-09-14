@@ -9,11 +9,14 @@ import ExploreIcon from "@mui/icons-material/Explore";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useRouter } from "next/navigation";
 import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close'; 
+
 
 export default function BurgerMenu1() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
   const router = useRouter();
+  const isOpen = Boolean(anchorEl);
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -22,22 +25,26 @@ export default function BurgerMenu1() {
   };
   return (
     <React.Fragment>
-      <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-          <IconButton
-            onClick={handleClick}
-            size="small"
-            sx={{ ml: 2 }}
-            aria-controls={open ? 'account-menu' : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? 'true' : undefined}
-          >
-            <MenuIcon />
-          </IconButton>
+     <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
+        <IconButton
+          onClick={isOpen ? handleClose : handleClick}
+          size="small"
+          sx={{ 
+            ml: 2, 
+            transition: 'transform 0.3s ease', 
+            transform: isOpen ? 'rotate(90deg)' : 'none', 
+        }}
+          aria-controls={isOpen ? 'account-menu' : undefined}
+          aria-haspopup="true"
+          aria-expanded={isOpen ? 'true' : undefined}
+        >
+          {isOpen ? <CloseIcon /> : <MenuIcon />}
+        </IconButton>
       </Box>
       <Menu
         anchorEl={anchorEl}
         id="account-menu"
-        open={open}
+        open={isOpen}
         onClose={handleClose}
         onClick={handleClose}
         PaperProps={{
