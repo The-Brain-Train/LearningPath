@@ -25,7 +25,7 @@ export default function Home() {
         <div
             className="relative text-center p-4 rounded cursor-pointer group transition-opacity duration-300"
             style={{ 
-                backgroundImage: 'url("/roadmap1.jpeg")',
+                backgroundImage: 'url("/roadmap2.jpeg")',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center center',
                 width: '150px',
