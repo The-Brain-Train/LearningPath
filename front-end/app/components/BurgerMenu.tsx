@@ -77,16 +77,16 @@ export default function BurgerMenu() {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <MenuItem onClick={() => router.push("/")}>
-        <HomeIcon /> Home
+        <HomeIcon /> <p className='pl-2'>Home</p>
         </MenuItem>
         <MenuItem onClick={() => router.push("/create")}>
-          <CreateIcon /> Create
+          <CreateIcon /> <p className='pl-2'>Create</p>
         </MenuItem>
         <MenuItem onClick={() => router.push("/explore")}>
-        <ExploreIcon /> Explore
+        <ExploreIcon /> <p className='pl-2'>Explore</p>
         </MenuItem>
         <MenuItem onClick={() => router.back()}>
-          <AccountCircleIcon /> My Profile
+          <AccountCircleIcon /> <p className='pl-2'>My Profile</p>
         </MenuItem>
       </Menu>
 
