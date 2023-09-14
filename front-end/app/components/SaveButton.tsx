@@ -1,4 +1,4 @@
-import React, { SetStateAction } from "react";
+import React, { SetStateAction, useState } from "react";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 type saveButtonProps = {
@@ -6,19 +6,23 @@ type saveButtonProps = {
 };
 
 function SaveButton({saveClick }: saveButtonProps) {
+  const [clicked, setClicked] = useState(false);
   const handleClick = () => {
     saveClick();
+    setClicked(true);
   };
 
   return (
     <>
-      <button
-        onClick={handleClick}
-        className={`width-1 bg-teal-600 fixed rounded-3xl p-3 z-30 bottom-3 left-3 transition-all duration-700"
+      {!clicked && (
+        <button
+          onClick={handleClick}
+          className={`width-1 bg-teal-600 fixed rounded-3xl p-3 z-30 bottom-3 left-3 transition-all duration-700"
         }`}
-      >
-        <CloudUploadIcon sx={{ fontSize: 35 }} />
-      </button>
+        >
+          <CloudUploadIcon sx={{ fontSize: 35 }} />
+        </button>
+      )}
     </>
   );
 }
