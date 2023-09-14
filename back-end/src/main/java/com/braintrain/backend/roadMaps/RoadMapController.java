@@ -23,7 +23,8 @@ public class RoadMapController {
 
     @GetMapping("/{id}")
     public ResponseEntity<RoadMap> getRoadMap(@PathVariable String id) {
-        return ResponseEntity.ok(service.getRoadMapById(id));
+        RoadMap roadMap = service.getRoadMapById(id);
+        return ResponseEntity.ok(roadMap);
     }
 
     @PostMapping
@@ -35,7 +36,8 @@ public class RoadMapController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRoadMap(@PathVariable String id) {
-        service.delete(service.getRoadMapMetaById(id));
+        RoadMapMeta roadMapMeta = service.getRoadMapMetaById(id);
+        service.delete(roadMapMeta);
         return ResponseEntity.noContent().build();
     }
 }

@@ -41,6 +41,7 @@ public class RoadMapService {
     }
 
     public void delete(RoadMapMeta roadMapMeta) {
+        if(roadMapMeta == null) return;
         repo.deleteById(roadMapMeta.getRoadMapReferenceId());
         metaRepo.delete(roadMapMeta);
     }
