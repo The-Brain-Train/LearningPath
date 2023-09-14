@@ -2,11 +2,13 @@ package com.braintrain.backend.roadMaps;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/roadmaps")
@@ -23,8 +25,7 @@ public class RoadMapController {
 
     @GetMapping("/{id}")
     public ResponseEntity<RoadMap> getRoadMap(@PathVariable String id) {
-        RoadMap roadMap = service.getRoadMapById(id);
-        return ResponseEntity.ok(roadMap);
+        return ResponseEntity.of(service.getRoadMapById(id));
     }
 
     @PostMapping
