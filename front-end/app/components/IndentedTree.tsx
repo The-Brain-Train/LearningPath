@@ -6,6 +6,7 @@ import { getResponseFromOpenAI } from "../openAIChat";
 import SaveButton from "./SaveButton";
 import { postRoadmap } from "../httpRequests";
 import { RoadmapDTO } from "../types";
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 
 type IndentedTreeProps = {
   topic: string | null;
@@ -14,8 +15,7 @@ type IndentedTreeProps = {
 const IndentedTree = ({ topic }: IndentedTreeProps) => {
   const [data, setData] = useState(null);
   const svgRef = useRef(null);
-
-
+  const [isLoading, setLoading] = useState(false);
 
   const saveRoadMap = () => {
     if(topic == null) return
@@ -27,10 +27,11 @@ const IndentedTree = ({ topic }: IndentedTreeProps) => {
   }
 
   const handleSendMessage = async () => {
+    setLoading(true);
     const chatHistory = [
       {
         role: "user",
-        content: `I will provide you with JSON format, Please use it to generate a hirecical roadmap for learning ${topic}.  Please only provided the data and nothing else as it will be parsed. { "name": "${topic}" "children": []`,
+        content: `I will provide you with JSON format, Please use it to generate a hierarchical roadmap for learning ${topic}.  Please only provided the data and nothing else as it will be parsed. { "name": "${topic}" "children": []`,
       },
     ];
     console.log("Fetching data");
@@ -42,6 +43,8 @@ const IndentedTree = ({ topic }: IndentedTreeProps) => {
       console.log(jsonData);
     } catch (error) {
       console.error("Error parsing JSON:", error);
+    }finally {
+      setLoading(false); // Set loading to false when data is received
     }
   };
   useEffect(() => {
@@ -152,10 +155,17 @@ const IndentedTree = ({ topic }: IndentedTreeProps) => {
   }, [data]);
 
   return (
-    <>
-      <svg className="overflow-hidden" ref={svgRef}></svg>
-      {data !== null && <SaveButton saveClick={saveRoadMap}/>}
-    </>
+    <div className="h-screen flex flex-col items-center justify-center">
+    {isLoading ? ( 
+      <div className="text-center font-bold text-xl">
+        Creating Roadmap...loading<RestartAltIcon/></div>
+    ) : (
+      <>
+        <svg className="overflow-hidden" ref={svgRef}></svg>
+        {data !== null && <SaveButton saveClick={saveRoadMap} />}
+      </>
+    )}
+  </div>
   );
 };
 

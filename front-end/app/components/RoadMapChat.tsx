@@ -1,10 +1,7 @@
 import "../roadMapChat.css";
-import { RoundedCorner } from "@mui/icons-material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import SendIcon from "@mui/icons-material/Send";
 import React, { useState } from "react";
-import { getResponseFromOpenAI } from "../openAIChat";
-import { type } from "os";
+
 
 type Message = {
   role: string;
@@ -16,9 +13,9 @@ type roadMapChatProps = {
   toggleChat: () => void;
   setTopic: React.Dispatch<React.SetStateAction<string | null>>;
 };
+
 function RoadMapChat({ showChat, toggleChat, setTopic }: roadMapChatProps) {
   const [userMessage, setUserMessage] = useState<string>("");
-  // const [assistantMessage, setAssistantMessage] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
@@ -32,19 +29,7 @@ function RoadMapChat({ showChat, toggleChat, setTopic }: roadMapChatProps) {
 
     setMessages(chatHistory);
     setUserMessage("");
-
-    // try {
-    //   const response = await getResponseFromOpenAI(chatHistory);
-    //   if (response.choices && response.choices.length > 0) {
-    //     setAssistantMessage(response.choices[0].message.content);
-    //     setMessages([
-    //       ...chatHistory,
-    //       { role: "assistant", content: response.choices[0].message.content },
-    //     ]);
-    //   }
-    // } catch (error) {
-    //   console.error("Failed to get response:", error);
-    // }
+    toggleChat(); 
   };
 
   return (

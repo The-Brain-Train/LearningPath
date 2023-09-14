@@ -63,12 +63,13 @@ export default function Explore() {
           <SearchIcon />
         </IconButton>
       </Paper>
-      <div className="roadMaps-list">
+      <div className="roadMaps-list"
+      style={{ maxWidth: '300px', width: '80%' }}>
         <ul className="flex flex-col justify-center ">
           {filteredRoadmaps.map((roadMap: RoadmapMeta) => (
             <li
               key={roadMap.id}
-              className="bg-neutral mb-5 rounded-lg shadow-md"
+              className="bg-neutral mb-5 rounded-lg shadow-md "
             >
               <div className="roadmap-list-card flex justify-between items-center p-4">
                 <Link
