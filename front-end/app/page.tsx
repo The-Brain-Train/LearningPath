@@ -10,12 +10,9 @@ export default function Home() {
       <TextAnimation />
       <section className="flex flex-col p-3 gap-2 mt-5">
         <div className="flex justify-center items-center">
-          <div className="info rounded p-5 relative text-white">
-            LearningPath is an AI-powered learning management tool. It designs
-            personalized learning plans, estimates time required to reach skill
-            levels, and offers a structured roadmap with attainable goals. These
-            plans are tailored to users' academic levels, available study time,
-            and pre-existing skills.
+          <div className="info rounded p-5 relative text-white text-xl text-center">
+            Want to learn a new skill, but never known where to start or
+            what path to follow? Let LearningPath do it for you
           </div>
         </div>
 
@@ -55,6 +52,16 @@ export default function Home() {
               </span>
             </div>
           </Link>
+        </div>
+        <div className="flex flex-col justify-center items-center pt-8">
+          <h2 className="text-white text-3xl">About LearningPath</h2>
+          <div className="rounded p-5 relative text-white text-base">
+            LearningPath is an AI-powered learning management tool. It designs
+            personalized learning plans, estimates time required to reach skill
+            levels, and offers a structured roadmap with attainable goals. These
+            plans are tailored to users' academic levels, available study time,
+            and pre-existing skills.
+          </div>
         </div>
       </section>
     </main>
