@@ -26,7 +26,7 @@ export default function Header() {
                   />
                 </svg> */}
 
-                <img src="/lp-logo-crop.png" alt="LP Logo" className="h-10" />
+                <img src="/learningpath-logo-cropped.png" alt="LP Logo" className="h-10" />
 
               </a>
             </div>
