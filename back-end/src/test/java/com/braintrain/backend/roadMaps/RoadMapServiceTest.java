@@ -57,7 +57,7 @@ class RoadMapServiceTest {
         roadMapService.delete(roadMapMeta);
 
         assertNull(roadMapService.getRoadMapMetaById(roadMapMeta.getId()));
-        assertNull(roadMapService.getRoadMapById(roadMapMeta.getRoadMapReferenceId()));
+        assertNull(roadMapService.getRoadMapById(roadMapMeta.getRoadMapReferenceId()).orElse(null));
     }
 
 
