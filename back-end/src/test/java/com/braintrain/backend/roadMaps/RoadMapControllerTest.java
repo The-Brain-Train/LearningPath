@@ -13,6 +13,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -20,6 +21,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchException;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -74,6 +76,19 @@ class RoadMapControllerTest {
         assertThat(response.hasBody()).isTrue();
 
     }
+
+    @Test
+    void getInvalidRoadmapReturns404() {
+        String uri = "http://localhost:%s/api/roadmaps/df".formatted(port);
+
+        HttpClientErrorException exception = assertThrows(HttpClientErrorException.NotFound.class, () -> {
+            restTemplate.exchange(uri, HttpMethod.GET, HttpEntity.EMPTY, Void.class);
+        });
+
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
+    }
+
+
 
     @Test
     void deleteRoadMap() {
