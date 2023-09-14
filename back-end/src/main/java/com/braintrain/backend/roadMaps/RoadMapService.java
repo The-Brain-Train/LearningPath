@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -28,8 +29,8 @@ public class RoadMapService {
         return repo.findAll();
     }
 
-    public RoadMap getRoadMapById(String id) {
-        return repo.findById(id).orElse(null);
+    public Optional<RoadMap> getRoadMapById(String id) {
+        return repo.findById(id);
     }
 
     public RoadMapMeta getRoadMapMetaById(String id) {
@@ -41,6 +42,7 @@ public class RoadMapService {
     }
 
     public void delete(RoadMapMeta roadMapMeta) {
+        if(roadMapMeta == null) return;
         repo.deleteById(roadMapMeta.getRoadMapReferenceId());
         metaRepo.delete(roadMapMeta);
     }
