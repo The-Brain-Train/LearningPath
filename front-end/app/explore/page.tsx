@@ -47,22 +47,23 @@ export default function Explore() {
       <div className="roadMaps-list">
           <ul className="flex flex-col justify-center ">
             {[...roadmaps].reverse().map((roadMap: RoadmapMeta) => (
-              <li key={roadMap.id} className="bg-neutral mb-5 rounded-lg">
-                <div className="roadmap-list-card flex justify-between items-center">
-                  <Link
-                    className="card-list-text card-body text-left overflow-hidden"
-                    href={`/explore/${roadMap.roadMapReferenceId}`}
-                  >
-                    <p className="lyric-card-name overflow-ellipsis overflow-hidden whitespace-nowrap">
-                      {roadMap.name}
-                    </p>
-                  </Link>
-
-                  <div className="flex-shrink-0 min-w-max">
-                    <DeleteIcon onClick={() => handleDelete(roadMap.id)}/>
-                  </div>
+              <li key={roadMap.id} className="bg-neutral mb-5 rounded-lg shadow-md">
+              <div className="roadmap-list-card flex justify-between items-center p-4">
+                <Link
+                  className="card-list-text card-body text-left overflow-hidden"
+                  href={`/explore/${roadMap.roadMapReferenceId}`}
+                >
+                  <p className="lyric-card-name overflow-ellipsis overflow-hidden whitespace-nowrap">
+                    {roadMap.name}
+                  </p>
+                </Link>
+            
+                <div className="flex-shrink-0 min-w-max">
+                  <DeleteIcon onClick={() => handleDelete(roadMap.id)} />
                 </div>
-              </li>
+              </div>
+            </li>
+            
             ))}
           </ul>
       </div>
