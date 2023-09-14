@@ -1,0 +1,27 @@
+@import url(https://fonts.googleapis.com/css?family=Khula:700);
+
+.console-container {
+
+  font-family: Khula;
+  font-size: 3em;
+  text-align: center;
+
+  display: block;
+  position: absolute;
+  color: white;
+
+
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+.console-underscore {
+  display: inline-block;
+  position: relative;
+
+}
+
+.hidden {
+  opacity: 0;
+}
