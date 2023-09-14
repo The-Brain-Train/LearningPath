@@ -1,10 +1,14 @@
 "use client";
 import Header from "./components/Header";
 import Link from "next/link";
+import TextAnimation from "./components/TextAnimation";
+
 
 export default function Home() {
+  
   return (
     <main>
+      <TextAnimation />
       <section className="flex flex-col p-3 gap-2 mt-5">
         <div 
             className="rounded p-5 border relative text-white" 
@@ -12,7 +16,8 @@ export default function Home() {
               backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("/roadmap2.jpeg")',
               backgroundSize: 'cover',
               backgroundPosition: 'center center',
-              minHeight: '300px'
+              minHeight: '300px',
+              marginTop: '40px'
             }}
         >
           Lorem ipsum dolor sit amet consectetur adipisicing elit. In facere
