@@ -1,8 +1,7 @@
 import "../roadMapChat.css";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import React, { useState } from "react";
-import SendIcon from '@mui/icons-material/Send';
-
+import SendIcon from "@mui/icons-material/Send";
 
 type Message = {
   role: string;
@@ -30,7 +29,7 @@ function RoadMapChat({ showChat, toggleChat, setTopic }: roadMapChatProps) {
 
     setMessages(chatHistory);
     setUserMessage("");
-    toggleChat(); 
+    toggleChat();
   };
 
   return (
@@ -70,11 +69,6 @@ function RoadMapChat({ showChat, toggleChat, setTopic }: roadMapChatProps) {
                         </span>
                       </div>
                     </div>
-                    <img
-                      src="https://images.unsplash.com/photo-1590031905470-a1a1feacbb0b?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144"
-                      alt="My profile"
-                      className="w-6 h-6 rounded-full order-2"
-                    />
                   </div>
                 </div>
               );
@@ -90,8 +84,8 @@ function RoadMapChat({ showChat, toggleChat, setTopic }: roadMapChatProps) {
                       </div>
                     </div>
                     <img
-                      src="https://images.unsplash.com/photo-1549078642-b2ba4bda0cdb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144"
-                      alt="My profile"
+                      src="/learningpath-logo-cropped.png"
+                      alt="LearningPath logo"
                       className="w-6 h-6 rounded-full order-1"
                     />
                   </div>
@@ -110,10 +104,10 @@ function RoadMapChat({ showChat, toggleChat, setTopic }: roadMapChatProps) {
               className="w-full focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-600 pl-12 bg-gray-200 rounded-md py-3"
             />
             <div className="bg-white">
-            <SendIcon onClick={handleSendMessage} 
-            sx={{ fontSize: 35,
-              marginTop: '4px'  }}
-            />
+              <SendIcon
+                onClick={handleSendMessage}
+                sx={{ fontSize: 35, marginTop: "4px" }}
+              />
             </div>
           </div>
         </div>
