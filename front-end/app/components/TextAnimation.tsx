@@ -7,7 +7,7 @@ const TextAnimation: React.FC = () => {
   const [underscoreClass, setUnderscoreClass] = useState(styles['console-underscore']);
 
   useEffect(() => {
-    const words = ['Hello World.', 'Console Text', 'Made with Love.'];
+    const words = ['Learning Path.', 'Learn with AI.', 'Made with Love.'];
     const colors = ['tomato', 'rebeccapurple', 'lightblue'];
     let letterCount = 1;
     let x = 1;
