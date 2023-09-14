@@ -3,7 +3,7 @@ import styles from '../animation.module.css';
 
 const TextAnimation: React.FC = () => {
     const words = ['Welcome to LearningPath.', 'Create your own LearningPath', 'Made with Love.'];
-    const colors = ['tomato', 'rebeccapurple', 'lightblue'];
+    const colors = ['#00BBF0', '#FDB44B', '#03C988'];
   
     const [text, setText] = useState(""); 
     const [color, setColor] = useState(colors[0]);
