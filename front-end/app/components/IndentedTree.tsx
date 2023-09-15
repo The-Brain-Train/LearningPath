@@ -7,6 +7,7 @@ import SaveButton from "./SaveButton";
 import { postRoadmap } from "../httpRequests";
 import { RoadmapDTO } from "../types";
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import { chatHistory } from "../chatPreHistory";
 
 type IndentedTreeProps = {
   topic: string | null;
@@ -28,15 +29,9 @@ const IndentedTree = ({ topic }: IndentedTreeProps) => {
 
   const handleSendMessage = async () => {
     setLoading(true);
-    const chatHistory = [
-      {
-        role: "user",
-        content: `I will provide you with JSON format, Please use it to generate a hierarchical roadmap for learning ${topic}.  Please only provided the data and nothing else as it will be parsed. { "name": "${topic}" "children": []`,
-      },
-    ];
     console.log("Fetching data");
     try {
-      const response = await getResponseFromOpenAI(chatHistory);
+      const response = await getResponseFromOpenAI(chatHistory(topic));
       console.log(response);
       const jsonData = await JSON.parse(response.choices[0].message.content);
       setData(jsonData);
@@ -73,7 +68,7 @@ const IndentedTree = ({ topic }: IndentedTreeProps) => {
 
     const columns = [
       {
-        label: "Size",
+        label: "Hours",
         value: (d) => d.value,
         format,
         x: screenWidth - 25,
