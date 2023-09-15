@@ -2,11 +2,10 @@
 import Header from "./components/Header";
 import Link from "next/link";
 import TextAnimation from "./components/TextAnimation";
-import "./home.css";
 
 export default function Home() {
     return (
-        <main className="home">
+        <main className="main-background">
             <section className="flex flex-col p-3 gap-2 mt-5">
 
                 <div className="info">

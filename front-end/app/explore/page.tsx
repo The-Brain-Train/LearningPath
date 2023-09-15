@@ -41,7 +41,7 @@ export default function Explore() {
   };
 
   return (
-    <main className="flex items-center justify-center flex-col">
+    <main className=" main-background min-h-max flex items-center  flex-col">
       <Paper
         component="form"
         sx={{

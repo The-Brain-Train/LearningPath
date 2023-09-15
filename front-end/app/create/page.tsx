@@ -13,7 +13,7 @@ export default function Create() {
   const [topic, setTopic] = useState<string | null>(null);
 
   return (
-    <main className="mt-7 mb-28">
+    <main className="main-background mt-7 mb-28">
       <RoadMapChat
         showChat={showChat}
         toggleChat={toggleChat}
