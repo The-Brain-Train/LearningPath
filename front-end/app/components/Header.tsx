@@ -24,7 +24,7 @@ export default function Header() {
                 marginLeft: "10px",
               }}
             >
-              Learning Path
+              LearningPath
             </span>
           </Link>
           <BurgerMenu />
