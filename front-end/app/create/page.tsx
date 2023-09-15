@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import { enhancedDummyData } from "../dummyData";
 import IndentedTree from "../components/IndentedTree";
 import RoadMapChat from "../components/RoadMapChat";
 import ChatButton from "../components/ChatButton";
@@ -14,13 +13,13 @@ export default function Create() {
   const [topic, setTopic] = useState<string | null>(null);
 
   return (
-    <main>
+    <main className="mt-7 mb-28">
       <RoadMapChat
         showChat={showChat}
         toggleChat={toggleChat}
         setTopic={setTopic}
       />
-      <IndentedTree topic={topic} />
+      <IndentedTree topic={topic}/>
       <ChatButton showChat={showChat} setShowChat={setShowChat} /> 
     </main>
   );
