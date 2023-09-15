@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styles from '../animation.module.css';
 
 const TextAnimation: React.FC = () => {
-    const words = ['create LearningPath.', 'learn something new?', 'Made with Love.'];
+    const words = ['create your own LearningPath.', 'learn something new.', 'create personalized learning plans.'];
     const colors = ['#00BBF0', '#FDB44B', '#03C988'];
   
     const [text, setText] = useState(""); 
