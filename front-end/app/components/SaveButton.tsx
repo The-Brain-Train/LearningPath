@@ -17,7 +17,7 @@ function SaveButton({saveClick }: saveButtonProps) {
       {!clicked && (
         <button
           onClick={handleClick}
-          className={`width-1 bg-teal-600 fixed rounded-3xl p-3 z-30 bottom-3 left-3 transition-all duration-700"
+          className={`width-1 border-black border-2 fixed rounded-3xl p-3 z-30 bottom-3 left-3 transition-all duration-700"
         }`}
         >
           <CloudUploadIcon sx={{ fontSize: 35 }} />
