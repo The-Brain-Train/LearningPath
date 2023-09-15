@@ -22,8 +22,8 @@ export default function roadMapId(props: Props) {
   }, []);
 
   return (
-    <main>
-      <ArrowBack fontSize="medium" onClick={() => router.back()} />
+    <main className="main-background">
+      <ArrowBack fontSize="medium" className="text-slate-300 m-3 mt-4" onClick={() => router.back()} />
       <IndentedTreeWithData data={roadMap} />
     </main>
   );

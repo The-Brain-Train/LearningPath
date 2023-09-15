@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { getResponseFromOpenAI } from "../openAIChat";
 
 type IndentedTreeProps = {
@@ -10,6 +11,7 @@ type IndentedTreeProps = {
 
 const IndentedTreeWithData = ({ data }: IndentedTreeProps) => {
   const svgRef = useRef(null);
+  const [isLoading, setLoading] = useState(false);
 
 
   useEffect(() => {
@@ -32,7 +34,6 @@ const IndentedTreeWithData = ({ data }: IndentedTreeProps) => {
 
     const columns = [
       {
-        label: "Hours",
         value: (d) => d.value,
         format,
         x: screenWidth - 25,
@@ -70,19 +71,21 @@ const IndentedTreeWithData = ({ data }: IndentedTreeProps) => {
       .selectAll()
       .data(nodes)
       .join("g")
-      .attr("transform", (d) => `translate(0,${d.index * nodeSize})`);
+      .attr("transform", (d) => `translate(0,${d.index * nodeSize})`)
+      .attr("fill", "#cbd5e1");
 
     node
       .append("circle")
       .attr("cx", (d) => d.depth * nodeSize)
       .attr("r", 2.5)
-      .attr("fill", (d) => (d.children ? null : "#999"));
+      .attr("fill", (d) => (d.children ? null : "#cbd5e1"));
 
     node
       .append("text")
       .attr("dy", "0.32em")
       .attr("x", (d) => d.depth * nodeSize + 6)
-      .text((d) => d.data.name);
+      .text((d) => d.data.name)
+      .attr("fill", "#cbd5e1");
 
     node.append("title").text((d) =>
       d
@@ -107,16 +110,31 @@ const IndentedTreeWithData = ({ data }: IndentedTreeProps) => {
         .attr("dy", "0.32em")
         .attr("x", x)
         .attr("text-anchor", "end")
-        .attr("fill", (d) => (d.children ? null : "#555"))
+        .attr("fill", (d) => (d.children ? null : "#cbd5e1"))
         .data(root.copy().sum(value).descendants())
         .text((d) => format(d.value, d));
     }
   }, [data]);
 
   return (
-    <>
+    <div className="flex flex-col px-3">
+    {isLoading ? ( 
+      <div className="text-center font-bold text-xl">
+        Fetching Roadmap...loading<RestartAltIcon /></div>
+    ) : (
+      <>
+      <div className="flex content-between justify-between flex-nowrap">
+        <p className="text-slate-300 pl-2 font-bold">
+          Learning Path
+        </p>
+        <p className="text-slate-300 pr-2 font-bold">
+          Hours
+        </p>
+      </div>
       <svg className="overflow-hidden" ref={svgRef}></svg>
-    </>
+      </>
+    )}
+  </div>
   );
 };
 
