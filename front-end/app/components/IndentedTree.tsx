@@ -87,7 +87,7 @@ const IndentedTree = ({ topic }: IndentedTreeProps) => {
     const link = svg
       .append("g")
       .attr("fill", "none")
-      .attr("stroke", "#999")
+      .attr("stroke", "#cbd5e1")
       .selectAll()
       .data(root.links())
       .join("path")
@@ -105,19 +105,21 @@ const IndentedTree = ({ topic }: IndentedTreeProps) => {
       .selectAll()
       .data(nodes)
       .join("g")
-      .attr("transform", (d) => `translate(0,${d.index * nodeSize})`);
+      .attr("transform", (d) => `translate(0,${d.index * nodeSize})`)
+      .attr("fill", "#cbd5e1");
 
     node
       .append("circle")
       .attr("cx", (d) => d.depth * nodeSize)
       .attr("r", 2.5)
-      .attr("fill", (d) => (d.children ? null : "#999"));
+      .attr("fill", (d) => (d.children ? null : "#cbd5e1"));
 
     node
       .append("text")
       .attr("dy", "0.32em")
       .attr("x", (d) => d.depth * nodeSize + 6)
-      .text((d) => d.data.name);
+      .text((d) => d.data.name)
+      .attr("fill", "#cbd5e1");
 
     node.append("title").text((d) =>
       d
@@ -142,7 +144,7 @@ const IndentedTree = ({ topic }: IndentedTreeProps) => {
         .attr("dy", "0.32em")
         .attr("x", x)
         .attr("text-anchor", "end")
-        .attr("fill", (d) => (d.children ? null : "#555"))
+        .attr("fill", (d) => (d.children ? null : "#cbd5e1"))
         .data(root.copy().sum(value).descendants())
         .text((d) => format(d.value, d));
     }
@@ -167,10 +169,10 @@ const IndentedTree = ({ topic }: IndentedTreeProps) => {
     ) : (
       <>
       <div className="flex content-between justify-between flex-nowrap">
-        <p className="pl-2 font-bold">
+        <p className="text-slate-300 pl-2 font-bold">
           Learning Path
         </p>
-        <p className="pr-2 font-bold">
+        <p className="text-slate-300 pr-2 font-bold">
           Hours
         </p>
 
