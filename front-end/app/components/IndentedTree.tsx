@@ -150,12 +150,21 @@ const IndentedTree = ({ topic }: IndentedTreeProps) => {
   }, [data]);
 
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex flex-col px-3">
     {isLoading ? ( 
       <div className="text-center font-bold text-xl">
         Creating Roadmap...loading<RestartAltIcon/></div>
     ) : (
       <>
+      <div className="flex content-between justify-between flex-nowrap">
+        <p className="pl-2 font-bold">
+          Learning Path
+        </p>
+        <p className="pr-2 font-bold">
+          Hours
+        </p>
+
+      </div>
         <svg className="overflow-hidden" ref={svgRef}></svg>
         {data !== null && <SaveButton saveClick={saveRoadMap} />}
       </>
