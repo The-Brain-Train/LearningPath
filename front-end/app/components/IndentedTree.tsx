@@ -8,7 +8,6 @@ import { postRoadmap } from "../httpRequests";
 import { RoadmapDTO } from "../types";
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { chatHistory } from "../chatPreHistory";
-import { enhancedDummyData } from "../dummyData";
 
 type IndentedTreeProps = {
   topic: string | null;
@@ -28,31 +27,33 @@ const IndentedTree = ({ topic }: IndentedTreeProps) => {
     postRoadmap(requestData);
   }
 
-  // const handleSendMessage = async () => {
-  //   setLoading(true);
-  //   console.log("Fetching data");
-  //   try {
-  //     const response = await getResponseFromOpenAI(chatHistory(topic));
-  //     console.log(response);
-  //     const jsonData = await JSON.parse(response.choices[0].message.content);
-  //     setData(jsonData);
-  //     console.log(jsonData);
-  //   } catch (error) {
-  //     console.error("Error parsing JSON:", error);
-  //   }finally {
-  //     setLoading(false); // Set loading to false when data is received
-  //   }
-  // };
-  // useEffect(() => {
-  //   if (topic != null) {
-  //     handleSendMessage();
-  //   }
-  // }, [topic]);
+  const handleSendMessage = async () => {
+    setLoading(true);
+    console.log("Fetching data");
+    try {
+      const response = await getResponseFromOpenAI(chatHistory(topic));
+      console.log(response);
+      const jsonData = await JSON.parse(response.choices[0].message.content);
+      setData(jsonData);
+      console.log(jsonData);
+    } catch (error) {
+      console.error("Error parsing JSON:", error);
+    }finally {
+      setLoading(false); // Set loading to false when data is received
+    }
+  };
+  useEffect(() => {
+    if (topic != null) {
+      handleSendMessage();
+    }
+  }, [topic]);
+
+
   const graph = () => {
     d3.select(svgRef.current).selectAll("*").remove();
     const format = d3.format(",");
     const nodeSize = 21;
-    const root = d3.hierarchy(enhancedDummyData).eachBefore(
+    const root = d3.hierarchy(data).eachBefore(
       (
         (i) => (d) =>
           (d.index = i++)
