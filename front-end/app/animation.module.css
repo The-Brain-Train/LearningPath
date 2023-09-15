@@ -2,23 +2,27 @@
 
 .console-container {
 
-  padding-top: 30px;
+  text-align: left;
+
+
+  /* padding-top: 30px; */
   font-family: 'Roboto', sans-serif;
   font-weight: 900;
   font-size: 1.5em;
-  text-align: center;
+  /* text-align: center; */
 
-  display: block;
+  /* display: block; */
   position: absolute;
   color: white;
 
+  
 
   left: 0;
   right: 0;
   margin: auto;
 }
 
-.console-underscore {
+/* .console-underscore {
   display: inline-block;
   position: relative;
 
@@ -26,4 +30,4 @@
 
 .hidden {
   opacity: 0;
-}
+} */

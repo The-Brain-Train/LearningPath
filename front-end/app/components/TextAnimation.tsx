@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styles from '../animation.module.css';
 
 const TextAnimation: React.FC = () => {
-    const words = ['Welcome to LearningPath.', 'Create your own LearningPath', 'Made with Love.'];
+    const words = ['create LearningPath.', 'learn something new?', 'Made with Love.'];
     const colors = ['#00BBF0', '#FDB44B', '#03C988'];
   
     const [text, setText] = useState(""); 
@@ -38,14 +38,15 @@ const TextAnimation: React.FC = () => {
           letterCount += x;
         }
       }, 120);
-  
+
       const underscoreInterval = setInterval(() => {
         if (underscoreClass === styles['console-underscore']) {
-          setUnderscoreClass(`${styles['console-underscore']} ${styles['hidden']}`);
+            setUnderscoreClass(`${styles['console-underscore']} ${styles['hidden']}`);
         } else {
-          setUnderscoreClass(styles['console-underscore']);
+            setUnderscoreClass(styles['console-underscore']);
         }
-      }, 400);
+    }, 400);
+    
   
       return () => {
         clearInterval(textInterval);
@@ -55,8 +56,8 @@ const TextAnimation: React.FC = () => {
   
     return (
       <div className={styles['console-container']}>
+        Welcome to LearningPath! Here you can&nbsp; 
         <span style={{ color: color }}>{text}</span>
-        <div className={underscoreClass}>&#95;</div>
       </div>
     );
   };
