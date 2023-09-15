@@ -16,7 +16,7 @@ export default function Home() {
 
 
 
-                <div className="flex justify-center gap-2 mt-5 pt-64">
+                <div className="flex justify-center gap-2 mt-5 pt-48">
                     <Link href="/explore">
                         <div
                             className="relative text-center p-4 rounded cursor-pointer group transition-opacity duration-300"
