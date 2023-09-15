@@ -48,9 +48,8 @@ const IndentedTree = ({ topic }: IndentedTreeProps) => {
   //     handleSendMessage();
   //   }
   // }, [topic]);
-
-  useEffect(() => {
-    // if (data == null) return;
+  const graph = () => {
+    d3.select(svgRef.current).selectAll("*").remove();
     const format = d3.format(",");
     const nodeSize = 21;
     const root = d3.hierarchy(enhancedDummyData).eachBefore(
@@ -147,8 +146,19 @@ const IndentedTree = ({ topic }: IndentedTreeProps) => {
         .data(root.copy().sum(value).descendants())
         .text((d) => format(d.value, d));
     }
-  }, [data]);
+  }
 
+  useEffect(() => {
+    graph();
+    const createGraph = () => {
+      window.addEventListener("resize", graph);
+    };
+    createGraph();
+    return () => {
+      window.removeEventListener("resize", graph);
+    };
+  }, []);
+  
   return (
     <div className="flex flex-col px-3">
     {isLoading ? ( 
