@@ -29,25 +29,17 @@ const IndentedTree = ({ topic }: IndentedTreeProps) => {
 
   const handleSendMessage = async () => {
     setLoading(true);
-    console.log("Fetching data");
     try {
       const response = await getResponseFromOpenAI(chatHistory(topic));
       console.log(response);
       const jsonData = await JSON.parse(response.choices[0].message.content);
       setData(jsonData);
-      console.log(jsonData);
     } catch (error) {
       console.error("Error parsing JSON:", error);
     }finally {
-      setLoading(false); // Set loading to false when data is received
+      setLoading(false);
     }
   };
-  useEffect(() => {
-    if (topic != null) {
-      handleSendMessage();
-    }
-  }, [topic]);
-
 
   const graph = () => {
     d3.select(svgRef.current).selectAll("*").remove();
@@ -61,7 +53,6 @@ const IndentedTree = ({ topic }: IndentedTreeProps) => {
     );
     const nodes = root.descendants();
 
-    // Dynamically calculate width and height based on screen dimensions
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
     const width = screenWidth;
@@ -152,6 +143,14 @@ const IndentedTree = ({ topic }: IndentedTreeProps) => {
   }
 
   useEffect(() => {
+    if (topic != null) {
+      handleSendMessage();
+    }
+  }, [topic]);
+
+
+  useEffect(() => {
+    if(data == null) return;
     graph();
     const createGraph = () => {
       window.addEventListener("resize", graph);
@@ -160,7 +159,7 @@ const IndentedTree = ({ topic }: IndentedTreeProps) => {
     return () => {
       window.removeEventListener("resize", graph);
     };
-  }, []);
+  }, [data]);
   
   return (
     <div className="flex flex-col px-3">
