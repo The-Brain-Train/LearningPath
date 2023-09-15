@@ -14,8 +14,10 @@ const IndentedTreeWithData = ({ data }: IndentedTreeProps) => {
   const [isLoading, setLoading] = useState(false);
 
 
-  useEffect(() => {
-    if (data == null) return;
+  const graph = () => {
+    if(data == null) return;
+
+    d3.select(svgRef.current).selectAll("*").remove();
     const format = d3.format(",");
     const nodeSize = 21;
     const root = d3.hierarchy(data).eachBefore(
@@ -53,7 +55,7 @@ const IndentedTreeWithData = ({ data }: IndentedTreeProps) => {
     const link = svg
       .append("g")
       .attr("fill", "none")
-      .attr("stroke", "#999")
+      .attr("stroke", "#cbd5e1")
       .selectAll()
       .data(root.links())
       .join("path")
@@ -114,6 +116,17 @@ const IndentedTreeWithData = ({ data }: IndentedTreeProps) => {
         .data(root.copy().sum(value).descendants())
         .text((d) => format(d.value, d));
     }
+  }
+
+  useEffect(() => {
+    graph();
+    const createGraph = () => {
+      window.addEventListener("resize", graph);
+    };
+    createGraph();
+    return () => {
+      window.removeEventListener("resize", graph);
+    };
   }, [data]);
 
   return (
