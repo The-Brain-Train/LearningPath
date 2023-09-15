@@ -69,7 +69,7 @@ export default function Explore() {
           {filteredRoadmaps.map((roadMap: RoadmapMeta) => (
             <li
               key={roadMap.id}
-              className="bg-neutral mb-5 rounded-lg shadow-md "
+              className="bg-slate-300 mb-5 rounded-lg shadow-md "
             >
               <div className="roadmap-list-card flex justify-between items-center p-4">
                 <Link
