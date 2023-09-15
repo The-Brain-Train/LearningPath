@@ -19,7 +19,7 @@ function ChatButton({ showChat, setShowChat }: chatButtonProps) {
       >
         <button
           onClick={handleClick}
-          className={`width-1 bg-teal-600 rounded-3xl p-3 opacity-100`}
+          className={`width-1 border-black border-2 rounded-3xl p-3 opacity-100`}
         >
           <ChatIcon sx={{ fontSize: 35 }} />
         </button>
