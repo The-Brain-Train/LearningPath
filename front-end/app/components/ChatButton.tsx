@@ -1,4 +1,3 @@
-import React, { SetStateAction } from "react";
 import ChatIcon from "@mui/icons-material/Chat";
 
 type chatButtonProps = {
