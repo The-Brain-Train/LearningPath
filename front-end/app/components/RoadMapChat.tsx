@@ -102,6 +102,11 @@ function RoadMapChat({ showChat, toggleChat, setTopic }: roadMapChatProps) {
               onChange={(e) => setUserMessage(e.target.value)}
               placeholder="Write your message!"
               className="w-full focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-600 pl-12 bg-gray-200 rounded-md py-3"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSendMessage();
+                }
+              }}
             />
             <div className="bg-white">
               <SendIcon
