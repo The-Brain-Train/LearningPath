@@ -6,8 +6,8 @@ import { getResponseFromOpenAI } from "../openAIChat";
 import SaveButton from "./SaveButton";
 import { postRoadmap } from "../httpRequests";
 import { RoadmapDTO } from "../types";
-import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { chatHistory } from "../chatPreHistory";
+import { CircularProgress } from "@mui/material";
 
 type IndentedTreeProps = {
   topic: string | null;
@@ -19,13 +19,13 @@ const IndentedTree = ({ topic }: IndentedTreeProps) => {
   const [isLoading, setLoading] = useState(false);
 
   const saveRoadMap = () => {
-    if(topic == null) return
+    if (topic == null) return;
     const requestData: RoadmapDTO = {
       name: topic,
       roadMap: JSON.stringify(data),
     };
     postRoadmap(requestData);
-  }
+  };
 
   const handleSendMessage = async () => {
     setLoading(true);
@@ -36,7 +36,7 @@ const IndentedTree = ({ topic }: IndentedTreeProps) => {
       setData(jsonData);
     } catch (error) {
       console.error("Error parsing JSON:", error);
-    }finally {
+    } finally {
       setLoading(false);
     }
   };
@@ -140,7 +140,7 @@ const IndentedTree = ({ topic }: IndentedTreeProps) => {
         .data(root.copy().sum(value).descendants())
         .text((d) => format(d.value, d));
     }
-  }
+  };
 
   useEffect(() => {
     if (topic != null) {
@@ -148,9 +148,8 @@ const IndentedTree = ({ topic }: IndentedTreeProps) => {
     }
   }, [topic]);
 
-
   useEffect(() => {
-    if(data == null) return;
+    if (data == null) return;
     graph();
     const createGraph = () => {
       window.addEventListener("resize", graph);
@@ -160,28 +159,24 @@ const IndentedTree = ({ topic }: IndentedTreeProps) => {
       window.removeEventListener("resize", graph);
     };
   }, [data]);
-  
+
   return (
     <div className="flex flex-col px-3">
-    {isLoading ? ( 
-      <div className="text-center font-bold text-xl">
-        Creating Roadmap...loading<RestartAltIcon/></div>
-    ) : (
-      <>
-      <div className="flex content-between justify-between flex-nowrap">
-        <p className="text-slate-300 pl-2 font-bold">
-          Learning Path
-        </p>
-        <p className="text-slate-300 pr-2 font-bold">
-          Hours
-        </p>
-
-      </div>
-        <svg className="overflow-hidden" ref={svgRef}></svg>
-        {data !== null && <SaveButton saveClick={saveRoadMap} />}
-      </>
-    )}
-  </div>
+      {isLoading ? (
+        <div className="text-center font-bold text-xl text-slate-300">
+          Creating Roadmap <CircularProgress />
+        </div>
+      ) : (
+        <>
+          <div className="flex content-between justify-between flex-nowrap">
+            <p className="text-slate-300 pl-2 font-bold">Learning Path</p>
+            <p className="text-slate-300 pr-2 font-bold">Hours</p>
+          </div>
+          <svg className="overflow-hidden" ref={svgRef}></svg>
+          {data !== null && <SaveButton saveClick={saveRoadMap} />}
+        </>
+      )}
+    </div>
   );
 };
 

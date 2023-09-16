@@ -2,8 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
-import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import { getResponseFromOpenAI } from "../openAIChat";
+import { CircularProgress } from "@mui/material";
 
 type IndentedTreeProps = {
   data: JSON | null;
@@ -13,9 +12,8 @@ const IndentedTreeWithData = ({ data }: IndentedTreeProps) => {
   const svgRef = useRef(null);
   const [isLoading, setLoading] = useState(false);
 
-
   const graph = () => {
-    if(data == null) return;
+    if (data == null) return;
 
     d3.select(svgRef.current).selectAll("*").remove();
     const format = d3.format(",");
@@ -116,7 +114,7 @@ const IndentedTreeWithData = ({ data }: IndentedTreeProps) => {
         .data(root.copy().sum(value).descendants())
         .text((d) => format(d.value, d));
     }
-  }
+  };
 
   useEffect(() => {
     graph();
@@ -131,23 +129,20 @@ const IndentedTreeWithData = ({ data }: IndentedTreeProps) => {
 
   return (
     <div className="flex flex-col px-3">
-    {isLoading ? ( 
-      <div className="text-center font-bold text-xl">
-        Fetching Roadmap...loading<RestartAltIcon /></div>
-    ) : (
-      <>
-      <div className="flex content-between justify-between flex-nowrap">
-        <p className="text-slate-300 pl-2 font-bold">
-          Learning Path
-        </p>
-        <p className="text-slate-300 pr-2 font-bold">
-          Hours
-        </p>
-      </div>
-      <svg className="overflow-hidden" ref={svgRef}></svg>
-      </>
-    )}
-  </div>
+      {isLoading ? (
+        <div className="text-center font-bold text-xl text-slate-300">
+          Fetching Roadmap <CircularProgress />
+        </div>
+      ) : (
+        <>
+          <div className="flex content-between justify-between flex-nowrap">
+            <p className="text-slate-300 pl-2 font-bold">Learning Path</p>
+            <p className="text-slate-300 pr-2 font-bold">Hours</p>
+          </div>
+          <svg className="overflow-hidden" ref={svgRef}></svg>
+        </>
+      )}
+    </div>
   );
 };
 
