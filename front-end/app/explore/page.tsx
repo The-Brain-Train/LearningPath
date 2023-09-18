@@ -27,11 +27,22 @@ export default function Explore() {
   }, [search, roadmaps]);
 
   const handleDelete = async (id: string) => {
-    await deleteRoadmap(id);
-    setRoadmaps((prevRoadmaps) =>
-      prevRoadmaps.filter((roadmap) => roadmap.id !== id)
-    );
+    const confirmDelete = window.confirm("Are you sure you want to delete this roadmap?");
+    
+    if (confirmDelete) {
+      try {
+        await deleteRoadmap(id);
+        setRoadmaps((prevRoadmaps) =>
+          prevRoadmaps.filter((roadmap) => roadmap.id !== id)
+        );
+        alert("Roadmap deleted successfully");
+      } catch (error) {
+        console.error("Error deleting roadmap:", error);
+        alert("Error deleting roadmap");
+      }
+    }
   };
+  
 
   const handleSearchChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
