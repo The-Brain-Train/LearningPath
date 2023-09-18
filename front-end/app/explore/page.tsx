@@ -9,6 +9,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { deleteRoadmap, getRoadmaps } from "../httpRequests";
 import { RoadmapMeta } from "../types";
 import DeleteIcon from "@mui/icons-material/Delete";
+import DeleteModal from "../components/DeleteModal";
 
 export default function Explore() {
   const [roadmaps, setRoadmaps] = useState<RoadmapMeta[]>([]);
@@ -25,30 +26,19 @@ export default function Explore() {
     );
     setFilteredRoadmaps(filtered);
   }, [search, roadmaps]);
-
-  const handleDelete = async (id: string) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this roadmap?");
-    
-    if (confirmDelete) {
-      try {
-        await deleteRoadmap(id);
-        setRoadmaps((prevRoadmaps) =>
-          prevRoadmaps.filter((roadmap) => roadmap.id !== id)
-        );
-        alert("Roadmap deleted successfully");
-      } catch (error) {
-        console.error("Error deleting roadmap:", error);
-        alert("Error deleting roadmap");
-      }
-    }
-  };
   
-
   const handleSearchChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const searchText = event.currentTarget.value;
     setSearch(searchText);
+  };
+
+  const handleDelete = async (id: string) => {
+    await deleteRoadmap(id);
+    setRoadmaps((prevRoadmaps) =>
+      prevRoadmaps.filter((roadmap) => roadmap.id !== id)
+    );
   };
 
   return (
@@ -93,7 +83,7 @@ export default function Explore() {
                 </Link>
 
                 <div className="flex-shrink-0 min-w-max">
-                  <DeleteIcon onClick={() => handleDelete(roadMap.id)} />
+                  <DeleteModal id={roadMap.id} onDelete={(id) => handleDelete(id)}/>
                 </div>
               </div>
             </li>
