@@ -8,7 +8,6 @@ import Link from "next/link";
 import { ChangeEvent, useEffect, useState } from "react";
 import { deleteRoadmap, getRoadmaps } from "../httpRequests";
 import { RoadmapMeta } from "../types";
-import DeleteIcon from "@mui/icons-material/Delete";
 import DeleteModal from "../components/DeleteModal";
 
 export default function Explore() {
