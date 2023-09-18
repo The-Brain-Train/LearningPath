@@ -11,11 +11,11 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
+  width: '80%',
+  bgcolor: '#cbd5e1',
   boxShadow: 24,
-  p: 4,
+  p: 2,
+  borderRadius: '5px'
 };
 
 interface DeleteModalProps {
@@ -30,7 +30,7 @@ export default function DeleteModal({ id, onDelete }: DeleteModalProps) {
 
   const handleDelete = async () => {
     await deleteRoadmap(id);
-    onDelete(id); // Call the onDelete callback to remove the item from the list
+    onDelete(id);
     handleClose();
   };
 
@@ -40,15 +40,15 @@ export default function DeleteModal({ id, onDelete }: DeleteModalProps) {
       <Modal
         open={open}
         onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Are you sure you want to delete?
           </Typography>
-          <Button onClick={handleDelete}>yes</Button>
-          <Button onClick={handleClose}>no</Button>
+          <div className='flex justify-between'>
+            <Button onClick={handleClose}>no</Button>
+            <Button className='text-red-600	' onClick={handleDelete}>yes</Button>
+          </div>
         </Box>
       </Modal>
     </div>

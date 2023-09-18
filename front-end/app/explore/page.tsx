@@ -72,7 +72,7 @@ export default function Explore() {
               key={roadMap.id}
               className="bg-slate-300 mb-5 rounded-lg shadow-md "
             >
-              <div className="roadmap-list-card flex justify-between items-center p-4">
+              <div className="roadmap-list-card flex justify-between items-center p-3">
                 <Link
                   className="card-list-text card-body text-left overflow-hidden"
                   href={`/explore/${roadMap.roadMapReferenceId}`}
