@@ -1,8 +1,7 @@
 "use client";
 import { useState } from "react";
 import IndentedTree from "../components/IndentedTree";
-import RoadMapChat from "../components/RoadMapChat";
-import ChatButton from "../components/ChatButton";
+import SearchTopic from "../components/SearchTopic";
 
 
 export default function Create() {
@@ -14,13 +13,11 @@ export default function Create() {
 
   return (
     <main className="main-background">
-      <RoadMapChat
-        showChat={showChat}
-        toggleChat={toggleChat}
-        setTopic={setTopic}
+      <SearchTopic
+      toggleChat={toggleChat}
+      setTopic={setTopic}
       />
       <IndentedTree topic={topic}/>
-      <ChatButton showChat={showChat} setShowChat={setShowChat} /> 
     </main>
   );
 }
