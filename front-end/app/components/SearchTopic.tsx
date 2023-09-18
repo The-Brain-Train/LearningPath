@@ -42,7 +42,7 @@ export default function SearchTopic({ toggleChat, setTopic }: roadMapChatProps) 
                 }
               }}
             />
-            <div className=" bg-gray-200 ">
+            <div className="bg-gray-200">
               <SendIcon
                 onClick={handleSendMessage}
                 sx={{ fontSize: 35, marginTop: "4px" }}

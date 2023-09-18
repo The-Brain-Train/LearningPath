@@ -10,20 +10,16 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 @Configuration
 public class DatabaseInitializer {
 
     private final MongoTemplate mongoTemplate;
-    private final RoadMapMetaRepository roadmapMetaRepository;
 
     @Autowired
     public DatabaseInitializer(MongoTemplate mongoTemplate, RoadMapMetaRepository roadmapMetaRepository) {
         this.mongoTemplate = mongoTemplate;
-        this.roadmapMetaRepository = roadmapMetaRepository;
     }
 
     @Bean
