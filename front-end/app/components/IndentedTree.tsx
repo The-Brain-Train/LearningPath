@@ -169,8 +169,8 @@ const IndentedTree = ({ topic }: IndentedTreeProps) => {
       ) : (
         <>
           <div className="flex content-between justify-between flex-nowrap">
-            <p className="text-slate-300 pl-2 font-bold">Learning Path</p>
-            <p className="text-slate-300 pr-2 font-bold">Hours</p>
+            <p className="text-slate-300 pt-4 pl-2 font-bold">Learning Path</p>
+            <p className="text-slate-300 pt-4 pr-2 font-bold">Hours</p>
           </div>
           <svg className="overflow-hidden" ref={svgRef}></svg>
           {data !== null && <SaveButton saveClick={saveRoadMap} />}
