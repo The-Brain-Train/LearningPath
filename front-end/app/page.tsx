@@ -10,17 +10,17 @@ export default function Home() {
           <TextAnimation />
         </div>
 
-        <div className="flex justify-center gap-2 mt-5 pt-36">
+        <div className="flex justify-center gap-4 mt-5 pt-36">
           <Link href="/explore">
             <div
-              className="relative text-center p-4 rounded cursor-pointer group transition-opacity duration-300"
+              className="relative text-center rounded cursor-pointer group transition-opacity duration-300 border-2"
               style={{
                 backgroundImage: 'url("/roadmap2.jpeg")',
                 backgroundSize: "cover",
                 backgroundPosition: "center center",
                 width: "120px",
-                height: "90px",
-                opacity: 1,
+                height: "50px",
+                opacity: 0.7,
               }}
             >
               <span className="absolute inset-0 flex items-center justify-center text-black font-bold group-hover:text-black">
@@ -31,14 +31,14 @@ export default function Home() {
 
           <Link href="/create">
             <div
-              className="relative text-center p-4 rounded cursor-pointer group transition-opacity duration-300"
+              className="relative text-center rounded cursor-pointer group transition-opacity duration-300 border-2"
               style={{
                 backgroundImage: 'url("/roadmap3.jpeg")',
                 backgroundSize: "cover",
                 backgroundPosition: "center center",
                 width: "120px",
-                height: "90px",
-                opacity: 1,
+                height: "50px",
+                opacity: 0.7,
               }}
             >
               <span className="absolute inset-0 flex items-center justify-center text-black font-bold group-hover:text-black">
