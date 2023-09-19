@@ -28,8 +28,8 @@ export default function SearchTopic({ toggleChat, setTopic }: roadMapChatProps) 
     
   return (
    
-      <div className="border-t-2 border-gray-200 px-4 pt-4 mb-2 sm:mb-0">
-          <div className="relative flex rounded-md">
+      <div className="pt-4 mb-2  flex justify-center items-center ">
+          <div className="relative flex rounded-md max-w-2xl" style={{ minWidth: '325px' }}>
             <input
               type="text"
               value={userMessage}
