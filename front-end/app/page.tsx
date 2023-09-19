@@ -3,6 +3,15 @@ import Link from "next/link";
 import TextAnimation from "./components/TextAnimation";
 
 export default function Home() {
+  const topSectionButtonStyles = (backgroundImageUrl: string) => ({
+    backgroundImage: `url(${backgroundImageUrl})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center center",
+    width: "120px",
+    height: "50px",
+    opacity: 0.7,
+  });
+
   return (
     <main className="main-background">
       <section className="flex flex-col p-3 gap-2 mt-5">
@@ -14,14 +23,7 @@ export default function Home() {
           <Link href="/explore">
             <div
               className="relative text-center rounded cursor-pointer group transition-opacity duration-300 border-2"
-              style={{
-                backgroundImage: 'url("/roadmap2.jpeg")',
-                backgroundSize: "cover",
-                backgroundPosition: "center center",
-                width: "120px",
-                height: "50px",
-                opacity: 0.7,
-              }}
+              style={topSectionButtonStyles("/roadmap2.jpeg")}
             >
               <span className="absolute inset-0 flex items-center justify-center text-black font-bold group-hover:text-black">
                 Explore
@@ -32,14 +34,7 @@ export default function Home() {
           <Link href="/create">
             <div
               className="relative text-center rounded cursor-pointer group transition-opacity duration-300 border-2"
-              style={{
-                backgroundImage: 'url("/roadmap3.jpeg")',
-                backgroundSize: "cover",
-                backgroundPosition: "center center",
-                width: "120px",
-                height: "50px",
-                opacity: 0.7,
-              }}
+              style={topSectionButtonStyles("/roadmap3.jpeg")}
             >
               <span className="absolute inset-0 flex items-center justify-center text-black font-bold group-hover:text-black">
                 Create
