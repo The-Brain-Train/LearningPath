@@ -9,7 +9,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/roadmaps")
+@RequestMapping("api/roadmaps")
 @CrossOrigin(origins = "*")
 public class RoadMapController {
 

@@ -19,14 +19,12 @@ const IndentedTreeWithData = ({ data }: IndentedTreeProps) => {
     const format = d3.format(",");
     const nodeSize = 21;
     const root = d3.hierarchy(data).eachBefore(
-      (
-        (i) => (d) =>
+      ((i) => (d) =>
           (d.index = i++)
       )(0)
     );
     const nodes = root.descendants();
-
-    // Dynamically calculate width and height based on screen dimensions
+    
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
     const width = screenWidth;
