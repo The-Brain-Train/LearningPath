@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import DeleteIcon from "@mui/icons-material/Delete";
-import { deleteRoadmap } from '../httpRequests';
+import { deleteRoadmap } from '../functions/httpRequests';
 
 const style = {
   position: 'absolute' as 'absolute',

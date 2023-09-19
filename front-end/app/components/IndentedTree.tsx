@@ -2,11 +2,11 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
-import { getResponseFromOpenAI } from "../openAIChat";
+import { getResponseFromOpenAI } from "../functions/openAIChat";
 import SaveButton from "./SaveButton";
-import { postRoadmap } from "../httpRequests";
+import { postRoadmap } from "../functions/httpRequests";
 import { RoadmapDTO } from "../types";
-import { chatHistory } from "../chatPreHistory";
+import { chatHistory } from "../functions/chatPreHistory";
 import { CircularProgress } from "@mui/material";
 
 type IndentedTreeProps = {

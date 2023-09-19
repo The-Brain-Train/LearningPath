@@ -1,0 +1,13 @@
+@import url("https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500&family=Lexend+Deca:wght@700;900&family=Poiret+One&family=Roboto:wght@300;900&family=Work+Sans:wght@200;800&display=swap");
+
+.console-container {
+  text-align: left;
+  font-family: "Roboto", sans-serif;
+  font-weight: 900;
+  font-size: 1.5em;
+  position: absolute;
+  color: white;
+  left: 2rem;
+  right: 2rem;
+  margin: auto;
+}

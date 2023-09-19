@@ -6,7 +6,7 @@ import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import Link from "next/link";
 import { ChangeEvent, useEffect, useState } from "react";
-import { deleteRoadmap, getRoadmaps } from "../httpRequests";
+import { deleteRoadmap, getRoadmaps } from "../functions/httpRequests";
 import { RoadmapMeta } from "../types";
 import DeleteModal from "../components/DeleteModal";
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import styles from '../animation.module.css';
+import styles from '../css/animation.module.css';
 
 const TextAnimation: React.FC = () => {
     const words = ['create your own LearningPath.', 'learn something new.', 'create personalized learning plans.'];
