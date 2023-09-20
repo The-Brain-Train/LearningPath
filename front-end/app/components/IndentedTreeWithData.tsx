@@ -141,7 +141,7 @@ const IndentedTreeWithData = ({ data, roadMapRefId }: IndentedTreeProps) => {
           <p className="text-slate-300 pl-2 font-bold">Learning Path</p>
           <p className="text-slate-300 pr-2 font-bold">Hours</p>
         </div>
-        <svg className="overflow-hidden" ref={svgRef}></svg>
+        <svg className="overflow-hidden mb-20" ref={svgRef}></svg>
       </div>
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 p-2 flex justify-center">
         <DeleteModal
