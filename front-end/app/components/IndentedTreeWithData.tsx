@@ -3,14 +3,19 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import { CircularProgress } from "@mui/material";
+import { useRouter } from "next/navigation";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { deleteRoadmap } from "../functions/httpRequests";
 
 type IndentedTreeProps = {
   data: JSON | null;
+  roadMapRefId: string | null;
 };
 
-const IndentedTreeWithData = ({ data }: IndentedTreeProps) => {
+const IndentedTreeWithData = ({ data, roadMapRefId }: IndentedTreeProps) => {
   const svgRef = useRef(null);
   const [isLoading, setLoading] = useState(false);
+  const router = useRouter();
 
   const graph = () => {
     if (data == null) return;
@@ -125,23 +130,31 @@ const IndentedTreeWithData = ({ data }: IndentedTreeProps) => {
     };
   }, [data]);
 
-  return (
-    <div className="flex flex-col px-3">
-      {isLoading ? (
-        <div className="text-center font-bold text-xl text-slate-300">
-          Fetching Roadmap <CircularProgress />
-        </div>
-      ) : (
-        <>
-          <div className="flex content-between justify-between flex-nowrap">
-            <p className="text-slate-300 pl-2 font-bold">Learning Path</p>
-            <p className="text-slate-300 pr-2 font-bold">Hours</p>
+  const handleDelete = async (id: string) => {
+    await deleteRoadmap(id);
+    router.back();
+    };
+
+    return (
+      <div className="flex flex-col px-3">
+        {isLoading ? (
+          <div className="text-center font-bold text-xl text-slate-300">
+            Fetching Roadmap <CircularProgress />
           </div>
-          <svg className="overflow-hidden" ref={svgRef}></svg>
-        </>
-      )}
-    </div>
-  );
+        ) : (
+          <div>
+            <div className="flex content-between justify-between flex-nowrap">
+              <p className="text-slate-300 pl-2 font-bold">Learning Path</p>
+              <p className="text-slate-300 pr-2 font-bold">Hours</p>
+            </div>
+            <svg className="overflow-hidden" ref={svgRef}></svg>
+          </div>
+        )}
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 p-2 flex justify-center">
+          <DeleteIcon onClick={() => handleDelete(roadMapRefId)} />
+        </div>
+      </div>
+    );
 };
 
 export default IndentedTreeWithData;

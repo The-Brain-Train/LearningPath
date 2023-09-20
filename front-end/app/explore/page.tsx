@@ -74,7 +74,7 @@ export default function Explore() {
               <div className="roadmap-list-card flex justify-between items-center p-3">
                 <Link
                   className="card-list-text card-body text-left overflow-hidden"
-                  href={`/explore/${roadMap.roadMapReferenceId}`}
+                  href={`/explore/${roadMap.id}`}
                 >
                   <p className="lyric-card-name overflow-ellipsis overflow-hidden whitespace-nowrap">
                     {roadMap.name}
