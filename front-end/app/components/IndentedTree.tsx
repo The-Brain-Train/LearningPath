@@ -181,9 +181,11 @@ const IndentedTree = ({ topic }: IndentedTreeProps) => {
                 <p className="text-slate-300 pt-4 pr-2 font-bold">Hours</p>
               </div>
               <svg className="overflow-hidden" ref={svgRef}></svg>
-              <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 p-2 flex justify-center">
-                {data !== null && <SaveButton saveClick={saveRoadMap} />}
-              </div>
+              {data !== null && (
+                <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 flex justify-center">
+                  <SaveButton saveClick={saveRoadMap} />
+                </div>
+              )}
             </>
           )}
         </>
