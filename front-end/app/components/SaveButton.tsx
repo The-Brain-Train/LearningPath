@@ -1,12 +1,32 @@
 import React, { SetStateAction, useState } from "react";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
 
 type saveButtonProps = {
   saveClick: () => void;
 };
 
+const style = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '80%',
+  bgcolor: '#cbd5e1',
+  boxShadow: 24,
+  p: 2,
+  borderRadius: '5px'
+};
+
 function SaveButton({saveClick }: saveButtonProps) {
   const [clicked, setClicked] = useState(false);
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   const handleClick = () => {
     saveClick();
     setClicked(true);
@@ -15,13 +35,23 @@ function SaveButton({saveClick }: saveButtonProps) {
   return (
     <>
       {!clicked && (
-        <button
-          onClick={handleClick}
-          className={`width-1 bg-slate-300 border-2 fixed rounded-3xl p-3 z-30 bottom-3 left-3 transition-all duration-700"
-        }`}
+        <div>
+        <Button onClick={handleOpen}><CloudUploadIcon className="text-black "/></Button>
+        <Modal
+          open={open}
+          onClose={handleClose}
         >
-          <CloudUploadIcon sx={{ fontSize: 35 }} />
-        </button>
+          <Box sx={style}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Are you sure you want to Save?
+            </Typography>
+            <div className='flex justify-between'>
+              <Button onClick={handleClose}>no</Button>
+              <Button className='text-red-600	' onClick={handleClick}>yes</Button>
+            </div>
+          </Box>
+        </Modal>
+      </div>
       )}
     </>
   );
