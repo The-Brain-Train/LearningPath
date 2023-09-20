@@ -2,20 +2,17 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
-import { CircularProgress } from "@mui/material";
 import { useRouter } from "next/navigation";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { deleteRoadmap } from "../functions/httpRequests";
 import DeleteModal from "./DeleteModal";
 
 type IndentedTreeProps = {
   data: JSON | null;
-  roadMapRefId: string | null;
+  roadMapRefId: string;
 };
 
 const IndentedTreeWithData = ({ data, roadMapRefId }: IndentedTreeProps) => {
   const svgRef = useRef(null);
-  const [isLoading, setLoading] = useState(false);
   const router = useRouter();
 
   const graph = () => {
@@ -25,12 +22,13 @@ const IndentedTreeWithData = ({ data, roadMapRefId }: IndentedTreeProps) => {
     const format = d3.format(",");
     const nodeSize = 21;
     const root = d3.hierarchy(data).eachBefore(
-      ((i) => (d) =>
+      (
+        (i) => (d) =>
           (d.index = i++)
       )(0)
     );
     const nodes = root.descendants();
-    
+
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
     const width = screenWidth;
@@ -134,28 +132,25 @@ const IndentedTreeWithData = ({ data, roadMapRefId }: IndentedTreeProps) => {
   const handleDelete = async (id: string) => {
     await deleteRoadmap(id);
     router.back();
-    };
+  };
 
-    return (
-      <div className="flex flex-col px-3">
-        {isLoading ? (
-          <div className="text-center font-bold text-xl text-slate-300">
-            Fetching Roadmap <CircularProgress />
-          </div>
-        ) : (
-          <div>
-            <div className="flex content-between justify-between flex-nowrap">
-              <p className="text-slate-300 pl-2 font-bold">Learning Path</p>
-              <p className="text-slate-300 pr-2 font-bold">Hours</p>
-            </div>
-            <svg className="overflow-hidden" ref={svgRef}></svg>
-          </div>
-        )}
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 p-2 flex justify-center">
-          <DeleteModal id={roadMapRefId} onDelete={(id) => handleDelete(roadMapRefId)}/>
+  return (
+    <div className="flex flex-col px-3">
+      <div>
+        <div className="flex content-between justify-between flex-nowrap">
+          <p className="text-slate-300 pl-2 font-bold">Learning Path</p>
+          <p className="text-slate-300 pr-2 font-bold">Hours</p>
         </div>
+        <svg className="overflow-hidden" ref={svgRef}></svg>
       </div>
-    );
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 p-2 flex justify-center">
+        <DeleteModal
+          id={roadMapRefId}
+          onDelete={() => handleDelete(roadMapRefId)}
+        />
+      </div>
+    </div>
+  );
 };
 
 export default IndentedTreeWithData;
