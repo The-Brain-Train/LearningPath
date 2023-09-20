@@ -25,9 +25,8 @@ public class DatabaseInitializer {
     @Bean
     CommandLineRunner initDatabase(RoadMapService service) {
         mongoTemplate.dropCollection(RoadMapMeta.class);
+        mongoTemplate.dropCollection(RoadMap.class);
         return args -> {
-
-
             ObjectMapper objectMapper = new ObjectMapper();
 
             List<String> startingData = List.of("java", "python");
