@@ -17,8 +17,9 @@ const IndentedTree = ({ topic }: IndentedTreeProps) => {
   const [data, setData] = useState(null);
   const svgRef = useRef(null);
   const [isLoading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const saveRoadMap = () => {
+  const saveRoadMap = async () => {
     if (topic == null) return;
     const requestData: RoadmapDTO = {
       name: topic,
@@ -35,7 +36,8 @@ const IndentedTree = ({ topic }: IndentedTreeProps) => {
       const jsonData = await JSON.parse(response.choices[0].message.content);
       setData(jsonData);
     } catch (error) {
-      console.error("Error parsing JSON:", error);
+      setError(`Unable to generate roadmap. Please try again. Error: ${error}`);
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -168,12 +170,20 @@ const IndentedTree = ({ topic }: IndentedTreeProps) => {
         </div>
       ) : (
         <>
-          <div className="flex content-between justify-between flex-nowrap">
-            <p className="text-slate-300 pt-4 pl-2 font-bold">Learning Path</p>
-            <p className="text-slate-300 pt-4 pr-2 font-bold">Hours</p>
-          </div>
-          <svg className="overflow-hidden" ref={svgRef}></svg>
-          {data !== null && <SaveButton saveClick={saveRoadMap} />}
+          {error ? (
+            <p className="text-red-500 font-bold">{error}</p>
+          ) : (
+            <>
+              <div className="flex content-between justify-between flex-nowrap">
+                <p className="text-slate-300 pt-4 pl-2 font-bold">
+                  Learning Path
+                </p>
+                <p className="text-slate-300 pt-4 pr-2 font-bold">Hours</p>
+              </div>
+              <svg className="overflow-hidden" ref={svgRef}></svg>
+              {data !== null && <SaveButton saveClick={saveRoadMap} />}
+            </>
+          )}
         </>
       )}
     </div>
