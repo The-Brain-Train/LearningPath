@@ -9,12 +9,9 @@ export default function Home() {
     backgroundPosition: "center center",
     width: "120px",
     height: "50px",
-    transition: "opacity 0.3s ease", 
+    transition: "opacity 0.7s ease", 
   });
 
-  const buttonHoverStyles = {
-    opacity: 1, 
-  };
 
   return (
     <main className="main-background">
@@ -30,7 +27,7 @@ export default function Home() {
               style={topSectionButtonStyles("/roadmap2.jpeg")}
             >
               <span className="absolute inset-0 flex items-center justify-center text-black font-bold"
-              style={buttonHoverStyles}>
+              >
                 Explore
               </span>
             </div>
@@ -42,7 +39,7 @@ export default function Home() {
               style={topSectionButtonStyles("/roadmap3.jpeg")}
             >
               <span className="absolute inset-0 flex items-center justify-center text-black font-bold"
-              style={buttonHoverStyles}>
+              >
                 Create
               </span>
             </div>
