@@ -37,7 +37,7 @@ export const postRoadmap = async (roadMap: RoadmapDTO) => {
     body: JSON.stringify(roadMap),
   });
   if (!response.ok) {
-    throw new Error("Failed to add job");
+    throw new Error("Failed to add roadmap");
   }
 
 };
