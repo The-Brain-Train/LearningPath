@@ -163,7 +163,7 @@ const IndentedTree = ({ topic }: IndentedTreeProps) => {
   }, [data]);
 
   return (
-    <div className="flex flex-col px-3">
+    <div className="flex flex-col px-3 pb-16">
       {isLoading ? (
         <div className="text-center font-bold text-xl text-slate-300">
           Creating Roadmap <CircularProgress />
