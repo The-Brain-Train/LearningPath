@@ -1,4 +1,4 @@
-import React, { SetStateAction, useState } from "react";
+import React, { useState } from "react";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -47,7 +47,7 @@ function SaveButton({saveClick }: saveButtonProps) {
             </Typography>
             <div className='flex justify-between'>
               <Button onClick={handleClose}>no</Button>
-              <Button className='text-red-600	' onClick={handleClick}>yes</Button>
+              <Button className='text-green-500	' onClick={handleClick}>yes</Button>
             </div>
           </Box>
         </Modal>

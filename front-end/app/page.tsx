@@ -9,8 +9,9 @@ export default function Home() {
     backgroundPosition: "center center",
     width: "120px",
     height: "50px",
-    opacity: 0.7,
+    transition: "opacity 0.7s ease", 
   });
+
 
   return (
     <main className="main-background">
@@ -25,7 +26,8 @@ export default function Home() {
               className="relative text-center rounded cursor-pointer group transition-opacity duration-300 border-2"
               style={topSectionButtonStyles("/roadmap2.jpeg")}
             >
-              <span className="absolute inset-0 flex items-center justify-center text-black font-bold group-hover:text-black">
+              <span className="absolute inset-0 flex items-center justify-center text-black font-bold"
+              >
                 Explore
               </span>
             </div>
@@ -36,7 +38,8 @@ export default function Home() {
               className="relative text-center rounded cursor-pointer group transition-opacity duration-300 border-2"
               style={topSectionButtonStyles("/roadmap3.jpeg")}
             >
-              <span className="absolute inset-0 flex items-center justify-center text-black font-bold group-hover:text-black">
+              <span className="absolute inset-0 flex items-center justify-center text-black font-bold"
+              >
                 Create
               </span>
             </div>
