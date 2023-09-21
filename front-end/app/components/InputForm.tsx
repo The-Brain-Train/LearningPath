@@ -26,7 +26,7 @@ function valuetext(value: number) {
 
 type InputFormProps = {
     setTopic: React.Dispatch<React.SetStateAction<string | null>>,
-    setHours: React.Dispatch<React.SetStateAction<string | null>>,
+    setHours: React.Dispatch<React.SetStateAction<number | null>>,
     setExperienceLevel: React.Dispatch<React.SetStateAction<string | null>>,
 }
 
@@ -36,12 +36,19 @@ const InputForm = ({setTopic, setHours, setExperienceLevel}: InputFormProps) => 
   const handleClose = () => setOpen(false);
   const [experience, setExperience] = useState("");
   const [userMessage, setUserMessage] = useState<string>("");
+  const [sliderValue, setSliderValue] = useState<number>(30);
 
   const handleChange = (event: SelectChangeEvent) => {
     setExperience(event.target.value);
   };
 
-  const handleSubmit =
+
+  const handleSubmit = () => {
+    setTopic(userMessage);
+    setExperienceLevel(experience);
+    setHours(sliderValue);
+    handleClose(); 
+  };
 
   return (
     <>
@@ -55,8 +62,7 @@ const InputForm = ({setTopic, setHours, setExperienceLevel}: InputFormProps) => 
         >
           <Box sx={style}>
             <div>
-              <FormControl 
-              sx={{ m: 1, minWidth: 80 }}>
+              <FormControl sx={{ m: 1, minWidth: 80 }}>
               <input
             type="text"
             value={userMessage}
@@ -82,6 +88,8 @@ const InputForm = ({setTopic, setHours, setExperienceLevel}: InputFormProps) => 
                 <Box sx={{ width: 300 }}>
                   <Slider
                     aria-label="Hours"
+                    value={sliderValue}
+                    onChange={(event, newValue) => setSliderValue(newValue as number)}
                     defaultValue={30}
                     getAriaValueText={valuetext}
                     valueLabelDisplay="auto"
@@ -91,10 +99,7 @@ const InputForm = ({setTopic, setHours, setExperienceLevel}: InputFormProps) => 
                     max={500}
                   />
                 </Box>
-
-                <button
-                type="submit"
-                >Submit</button>
+                <Button onClick={handleSubmit}>Submit</Button>
               </FormControl>
             </div>
           </Box>

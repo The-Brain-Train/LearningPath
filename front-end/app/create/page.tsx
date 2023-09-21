@@ -7,7 +7,7 @@ import InputForm from "../components/InputForm";
 
 export default function Create() {
   const [showChat, setShowChat] = useState(true);
-  const [hours, setHours] = useState<string | null>(null);
+  const [hours, setHours] = useState<number | null>(null);
   const [experienceLevel, setExperienceLevel] = useState<string| null>(null);
   const toggleChat = () => {
     setShowChat(!showChat);
@@ -20,7 +20,7 @@ export default function Create() {
       toggleChat={toggleChat}
       setTopic={setTopic}
       /> */}
-      <InputForm setTopic={setTopic} setHours={setHours} setExperiencelevel={setExperienceLevel}/>
+      <InputForm setTopic={setTopic} setHours={setHours} setExperienceLevel={setExperienceLevel}/>
       <IndentedTree topic={topic}/>
     </main>
   );
