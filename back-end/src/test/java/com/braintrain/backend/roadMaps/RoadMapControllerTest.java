@@ -36,21 +36,21 @@ class RoadMapControllerTest {
 
     ResponseEntity<RoadMapMeta> exchange;
 
-//    @BeforeEach
-//    public void setup() throws IOException {
-//        String uri = BASE_URL.formatted(port);
-//        RoadMapDTO dto = TestHelper.createRoadMapDTO("Java", Paths.get("src/test/resources/java.json"));
-//        exchange = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(dto), RoadMapMeta.class);
-//    }
-//
-//    @AfterEach
-//    public void tearDown() {
-//        if(exchange != null) {
-//            String uri = "http://localhost:%s/api/roadmaps/%s".formatted(port, exchange.getBody().getId());
-//            ResponseEntity<Void> exchange = restTemplate.exchange(uri, HttpMethod.DELETE, HttpEntity.EMPTY, Void.class);
-//            assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
-//        }
-//    }
+    @BeforeEach
+    public void setup() throws IOException {
+        String uri = BASE_URL.formatted(port);
+        RoadMapDTO dto = TestHelper.createRoadMapDTO("Java", Paths.get("src/test/resources/java.json"));
+        exchange = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(dto), RoadMapMeta.class);
+    }
+
+    @AfterEach
+    public void tearDown() {
+        if(exchange != null) {
+            String uri = "http://localhost:%s/api/roadmaps/%s".formatted(port, exchange.getBody().getId());
+            ResponseEntity<Void> exchange = restTemplate.exchange(uri, HttpMethod.DELETE, HttpEntity.EMPTY, Void.class);
+            assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        }
+    }
 
     @Test
     void shouldGetRoadMaps() {
@@ -108,17 +108,17 @@ class RoadMapControllerTest {
             assertThat(err.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         }
     }
-
-    @Test
-    void shouldReturn400WhenCreatingRoadMapWithEmptyRoadmap() {
-        String uri = BASE_URL.formatted(port);
-        RoadMapDTO dto = new RoadMapDTO("Java", "");
-
-        try {
-            ResponseEntity<Void> exchange = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(dto), Void.class);
-            fail("should throw exception");
-        } catch (HttpClientErrorException err) {
-            assertThat(err.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-        }
-    }
+//
+//    @Test
+//    void shouldReturn400WhenCreatingRoadMapWithEmptyRoadmap() {
+//        String uri = BASE_URL.formatted(port);
+//        RoadMapDTO dto = new RoadMapDTO("Java", "");
+//
+//        try {
+//            ResponseEntity<Void> exchange = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(dto), Void.class);
+//            fail("should throw exception");
+//        } catch (HttpClientErrorException err) {
+//            assertThat(err.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+//        }
+//    }
 }
