@@ -3,7 +3,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { Box, Button } from "@mui/material";
+import { Box, Button, TextField } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import { useState } from "react";
 import Slider from "@mui/material/Slider";
@@ -65,14 +65,15 @@ const InputForm = ({
         >
           <Box sx={style}>
             <div>
-              <FormControl sx={{ m: 1, minWidth: 80 }}>
-                <input
-                  type="text"
-                  value={userMessage}
-                  onChange={(e) => setUserMessage(e.target.value)}
-                  placeholder="Enter Topic!"
-                  className="rounded-l-md	 w-full focus:outline-none focus:placeholder-gray-400 text-center text-gray-600 placeholder-gray-60 py-3"
-                />
+              <TextField
+                type="text"
+                value={userMessage}
+                onChange={(e) => setUserMessage(e.target.value)}
+                placeholder="Enter Topic!"
+                sx={{ m: 1, minWidth: '90%'}}
+                className="rounded-l-md focus:outline-none focus:placeholder-gray-400 text-center text-gray-600 placeholder-gray-60 py-3"
+              />
+              <FormControl sx={{ m: 1, minWidth: '90%'}}>
                 <InputLabel id="demo-simple-select-autowidth-label">
                   Experience Level
                 </InputLabel>
@@ -88,24 +89,24 @@ const InputForm = ({
                   <MenuItem value={"intermediate"}>Intermediate</MenuItem>
                   <MenuItem value={"experienced"}>Experienced</MenuItem>
                 </Select>
-                <Box sx={{ width: 300 }}>
-                  <Slider
-                    aria-label="Hours"
-                    value={sliderValue}
-                    onChange={(event, newValue) =>
-                      setSliderValue(newValue as number)
-                    }
-                    defaultValue={30}
-                    getAriaValueText={valuetext}
-                    valueLabelDisplay="auto"
-                    step={10}
-                    marks
-                    min={0}
-                    max={500}
-                  />
-                </Box>
-                <Button onClick={handleSubmit}>Submit</Button>
               </FormControl>
+              <Box sx={{ minWidth: '80%' }}>
+                <Slider
+                  aria-label="Hours"
+                  value={sliderValue}
+                  onChange={(event, newValue) =>
+                    setSliderValue(newValue as number)
+                  }
+                  defaultValue={30}
+                  getAriaValueText={valuetext}
+                  valueLabelDisplay="auto"
+                  step={10}
+                  marks
+                  min={0}
+                  max={500}
+                />
+              </Box>
+              <Button onClick={handleSubmit} className="border-2 rounded">Submit</Button>
             </div>
           </Box>
         </Modal>
