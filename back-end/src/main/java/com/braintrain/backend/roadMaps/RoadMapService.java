@@ -1,5 +1,6 @@
 package com.braintrain.backend.roadMaps;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,13 +9,10 @@ import java.util.Optional;
 
 
 @Service
+@AllArgsConstructor
 public class RoadMapService {
-
-    @Autowired
-    RoadMapMetaRepository metaRepo;
-
-    @Autowired
-    RoadMapRepository repo;
+    private final RoadMapMetaRepository metaRepo;
+    private final RoadMapRepository repo;
 
     public RoadMapMeta createRoadMap(RoadMapDTO roadMapDTO) {
         RoadMap roadMap = repo.save(new RoadMap(roadMapDTO.roadMap()));
@@ -37,10 +35,6 @@ public class RoadMapService {
         return metaRepo.findById(id).orElse(null);
     }
 
-    public RoadMapMeta createRoadMapMeta(RoadMapMeta roadMapMeta) {
-        return metaRepo.save(roadMapMeta);
-    }
-
     public void delete(RoadMapMeta roadMapMeta) {
         if(roadMapMeta == null) return;
         repo.deleteById(roadMapMeta.getRoadMapReferenceId());
@@ -49,9 +43,5 @@ public class RoadMapService {
 
     public void deleteRoadMapMeta(String id) {
         metaRepo.deleteById(id);
-    }
-
-    public void deleteRoadMap(String id) {
-        repo.deleteById(id);
     }
 }
