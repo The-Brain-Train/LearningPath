@@ -21,7 +21,7 @@ export default function Create() {
       setTopic={setTopic}
       /> */}
       <InputForm setTopic={setTopic} setHours={setHours} setExperienceLevel={setExperienceLevel}/>
-      <IndentedTree topic={topic}/>
+      <IndentedTree topic={topic} experienceLevel={experienceLevel} hours={hours} />
     </main>
   );
 }

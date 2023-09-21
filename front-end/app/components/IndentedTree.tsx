@@ -10,10 +10,12 @@ import { chatHistory } from "../functions/chatPreHistory";
 import { CircularProgress } from "@mui/material";
 
 type IndentedTreeProps = {
-  topic: string | null;
+  topic: string | null,
+  experienceLevel: string | null,
+  hours: number | null
 };
 
-const IndentedTree = ({ topic }: IndentedTreeProps) => {
+const IndentedTree = ({ topic, experienceLevel, hours }: IndentedTreeProps) => {
   const [data, setData] = useState(null);
   const svgRef = useRef(null);
   const [isLoading, setLoading] = useState(false);
@@ -31,7 +33,8 @@ const IndentedTree = ({ topic }: IndentedTreeProps) => {
   const handleSendMessage = async () => {
     setLoading(true);
     try {
-      const response = await getResponseFromOpenAI(chatHistory(topic));
+      console.log(hours, experienceLevel, topic);
+      const response = await getResponseFromOpenAI(chatHistory(topic, experienceLevel, hours));
       console.log(response);
       const jsonData = await JSON.parse(response.choices[0].message.content);
       setData(jsonData);

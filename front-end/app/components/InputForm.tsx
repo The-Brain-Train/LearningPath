@@ -6,7 +6,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { Box, Button } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import { useState } from "react";
-import Slider from '@mui/material/Slider';
+import Slider from "@mui/material/Slider";
 
 const style = {
   position: "absolute" as "absolute",
@@ -21,16 +21,20 @@ const style = {
 };
 
 function valuetext(value: number) {
-    return `${value}`;
-  }
-
-type InputFormProps = {
-    setTopic: React.Dispatch<React.SetStateAction<string | null>>,
-    setHours: React.Dispatch<React.SetStateAction<number | null>>,
-    setExperienceLevel: React.Dispatch<React.SetStateAction<string | null>>,
+  return `${value}`;
 }
 
-const InputForm = ({setTopic, setHours, setExperienceLevel}: InputFormProps) => {
+type InputFormProps = {
+  setTopic: React.Dispatch<React.SetStateAction<string | null>>;
+  setHours: React.Dispatch<React.SetStateAction<number | null>>;
+  setExperienceLevel: React.Dispatch<React.SetStateAction<string | null>>;
+};
+
+const InputForm = ({
+  setTopic,
+  setHours,
+  setExperienceLevel,
+}: InputFormProps) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -42,12 +46,11 @@ const InputForm = ({setTopic, setHours, setExperienceLevel}: InputFormProps) => 
     setExperience(event.target.value);
   };
 
-
   const handleSubmit = () => {
     setTopic(userMessage);
     setExperienceLevel(experience);
     setHours(sliderValue);
-    handleClose(); 
+    handleClose();
   };
 
   return (
@@ -63,13 +66,13 @@ const InputForm = ({setTopic, setHours, setExperienceLevel}: InputFormProps) => 
           <Box sx={style}>
             <div>
               <FormControl sx={{ m: 1, minWidth: 80 }}>
-              <input
-            type="text"
-            value={userMessage}
-            onChange={(e) => setUserMessage(e.target.value)}
-            placeholder="Enter Topic!"
-            className="rounded-l-md	 w-full focus:outline-none focus:placeholder-gray-400 text-center text-gray-600 placeholder-gray-60 py-3"
-          />
+                <input
+                  type="text"
+                  value={userMessage}
+                  onChange={(e) => setUserMessage(e.target.value)}
+                  placeholder="Enter Topic!"
+                  className="rounded-l-md	 w-full focus:outline-none focus:placeholder-gray-400 text-center text-gray-600 placeholder-gray-60 py-3"
+                />
                 <InputLabel id="demo-simple-select-autowidth-label">
                   Experience Level
                 </InputLabel>
@@ -89,7 +92,9 @@ const InputForm = ({setTopic, setHours, setExperienceLevel}: InputFormProps) => 
                   <Slider
                     aria-label="Hours"
                     value={sliderValue}
-                    onChange={(event, newValue) => setSliderValue(newValue as number)}
+                    onChange={(event, newValue) =>
+                      setSliderValue(newValue as number)
+                    }
                     defaultValue={30}
                     getAriaValueText={valuetext}
                     valueLabelDisplay="auto"

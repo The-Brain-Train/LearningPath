@@ -1,4 +1,4 @@
-export const chatHistory = (topic: string | null) => {
+export const chatHistory = (topic: string | null, experienceLevel: string | null, hours: number | null) => {
   return [
     {
       role: "user",
