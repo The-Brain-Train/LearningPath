@@ -46,14 +46,14 @@ export default function SearchTopic({
             value={userMessage}
             onChange={(e) => setUserMessage(e.target.value)}
             placeholder="Enter Topic!"
-            className="rounded-l-md	 w-full focus:outline-none focus:placeholder-gray-400 text-center text-gray-600 placeholder-gray-600 bg-gray-200  py-3"
+            className="rounded-l-md	 w-full focus:outline-none focus:placeholder-gray-400 text-center text-gray-600 placeholder-gray-60 py-3"
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 handleSendMessage();
               }
             }}
           />
-          <div className="rounded-r-md bg-gray-200">
+          <div className="rounded-r-md bg-white">
             <SendIcon
               onClick={handleSendMessage}
               sx={{ fontSize: 35, marginTop: "4px" }}
