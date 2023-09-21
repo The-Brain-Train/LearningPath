@@ -1,7 +1,6 @@
 package com.braintrain.backend.roadMaps;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,9 +14,8 @@ public class RoadMapService {
     private final RoadMapRepository repo;
 
     public RoadMapMeta createRoadMap(RoadMapDTO roadMapDTO) {
-        if (roadMapDTO.name() == null || roadMapDTO.name().isEmpty()) {
-            throw new IllegalArgumentException("Invalid name");
-        }
+        validateDTOInput(roadMapDTO.name(), "Invalid name");
+        validateDTOInput(roadMapDTO.roadMap(), "Invalid roadmap");
         RoadMap roadMap = repo.save(new RoadMap(roadMapDTO.roadMap()));
         return metaRepo.save(new RoadMapMeta(roadMapDTO.name(), roadMap.getId()));
     }
@@ -46,5 +44,11 @@ public class RoadMapService {
 
     public void deleteRoadMapMeta(String id) {
         metaRepo.deleteById(id);
+    }
+
+    private static void validateDTOInput(String roadMapDTO, String Invalid_name) {
+        if (roadMapDTO == null || roadMapDTO.isEmpty()) {
+            throw new IllegalArgumentException(Invalid_name);
+        }
     }
 }

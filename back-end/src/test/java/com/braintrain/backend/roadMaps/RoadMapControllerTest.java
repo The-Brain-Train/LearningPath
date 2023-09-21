@@ -108,17 +108,17 @@ class RoadMapControllerTest {
             assertThat(err.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         }
     }
-//
-//    @Test
-//    void shouldReturn400WhenCreatingRoadMapWithEmptyRoadmap() {
-//        String uri = BASE_URL.formatted(port);
-//        RoadMapDTO dto = new RoadMapDTO("Java", "");
-//
-//        try {
-//            ResponseEntity<Void> exchange = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(dto), Void.class);
-//            fail("should throw exception");
-//        } catch (HttpClientErrorException err) {
-//            assertThat(err.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-//        }
-//    }
+
+    @Test
+    void shouldReturn400WhenCreatingRoadMapWithEmptyRoadmap() {
+        String uri = BASE_URL.formatted(port);
+        RoadMapDTO dto = new RoadMapDTO("Java", "");
+
+        try {
+            ResponseEntity<Void> exchange = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(dto), Void.class);
+            fail("should throw exception");
+        } catch (HttpClientErrorException err) {
+            assertThat(err.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        }
+    }
 }
