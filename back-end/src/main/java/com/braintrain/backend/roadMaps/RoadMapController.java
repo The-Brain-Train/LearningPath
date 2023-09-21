@@ -1,6 +1,7 @@
 package com.braintrain.backend.roadMaps;
 
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,10 +12,14 @@ import java.util.List;
 @RestController
 @RequestMapping("api/roadmaps")
 @CrossOrigin(origins = "*")
+@AllArgsConstructor
 public class RoadMapController {
+    private final RoadMapService service;
 
-    @Autowired
-    private RoadMapService service;
+    @GetMapping("/status")
+    public ResponseEntity<String> getStatus() {
+        return ResponseEntity.ok().body("Server is up and running!");
+    }
 
     @GetMapping
     public ResponseEntity<List<RoadMapMeta>> getRoadMap() {
