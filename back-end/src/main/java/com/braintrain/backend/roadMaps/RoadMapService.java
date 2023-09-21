@@ -15,6 +15,9 @@ public class RoadMapService {
     private final RoadMapRepository repo;
 
     public RoadMapMeta createRoadMap(RoadMapDTO roadMapDTO) {
+        if (roadMapDTO.name() == null || roadMapDTO.name().isEmpty()) {
+            throw new IllegalArgumentException("Invalid name");
+        }
         RoadMap roadMap = repo.save(new RoadMap(roadMapDTO.roadMap()));
         return metaRepo.save(new RoadMapMeta(roadMapDTO.name(), roadMap.getId()));
     }
