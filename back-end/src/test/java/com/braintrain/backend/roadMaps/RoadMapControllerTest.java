@@ -55,8 +55,7 @@ class RoadMapControllerTest {
     @Test
     void shouldGetRoadMaps() {
         String uri = BASE_URL.formatted(port);
-        ResponseEntity<List<RoadMapMeta>> exchange = restTemplate.exchange(uri, HttpMethod.GET, HttpEntity.EMPTY,
-                new ParameterizedTypeReference<List<RoadMapMeta>>() {});
+        ResponseEntity<RoadMapMetaListDTO> exchange = restTemplate.exchange(uri, HttpMethod.GET, HttpEntity.EMPTY, RoadMapMetaListDTO.class);
         assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(exchange.hasBody()).isTrue();
     }

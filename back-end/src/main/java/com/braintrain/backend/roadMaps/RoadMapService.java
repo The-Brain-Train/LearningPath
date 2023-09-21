@@ -20,8 +20,8 @@ public class RoadMapService {
         return metaRepo.save(new RoadMapMeta(roadMapDTO.name(), roadMap.getId()));
     }
 
-    public List<RoadMapMeta> getAllRoadMapsMeta() {
-        return metaRepo.findAll();
+    public RoadMapMetaListDTO getAllRoadMapsMeta() {
+        return new RoadMapMetaListDTO(metaRepo.findAll());
     }
 
     public List<RoadMap> getAllRoadMaps() {

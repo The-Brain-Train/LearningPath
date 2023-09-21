@@ -22,7 +22,7 @@ public class RoadMapController {
     }
 
     @GetMapping
-    public ResponseEntity<List<RoadMapMeta>> getRoadMap() {
+    public ResponseEntity<RoadMapMetaListDTO> getRoadMap() {
         return ResponseEntity.ok(service.getAllRoadMapsMeta());
     }
 
@@ -44,4 +44,6 @@ public class RoadMapController {
         service.delete(roadMapMeta);
         return ResponseEntity.noContent().build();
     }
+
+
 }
