@@ -2,10 +2,13 @@
 import { useState } from "react";
 import IndentedTree from "../components/IndentedTree";
 import SearchTopic from "../components/SearchTopic";
+import InputForm from "../components/InputForm";
 
 
 export default function Create() {
   const [showChat, setShowChat] = useState(true);
+  const [hours, setHours] = useState<string | null>(null);
+  const [experienceLevel, setExperienceLevel] = useState<string| null>(null);
   const toggleChat = () => {
     setShowChat(!showChat);
   };
@@ -13,10 +16,11 @@ export default function Create() {
 
   return (
     <main className="main-background">
-      <SearchTopic
+      {/* <SearchTopic
       toggleChat={toggleChat}
       setTopic={setTopic}
-      />
+      /> */}
+      <InputForm setTopic={setTopic} setHours={setHours} setExperiencelevel={setExperienceLevel}/>
       <IndentedTree topic={topic}/>
     </main>
   );
