@@ -4,6 +4,10 @@ export type RoadmapMeta = {
     roadMapReferenceId: string
 }
 
+export type RoadMapMetaList = {
+    roadMapMetaList: RoadmapMeta[]
+}
+
 export type Roadmap = {
     id: string,
     obj: string
