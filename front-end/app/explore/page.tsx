@@ -14,9 +14,10 @@ export default function Explore() {
   const [roadmaps, setRoadmaps] = useState<RoadmapMeta[]>([]);
   const [filteredRoadmaps, setFilteredRoadmaps] = useState<RoadmapMeta[]>([]);
   const [search, setSearch] = useState("");
+  
 
   useEffect(() => {
-    getRoadmaps().then((data) => setRoadmaps(data));
+    getRoadmaps().then((data) => setRoadmaps(data.roadMapMetaList));
   }, []);
 
   useEffect(() => {

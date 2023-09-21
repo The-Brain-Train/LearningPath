@@ -21,7 +21,7 @@ export default function roadMapId(props: Props) {
     const fetchData = async () => {
       try {
         const roadmaps = await getRoadmaps();
-        const foundRoadmap = roadmaps.find(
+        const foundRoadmap = roadmaps.roadMapMetaList.find(
           (roadmap) => roadmap.id === props.params.roadMapId
         );
 
