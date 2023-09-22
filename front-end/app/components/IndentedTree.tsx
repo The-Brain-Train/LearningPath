@@ -185,7 +185,7 @@ const IndentedTree = ({ topic, experienceLevel, hours }: IndentedTreeProps) => {
                   <p className="text-slate-300 pt-4 pr-2 font-bold">Hours</p>
                 </div>
               ) : (
-                <p className="text-slate-300 font-bold flex flex-col justify-center items-center h-screen ">Your RoadMap will be displayed Here!</p>
+                <p className="text-slate-300 font-bold flex flex-col justify-center items-center h-screen  "style={{ maxHeight: '100vw' }}>Your RoadMap will be displayed Here!</p>
               )}
               <svg className="overflow-hidden" ref={svgRef}></svg>
               {data !== null && (
