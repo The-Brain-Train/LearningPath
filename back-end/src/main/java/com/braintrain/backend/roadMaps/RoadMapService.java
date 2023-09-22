@@ -14,8 +14,8 @@ public class RoadMapService {
     private final RoadMapRepository repo;
 
     public RoadMapMeta createRoadMap(RoadMapDTO roadMapDTO) {
-        validateDTOInput(roadMapDTO.name(), "Invalid name");
-        validateDTOInput(roadMapDTO.roadMap(), "Invalid roadmap");
+        validateDTONameInput(roadMapDTO.name(), "Invalid name");
+        validateDTORoadmapInput(roadMapDTO.roadMap());
         RoadMap roadMap = repo.save(new RoadMap(roadMapDTO.roadMap()));
         return metaRepo.save(new RoadMapMeta(roadMapDTO.name(), roadMap.getId()));
     }
@@ -46,9 +46,21 @@ public class RoadMapService {
         metaRepo.deleteById(id);
     }
 
-    private static void validateDTOInput(String roadMapDTO, String Invalid_name) {
-        if (roadMapDTO == null || roadMapDTO.isEmpty()) {
+    private static void validateDTONameInput(String roadMapDTOName, String Invalid_name) {
+        if (roadMapDTOName == null || roadMapDTOName.isEmpty()) {
             throw new IllegalArgumentException(Invalid_name);
+        }
+    }
+
+    private void validateDTORoadmapInput(String roadMapDTORoadMap) {
+        if (roadMapDTORoadMap == null || roadMapDTORoadMap.isEmpty()) {
+            throw new IllegalArgumentException("Roadmap null or empty");
+        }
+
+        if (!roadMapDTORoadMap.contains("\"name\":") ||
+                !roadMapDTORoadMap.contains("\"value\":") ||
+                !roadMapDTORoadMap.contains("\"children\":")) {
+            throw new IllegalArgumentException("Roadmap has an invalid data structure");
         }
     }
 }
