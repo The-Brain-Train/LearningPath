@@ -7,12 +7,14 @@ import { Box, Button, TextField } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import { useState } from "react";
 import Slider from "@mui/material/Slider";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 const style = {
   position: "absolute" as "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
+  height: 430,
   width: 350,
   bgcolor: "background.paper",
   border: "2px solid #000",
@@ -60,7 +62,7 @@ const InputForm = ({
           What would you want to create?
         </h1>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <button className="bg-transparent hover:bg-emerald-600text-lg text-slate-400 font-bold border-2 p-2 border-white rounded " onClick={handleOpen}>Create Roadmap</button>
+          <button className="bg-transparent hover:bg-emerald-600text-lg text-slate-400 font-bold border-2 p-2 border-white rounded " onClick={handleOpen}>Create Roadmap</button>
         </div>
         <Modal
           open={open}
@@ -70,18 +72,18 @@ const InputForm = ({
         >
           <Box sx={style}>
             <div>
-            <InputLabel className="ml-3 form-control" id="demo-simple-topic-autowidth-label">
-                  Topic:
-                </InputLabel>
+              <InputLabel className="ml-3 form-control" id="demo-simple-topic-autowidth-label">
+                Topic:
+              </InputLabel>
               <TextField
                 type="text"
                 value={userMessage}
                 onChange={(e) => setUserMessage(e.target.value)}
                 placeholder="Enter Topic!"
-                sx={{ m: 1, minWidth: '90%'}}
+                sx={{ m: 1, minWidth: '90%' }}
                 className="pt-0 rounded-l-md focus:outline-none focus:placeholder-gray-400 text-center text-gray-600 placeholder-gray-60 py-3 form-control"
               />
-              <FormControl sx={{ m: 1, minWidth: '90%'}}>
+              <FormControl sx={{ m: 1, minWidth: '90%' }}>
                 <InputLabel id="demo-simple-select-autowidth-label">
                   Experience Level
                 </InputLabel>
@@ -95,29 +97,33 @@ const InputForm = ({
                 >
                   <MenuItem value={"beginner"}>Beginner</MenuItem>
                   <MenuItem value={"intermediate"}>Intermediate</MenuItem>
-                  <MenuItem value={"experienced"}>Expert</MenuItem>
+                  <MenuItem value={"expert"}>Expert</MenuItem>
                 </Select>
               </FormControl>
-              <InputLabel className="mt-5 ml-3 text-sm" id="demo-simple-box-autowidth-label">
-                  How many hours do you want to spend? 
+              <div>
+                <InputLabel className="mt-10 pb-2 text-sm font-black" id="demo-simple-box-autowidth-label">
+                  How many hours do you want to spend?
                 </InputLabel>
-              <Box sx={{ minWidth: '80%' }}>
-                <Slider
-                  aria-label="Hours"
-                  value={sliderValue}
-                  onChange={(event, newValue) =>
-                    setSliderValue(newValue as number)
-                  }
-                  defaultValue={30}
-                  getAriaValueText={valuetext}
-                  valueLabelDisplay="auto"
-                  step={10}
-                  marks
-                  min={0}
-                  max={500}
-                />
-              </Box>
-              <Button onClick={handleSubmit} className="border-2 rounded">Submit</Button>
+                <Box sx={{ minWidth: '80%' }}>
+                  <Slider
+                    aria-label="Hours"
+                    value={sliderValue}
+                    onChange={(event, newValue) =>
+                      setSliderValue(newValue as number)
+                    }
+                    defaultValue={30}
+                    getAriaValueText={valuetext}
+                    valueLabelDisplay="auto"
+                    step={10}
+                    marks
+                    min={0}
+                    max={500}
+                  />
+                </Box>
+              </div>
+              <div className="flex justify-center">
+                <button onClick={handleSubmit} className="w-3/6 bg-blue-500 hover:bg-blue-700 mt-10 text-white font-bold py-2 px-4 border border-blue-700 rounded">Submit <ArrowForwardIcon /></button>
+              </div>
             </div>
           </Box>
         </Modal>
