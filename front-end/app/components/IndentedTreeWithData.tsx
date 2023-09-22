@@ -135,7 +135,7 @@ const IndentedTreeWithData = ({ data, roadMapRefId }: IndentedTreeProps) => {
   };
 
   return (
-    <div className="flex flex-col px-3 pb-16">
+    <div className="flex flex-col px-3">
       <div>
         <div className="flex content-between justify-between flex-nowrap">
           <p className="text-slate-300 pl-2 font-bold">Learning Path</p>
