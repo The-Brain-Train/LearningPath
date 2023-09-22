@@ -59,7 +59,7 @@ const InputForm = ({
         <h1 className="flex justify-center p-5 text-white">
           What would you want to create?
         </h1>
-        <Button className="justify-center bg-transparent hover:bg-emerald-600 hover:bg-blue-700 text-lg text-lime-400 font-bold border-blue-500 rounded  animate-pulse" onClick={handleOpen}>Click to create Roadmap</Button>
+        <button className="bg-transparent hover:bg-emerald-600 hover:bg-blue-700 text-lg text-lime-400 font-bold border-2 border-blue-500 rounded animate-pulse" onClick={handleOpen}>Click to create Roadmap</button>
         <Modal
           open={open}
           onClose={handleClose}
@@ -93,7 +93,7 @@ const InputForm = ({
                 >
                   <MenuItem value={"beginner"}>Beginner</MenuItem>
                   <MenuItem value={"intermediate"}>Intermediate</MenuItem>
-                  <MenuItem value={"experienced"}>Experienced</MenuItem>
+                  <MenuItem value={"experienced"}>Expert</MenuItem>
                 </Select>
               </FormControl>
               <InputLabel className="mt-5 ml-3 text-sm" id="demo-simple-box-autowidth-label">
