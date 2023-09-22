@@ -11,10 +11,7 @@ export default function Create() {
 
   return (
     <main className="main-background">
-      {/* <SearchTopic
-      toggleChat={toggleChat}
-      setTopic={setTopic}
-      /> */}
+     
       <InputForm setTopic={setTopic} setHours={setHours} setExperienceLevel={setExperienceLevel}/>
       <IndentedTree topic={topic} experienceLevel={experienceLevel} hours={hours} />
     </main>

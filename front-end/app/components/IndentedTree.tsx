@@ -177,7 +177,7 @@ const IndentedTree = ({ topic, experienceLevel, hours }: IndentedTreeProps) => {
             <p className="text-red-500 font-bold">{error}</p>
           ) : (
             <>
-              {data !== null ? ( // Only render the message if data is null
+              {data !== null ? ( 
                 <div className="flex content-between justify-between flex-nowrap">
                   <p className="text-slate-300 pt-4 pl-2 font-bold">
                     Learning Path
@@ -185,7 +185,7 @@ const IndentedTree = ({ topic, experienceLevel, hours }: IndentedTreeProps) => {
                   <p className="text-slate-300 pt-4 pr-2 font-bold">Hours</p>
                 </div>
               ) : (
-                <p className="text-slate-300 font-bold flex flex-col justify-center items-center h-screen  "style={{ maxHeight: '100vw' }}>Your RoadMap will be displayed Here!</p>
+                <p className="text-slate-300 font-bold flex flex-col justify-center items-center h-screen  "style={{ maxHeight: '90vw' }}>Your RoadMap will be displayed Here!</p>
               )}
               <svg className="overflow-hidden" ref={svgRef}></svg>
               {data !== null && (
