@@ -120,4 +120,17 @@ class RoadMapControllerTest {
             assertThat(err.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @Test
+    void shouldReturn400WhenCreatingRoadMapWithInvalidRoadmapData() throws IOException {
+        String uri = BASE_URL.formatted(port);
+        RoadMapDTO dto = TestHelper.createRoadMapDTO("JavaScript", Paths.get("src/test/resources/javascript.json"));
+
+        try {
+            ResponseEntity<Void> exchange = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(dto), Void.class);
+            fail("should throw exception");
+        } catch (HttpClientErrorException err) {
+            assertThat(err.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        }
+    }
 }
