@@ -60,7 +60,7 @@ const InputForm = ({
           What would you want to create?
         </h1>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <button className="bg-transparent hover:bg-emerald-600text-lg text-slate-400 font-bold border-white rounded " onClick={handleOpen}>Create Roadmap</button>
+        <button className="bg-transparent hover:bg-emerald-600text-lg text-slate-400 font-bold border-2 p-2 border-white rounded " onClick={handleOpen}>Create Roadmap</button>
         </div>
         <Modal
           open={open}
