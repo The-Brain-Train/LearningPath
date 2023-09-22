@@ -59,7 +59,6 @@ const IndentedTree = ({ topic, experienceLevel, hours }: IndentedTreeProps) => {
     const nodes = root.descendants();
 
     const screenWidth = window.innerWidth;
-    const screenHeight = window.innerHeight;
     const width = screenWidth;
     const height = (nodes.length + 1) * nodeSize;
 
@@ -165,6 +164,7 @@ const IndentedTree = ({ topic, experienceLevel, hours }: IndentedTreeProps) => {
     };
   }, [data]);
 
+    
   return (
     <div className="flex flex-col px-3">
       {isLoading ? (
@@ -177,12 +177,16 @@ const IndentedTree = ({ topic, experienceLevel, hours }: IndentedTreeProps) => {
             <p className="text-red-500 font-bold">{error}</p>
           ) : (
             <>
-              <div className="flex content-between justify-between flex-nowrap">
-                <p className="text-slate-300 pt-4 pl-2 font-bold">
-                  Learning Path
-                </p>
-                <p className="text-slate-300 pt-4 pr-2 font-bold">Hours</p>
-              </div>
+              {data !== null ? ( // Only render the message if data is null
+                <div className="flex content-between justify-between flex-nowrap">
+                  <p className="text-slate-300 pt-4 pl-2 font-bold">
+                    Learning Path
+                  </p>
+                  <p className="text-slate-300 pt-4 pr-2 font-bold">Hours</p>
+                </div>
+              ) : (
+                <p className="text-slate-300 font-bold flex flex-col justify-center items-center h-screen ">Your RoadMap will be displayed Here!</p>
+              )}
               <svg className="overflow-hidden" ref={svgRef}></svg>
               {data !== null && (
                 <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 flex justify-center">
