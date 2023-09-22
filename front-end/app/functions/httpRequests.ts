@@ -3,7 +3,7 @@ import { RoadMapMetaList, Roadmap, RoadmapDTO, RoadmapMeta } from "../types";
 export const getRoadmaps = async () => {
   const response = await fetch(`http://localhost:8080/api/roadmaps`);
   if (!response.ok) {
-    throw new Error("Failed to fetch roadmaps");
+    throw Error("Failed to fetch roadmaps");
   }
   const data: RoadMapMetaList = await response.json();
   return data;
