@@ -20,7 +20,7 @@ export default function Home() {
           <TextAnimation />
         </div>
 
-        <div className="flex justify-center gap-4 mt-5 pt-36">
+        <div className="flex justify-center gap-4 mt-5 pt-32">
           <Link href="/explore">
             <div
               className="relative text-center rounded cursor-pointer group transition-opacity duration-300 border-2"
