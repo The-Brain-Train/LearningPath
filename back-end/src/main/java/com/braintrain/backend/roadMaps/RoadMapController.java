@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/roadmaps")
-@CrossOrigin(origins = "*")
+@CrossOrigin
 @AllArgsConstructor
 public class RoadMapController {
     private final RoadMapService service;
