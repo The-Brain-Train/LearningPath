@@ -52,6 +52,10 @@ const InputForm = ({
     setTopic(userMessage);
     setExperienceLevel(experience);
     setHours(sliderValue);
+    setUserMessage(""); 
+    setExperience(""); 
+    setSliderValue(30); 
+  
     handleClose();
   };
 
