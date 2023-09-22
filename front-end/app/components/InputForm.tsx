@@ -65,13 +65,16 @@ const InputForm = ({
         >
           <Box sx={style}>
             <div>
+            <InputLabel className="ml-3"id="demo-simple-topic-autowidth-label">
+                  Topic:
+                </InputLabel>
               <TextField
                 type="text"
                 value={userMessage}
                 onChange={(e) => setUserMessage(e.target.value)}
                 placeholder="Enter Topic!"
                 sx={{ m: 1, minWidth: '90%'}}
-                className="rounded-l-md focus:outline-none focus:placeholder-gray-400 text-center text-gray-600 placeholder-gray-60 py-3"
+                className="pt-0 rounded-l-md focus:outline-none focus:placeholder-gray-400 text-center text-gray-600 placeholder-gray-60 py-3"
               />
               <FormControl sx={{ m: 1, minWidth: '90%'}}>
                 <InputLabel id="demo-simple-select-autowidth-label">
@@ -90,6 +93,9 @@ const InputForm = ({
                   <MenuItem value={"experienced"}>Experienced</MenuItem>
                 </Select>
               </FormControl>
+              <InputLabel className="mb-3 mt-5 ml-3 " id="demo-simple-box-autowidth-label">
+                  How many hours do you want to spend? 
+                </InputLabel>
               <Box sx={{ minWidth: '80%' }}>
                 <Slider
                   aria-label="Hours"
