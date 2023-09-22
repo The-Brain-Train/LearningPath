@@ -13,7 +13,7 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: 350,
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -56,7 +56,10 @@ const InputForm = ({
   return (
     <>
       <div>
-        <Button onClick={handleOpen}>Open modal</Button>
+        <h1 className="flex justify-center p-5 text-white">
+          What would you want to create?
+        </h1>
+        <Button className="justify-center bg-transparent hover:bg-emerald-600 hover:bg-blue-700 text-lg text-lime-400 font-bold border-blue-500 rounded  animate-pulse" onClick={handleOpen}>Click to create Roadmap</Button>
         <Modal
           open={open}
           onClose={handleClose}
@@ -65,7 +68,7 @@ const InputForm = ({
         >
           <Box sx={style}>
             <div>
-            <InputLabel className="ml-3"id="demo-simple-topic-autowidth-label">
+            <InputLabel className="ml-3 form-control" id="demo-simple-topic-autowidth-label">
                   Topic:
                 </InputLabel>
               <TextField
@@ -74,7 +77,7 @@ const InputForm = ({
                 onChange={(e) => setUserMessage(e.target.value)}
                 placeholder="Enter Topic!"
                 sx={{ m: 1, minWidth: '90%'}}
-                className="pt-0 rounded-l-md focus:outline-none focus:placeholder-gray-400 text-center text-gray-600 placeholder-gray-60 py-3"
+                className="pt-0 rounded-l-md focus:outline-none focus:placeholder-gray-400 text-center text-gray-600 placeholder-gray-60 py-3 form-control"
               />
               <FormControl sx={{ m: 1, minWidth: '90%'}}>
                 <InputLabel id="demo-simple-select-autowidth-label">
@@ -93,7 +96,7 @@ const InputForm = ({
                   <MenuItem value={"experienced"}>Experienced</MenuItem>
                 </Select>
               </FormControl>
-              <InputLabel className="mb-3 mt-5 ml-3 " id="demo-simple-box-autowidth-label">
+              <InputLabel className="mt-5 ml-3 text-sm" id="demo-simple-box-autowidth-label">
                   How many hours do you want to spend? 
                 </InputLabel>
               <Box sx={{ minWidth: '80%' }}>
