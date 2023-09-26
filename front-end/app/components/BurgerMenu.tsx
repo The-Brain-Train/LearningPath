@@ -85,7 +85,7 @@ export default function BurgerMenu() {
         <MenuItem onClick={() => router.push("/explore")}>
         <ExploreIcon /> <p className='pl-2'>Explore</p>
         </MenuItem>
-        <MenuItem onClick={() => router.back()}>
+        <MenuItem onClick={() => router.push("/myprofile")}>
           <AccountCircleIcon /> <p className='pl-2'>My Profile</p>
         </MenuItem>
       </Menu>
