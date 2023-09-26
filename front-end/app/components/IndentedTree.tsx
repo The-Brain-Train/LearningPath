@@ -187,7 +187,7 @@ const IndentedTree = ({ topic, experienceLevel, hours }: IndentedTreeProps) => {
               ) : (
                 <p className="text-slate-300 font-bold flex flex-col justify-center items-center h-screen  "style={{ maxHeight: '90vw' }}>Your RoadMap will be displayed Here!</p>
               )}
-              <svg className="overflow-hidden" ref={svgRef}></svg>
+              <svg className="overflow-hidden pb-10" ref={svgRef}></svg>
               {data !== null && (
                 <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 flex justify-center">
                   <SaveButton saveClick={saveRoadMap} />
