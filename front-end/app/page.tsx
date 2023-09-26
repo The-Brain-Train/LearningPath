@@ -17,10 +17,10 @@ export default function Home() {
 
   const user: User = {
     email: session?.user?.email!,
-    name: session?.user?.name!,
+    name: session?.user?.name!
   };
 
-  const addUserToDb = async () => {
+  const addUser = async () => {
     if (!user.email) {
       return;
     }
@@ -32,7 +32,7 @@ export default function Home() {
           "Content-Type": "application/json",
         },
       });
-      // const data = await res.json();
+      const data = await res.json();
       if (!res.ok) {
         throw new Error(`Failed to add user. Status code: ${res.status}`);
       }
@@ -43,7 +43,7 @@ export default function Home() {
 
   useEffect(() => {
     if (status === "authenticated") {
-      addUserToDb();
+      addUser();
     }
   }, [status]);
 

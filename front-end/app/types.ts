@@ -19,6 +19,6 @@ export type RoadmapDTO = {
 };
 
 export type User = {
-  email?: string;
-  name?: string;
+  email: string | null;
+  name: string | null;
 };
