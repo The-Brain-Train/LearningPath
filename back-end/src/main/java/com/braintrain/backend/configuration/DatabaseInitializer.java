@@ -1,6 +1,10 @@
-package com.braintrain.backend;
+package com.braintrain.backend.configuration;
 
-import com.braintrain.backend.roadMaps.*;
+import com.braintrain.backend.model.RoadMap;
+import com.braintrain.backend.model.RoadMapDTO;
+import com.braintrain.backend.model.RoadMapMeta;
+import com.braintrain.backend.repository.RoadMapMetaRepository;
+import com.braintrain.backend.service.RoadMapService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;

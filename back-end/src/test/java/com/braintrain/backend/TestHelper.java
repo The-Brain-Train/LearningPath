@@ -1,6 +1,6 @@
 package com.braintrain.backend;
 
-import com.braintrain.backend.roadMaps.RoadMapDTO;
+import com.braintrain.backend.model.RoadMapDTO;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

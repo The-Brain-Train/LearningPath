@@ -1,5 +1,6 @@
-package com.braintrain.backend;
+package com.braintrain.backend.exceptionHandler;
 
+import com.braintrain.backend.exceptionHandler.ErrorMessageResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

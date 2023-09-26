@@ -1,13 +1,16 @@
 package com.braintrain.backend.roadMaps;
 
 import com.braintrain.backend.TestHelper;
+import com.braintrain.backend.model.RoadMap;
+import com.braintrain.backend.model.RoadMapDTO;
+import com.braintrain.backend.model.RoadMapMeta;
+import com.braintrain.backend.model.RoadMapMetaListDTO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -18,7 +21,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;

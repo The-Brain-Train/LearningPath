@@ -1,4 +1,4 @@
-package com.braintrain.backend;
+package com.braintrain.backend.exceptionHandler;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

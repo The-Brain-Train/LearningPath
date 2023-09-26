@@ -1,4 +1,6 @@
-package com.braintrain.backend.roadMaps;
+package com.braintrain.backend.model;
+
+import com.braintrain.backend.model.RoadMapMeta;
 
 import java.util.List;
 

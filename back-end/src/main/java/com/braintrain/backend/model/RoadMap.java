@@ -1,4 +1,4 @@
-package com.braintrain.backend.roadMaps;
+package com.braintrain.backend.model;
 
 
 import lombok.Data;
