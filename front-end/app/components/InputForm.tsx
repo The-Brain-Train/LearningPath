@@ -3,11 +3,10 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { Box, Button, TextField } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import { useState } from "react";
 import Slider from "@mui/material/Slider";
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 const style = {
   position: "absolute" as "absolute",
@@ -126,7 +125,7 @@ const InputForm = ({
                 </Box>
               </div>
               <div className="flex justify-center">
-                <button onClick={handleSubmit} className="w-3/6 bg-blue-500 hover:bg-blue-700 mt-10 text-white font-bold py-2 px-4 border border-blue-700 rounded">Submit <ArrowForwardIcon /></button>
+                <button onClick={handleSubmit} className="w-3/6 bg-blue-500 hover:bg-blue-700 mt-10 text-white font-bold py-2 px-4 border border-blue-700 rounded">Create</button>
               </div>
             </div>
           </Box>
