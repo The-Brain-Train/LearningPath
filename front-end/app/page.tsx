@@ -1,8 +1,53 @@
 "use client";
 import Link from "next/link";
 import TextAnimation from "./components/TextAnimation";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
+import { User } from "./types";
+import { useEffect } from "react";
 
 export default function Home() {
+
+  const { data: session, status } = useSession({
+    required: true,
+    onUnauthenticated() {
+      redirect("api/auth/signin?callbackUrl=/home");
+    },
+  });
+
+  const user: User = {
+    email: session?.user?.email!,
+    name: session?.user?.name!,
+  };
+
+  const addUserToDb = async () => {
+    if (!user.email) {
+      return;
+    }
+    try {
+      const res = await fetch("http://localhost:8080/api/user", {
+        method: "POST",
+        body: JSON.stringify(user),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      // const data = await res.json();
+      if (!res.ok) {
+        throw new Error(`Failed to add user. Status code: ${res.status}`);
+      }
+    } catch (error) {
+      console.error("Error adding user to DB:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      addUserToDb();
+    }
+  }, [status]);
+
+
   const topSectionButtonStyles = (backgroundImageUrl: string) => ({
     backgroundImage: `url(${backgroundImageUrl})`,
     backgroundSize: "cover",

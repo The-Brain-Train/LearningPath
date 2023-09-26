@@ -1,19 +1,24 @@
 export type RoadmapMeta = {
-    id: string,
-    name: string
-    roadMapReferenceId: string
-}
+  id: string;
+  name: string;
+  roadMapReferenceId: string;
+};
 
 export type RoadMapMetaList = {
-    roadMapMetaList: RoadmapMeta[]
-}
+  roadMapMetaList: RoadmapMeta[];
+};
 
 export type Roadmap = {
-    id: string,
-    obj: string
-}
+  id: string;
+  obj: string;
+};
 
 export type RoadmapDTO = {
-    name: string,
-    roadMap: string
-}
+  name: string;
+  roadMap: string;
+};
+
+export type User = {
+  email?: string;
+  name?: string;
+};
