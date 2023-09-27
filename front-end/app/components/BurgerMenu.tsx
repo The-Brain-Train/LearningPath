@@ -29,8 +29,7 @@ export default function BurgerMenu() {
         <IconButton
           onClick={isOpen ? handleClose : handleClick}
           size="small"
-          sx={{ 
-            ml: 2, 
+          sx={{  
             transition: 'transform 0.3s ease', 
             transform: isOpen ? 'rotate(90deg)' : 'none', 
         }}
