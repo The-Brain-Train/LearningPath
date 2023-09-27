@@ -7,12 +7,7 @@ import { User } from "./types";
 import { useEffect } from "react";
 
 export default function Home() {
-  const { data: session, status } = useSession({
-    required: true,
-    onUnauthenticated() {
-      redirect("api/auth/signin?callbackUrl=/home");
-    },
-  });
+  const { data: session, status } = useSession();
 
   const user: User = {
     email: session?.user?.email!,
