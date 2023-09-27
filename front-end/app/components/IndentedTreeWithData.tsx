@@ -129,10 +129,10 @@ const IndentedTreeWithData = ({ data, roadMapRefId }: IndentedTreeProps) => {
     };
   }, [data]);
 
-  const handleDelete = async (id: string) => {
-    await deleteRoadmap(id);
-    router.back();
-  };
+  // const handleDelete = async (id: string) => {
+  //   await deleteRoadmap(id);
+  //   router.back();
+  // };
 
   return (
     <div className="flex flex-col px-3">
@@ -143,12 +143,12 @@ const IndentedTreeWithData = ({ data, roadMapRefId }: IndentedTreeProps) => {
         </div>
         <svg className="overflow-hidden mb-20" ref={svgRef}></svg>
       </div>
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 flex justify-center">
+      {/* <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 flex justify-center">
         <DeleteModal
           id={roadMapRefId}
           onDelete={() => handleDelete(roadMapRefId)}
         />
-      </div>
+      </div> */}
     </div>
   );
 };
