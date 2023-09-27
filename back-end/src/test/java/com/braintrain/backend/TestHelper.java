@@ -13,6 +13,6 @@ public class TestHelper {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(new File(String.valueOf(path)));
         String str = objectMapper.writeValueAsString(jsonNode);
-        return new RoadMapDTO(name, str);
+        return new RoadMapDTO(name, str, "My email");
     }
 }
