@@ -11,12 +11,16 @@ import { useRouter } from "next/navigation";
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close'; 
 import LogoutIcon from '@mui/icons-material/Logout';
+import LoginIcon from '@mui/icons-material/Login';
+import { useSession } from "next-auth/react";
 
 
 export default function BurgerMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const router = useRouter();
   const isOpen = Boolean(anchorEl);
+
+  const { data: session, status } = useSession();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -88,9 +92,15 @@ export default function BurgerMenu() {
         <MenuItem onClick={() => router.push("/myprofile")}>
           <AccountCircleIcon /> <p className='pl-2'>My Profile</p>
         </MenuItem>
-        <MenuItem onClick={() => router.push("/api/auth/signout")}>
-          <LogoutIcon /> <p className='pl-2'>Sign Out</p>
-        </MenuItem>
+        {session ? (
+          <MenuItem onClick={() => router.push("/api/auth/signout")}>
+            <LogoutIcon /> <p className='pl-2'>Sign Out</p>
+          </MenuItem>
+        ) : (
+          <MenuItem onClick={() => router.push("/api/auth/signin")}>
+            <LoginIcon /> <p className='pl-2'>Sign In</p>
+          </MenuItem>
+        )}
       </Menu>
 
     </React.Fragment>
