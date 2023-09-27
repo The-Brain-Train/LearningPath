@@ -46,7 +46,7 @@ const page = () => {
   return (
     <main className="main-background min-h-max flex items-center flex-col">
       <UserCard user={session?.user} />
-      <h2 className="pt-7 pl-2">My Roadmaps</h2>
+      <h2 className="pt-7 pl-2 text-white">My Roadmaps</h2>
       <div
         className="roadMaps-list"
         style={{ maxWidth: "300px", width: "80%" }}
