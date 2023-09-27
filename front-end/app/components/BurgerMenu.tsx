@@ -10,6 +10,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useRouter } from "next/navigation";
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close'; 
+import LogoutIcon from '@mui/icons-material/Logout';
 
 
 export default function BurgerMenu() {
@@ -86,6 +87,9 @@ export default function BurgerMenu() {
         </MenuItem>
         <MenuItem onClick={() => router.push("/myprofile")}>
           <AccountCircleIcon /> <p className='pl-2'>My Profile</p>
+        </MenuItem>
+        <MenuItem onClick={() => router.push("/api/auth/signout")}>
+          <LogoutIcon /> <p className='pl-2'>Sign Out</p>
         </MenuItem>
       </Menu>
 
