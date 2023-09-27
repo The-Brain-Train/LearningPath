@@ -12,13 +12,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class RoadMapMeta {
     @Id
     private String id;
-
     private String name;
-
     private String roadMapReferenceId;
+    private String userEmail;
 
-    public RoadMapMeta(String name, String roadMapReferenceId) {
+    public RoadMapMeta(String name, String roadMapReferenceId, String userEmail) {
         this.name = name;
         this.roadMapReferenceId = roadMapReferenceId;
+        this.userEmail = userEmail;
     }
 }

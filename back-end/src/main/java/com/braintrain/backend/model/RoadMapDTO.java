@@ -1,5 +1,5 @@
 package com.braintrain.backend.model;
 
 
-public record RoadMapDTO(String name, String roadMap) {
+public record RoadMapDTO(String name, String roadMap, String userEmail) {
 }

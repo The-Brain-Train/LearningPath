@@ -17,7 +17,10 @@ public class RoadMap {
 
     private String obj;
 
-    public RoadMap(String obj) {
+    private String userEmail;
+
+    public RoadMap(String obj, String userEmail) {
         this.obj = obj;
+        this.userEmail = userEmail;
     }
 }
