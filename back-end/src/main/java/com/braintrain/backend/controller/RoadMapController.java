@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/roadmaps")
@@ -32,6 +34,17 @@ public class RoadMapController {
     @GetMapping("/{id}")
     public ResponseEntity<RoadMap> getRoadMap(@PathVariable String id) {
         return ResponseEntity.of(service.getRoadMapById(id));
+    }
+
+    @GetMapping("/{userEmail}/roadMapMetas")
+    public ResponseEntity<RoadMapMetaListDTO> getUserRoadmapMetas(@PathVariable String userEmail) {
+        RoadMapMetaListDTO roadMapMetaListDTO = service.getAllRoadMapsMeta();
+
+        List<RoadMapMeta> filteredMetaList = roadMapMetaListDTO.roadMapMetaList().stream()
+                .filter(meta -> userEmail.equals(meta.getUserEmail()))
+                .toList();
+
+        return ResponseEntity.ok(new RoadMapMetaListDTO(filteredMetaList));
     }
 
     @PostMapping
