@@ -39,5 +39,13 @@ export const postRoadmap = async (roadMap: RoadmapDTO) => {
   if (!response.ok) {
     throw new Error("Failed to add roadmap");
   }
+};
 
+export const getUsersRoadmapMetas = async (userEmail: string) => {
+  const response = await fetch(`http://localhost:8080/api/roadmaps/${userEmail}/roadMapMetas`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch roadmaps");
+  }
+  const data: RoadMapMetaList = await response.json();
+  return data;
 };
