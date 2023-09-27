@@ -1,7 +1,7 @@
 "use client";
-import Link from "next/link";
 import BurgerMenu from "./BurgerMenu";
 import Image from "next/image"
+import Link from "next/link";
 
 type HeaderProp = {
   userImage: string | null | undefined;
@@ -10,14 +10,16 @@ type HeaderProp = {
 export default function Header({userImage}: HeaderProp) {
 
   const userPic = userImage ? (
-    <Image
-        className="dark:border-slate-500 drop-shadow-xl shadow-black rounded-full mx-auto "
+    <Link href="/myprofile">
+      <Image
+        className="dark:border-slate-500 drop-shadow-xl shadow-black rounded-full mx-auto"
         src={userImage}
         width={40}
         height={40}
         alt={"Profile Pic"}
         priority={true}
-    />
+      />
+  </Link>
 ) : null
 
 
