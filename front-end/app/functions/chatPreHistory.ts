@@ -7,36 +7,10 @@ export const chatHistory = (topic: string | null, experienceLevel: string | null
       The JSON structure should follow this format:
       {
         "name": "${topic}",
-        "children": [
-          {
-            "name": "Stage 1",
-            "children": [
-              {
-                "name": "Substage 1.1",
-                "children": [],
-                "value": 10
-              },
-              {
-                "name": "Substage 1.2",
-                "children": [],
-                "value": 15
-              }
-            ]
-          },
-          {
-            "name": "Stage 2",
-            "children": [
-              {
-                "name": "Substage 2.1",
-                "children": [],
-                "value": 20
-              }
-            ]
-          }
-        ],
+        "children": [],
         "value": ${hours}
       }
-      
+      Ensure that the "value" field is only present in the last children. The total value should approximate ${hours} hours.
       ` },
   ];
 };
