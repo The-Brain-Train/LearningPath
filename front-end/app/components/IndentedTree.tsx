@@ -5,27 +5,34 @@ import * as d3 from "d3";
 import { getResponseFromOpenAI } from "../functions/openAIChat";
 import SaveButton from "./SaveButton";
 import { postRoadmap } from "../functions/httpRequests";
-import { RoadmapDTO } from "../types";
+import { RoadmapDTO, User } from "../types";
 import { chatHistory } from "../functions/chatPreHistory";
 import { CircularProgress } from "@mui/material";
 
 type IndentedTreeProps = {
-  topic: string | null,
-  experienceLevel: string | null,
-  hours: number | null
+  topic: string | null;
+  experienceLevel: string | null;
+  hours: number | null;
+  userEmail: string | null | undefined;
 };
 
-const IndentedTree = ({ topic, experienceLevel, hours }: IndentedTreeProps) => {
+const IndentedTree = ({
+  topic,
+  experienceLevel,
+  hours,
+  userEmail,
+}: IndentedTreeProps) => {
   const [data, setData] = useState(null);
   const svgRef = useRef(null);
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const saveRoadMap = async () => {
-    if (topic == null) return;
+    if (topic == null || userEmail == null) return;
     const requestData: RoadmapDTO = {
       name: topic,
       roadMap: JSON.stringify(data),
+      userEmail: userEmail,
     };
     postRoadmap(requestData);
   };
@@ -34,7 +41,9 @@ const IndentedTree = ({ topic, experienceLevel, hours }: IndentedTreeProps) => {
     setLoading(true);
     try {
       console.log(hours, experienceLevel, topic);
-      const response = await getResponseFromOpenAI(chatHistory(topic, experienceLevel, hours));
+      const response = await getResponseFromOpenAI(
+        chatHistory(topic, experienceLevel, hours)
+      );
       console.log(response);
       const jsonData = await JSON.parse(response.choices[0].message.content);
       setData(jsonData);
@@ -164,7 +173,6 @@ const IndentedTree = ({ topic, experienceLevel, hours }: IndentedTreeProps) => {
     };
   }, [data]);
 
-    
   return (
     <div className="flex flex-col px-3">
       {isLoading ? (
@@ -177,7 +185,7 @@ const IndentedTree = ({ topic, experienceLevel, hours }: IndentedTreeProps) => {
             <p className="text-red-500 font-bold">{error}</p>
           ) : (
             <>
-              {data !== null ? ( 
+              {data !== null ? (
                 <div className="flex content-between justify-between flex-nowrap">
                   <p className="text-slate-300 pt-4 pl-2 font-bold">
                     Learning Path
@@ -185,7 +193,12 @@ const IndentedTree = ({ topic, experienceLevel, hours }: IndentedTreeProps) => {
                   <p className="text-slate-300 pt-4 pr-2 font-bold">Hours</p>
                 </div>
               ) : (
-                <p className="text-slate-300 font-bold flex flex-col justify-center items-center h-screen  "style={{ maxHeight: '90vw' }}>Your RoadMap will be displayed Here!</p>
+                <p
+                  className="text-slate-300 font-bold flex flex-col justify-center items-center h-screen  "
+                  style={{ maxHeight: "90vw" }}
+                >
+                  Your RoadMap will be displayed Here!
+                </p>
               )}
               <svg className="overflow-hidden pb-10" ref={svgRef}></svg>
               {data !== null && (

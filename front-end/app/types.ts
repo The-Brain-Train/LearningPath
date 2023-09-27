@@ -16,6 +16,7 @@ export type Roadmap = {
 export type RoadmapDTO = {
   name: string;
   roadMap: string;
+  userEmail: string
 };
 
 export type User = {

@@ -4,7 +4,7 @@ import { getServerSession } from "next-auth/next"
 import { options } from '../api/auth/[...nextauth]/options'
 
 const page = async () => {
-    const session = await getServerSession(options)
+    const session = await getServerSession(options);
 
   return (
     <>
