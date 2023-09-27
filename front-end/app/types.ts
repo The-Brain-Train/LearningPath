@@ -17,10 +17,22 @@ export type Roadmap = {
 export type RoadmapDTO = {
   name: string;
   roadMap: string;
-  userEmail: string
+  userEmail: string;
 };
 
 export type User = {
   email: string | null;
   name: string | null;
+};
+
+export type UserProfile =
+  | {
+      name?: string | null | undefined;
+      email?: string | null | undefined;
+      image?: string | null | undefined;
+    }
+  | undefined;
+
+export type CardProps = {
+  user: UserProfile;
 };
