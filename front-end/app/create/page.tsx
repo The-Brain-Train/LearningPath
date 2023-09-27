@@ -2,8 +2,6 @@
 import { useState } from "react";
 import IndentedTree from "../components/IndentedTree";
 import InputForm from "../components/InputForm";
-import { getServerSession } from "next-auth";
-import { options } from "../api/auth/[...nextauth]/options";
 import { useSession } from "next-auth/react";
 
 
