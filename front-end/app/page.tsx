@@ -7,7 +7,6 @@ import { User } from "./types";
 import { useEffect } from "react";
 
 export default function Home() {
-
   const { data: session, status } = useSession({
     required: true,
     onUnauthenticated() {

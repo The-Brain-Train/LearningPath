@@ -25,7 +25,7 @@ const IndentedTree = ({
   const [data, setData] = useState(null);
   const svgRef = useRef(null);
   const [isLoading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [createError, setCreateError] = useState<string | null>(null);
 
   const saveRoadMap = async () => {
     if (topic == null || userEmail == null) return;
@@ -48,7 +48,7 @@ const IndentedTree = ({
       const jsonData = await JSON.parse(response.choices[0].message.content);
       setData(jsonData);
     } catch (error) {
-      setError(`Unable to generate roadmap. Please try again. Error: ${error}`);
+      setCreateError(`Unable to generate roadmap. Please try again. Error: ${error}`);
       console.error(error);
     } finally {
       setLoading(false);
@@ -181,8 +181,8 @@ const IndentedTree = ({
         </div>
       ) : (
         <>
-          {error ? (
-            <p className="text-red-500 font-bold">{error}</p>
+          {createError ? (
+            <p className="text-red-500 font-bold">{createError}</p>
           ) : (
             <>
               {data !== null ? (

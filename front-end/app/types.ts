@@ -2,6 +2,7 @@ export type RoadmapMeta = {
   id: string;
   name: string;
   roadMapReferenceId: string;
+  userEmail: string;
 };
 
 export type RoadMapMetaList = {
