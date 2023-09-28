@@ -89,6 +89,17 @@ class RoadMapControllerTest {
     }
 
     @Test
+    void getRoadmapMetaListForUserWithInvalidEmailShouldReturn404() {
+        String uri = "http://localhost:%s/api/roadmaps/gegerg/roadMapMetas".formatted(port);
+
+        HttpClientErrorException exception = assertThrows(HttpClientErrorException.NotFound.class, () -> {
+            restTemplate.exchange(uri, HttpMethod.GET, HttpEntity.EMPTY, Void.class);
+        });
+
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
+    }
+
+    @Test
     void getInvalidRoadmapShouldReturn404() {
         String uri = "http://localhost:%s/api/roadmaps/df".formatted(port);
 
