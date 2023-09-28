@@ -8,24 +8,14 @@ import Link from "next/link";
 import { ChangeEvent, useEffect, useState } from "react";
 import { getRoadmaps } from "../functions/httpRequests";
 import { RoadmapMeta } from "../types";
+import { generateStarsforExperienceLevel } from "../functions/generateStarsForExperience";
 
 export default function Explore() {
   const [roadmaps, setRoadmaps] = useState<RoadmapMeta[]>([]);
   const [filteredRoadmaps, setFilteredRoadmaps] = useState<RoadmapMeta[]>([]);
   const [search, setSearch] = useState("");
 
-  const generateStarsforExperienceLevel = (difficultyLevel: string) => {
-    switch (difficultyLevel) {
-      case "beginner":
-        return "⭐";
-      case "intermediate":
-        return "⭐⭐";
-      case "expert":
-        return "⭐⭐⭐";
-      default:
-        return "";
-    }
-  };
+  
 
   const fetchRoadmaps = async () => {
     const roadmaps = await getRoadmaps();
