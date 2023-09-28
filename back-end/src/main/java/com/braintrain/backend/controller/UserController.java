@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+
 @RestController
 @RequestMapping("api/user")
 @AllArgsConstructor
@@ -21,12 +23,14 @@ public class UserController {
     }
 
     @PostMapping
-    public User addUser(@RequestBody User user) {
+    public ResponseEntity<User> addUser(@RequestBody User user) {
         User existingUser = userService.getUserByEmail(user.getEmail());
         if (existingUser == null) {
-            return userService.createUser(user);
+            User newUser = userService.createUser(user);
+            URI uri = URI.create("/api/user/" + user.getId());
+            return ResponseEntity.created(uri).body(newUser);
         }
-        return existingUser;
+        return ResponseEntity.ok(existingUser);
     }
 
 
