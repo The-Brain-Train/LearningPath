@@ -3,6 +3,8 @@ export type RoadmapMeta = {
   name: string;
   roadMapReferenceId: string;
   userEmail: string;
+  experienceLevel: string;
+  hours: number
 };
 
 export type PersonalRoadmapCardProps = {

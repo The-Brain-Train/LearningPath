@@ -14,8 +14,26 @@ export default function Explore() {
   const [filteredRoadmaps, setFilteredRoadmaps] = useState<RoadmapMeta[]>([]);
   const [search, setSearch] = useState("");
 
+  const generateStarsforExperienceLevel = (difficultyLevel: string) => {
+    switch (difficultyLevel) {
+      case "beginner":
+        return "⭐";
+      case "intermediate":
+        return "⭐⭐";
+      case "expert":
+        return "⭐⭐⭐";
+      default:
+        return "";
+    }
+  };
+
+  const fetchRoadmaps = async () => {
+    const roadmaps = await getRoadmaps();
+    setRoadmaps(roadmaps.roadMapMetaList);
+  };
+
   useEffect(() => {
-    getRoadmaps().then((data) => setRoadmaps(data.roadMapMetaList));
+    fetchRoadmaps();
   }, []);
 
   useEffect(() => {
@@ -55,25 +73,31 @@ export default function Explore() {
           <SearchIcon />
         </IconButton>
       </Paper>
-      <div
-        style={{ maxWidth: "300px", width: "80%" }}
-      >
+      <div style={{ maxWidth: "300px", width: "80%" }}>
         <ul className="flex flex-col justify-center ">
           {filteredRoadmaps.map((roadMap: RoadmapMeta) => (
             <li
               key={roadMap.id}
-              className="bg-slate-300 mb-5 rounded-lg shadow-md "
+              className="bg-slate-300 mb-5 rounded-lg shadow-md"
             >
-              <div className="flex items-center p-3">
-                <Link
-                  className="card-list-text card-body text-left overflow-hidden"
-                  href={`/explore/${roadMap.id}`}
-                >
-                  <p className="lyric-card-name overflow-ellipsis overflow-hidden whitespace-nowrap">
+              <Link
+                className="text-left overflow-hidden flex justify-between"
+                href={`/explore/${roadMap.id}`}
+              >
+                <div className="flex items-center px-2 py-1">
+                  <p className="overflow-ellipsis overflow-hidden whitespace-nowrap">
                     {roadMap.name}
                   </p>
-                </Link>
-              </div>
+                </div>
+                <div className="flex items-center flex-col px-2 py-1">
+                  <p className="overflow-ellipsis overflow-hidden whitespace-nowrap">
+                    {generateStarsforExperienceLevel(roadMap.experienceLevel)}
+                  </p>
+                  <p className="overflow-ellipsis overflow-hidden whitespace-nowrap">
+                    {roadMap.hours} hours
+                  </p>
+                </div>
+              </Link>
             </li>
           ))}
         </ul>

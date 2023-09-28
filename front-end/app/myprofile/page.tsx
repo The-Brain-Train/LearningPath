@@ -105,10 +105,10 @@ const page = () => {
                 >
                   <div className="flex justify-between items-center p-2">
                     <Link
-                      className="card-list-text card-body text-left overflow-hidden"
+                      className="text-left overflow-hidden"
                       href={`/explore/${meta.id}`}
                     >
-                      <p className="lyric-card-name overflow-ellipsis overflow-hidden whitespace-nowrap pl-1">
+                      <p className="overflow-ellipsis overflow-hidden whitespace-nowrap pl-1">
                         {meta.name}
                       </p>
                     </Link>
