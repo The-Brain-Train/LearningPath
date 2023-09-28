@@ -15,10 +15,14 @@ public class RoadMapMeta {
     private String name;
     private String roadMapReferenceId;
     private String userEmail;
+    private String experienceLevel;
+    private int hours;
 
-    public RoadMapMeta(String name, String roadMapReferenceId, String userEmail) {
+    public RoadMapMeta(String name, String roadMapReferenceId, String userEmail, String experienceLevel, int hours) {
         this.name = name;
         this.roadMapReferenceId = roadMapReferenceId;
         this.userEmail = userEmail;
+        this.experienceLevel = experienceLevel;
+        this.hours = hours;
     }
 }

@@ -22,8 +22,8 @@ public class RoadMapService {
     public RoadMapMeta createRoadMap(RoadMapDTO roadMapDTO) {
         validateDTONameInput(roadMapDTO.name(), "Invalid name");
         validateDTORoadmapInput(roadMapDTO.roadMap());
-        RoadMap roadMap = repo.save(new RoadMap(roadMapDTO.roadMap(), roadMapDTO.userEmail()));
-        return metaRepo.save(new RoadMapMeta(roadMapDTO.name(), roadMap.getId(), roadMapDTO.userEmail()));
+        RoadMap roadMap = repo.save(new RoadMap(roadMapDTO.roadMap(), roadMapDTO.userEmail(), roadMapDTO.experienceLevel(), roadMapDTO.hours()));
+        return metaRepo.save(new RoadMapMeta(roadMapDTO.name(), roadMap.getId(), roadMapDTO.userEmail(), roadMapDTO.experienceLevel(), roadMapDTO.hours()));
     }
 
     public RoadMapMetaListDTO getAllRoadMapsMeta() {

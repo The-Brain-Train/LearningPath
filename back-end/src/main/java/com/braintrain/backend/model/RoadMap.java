@@ -19,8 +19,14 @@ public class RoadMap {
 
     private String userEmail;
 
-    public RoadMap(String obj, String userEmail) {
+    private String experienceLevel;
+
+    private int hours;
+
+    public RoadMap(String obj, String userEmail, String experienceLevel, int hours) {
         this.obj = obj;
         this.userEmail = userEmail;
+        this.experienceLevel = experienceLevel;
+        this.hours = hours;
     }
 }

@@ -113,7 +113,7 @@ class RoadMapControllerTest {
     @Test
     void shouldReturn400WhenCreatingRoadMapWithEmptyRoadmap() {
         String uri = BASE_URL.formatted(port);
-        RoadMapDTO dto = new RoadMapDTO("Java", "", "My email");
+        RoadMapDTO dto = new RoadMapDTO("Java", "", "My email", "", 10);
 
         try {
             ResponseEntity<Void> exchange = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(dto), Void.class);
