@@ -14,8 +14,8 @@ export default function Explore() {
   const [roadmaps, setRoadmaps] = useState<RoadmapMeta[]>([]);
   const [filteredRoadmaps, setFilteredRoadmaps] = useState<RoadmapMeta[]>([]);
   const [search, setSearch] = useState("");
-
-  
+  const [experienceFilter, setExperienceFilter] = useState<string | null>(null);
+  const [hoursFilter, setHoursFilter] = useState<number | null>(null);
 
   const fetchRoadmaps = async () => {
     const roadmaps = await getRoadmaps();
@@ -26,12 +26,24 @@ export default function Explore() {
     fetchRoadmaps();
   }, []);
 
+  const filterRoadmaps = (roadmap: RoadmapMeta) => {
+    if (experienceFilter && roadmap.experienceLevel !== experienceFilter) {
+      return false;
+    }
+    if (hoursFilter !== null && roadmap.hours !== hoursFilter) { 
+      return false;
+    }
+    return true;
+  };
+
   useEffect(() => {
-    const filtered = roadmaps.filter((roadmap) =>
-      roadmap.name.toLowerCase().includes(search.toLowerCase())
+    const filtered = roadmaps.filter(
+      (roadmap) =>
+        roadmap.name.toLowerCase().includes(search.toLowerCase()) &&
+        filterRoadmaps(roadmap)
     );
     setFilteredRoadmaps(filtered);
-  }, [search, roadmaps]);
+  }, [search, roadmaps, experienceFilter, hoursFilter]);
 
   const handleSearchChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -64,6 +76,32 @@ export default function Explore() {
         </IconButton>
       </Paper>
       <div style={{ maxWidth: "300px", width: "80%" }}>
+        <div>
+          <label>Experience Level:</label>
+          <select
+            value={experienceFilter || ""}
+            onChange={(e) => setExperienceFilter(e.target.value || null)}
+          >
+            <option value="">All</option>
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="expert">Expert</option>
+          </select>
+        </div>
+        <div>
+          <label>Hours:</label>
+          <input
+            type="number"
+            min="0"
+            value={hoursFilter === null ? "" : hoursFilter}
+            onChange={(e) =>
+              setHoursFilter(
+                e.target.value === "" ? null : parseInt(e.target.value)
+              )
+            }
+          />
+        </div>
+
         <ul className="flex flex-col justify-center ">
           {filteredRoadmaps.map((roadMap: RoadmapMeta) => (
             <li
