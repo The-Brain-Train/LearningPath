@@ -51,7 +51,12 @@ class UserControllerTest {
 
     @Test
     void shouldGetUserIfUserExists() {
+        String uri = BASE_URL.formatted(port);
+        User user = new User("Edward", "edwardsemail@gmail.com");
+        restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(user), User.class);
 
+        ResponseEntity<User> exchange = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(user), User.class);
+        assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(exchange.getBody()).isNotNull();
     }
-
 }
