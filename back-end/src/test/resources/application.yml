@@ -6,7 +6,7 @@ spring:
   data:
     mongodb:
       uri: mongodb://root:example@localhost:27017/
-      database: learningPath
+      database: learningPathTest
   jpa:
     show-sql: true
     defer-datasource-initialization: true
