@@ -11,6 +11,7 @@ import {
   AccordionHeader,
   AccordionBody,
 } from "@material-tailwind/react";
+import PersonalRoadmapCard from "../components/PersonalRoadmapCard";
 
 function Icon({ id, open }: { id: string | number; open: number }) {
   return (
@@ -83,27 +84,7 @@ const page = () => {
           <AccordionBody>
             <ul className="flex flex-col justify-center">
               {userRoadmaps?.roadMapMetaList.map((meta, index) => (
-                <li
-                  key={index}
-                  className="bg-slate-300 shadow-md w-full border-t-2 border-opacity-100 dark:border-opacity-50"
-                >
-                  <div className="flex justify-between items-center p-2">
-                    <Link
-                      className="card-list-text card-body text-left overflow-hidden"
-                      href={`/explore/${meta.id}`}
-                    >
-                      <p className="lyric-card-name overflow-ellipsis overflow-hidden whitespace-nowrap pl-1">
-                        {meta.name}
-                      </p>
-                    </Link>
-                    <div className="flex-shrink-0 min-w-max">
-                      <DeleteModal
-                        id={meta.id}
-                        onDelete={(id) => handleDelete(id)}
-                      />
-                    </div>
-                  </div>
-                </li>
+                <PersonalRoadmapCard roadmapMeta={meta} key={index} handleDelete={handleDelete}/>
               ))}
             </ul>
           </AccordionBody>

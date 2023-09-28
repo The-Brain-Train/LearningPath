@@ -5,6 +5,11 @@ export type RoadmapMeta = {
   userEmail: string;
 };
 
+export type PersonalRoadmapCardProps = {
+  roadmapMeta: RoadmapMeta;
+  handleDelete: (id: string) => Promise<void>
+}
+
 export type RoadMapMetaList = {
   roadMapMetaList: RoadmapMeta[];
 };
@@ -35,6 +40,6 @@ export type UserProfile =
     }
   | undefined;
 
-export type CardProps = {
+export type UserCardProps = {
   user: UserProfile;
 };

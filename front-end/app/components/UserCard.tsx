@@ -1,7 +1,7 @@
 import Image from "next/image";
-import { CardProps } from "../types";
+import { UserCardProps } from "../types";
 
-export default function Card({ user }: CardProps) {
+export default function Card({ user }: UserCardProps) {
   const userImage = user?.image ? (
     <Image
       className="border-4 border-black dark:border-slate-500 drop-shadow-xl shadow-black rounded-full mx-auto "
