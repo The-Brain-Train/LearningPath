@@ -9,6 +9,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { getRoadmaps } from "../functions/httpRequests";
 import { RoadmapMeta } from "../types";
 import { generateStarsforExperienceLevel } from "../functions/generateStarsForExperience";
+import TuneIcon from '@mui/icons-material/Tune';
 
 export default function Explore() {
   const [roadmaps, setRoadmaps] = useState<RoadmapMeta[]>([]);
@@ -75,31 +76,32 @@ export default function Explore() {
           <SearchIcon />
         </IconButton>
       </Paper>
+    
       <div style={{ maxWidth: "300px", width: "80%" }}>
         <div>
-          <label>Experience Level:</label>
-          <select
-            value={experienceFilter || ""}
-            onChange={(e) => setExperienceFilter(e.target.value || null)}
-          >
-            <option value="">All</option>
-            <option value="beginner">Beginner</option>
-            <option value="intermediate">Intermediate</option>
-            <option value="expert">Expert</option>
-          </select>
-        </div>
-        <div>
-          <label>Hours:</label>
-          <input
-            type="number"
-            min="0"
-            value={hoursFilter === null ? "" : hoursFilter}
-            onChange={(e) =>
-              setHoursFilter(
-                e.target.value === "" ? null : parseInt(e.target.value)
-              )
-            }
-          />
+          <label><TuneIcon/></label>
+          <div>
+            <select
+              value={experienceFilter || ""}
+              onChange={(e) => setExperienceFilter(e.target.value || null)}
+            >
+              <option value="">All</option>
+              <option value="beginner">Beginner</option>
+              <option value="intermediate">Intermediate</option>
+              <option value="expert">Expert</option>
+            </select>
+            <input
+              type="number"
+              min="0"
+              value={hoursFilter === null ? "" : hoursFilter}
+              onChange={(e) =>
+                setHoursFilter(
+                  e.target.value === "" ? null : parseInt(e.target.value)
+                )
+              }
+              placeholder="Hours"
+            />
+          </div>
         </div>
 
         <ul className="flex flex-col justify-center ">
