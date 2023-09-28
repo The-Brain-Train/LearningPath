@@ -18,6 +18,8 @@ export type RoadmapDTO = {
   name: string;
   roadMap: string;
   userEmail: string;
+  experienceLevel: string | null;
+  hours: number | null;
 };
 
 export type User = {

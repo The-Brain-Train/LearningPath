@@ -33,6 +33,8 @@ const IndentedTree = ({
       name: topic,
       roadMap: JSON.stringify(data),
       userEmail: userEmail,
+      experienceLevel: experienceLevel,
+      hours: hours,
     };
     postRoadmap(requestData);
   };
