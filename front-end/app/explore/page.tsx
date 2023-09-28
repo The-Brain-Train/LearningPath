@@ -56,7 +56,6 @@ export default function Explore() {
         </IconButton>
       </Paper>
       <div
-        className="roadMaps-list"
         style={{ maxWidth: "300px", width: "80%" }}
       >
         <ul className="flex flex-col justify-center ">
@@ -65,7 +64,7 @@ export default function Explore() {
               key={roadMap.id}
               className="bg-slate-300 mb-5 rounded-lg shadow-md "
             >
-              <div className="roadmap-list-card flex items-center p-3">
+              <div className="flex items-center p-3">
                 <Link
                   className="card-list-text card-body text-left overflow-hidden"
                   href={`/explore/${roadMap.id}`}
