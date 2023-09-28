@@ -1,10 +1,9 @@
-package com.braintrain.backend.roadMaps;
+package com.braintrain.backend.service;
 
 import com.braintrain.backend.TestHelper;
 import com.braintrain.backend.model.RoadMap;
 import com.braintrain.backend.model.RoadMapDTO;
 import com.braintrain.backend.model.RoadMapMeta;
-import com.braintrain.backend.service.RoadMapService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -58,6 +57,4 @@ class RoadMapServiceTest {
         assertNull(roadMapService.getRoadMapMetaById(roadMapMeta.getId()));
         assertNull(roadMapService.getRoadMapById(roadMapMeta.getRoadMapReferenceId()).orElse(null));
     }
-
-
 }

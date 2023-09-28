@@ -1,4 +1,4 @@
-package com.braintrain.backend.roadMaps;
+package com.braintrain.backend.controller;
 
 import com.braintrain.backend.TestHelper;
 import com.braintrain.backend.model.RoadMap;
