@@ -78,6 +78,17 @@ class RoadMapControllerTest {
     }
 
     @Test
+    void shouldGetRoadmapMetasForUser() {
+        String email = "edwardsemail@gmail.com";
+        String uri = "http://localhost:%s/api/roadmaps/%s/roadMapMetas".formatted(port, email);
+
+        ResponseEntity<RoadMapMetaListDTO> response = restTemplate.exchange(uri, HttpMethod.GET, HttpEntity.EMPTY, RoadMapMetaListDTO.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.hasBody()).isTrue();
+        assertThat(response.getBody().roadMapMetaList().size()).isEqualTo(1);
+    }
+
+    @Test
     void getInvalidRoadmapShouldReturn404() {
         String uri = "http://localhost:%s/api/roadmaps/df".formatted(port);
 
@@ -87,8 +98,6 @@ class RoadMapControllerTest {
 
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
     }
-
-
 
     @Test
     void shouldDeleteRoadMap() {
