@@ -10,6 +10,7 @@ import { getRoadmaps } from "../functions/httpRequests";
 import { RoadmapMeta } from "../types";
 import { generateStarsforExperienceLevel } from "../functions/generateStarsForExperience";
 import TuneIcon from "@mui/icons-material/Tune";
+import { Button } from "@mui/material";
 
 export default function Explore() {
   const [roadmaps, setRoadmaps] = useState<RoadmapMeta[]>([]);
@@ -60,15 +61,17 @@ export default function Explore() {
 
   return (
     <main className="main-background min-h-max flex items-center flex-col">
+      <div className="flex flex-row my-5" style={{ maxWidth: '300px' }}>
       <Paper
         component="form"
         sx={{
-          m: "20px",
+          
           p: "2px 4px",
           display: "flex",
           alignItems: "center",
           width: 250,
         }}
+        
       >
         <InputBase
           sx={{ ml: 1, flex: 1 }}
@@ -81,14 +84,12 @@ export default function Explore() {
           <SearchIcon />
         </IconButton>
       </Paper>
+      <Button onClick={toggleFilters}><TuneIcon /></Button>
+      </div>
 
       <div style={{ maxWidth: "300px", width: "80%" }}>
-        <div>
-          <button onClick={toggleFilters}>
-            <TuneIcon />
-          </button>
           {showFilters && (
-            <div>
+            <div className="flex flex-col gap-2" style={{ maxWidth: '200px', margin: '0 auto' }}>
               <select
                 value={experienceFilter || ""}
                 onChange={(e) => setExperienceFilter(e.target.value || null)}
@@ -112,7 +113,7 @@ export default function Explore() {
               />
             </div>
           )}
-        </div>
+        
         <ul className="flex flex-col justify-center ">
           {filteredRoadmaps.map((roadMap: RoadmapMeta) => (
             <li
