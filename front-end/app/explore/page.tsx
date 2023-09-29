@@ -89,12 +89,13 @@ export default function Explore() {
 
       <div style={{ maxWidth: "300px", width: "80%" }}>
           {showFilters && (
-            <div className="flex flex-col gap-2" style={{ maxWidth: '200px', margin: '0 auto' }}>
+            <div className="flex flex-col gap-1" style={{ maxWidth: '200px', margin: '0 auto'}}>
               <select
                 value={experienceFilter || ""}
                 onChange={(e) => setExperienceFilter(e.target.value || null)}
+                className="rounded-md h-7"
               >
-                <option value="">All</option>
+                <option value="">Experience Level</option>
                 <option value="beginner">Beginner</option>
                 <option value="intermediate">Intermediate</option>
                 <option value="expert">Expert</option>
@@ -110,15 +111,16 @@ export default function Explore() {
                   )
                 }
                 placeholder="Hours"
+                className="rounded-md h-7"
               />
             </div>
           )}
         
-        <ul className="flex flex-col justify-center ">
+        <ul className="flex flex-col justify-center mt-2 gap-3">
           {filteredRoadmaps.map((roadMap: RoadmapMeta) => (
             <li
               key={roadMap.id}
-              className="bg-slate-300 mb-5 rounded-lg shadow-md"
+              className="bg-slate-300 rounded-lg shadow-md"
             >
               <Link
                 className="text-left overflow-hidden flex justify-between"
