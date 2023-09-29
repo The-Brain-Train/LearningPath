@@ -94,7 +94,7 @@ export default function Explore() {
       <div style={{ maxWidth: "300px", width: "80%" }}>
         {showFilters && (
           <div
-            className="flex flex-col gap-1"
+            className="flex flex-col gap-1 border-2 p-2"
             style={{ maxWidth: "200px", margin: "0 auto" }}
           >
             <span className="text-white">Filter:</span>
