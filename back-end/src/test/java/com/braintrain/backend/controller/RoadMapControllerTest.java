@@ -1,10 +1,8 @@
 package com.braintrain.backend.controller;
 
 import com.braintrain.backend.TestHelper;
-import com.braintrain.backend.model.RoadMap;
-import com.braintrain.backend.model.RoadMapDTO;
-import com.braintrain.backend.model.RoadMapMeta;
-import com.braintrain.backend.model.RoadMapMetaListDTO;
+import com.braintrain.backend.model.*;
+import com.braintrain.backend.service.UserService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,6 +32,9 @@ class RoadMapControllerTest {
     @Autowired
     RestTemplate restTemplate;
 
+    @Autowired
+    UserService userService;
+
     private static final String BASE_URL = "http://localhost:%s/api/roadmaps";
 
     ResponseEntity<RoadMapMeta> exchange;
@@ -51,6 +52,11 @@ class RoadMapControllerTest {
             String uri = "http://localhost:%s/api/roadmaps/%s".formatted(port, exchange.getBody().getId());
             ResponseEntity<Void> exchange = restTemplate.exchange(uri, HttpMethod.DELETE, HttpEntity.EMPTY, Void.class);
             assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        }
+
+        User user = userService.getUserByEmail("edwardsemail@gmail.com");
+        if (user != null) {
+            userService.deleteUser(user);
         }
     }
 
@@ -74,18 +80,21 @@ class RoadMapControllerTest {
         ResponseEntity<RoadMap> response = restTemplate.exchange(uri, HttpMethod.GET, HttpEntity.EMPTY, RoadMap.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.hasBody()).isTrue();
-
     }
 
     @Test
     void shouldGetRoadmapMetasForUser() {
-        String email = "edwardsemail@gmail.com";
-        String uri = "http://localhost:%s/api/roadmaps/%s/roadMapMetas".formatted(port, email);
+        User user = new User("Edward", "edwardsemail@gmail.com");
+        String uriForPost = "http://localhost:%s/api/user".formatted(port);
 
-        ResponseEntity<RoadMapMetaListDTO> response = restTemplate.exchange(uri, HttpMethod.GET, HttpEntity.EMPTY, RoadMapMetaListDTO.class);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.hasBody()).isTrue();
-        assertThat(response.getBody().roadMapMetaList().size()).isEqualTo(1);
+        ResponseEntity<User> postResponse = restTemplate.exchange(uriForPost, HttpMethod.POST, new HttpEntity<>(user), User.class);
+
+        String uriForGet = "http://localhost:%s/api/roadmaps/%s/roadMapMetas".formatted(port, user.getEmail());
+
+        ResponseEntity<RoadMapMetaListDTO> getResponse = restTemplate.exchange(uriForGet, HttpMethod.GET, HttpEntity.EMPTY, RoadMapMetaListDTO.class);
+        assertThat(getResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(getResponse.hasBody()).isTrue();
+        assertThat(getResponse.getBody().roadMapMetaList().size()).isEqualTo(1);
     }
 
     @Test
