@@ -8,9 +8,8 @@ export const chatHistory = (topic: string | null, experienceLevel: string | null
       {
         "name": "${topic}",
         "children": [],
-        "value": ${hours}
       }
-      Ensure that the "value" field is only present in the last children. The total value should approximate ${hours} hours.
+      in the last set of children in the data there should be a '"value": provide hours for task' that represents the hours for that task. These combined should equal around ${hours} hours.
       ` },
   ];
 };
