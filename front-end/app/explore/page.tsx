@@ -139,7 +139,7 @@ export default function Explore() {
                 <div className="flex items-center flex-col px-2 py-1">
                   <p className="overflow-ellipsis overflow-hidden whitespace-nowrap">
                   <Tooltip title={roadMap.experienceLevel} arrow>
-                    {generateStarsforExperienceLevel(roadMap.experienceLevel)}
+                    <span>{generateStarsforExperienceLevel(roadMap.experienceLevel)}</span>
                   </Tooltip>
                   </p>
                   <p className="overflow-ellipsis overflow-hidden whitespace-nowrap">
