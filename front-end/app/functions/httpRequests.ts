@@ -1,4 +1,4 @@
-import { RoadMapMetaList, Roadmap, RoadmapDTO, RoadmapMeta } from "../types";
+import { RoadMapMetaList, Roadmap, RoadmapDTO, User } from "../types";
 
 export const getRoadmaps = async () => {
   const response = await fetch(`http://localhost:8080/api/roadmaps`);
@@ -48,4 +48,24 @@ export const getUsersRoadmapMetas = async (userEmail: string) => {
   }
   const data: RoadMapMetaList = await response.json();
   return data;
+};
+
+export const addUser = async (user: User) => {
+  if (!user.email) {
+    return;
+  }
+  try {
+    const res = await fetch("http://localhost:8080/api/user", {
+      method: "POST",
+      body: JSON.stringify(user),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!res.ok) {
+      throw new Error(`Failed to add user. Status code: ${res.status}`);
+    }
+  } catch (error) {
+    console.error("Error adding user to DB:", error);
+  }
 };
