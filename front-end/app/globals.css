@@ -18,8 +18,3 @@ main {
     background: linear-gradient(151deg, rgba(81,85,133,1) 0%, rgba(0,32,74,1) 50%, rgba(81,85,133,1) 100%);
     min-height: 100vh;
 }
-
-.info {
-    margin-top: 50px;
-    width: auto; 
-}
