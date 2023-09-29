@@ -86,7 +86,7 @@ export default function Explore() {
         </Paper>
         <Button onClick={toggleFilters}>
           <Tooltip title="Filter">
-            <TuneIcon />
+            <TuneIcon className="text-white" />
           </Tooltip>
         </Button>
       </div>
@@ -97,7 +97,7 @@ export default function Explore() {
             className="flex flex-col gap-1"
             style={{ maxWidth: "200px", margin: "0 auto" }}
           >
-            <span>Filter:</span>
+            <span className="text-white">Filter:</span>
             <select
               value={experienceFilter || ""}
               onChange={(e) => setExperienceFilter(e.target.value || null)}
