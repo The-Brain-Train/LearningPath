@@ -8,7 +8,7 @@ export default function PersonalRoadmapCard({
   handleDelete,
 }: PersonalRoadmapCardProps) {
   return (
-    <li className="shadow-md w-full border-t-2 border-opacity-100 dark:border-opacity-50 text-white" >
+    <li className="shadow-md w-full border-t-2 border-opacity-100 dark:border-opacity-50 bg-slate-300" >
       <div className="flex items-center p-2">
         <Link
           className="text-left overflow-hidden flex flex-1 justify-center items-center"

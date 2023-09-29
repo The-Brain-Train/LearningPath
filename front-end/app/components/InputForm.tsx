@@ -15,10 +15,33 @@ const style = {
   transform: "translate(-50%, -50%)",
   height: 430,
   width: 350,
-  bgcolor: "background.paper",
+  bgcolor: "#141832",
   border: "2px solid #000",
   boxShadow: 24,
   p: 4,
+  color: "white",
+  "& .MuiInputLabel-root": {
+    color: "white",
+  },
+  "& .MuiInputBase-input": {
+    color: "white",
+  },
+  "& .MuiSelect-icon": {
+    color: "white", 
+  },
+  "& .MuiSlider-root": {
+    color: "white", 
+  },
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: "white",
+    },
+  },
+  "& .MuiSelect-root": {
+    "& fieldset": {
+      borderColor: "white",
+    },
+  },
 };
 
 function valuetext(value: number) {
@@ -93,7 +116,7 @@ const InputForm = ({
                 onChange={(e) => setUserMessage(e.target.value)}
                 placeholder="Enter Topic!"
                 sx={{ m: 1, minWidth: "90%" }}
-                className="pt-0 rounded-l-md focus:outline-none focus:placeholder-gray-400 text-center text-gray-600 placeholder-gray-60 py-3 form-control"
+                className="pt-0 rounded-l-md focus:outline-none focus:placeholder-gray-400 text-center placeholder-gray-60 py-3 form-control"
               />
               <FormControl sx={{ m: 1, minWidth: "90%" }}>
                 <InputLabel id="demo-simple-select-autowidth-label">
@@ -106,6 +129,7 @@ const InputForm = ({
                   onChange={handleChange}
                   autoWidth
                   label="Experience Level"
+                  className="border-white"
                 >
                   <MenuItem value={"beginner"}>Beginner</MenuItem>
                   <MenuItem value={"intermediate"}>Intermediate</MenuItem>
