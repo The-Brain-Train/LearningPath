@@ -11,6 +11,8 @@ import { RoadmapMeta } from "../types";
 import { generateStarsforExperienceLevel } from "../functions/generateStarsForExperience";
 import TuneIcon from "@mui/icons-material/Tune";
 import { Button } from "@mui/material";
+import Tooltip from "@mui/material/Tooltip";
+
 
 export default function Explore() {
   const [roadmaps, setRoadmaps] = useState<RoadmapMeta[]>([]);
@@ -61,67 +63,70 @@ export default function Explore() {
 
   return (
     <main className="main-background min-h-max flex items-center flex-col">
-      <div className="flex flex-row my-5" style={{ maxWidth: '300px' }}>
-      <Paper
-        component="form"
-        sx={{
-          
-          p: "2px 4px",
-          display: "flex",
-          alignItems: "center",
-          width: 250,
-        }}
-        
-      >
-        <InputBase
-          sx={{ ml: 1, flex: 1 }}
-          placeholder="Search"
-          inputProps={{ "aria-label": "search" }}
-          value={search}
-          onChange={handleSearchChange}
-        />
-        <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
-          <SearchIcon />
-        </IconButton>
-      </Paper>
-      <Button onClick={toggleFilters}><TuneIcon /></Button>
+      <div className="flex flex-row my-5" style={{ maxWidth: "300px" }}>
+        <Paper
+          component="form"
+          sx={{
+            p: "2px 4px",
+            display: "flex",
+            alignItems: "center",
+            width: 250,
+          }}
+        >
+          <InputBase
+            sx={{ ml: 1, flex: 1 }}
+            placeholder="Search"
+            inputProps={{ "aria-label": "search" }}
+            value={search}
+            onChange={handleSearchChange}
+          />
+          <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
+            <SearchIcon />
+          </IconButton>
+        </Paper>
+        <Button onClick={toggleFilters}>
+          <Tooltip title="Filter">
+            <TuneIcon />
+          </Tooltip>
+        </Button>
       </div>
 
       <div style={{ maxWidth: "300px", width: "80%" }}>
-          {showFilters && (
-            <div className="flex flex-col gap-1" style={{ maxWidth: '200px', margin: '0 auto'}}>
-              <select
-                value={experienceFilter || ""}
-                onChange={(e) => setExperienceFilter(e.target.value || null)}
-                className="rounded-md h-7"
-              >
-                <option value="">Experience Level</option>
-                <option value="beginner">Beginner</option>
-                <option value="intermediate">Intermediate</option>
-                <option value="expert">Expert</option>
-              </select>
-              <input
-                type="number"
-                min="0"
-                step="10"
-                value={hoursFilter === null ? "" : hoursFilter}
-                onChange={(e) =>
-                  setHoursFilter(
-                    e.target.value === "" ? null : parseInt(e.target.value)
-                  )
-                }
-                placeholder="Hours"
-                className="rounded-md h-7"
-              />
-            </div>
-          )}
-        
+        {showFilters && (
+          <div
+            className="flex flex-col gap-1"
+            style={{ maxWidth: "200px", margin: "0 auto" }}
+          >
+            <span>Filter:</span>
+            <select
+              value={experienceFilter || ""}
+              onChange={(e) => setExperienceFilter(e.target.value || null)}
+              className="rounded-md h-7"
+            >
+              <option value="">Experience Level</option>
+              <option value="beginner">Beginner</option>
+              <option value="intermediate">Intermediate</option>
+              <option value="expert">Expert</option>
+            </select>
+            <input
+              type="number"
+              min="0"
+              step="10"
+              value={hoursFilter === null ? "" : hoursFilter}
+              onChange={(e) =>
+                setHoursFilter(
+                  e.target.value === "" ? null : parseInt(e.target.value)
+                )
+              }
+              placeholder="Hours"
+              className="rounded-md h-7"
+            />
+          </div>
+        )}
+
         <ul className="flex flex-col justify-center mt-2 gap-3">
           {filteredRoadmaps.map((roadMap: RoadmapMeta) => (
-            <li
-              key={roadMap.id}
-              className="bg-slate-300 rounded-lg shadow-md"
-            >
+            <li key={roadMap.id} className="bg-slate-300 rounded-lg shadow-md">
               <Link
                 className="text-left overflow-hidden flex justify-between"
                 href={`/explore/${roadMap.id}`}
@@ -133,7 +138,9 @@ export default function Explore() {
                 </div>
                 <div className="flex items-center flex-col px-2 py-1">
                   <p className="overflow-ellipsis overflow-hidden whitespace-nowrap">
+                  <Tooltip title={roadMap.experienceLevel} arrow>
                     {generateStarsforExperienceLevel(roadMap.experienceLevel)}
+                  </Tooltip>
                   </p>
                   <p className="overflow-ellipsis overflow-hidden whitespace-nowrap">
                     {roadMap.hours} hours
