@@ -94,7 +94,7 @@ export default function Explore() {
       <div style={{ maxWidth: "300px", width: "80%" }}>
         {showFilters && (
           <div
-            className="flex flex-col gap-1 border-2 p-2"
+            className="flex flex-col gap-1 border-2 p-2 rounded-sm"
             style={{ maxWidth: "200px", margin: "0 auto" }}
           >
             <span className="text-white">Filter:</span>
@@ -126,7 +126,7 @@ export default function Explore() {
 
         <ul className="flex flex-col justify-center mt-2 gap-3">
           {filteredRoadmaps.map((roadMap: RoadmapMeta) => (
-            <li key={roadMap.id} className="bg-slate-300 rounded-lg shadow-md">
+            <li key={roadMap.id} className=" rounded-lg shadow-md text-white" style={{ backgroundColor: "#141832"}}>
               <Link
                 className="text-left overflow-hidden flex justify-between"
                 href={`/explore/${roadMap.id}`}

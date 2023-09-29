@@ -77,7 +77,8 @@ const page = () => {
         <Accordion open={open === 1} icon={<Icon id={1} open={open} />}>
           <AccordionHeader
             onClick={() => handleOpen(1)}
-            className="bg-slate-300 p-3 dark:border-opacity-50"
+            className="p-3 dark:border-opacity-50 text-white"
+            style={{ backgroundColor: "#141832"}}
           >
             <h2>My Roadmaps</h2>
           </AccordionHeader>
@@ -92,7 +93,8 @@ const page = () => {
         <Accordion open={open === 2} icon={<Icon id={2} open={open} />}>
           <AccordionHeader
             onClick={() => handleOpen(2)}
-            className="bg-slate-300 p-3 border-t-2 border-black"
+            className="p-3 dark:border-opacity-50 text-white"
+            style={{ backgroundColor: "#141832"}}
           >
             My Favourites
           </AccordionHeader>

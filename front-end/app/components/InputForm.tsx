@@ -51,10 +51,10 @@ const InputForm = ({
     setTopic(userMessage);
     setExperienceLevel(experience);
     setHours(sliderValue);
-    setUserMessage(""); 
-    setExperience(""); 
-    setSliderValue(30); 
-  
+    setUserMessage("");
+    setExperience("");
+    setSliderValue(30);
+
     handleClose();
   };
 
@@ -64,8 +64,14 @@ const InputForm = ({
         <h1 className="flex justify-center p-5 text-white">
           What would you want to create?
         </h1>
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <button className="bg-transparent hover:bg-emerald-600text-lg text-slate-400 font-bold border-2 p-2 border-white rounded " onClick={handleOpen}>Create Roadmap</button>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <button
+            className="bg-transparent hover:bg-emerald-600text-lg text-white font-bold border-2 p-2 border-white rounded "
+            style={{ backgroundColor: "#141832" }}
+            onClick={handleOpen}
+          >
+            Create Roadmap
+          </button>
         </div>
         <Modal
           open={open}
@@ -75,7 +81,10 @@ const InputForm = ({
         >
           <Box sx={style}>
             <div>
-              <InputLabel className="ml-3 form-control" id="demo-simple-topic-autowidth-label">
+              <InputLabel
+                className="ml-3 form-control"
+                id="demo-simple-topic-autowidth-label"
+              >
                 Topic:
               </InputLabel>
               <TextField
@@ -83,10 +92,10 @@ const InputForm = ({
                 value={userMessage}
                 onChange={(e) => setUserMessage(e.target.value)}
                 placeholder="Enter Topic!"
-                sx={{ m: 1, minWidth: '90%' }}
+                sx={{ m: 1, minWidth: "90%" }}
                 className="pt-0 rounded-l-md focus:outline-none focus:placeholder-gray-400 text-center text-gray-600 placeholder-gray-60 py-3 form-control"
               />
-              <FormControl sx={{ m: 1, minWidth: '90%' }}>
+              <FormControl sx={{ m: 1, minWidth: "90%" }}>
                 <InputLabel id="demo-simple-select-autowidth-label">
                   Experience Level
                 </InputLabel>
@@ -104,10 +113,13 @@ const InputForm = ({
                 </Select>
               </FormControl>
               <div>
-                <InputLabel className="mt-10 pb-2 text-sm font-black" id="demo-simple-box-autowidth-label">
+                <InputLabel
+                  className="mt-10 pb-2 text-sm font-black"
+                  id="demo-simple-box-autowidth-label"
+                >
                   How many hours do you want to spend?
                 </InputLabel>
-                <Box sx={{ minWidth: '80%' }}>
+                <Box sx={{ minWidth: "80%" }}>
                   <Slider
                     aria-label="Hours"
                     value={sliderValue}
@@ -125,7 +137,12 @@ const InputForm = ({
                 </Box>
               </div>
               <div className="flex justify-center">
-                <button onClick={handleSubmit} className="w-3/6 bg-blue-500 hover:bg-blue-700 mt-10 text-white font-bold py-2 px-4 border border-blue-700 rounded">Create</button>
+                <button
+                  onClick={handleSubmit}
+                  className="w-3/6 bg-blue-500 hover:bg-blue-700 mt-10 text-white font-bold py-2 px-4 border border-blue-700 rounded"
+                >
+                  Create
+                </button>
               </div>
             </div>
           </Box>
