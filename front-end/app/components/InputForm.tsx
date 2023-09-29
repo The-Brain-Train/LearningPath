@@ -163,7 +163,7 @@ const InputForm = ({
               <div className="flex justify-center">
                 <button
                   onClick={handleSubmit}
-                  className="w-3/6 bg-blue-500 hover:bg-blue-700 mt-10 text-white font-bold py-2 px-4 border border-blue-700 rounded"
+                  className="w-3/6 bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 border border-blue-700 rounded"
                 >
                   Create
                 </button>
