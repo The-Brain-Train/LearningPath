@@ -9,7 +9,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { getRoadmaps } from "../functions/httpRequests";
 import { RoadmapMeta } from "../types";
 import { generateStarsforExperienceLevel } from "../functions/generateStarsForExperience";
-import TuneIcon from '@mui/icons-material/Tune';
+import TuneIcon from "@mui/icons-material/Tune";
 
 export default function Explore() {
   const [roadmaps, setRoadmaps] = useState<RoadmapMeta[]>([]);
@@ -17,10 +17,15 @@ export default function Explore() {
   const [search, setSearch] = useState("");
   const [experienceFilter, setExperienceFilter] = useState<string | null>(null);
   const [hoursFilter, setHoursFilter] = useState<number | null>(null);
+  const [showFilters, setShowFilters] = useState(false);
 
   const fetchRoadmaps = async () => {
     const roadmaps = await getRoadmaps();
     setRoadmaps(roadmaps.roadMapMetaList);
+  };
+
+  const toggleFilters = () => {
+    setShowFilters(!showFilters);
   };
 
   useEffect(() => {
@@ -31,7 +36,7 @@ export default function Explore() {
     if (experienceFilter && roadmap.experienceLevel !== experienceFilter) {
       return false;
     }
-    if (hoursFilter !== null && roadmap.hours !== hoursFilter) { 
+    if (hoursFilter !== null && roadmap.hours !== hoursFilter) {
       return false;
     }
     return true;
@@ -76,34 +81,38 @@ export default function Explore() {
           <SearchIcon />
         </IconButton>
       </Paper>
-    
+
       <div style={{ maxWidth: "300px", width: "80%" }}>
         <div>
-          <label><TuneIcon/></label>
-          <div>
-            <select
-              value={experienceFilter || ""}
-              onChange={(e) => setExperienceFilter(e.target.value || null)}
-            >
-              <option value="">All</option>
-              <option value="beginner">Beginner</option>
-              <option value="intermediate">Intermediate</option>
-              <option value="expert">Expert</option>
-            </select>
-            <input
-              type="number"
-              min="0"
-              value={hoursFilter === null ? "" : hoursFilter}
-              onChange={(e) =>
-                setHoursFilter(
-                  e.target.value === "" ? null : parseInt(e.target.value)
-                )
-              }
-              placeholder="Hours"
-            />
-          </div>
+          <button onClick={toggleFilters}>
+            <TuneIcon />
+          </button>
+          {showFilters && (
+            <div>
+              <select
+                value={experienceFilter || ""}
+                onChange={(e) => setExperienceFilter(e.target.value || null)}
+              >
+                <option value="">All</option>
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="expert">Expert</option>
+              </select>
+              <input
+                type="number"
+                min="0"
+                step="10"
+                value={hoursFilter === null ? "" : hoursFilter}
+                onChange={(e) =>
+                  setHoursFilter(
+                    e.target.value === "" ? null : parseInt(e.target.value)
+                  )
+                }
+                placeholder="Hours"
+              />
+            </div>
+          )}
         </div>
-
         <ul className="flex flex-col justify-center ">
           {filteredRoadmaps.map((roadMap: RoadmapMeta) => (
             <li
