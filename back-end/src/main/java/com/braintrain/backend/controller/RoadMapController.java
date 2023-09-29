@@ -1,11 +1,10 @@
 package com.braintrain.backend.controller;
 
 
-import com.braintrain.backend.model.RoadMap;
-import com.braintrain.backend.model.RoadMapDTO;
-import com.braintrain.backend.model.RoadMapMeta;
-import com.braintrain.backend.model.RoadMapMetaListDTO;
+import com.braintrain.backend.exceptionHandler.UserNotFoundException;
+import com.braintrain.backend.model.*;
 import com.braintrain.backend.service.RoadMapService;
+import com.braintrain.backend.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +19,8 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class RoadMapController {
     private final RoadMapService service;
+
+    private final UserService userService;
 
     @GetMapping("/status")
     public ResponseEntity<String> getStatus() {
@@ -38,6 +39,12 @@ public class RoadMapController {
 
     @GetMapping("/{userEmail}/roadMapMetas")
     public ResponseEntity<RoadMapMetaListDTO> getUserRoadmapMetas(@PathVariable String userEmail) {
+        User user = userService.getUserByEmail(userEmail);
+
+        if (user == null) {
+            throw new UserNotFoundException("User not found for email: " + userEmail);
+        }
+
         RoadMapMetaListDTO roadMapMetaListDTO = service.getAllRoadMapsMeta();
 
         List<RoadMapMeta> filteredMetaList = roadMapMetaListDTO.roadMapMetaList().stream()
