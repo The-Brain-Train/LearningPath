@@ -1,6 +1,5 @@
 package com.braintrain.backend.exceptionHandler;
 
-import com.braintrain.backend.exceptionHandler.ErrorMessageResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -19,5 +18,10 @@ public class GlobalExceptionHandler {
                 ex.getMessage()
         );
         return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorMessageResponse> handleUserNotFoundException(UserNotFoundException ex) {
+        return ResponseEntity.notFound().build();
     }
 }
