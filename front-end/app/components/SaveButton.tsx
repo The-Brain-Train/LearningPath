@@ -36,7 +36,9 @@ function SaveButton({saveClick }: saveButtonProps) {
     <>
       {!clicked && (
         <div>
-        <Button onClick={handleOpen}><CloudUploadIcon className="text-black "/></Button>
+        <button 
+        className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded ml-4"
+        onClick={handleOpen}>Save</button>
         <Modal
           open={open}
           onClose={handleClose}
