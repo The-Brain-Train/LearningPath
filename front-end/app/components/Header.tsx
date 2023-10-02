@@ -23,7 +23,6 @@ export default function Header({userImage}: HeaderProp) {
 ) : null
 
 
-
   return (
     <>
       <header className="bg-white fixed w-full h-16	z-50 top-0 left-0">
