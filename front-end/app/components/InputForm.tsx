@@ -52,12 +52,14 @@ type InputFormProps = {
   setTopic: React.Dispatch<React.SetStateAction<string | null>>;
   setHours: React.Dispatch<React.SetStateAction<number | null>>;
   setExperienceLevel: React.Dispatch<React.SetStateAction<string | null>>;
+  resetForm: () => void; 
 };
 
 const InputForm = ({
   setTopic,
   setHours,
   setExperienceLevel,
+  resetForm
 }: InputFormProps) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -77,7 +79,6 @@ const InputForm = ({
     setUserMessage("");
     setExperience("");
     setSliderValue(30);
-
     handleClose();
   };
 
@@ -91,7 +92,10 @@ const InputForm = ({
           <button
             className="bg-transparent hover:bg-emerald-600text-lg text-white font-bold border-2 p-2 border-white rounded "
             style={{ backgroundColor: "#141832" }}
-            onClick={handleOpen}
+            onClick={() => {
+              handleOpen();
+              resetForm();
+            }}
           >
             Create Roadmap
           </button>

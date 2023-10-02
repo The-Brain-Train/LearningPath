@@ -12,9 +12,15 @@ export default function  Create() {
 
   const {data: session, status} = useSession();
 
+  const resetForm = () => {
+    setHours(null);
+    setExperienceLevel(null);
+    setTopic(null);
+  };
+
   return (
     <main className="main-background">
-      <InputForm setTopic={setTopic} setHours={setHours} setExperienceLevel={setExperienceLevel}/>
+      <InputForm setTopic={setTopic} setHours={setHours} setExperienceLevel={setExperienceLevel} resetForm={resetForm}/>
       <IndentedTree topic={topic} experienceLevel={experienceLevel} hours={hours} userEmail={session?.user?.email} />
     </main>
   );
