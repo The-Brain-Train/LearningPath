@@ -1,11 +1,9 @@
 package com.braintrain.backend.service;
 
-import com.braintrain.backend.model.RoadMap;
-import com.braintrain.backend.model.RoadMapDTO;
-import com.braintrain.backend.model.RoadMapMeta;
-import com.braintrain.backend.model.RoadMapMetaListDTO;
+import com.braintrain.backend.model.*;
 import com.braintrain.backend.repository.RoadMapMetaRepository;
 import com.braintrain.backend.repository.RoadMapRepository;
+import com.braintrain.backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +16,8 @@ import java.util.Optional;
 public class RoadMapService {
     private final RoadMapMetaRepository metaRepo;
     private final RoadMapRepository repo;
+
+    private final UserRepository userRepo;
 
     public RoadMapMeta createRoadMap(RoadMapDTO roadMapDTO) {
         validateDTONameInput(roadMapDTO.name(), "Invalid name");
@@ -68,5 +68,17 @@ public class RoadMapService {
                 !roadMapDTORoadMap.contains("\"children\":")) {
             throw new IllegalArgumentException("Roadmap has an invalid data structure");
         }
+    }
+
+    public UserFavoritesDTO addRoadmapToFavorites(User user, RoadMapMeta roadMapMeta) {
+        List<RoadMapMeta> favorites = user.getFavorites();
+
+        if (!favorites.contains(roadMapMeta)) {
+            favorites.add(roadMapMeta);
+            user.setFavorites(favorites);
+            userRepo.save(user);
+        }
+
+        return new UserFavoritesDTO(user.getFavorites());
     }
 }

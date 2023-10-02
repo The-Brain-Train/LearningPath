@@ -2,6 +2,7 @@ package com.braintrain.backend.controller;
 
 
 import com.braintrain.backend.model.User;
+import com.braintrain.backend.model.UserFavoritesDTO;
 import com.braintrain.backend.model.UserListDTO;
 import com.braintrain.backend.service.UserService;
 import lombok.AllArgsConstructor;
@@ -31,6 +32,12 @@ public class UserController {
             return ResponseEntity.created(uri).body(newUser);
         }
         return ResponseEntity.ok(existingUser);
+    }
+
+    @GetMapping("/{userEmail}/favorites")
+    public ResponseEntity<UserFavoritesDTO> getUsersFavorites(@PathVariable String userEmail){
+        User user = userService.getUserByEmail(userEmail);
+        return ResponseEntity.ok(userService.getUsersFavorites(user));
     }
 
 

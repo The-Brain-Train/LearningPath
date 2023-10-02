@@ -19,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -87,7 +88,7 @@ class RoadMapControllerTest {
         User user = new User("Edward", "edwardsemail@gmail.com");
         String uriForPost = "http://localhost:%s/api/user".formatted(port);
 
-        ResponseEntity<User> postResponse = restTemplate.exchange(uriForPost, HttpMethod.POST, new HttpEntity<>(user), User.class);
+        restTemplate.exchange(uriForPost, HttpMethod.POST, new HttpEntity<>(user), User.class);
 
         String uriForGet = "http://localhost:%s/api/roadmaps/%s/roadMapMetas".formatted(port, user.getEmail());
 
@@ -163,5 +164,20 @@ class RoadMapControllerTest {
         } catch (HttpClientErrorException err) {
             assertThat(err.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @Test
+    void shouldAddRoadmapMetaToFavoritesForExistingUser() {
+        User user = new User("Edward", "edwardsemail@gmail.com", new ArrayList<>());
+        RoadMapMeta roadMapMeta = new RoadMapMeta("Java", "1245", "anotherEmail@gmail.com", "Beginner", 50);
+
+        String uriForCreateUser = "http://localhost:%s/api/user".formatted(port);
+        restTemplate.exchange(uriForCreateUser, HttpMethod.POST, new HttpEntity<>(user), User.class);
+
+        String uri = "http://localhost:%s/api/roadmaps/%s/favorites".formatted(port, user.getEmail());
+        ResponseEntity<UserFavoritesDTO> exchange = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(roadMapMeta), UserFavoritesDTO.class);
+
+        assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(exchange.getHeaders().getLocation()).isNotNull();
     }
 }

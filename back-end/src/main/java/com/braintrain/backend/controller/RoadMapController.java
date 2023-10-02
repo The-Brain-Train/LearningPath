@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/roadmaps")
@@ -52,6 +51,20 @@ public class RoadMapController {
                 .toList();
 
         return ResponseEntity.ok(new RoadMapMetaListDTO(filteredMetaList));
+    }
+
+    @PostMapping("/{userEmail}/favorites")
+    public ResponseEntity<UserFavoritesDTO> addRoadmapMetaToFavorites(@PathVariable String userEmail, @RequestBody RoadMapMeta roadMapMeta) {
+        User user = userService.getUserByEmail(userEmail);
+
+        if (user == null) {
+            throw new UserNotFoundException("User not found for email: " + userEmail);
+        }
+
+        UserFavoritesDTO userFavorites = service.addRoadmapToFavorites(user, roadMapMeta);
+
+        URI uri = URI.create("/api/roadmaps" + user.getEmail() + "/favorites" + roadMapMeta.getRoadMapReferenceId());
+        return ResponseEntity.created(uri).body(userFavorites);
     }
 
     @PostMapping
