@@ -36,9 +36,9 @@ function SaveButton({saveClick }: saveButtonProps) {
     <>
       {!clicked && (
         <div>
-        <button 
-        className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded ml-4"
-        onClick={handleOpen}>Save</button>
+        <Button 
+        className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded"
+        onClick={handleOpen}>Save</Button>
         <Modal
           open={open}
           onClose={handleClose}

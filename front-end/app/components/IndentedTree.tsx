@@ -7,7 +7,7 @@ import SaveButton from "./SaveButton";
 import { postRoadmap } from "../functions/httpRequests";
 import { RoadmapDTO, User } from "../types";
 import { chatHistory } from "../functions/chatPreHistory";
-import { CircularProgress } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 
 type IndentedTreeProps = {
   topic: string | null;
@@ -180,8 +180,21 @@ const IndentedTree = ({
   return (
     <div className="flex flex-col px-3">
       {isLoading ? (
-        <div className="text-center font-bold text-xl text-slate-300">
-          Creating Roadmap <CircularProgress />
+        <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "70vh",
+        }}
+        >
+          <div className="text-center font-bold text-xl text-slate-300">
+            Creating Roadmap
+          </div>
+          <div>
+            <CircularProgress />
+          </div>
         </div>
       ) : (
         <>
@@ -206,17 +219,17 @@ const IndentedTree = ({
               )}
               <svg className="overflow-hidden pb-10" ref={svgRef}></svg>
               {data !== null && (
-                <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 flex justify-center">
+                <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 flex justify-center gap-3">
                   <SaveButton saveClick={saveRoadMap} />
-                  <button
+                  <Button
                     onClick={() => {
                       setData(null);
                       d3.select(svgRef.current).selectAll("*").remove();
                     }}
-                    className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded ml-4"
+                    className="bg-red-500 hover:bg-red-600 py-2 px-4 rounded text-white"
                   >
                     Reset
-                  </button>
+                  </Button>
                 </div>
               )}
             </>
