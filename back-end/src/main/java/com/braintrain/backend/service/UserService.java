@@ -1,6 +1,7 @@
 package com.braintrain.backend.service;
 
 import com.braintrain.backend.model.User;
+import com.braintrain.backend.model.UserFavoritesDTO;
 import com.braintrain.backend.model.UserListDTO;
 import com.braintrain.backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -25,5 +26,9 @@ public class UserService {
 
     public void deleteUser(User user) {
         userRepository.delete(user);
+    }
+
+    public UserFavoritesDTO getUsersFavorites(User user) {
+        return new UserFavoritesDTO(user.getFavorites());
     }
 }
