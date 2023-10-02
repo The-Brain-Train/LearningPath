@@ -50,7 +50,9 @@ const IndentedTree = ({
       const jsonData = await JSON.parse(response.choices[0].message.content);
       setData(jsonData);
     } catch (error) {
-      setCreateError(`Unable to generate roadmap. Please try again. Error: ${error}`);
+      setCreateError(
+        `Unable to generate roadmap. Please try again. Error: ${error}`
+      );
       console.error(error);
     } finally {
       setLoading(false);
@@ -206,6 +208,15 @@ const IndentedTree = ({
               {data !== null && (
                 <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 flex justify-center">
                   <SaveButton saveClick={saveRoadMap} />
+                  <button
+                    onClick={() => {
+                      setData(null);
+                      d3.select(svgRef.current).selectAll("*").remove();
+                    }}
+                    className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded ml-4"
+                  >
+                    Reset
+                  </button>
                 </div>
               )}
             </>
