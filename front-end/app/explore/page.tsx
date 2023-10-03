@@ -6,13 +6,19 @@ import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import Link from "next/link";
 import { ChangeEvent, useEffect, useState } from "react";
-import { getRoadmaps } from "../functions/httpRequests";
-import { RoadmapMeta } from "../types";
+import {
+  addRoadmapMetaToUserFavorites,
+  getRoadmaps,
+  getUserFavorites,
+} from "../functions/httpRequests";
+import { RoadmapMeta, RoadmapMetaList } from "../types";
 import { generateStarsforExperienceLevel } from "../functions/generateStarsForExperience";
 import TuneIcon from "@mui/icons-material/Tune";
 import { Button } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
-
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import { useSession } from "next-auth/react";
 
 export default function Explore() {
   const [roadmaps, setRoadmaps] = useState<RoadmapMeta[]>([]);
@@ -21,10 +27,34 @@ export default function Explore() {
   const [experienceFilter, setExperienceFilter] = useState<string | null>(null);
   const [hoursFilter, setHoursFilter] = useState<number | null>(null);
   const [showFilters, setShowFilters] = useState(false);
+  const [favorites, setFavorites] = useState<RoadmapMeta[]>([]);
+
+  const { data: session, status } = useSession();
 
   const fetchRoadmaps = async () => {
     const roadmaps = await getRoadmaps();
     setRoadmaps(roadmaps.roadmapMetaList);
+  };
+
+  const fetchUserFavorites = async () => {
+    if (status === "authenticated") {
+      try {
+        const userEmail = session?.user?.email;
+        const favoriteRoadmaps = await getUserFavorites(userEmail);
+        setFavorites(favoriteRoadmaps);
+      } catch (error) {
+        console.error("Error fetching user favorites:", error);
+      }
+    }
+  };
+
+  const handleAddToFavorite = async (roadmapMeta: RoadmapMeta) => {
+    try {
+      await addRoadmapMetaToUserFavorites(session?.user?.email, roadmapMeta);
+      setFavorites((prevFavorites) => [...prevFavorites, roadmapMeta]);
+    } catch (error) {
+      console.error("Error adding roadmap to favorites:", error);
+    }
   };
 
   const toggleFilters = () => {
@@ -34,6 +64,10 @@ export default function Explore() {
   useEffect(() => {
     fetchRoadmaps();
   }, []);
+
+  useEffect(() => {
+    fetchUserFavorites();
+  }, [session, status]);
 
   const filterRoadmaps = (roadmap: RoadmapMeta) => {
     if (experienceFilter && roadmap.experienceLevel !== experienceFilter) {
@@ -125,28 +159,46 @@ export default function Explore() {
         )}
 
         <ul className="flex flex-col justify-center mt-2 gap-3">
-          {filteredRoadmaps.map((roadMap: RoadmapMeta) => (
-            <li key={roadMap.id} className=" rounded-lg shadow-md text-white" style={{ backgroundColor: "#141832"}}>
+          {filteredRoadmaps.map((roadmap: RoadmapMeta) => (
+            <li
+              key={roadmap.id}
+              className=" rounded-lg shadow-md text-white"
+              style={{ backgroundColor: "#141832" }}
+            >
               <Link
                 className="text-left overflow-hidden flex justify-between"
-                href={`/explore/${roadMap.id}`}
+                href={`/explore/${roadmap.id}`}
               >
                 <div className="flex items-center px-2 py-1">
                   <p className="overflow-ellipsis overflow-hidden whitespace-nowrap">
-                    {roadMap.name}
+                    {roadmap.name}
                   </p>
                 </div>
                 <div className="flex items-center flex-col px-2 py-1">
                   <p className="overflow-ellipsis overflow-hidden whitespace-nowrap">
-                  <Tooltip title={roadMap.experienceLevel} arrow>
-                    <span>{generateStarsforExperienceLevel(roadMap.experienceLevel)}</span>
-                  </Tooltip>
+                    <Tooltip title={roadmap.experienceLevel} arrow>
+                      <span>
+                        {generateStarsforExperienceLevel(
+                          roadmap.experienceLevel
+                        )}
+                      </span>
+                    </Tooltip>
                   </p>
                   <p className="overflow-ellipsis overflow-hidden whitespace-nowrap">
-                    {roadMap.hours} hours
+                    {roadmap.hours} hours
                   </p>
                 </div>
               </Link>
+              <span
+                onClick={() => handleAddToFavorite(roadmap)}
+                style={{ cursor: "pointer" }}
+              >
+                {favorites.some((favorite) => favorite.id === roadmap.id) ? (
+                  <FavoriteIcon />
+                ) : (
+                  <FavoriteBorderIcon />
+                )}
+              </span>
             </li>
           ))}
         </ul>
