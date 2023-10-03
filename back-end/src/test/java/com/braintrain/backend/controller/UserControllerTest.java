@@ -45,7 +45,7 @@ class UserControllerTest {
     @Test
     void shouldCreateUserIfNonExisting() {
         String uri = BASE_URL.formatted(port);
-        User user = new User("Edward", "edwardsemail@gmail.com");
+        User user = new User("Edward", "edwardsemail@gmail.com", new ArrayList<>());
         ResponseEntity<User> exchange = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(user), User.class);
         assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(exchange.getHeaders().getLocation()).isNotNull();
@@ -54,7 +54,7 @@ class UserControllerTest {
     @Test
     void shouldGetUserIfUserExists() {
         String uri = BASE_URL.formatted(port);
-        User user = new User("Edward", "edwardsemail@gmail.com");
+        User user = new User("Edward", "edwardsemail@gmail.com", new ArrayList<>());
         restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(user), User.class);
 
         ResponseEntity<User> exchange = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(user), User.class);

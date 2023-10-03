@@ -85,7 +85,7 @@ class RoadmapControllerTest {
 
     @Test
     void shouldGetRoadmapMetasForUser() {
-        User user = new User("Edward", "edwardsemail@gmail.com");
+        User user = new User("Edward", "edwardsemail@gmail.com", new ArrayList<>());
         String uriForPost = "http://localhost:%s/api/user".formatted(port);
 
         restTemplate.exchange(uriForPost, HttpMethod.POST, new HttpEntity<>(user), User.class);
