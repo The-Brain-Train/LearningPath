@@ -10,7 +10,7 @@ export default function  Create() {
   const [experienceLevel, setExperienceLevel] = useState<string| null>(null);
   const [topic, setTopic] = useState<string | null>(null);
 
-  const {data: session, status} = useSession();
+  const {data: session} = useSession();
 
   const resetForm = () => {
     setHours(null);

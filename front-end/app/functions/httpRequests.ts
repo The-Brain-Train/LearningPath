@@ -1,11 +1,11 @@
-import { RoadMapMetaList, Roadmap, RoadmapDTO, User } from "../types";
+import { RoadmapMetaList, Roadmap, RoadmapDTO, User } from "../types";
 
 export const getRoadmaps = async () => {
   const response = await fetch(`http://localhost:8080/api/roadmaps`);
   if (!response.ok) {
     throw Error("Failed to fetch roadmaps");
   }
-  const data: RoadMapMetaList = await response.json();
+  const data: RoadmapMetaList = await response.json();
   return data;
 };
 
@@ -28,13 +28,13 @@ export const deleteRoadmap = async (roadMapId: string) => {
   return roadMapId;
 };
 
-export const postRoadmap = async (roadMap: RoadmapDTO) => {
+export const postRoadmap = async (roadmap: RoadmapDTO) => {
   const response = await fetch(`http://localhost:8080/api/roadmaps`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(roadMap),
+    body: JSON.stringify(roadmap),
   });
   if (!response.ok) {
     throw new Error("Failed to add roadmap");
@@ -42,11 +42,11 @@ export const postRoadmap = async (roadMap: RoadmapDTO) => {
 };
 
 export const getUsersRoadmapMetas = async (userEmail: string) => {
-  const response = await fetch(`http://localhost:8080/api/roadmaps/${userEmail}/roadMapMetas`);
+  const response = await fetch(`http://localhost:8080/api/roadmaps/${userEmail}/roadmapMetas`);
   if (!response.ok) {
     throw new Error("Failed to fetch roadmaps");
   }
-  const data: RoadMapMetaList = await response.json();
+  const data: RoadmapMetaList = await response.json();
   return data;
 };
 
@@ -55,7 +55,7 @@ export const addUser = async (user: User) => {
     return;
   }
   try {
-    const res = await fetch("http://localhost:8080/api/user", {
+    const res = await fetch("http://localhost:8080/api/users", {
       method: "POST",
       body: JSON.stringify(user),
       headers: {

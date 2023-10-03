@@ -7,28 +7,25 @@ import { useRouter } from "next/navigation";
 
 type Props = {
   params: {
-    roadMapId: string;
+    roadmapId: string;
   };
 };
 
 export default function roadMapId(props: Props) {
-  const [roadMap, setRoadmap] = useState<JSON | null>(null);
+  const [roadmap, setRoadmap] = useState<JSON | null>(null);
   const router = useRouter();
-  const [roadMapRefId, setRoadMapRefId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const roadmaps = await getRoadmaps();
-        const foundRoadmap = roadmaps.roadMapMetaList.find(
-          (roadmap) => roadmap.id === props.params.roadMapId
+        const foundRoadmap = roadmaps.roadmapMetaList.find(
+          (roadmap) => roadmap.id === props.params.roadmapId
         );
 
         if (foundRoadmap) {
-          const roadMapRefId = foundRoadmap.roadMapReferenceId;
-          setRoadMapRefId(roadMapRefId);
-          const roadmapData = await getRoadmap(roadMapRefId);
+          const roadmapData = await getRoadmap(foundRoadmap.roadmapReferenceId);
           const parsedData = JSON.parse(roadmapData.obj);
           setRoadmap(parsedData);
         } else {
@@ -54,8 +51,7 @@ export default function roadMapId(props: Props) {
             onClick={() => router.back()}
           />
           <IndentedTreeWithData
-            data={roadMap}
-            roadMapRefId={props.params.roadMapId}
+            data={roadmap}
           />
         </>
       )}

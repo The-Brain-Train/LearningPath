@@ -31,7 +31,7 @@ const IndentedTree = ({
     if (topic == null || userEmail == null) return;
     const requestData: RoadmapDTO = {
       name: topic,
-      roadMap: JSON.stringify(data),
+      roadmap: JSON.stringify(data),
       userEmail: userEmail,
       experienceLevel: experienceLevel,
       hours: hours,

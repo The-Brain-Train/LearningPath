@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import UserCard from "../components/UserCard";
 import { deleteRoadmap, getUsersRoadmapMetas } from "../functions/httpRequests";
 import { useSession } from "next-auth/react";
-import { RoadMapMetaList } from "../types";
+import { RoadmapMetaList } from "../types";
 import Link from "next/link";
 import DeleteModal from "../components/DeleteModal";
 import {
@@ -36,7 +36,7 @@ function Icon({ id, open }: { id: string | number; open: number }) {
 
 const page = () => {
   const { data: session } = useSession();
-  const [userRoadmaps, setUserRoadmaps] = useState<RoadMapMetaList | undefined>(
+  const [userRoadmaps, setUserRoadmaps] = useState<RoadmapMetaList | undefined>(
     undefined
   );
   const [open, setOpen] = React.useState(0);
@@ -48,7 +48,7 @@ const page = () => {
     setUserRoadmaps((prevRoadmaps) => {
       if (!prevRoadmaps) return prevRoadmaps;
       return {
-        roadMapMetaList: prevRoadmaps.roadMapMetaList?.filter(
+        roadmapMetaList: prevRoadmaps.roadmapMetaList?.filter(
           (roadmap) => roadmap.id !== id
         ),
       };
@@ -84,7 +84,7 @@ const page = () => {
           </AccordionHeader>
           <AccordionBody>
             <ul className="flex flex-col justify-center">
-              {userRoadmaps?.roadMapMetaList.map((meta, index) => (
+              {userRoadmaps?.roadmapMetaList.map((meta, index) => (
                 <PersonalRoadmapCard roadmapMeta={meta} key={index} handleDelete={handleDelete}/>
               ))}
             </ul>
@@ -100,7 +100,7 @@ const page = () => {
           </AccordionHeader>
           <AccordionBody>
             <ul className="flex flex-col justify-center">
-              {userRoadmaps?.roadMapMetaList.map((meta, index) => (
+              {userRoadmaps?.roadmapMetaList.map((meta, index) => (
                 <li
                   key={index}
                   className="bg-slate-300 shadow-md w-full border-t-2 border-opacity-100 dark:border-opacity-50"

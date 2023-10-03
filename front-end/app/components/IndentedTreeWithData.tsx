@@ -8,10 +8,9 @@ import DeleteModal from "./DeleteModal";
 
 type IndentedTreeProps = {
   data: JSON | null;
-  roadMapRefId: string;
 };
 
-const IndentedTreeWithData = ({ data, roadMapRefId }: IndentedTreeProps) => {
+const IndentedTreeWithData = ({ data }: IndentedTreeProps) => {
   const svgRef = useRef(null);
   const router = useRouter();
 

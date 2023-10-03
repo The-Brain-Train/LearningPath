@@ -1,7 +1,7 @@
 export type RoadmapMeta = {
   id: string;
   name: string;
-  roadMapReferenceId: string;
+  roadmapReferenceId: string;
   userEmail: string;
   experienceLevel: string;
   hours: number
@@ -12,8 +12,8 @@ export type PersonalRoadmapCardProps = {
   handleDelete: (id: string) => Promise<void>
 }
 
-export type RoadMapMetaList = {
-  roadMapMetaList: RoadmapMeta[];
+export type RoadmapMetaList = {
+  roadmapMetaList: RoadmapMeta[];
 };
 
 export type Roadmap = {
@@ -23,7 +23,7 @@ export type Roadmap = {
 
 export type RoadmapDTO = {
   name: string;
-  roadMap: string;
+  roadmap: string;
   userEmail: string;
   experienceLevel: string | null;
   hours: number | null;

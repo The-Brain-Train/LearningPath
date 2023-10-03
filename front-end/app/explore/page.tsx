@@ -24,7 +24,7 @@ export default function Explore() {
 
   const fetchRoadmaps = async () => {
     const roadmaps = await getRoadmaps();
-    setRoadmaps(roadmaps.roadMapMetaList);
+    setRoadmaps(roadmaps.roadmapMetaList);
   };
 
   const toggleFilters = () => {
