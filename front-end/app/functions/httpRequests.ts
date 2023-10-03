@@ -1,4 +1,4 @@
-import { RoadmapMetaList, Roadmap, RoadmapDTO, User } from "../types";
+import { RoadmapMetaList, Roadmap, RoadmapDTO, User, RoadmapMeta } from "../types";
 
 export const getRoadmaps = async () => {
   const response = await fetch(`http://localhost:8080/api/roadmaps`);
@@ -10,7 +10,9 @@ export const getRoadmaps = async () => {
 };
 
 export const getRoadmap = async (roadMapId: string) => {
-  const response = await fetch(`http://localhost:8080/api/roadmaps/${roadMapId}`);
+  const response = await fetch(
+    `http://localhost:8080/api/roadmaps/${roadMapId}`
+  );
   if (!response.ok) {
     throw new Error("Failed to fetch roadmaps");
   }
@@ -19,9 +21,12 @@ export const getRoadmap = async (roadMapId: string) => {
 };
 
 export const deleteRoadmap = async (roadMapId: string) => {
-  const response = await fetch(`http://localhost:8080/api/roadmaps/${roadMapId}`,{
-    method: "DELETE"
-  });
+  const response = await fetch(
+    `http://localhost:8080/api/roadmaps/${roadMapId}`,
+    {
+      method: "DELETE",
+    }
+  );
   if (!response.ok) {
     throw new Error("Failed to delete roadmap");
   }
@@ -42,7 +47,9 @@ export const postRoadmap = async (roadmap: RoadmapDTO) => {
 };
 
 export const getUsersRoadmapMetas = async (userEmail: string) => {
-  const response = await fetch(`http://localhost:8080/api/roadmaps/${userEmail}/roadmapMetas`);
+  const response = await fetch(
+    `http://localhost:8080/api/roadmaps/${userEmail}/roadmapMetas`
+  );
   if (!response.ok) {
     throw new Error("Failed to fetch roadmaps");
   }
@@ -69,3 +76,31 @@ export const addUser = async (user: User) => {
     console.error("Error adding user to DB:", error);
   }
 };
+
+export const getUserFavorites = async (userEmail: string) => {
+  const response = await fetch(
+    `http://localhost:8080/api/roadmaps/${userEmail}/favorites`
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch user favorites");
+  }
+  const data: RoadmapMetaList = await response.json();
+  return data;
+};
+
+export const addRoadmapMetaToUserFavorites = async (userEmail: string | null | undefined, roadmapMeta: RoadmapMeta) => {
+  try {
+    const res = await fetch(`http://localhost:8080/api/roadmaps/${userEmail}/favorites`, {
+      method: "POST",
+      body: JSON.stringify(roadmapMeta),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!res.ok) {
+      throw new Error(`Failed to add user. Status code: ${res.status}`);
+    }
+  } catch (error) {
+    console.error("Error adding user to DB:", error);
+  }
+}
