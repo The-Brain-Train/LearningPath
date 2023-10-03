@@ -1,4 +1,10 @@
-import { RoadmapMetaList, Roadmap, RoadmapDTO, User, RoadmapMeta } from "../types";
+import {
+  RoadmapMetaList,
+  Roadmap,
+  RoadmapDTO,
+  User,
+  RoadmapMeta,
+} from "../types";
 
 export const getRoadmaps = async () => {
   const response = await fetch(`http://localhost:8080/api/roadmaps`);
@@ -77,30 +83,38 @@ export const addUser = async (user: User) => {
   }
 };
 
-export const getUserFavorites = async (userEmail: string) => {
+export const getUserFavorites = async (
+  userEmail: string | null | undefined
+) => {
   const response = await fetch(
-    `http://localhost:8080/api/roadmaps/${userEmail}/favorites`
+    `http://localhost:8080/api/users/${userEmail}/favorites`
   );
   if (!response.ok) {
     throw new Error("Failed to fetch user favorites");
   }
-  const data: RoadmapMetaList = await response.json();
-  return data;
+  const data = await response.json();
+  return data.favorites;
 };
 
-export const addRoadmapMetaToUserFavorites = async (userEmail: string | null | undefined, roadmapMeta: RoadmapMeta) => {
+export const addRoadmapMetaToUserFavorites = async (
+  userEmail: string | null | undefined,
+  roadmapMeta: RoadmapMeta
+) => {
   try {
-    const res = await fetch(`http://localhost:8080/api/roadmaps/${userEmail}/favorites`, {
-      method: "POST",
-      body: JSON.stringify(roadmapMeta),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const res = await fetch(
+      `http://localhost:8080/api/roadmaps/${userEmail}/favorites`,
+      {
+        method: "POST",
+        body: JSON.stringify(roadmapMeta),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     if (!res.ok) {
       throw new Error(`Failed to add user. Status code: ${res.status}`);
     }
   } catch (error) {
     console.error("Error adding user to DB:", error);
   }
-}
+};
