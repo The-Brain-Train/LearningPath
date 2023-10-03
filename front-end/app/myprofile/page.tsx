@@ -1,9 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import UserCard from "../components/UserCard";
-import { deleteRoadmap, getUsersRoadmapMetas } from "../functions/httpRequests";
+import {
+  deleteRoadmap,
+  getUserFavorites,
+  getUsersRoadmapMetas,
+} from "../functions/httpRequests";
 import { useSession } from "next-auth/react";
-import { RoadmapMetaList } from "../types";
+import { RoadmapMeta, RoadmapMetaList } from "../types";
 import Link from "next/link";
 import DeleteModal from "../components/DeleteModal";
 import {
@@ -12,6 +16,8 @@ import {
   AccordionBody,
 } from "@material-tailwind/react";
 import PersonalRoadmapCard from "../components/PersonalRoadmapCard";
+import { generateStarsforExperienceLevel } from "../functions/generateStarsForExperience";
+import FavoriteRoadmapCard from "../components/FavoriteRoadmapCard";
 
 function Icon({ id, open }: { id: string | number; open: number }) {
   return (
@@ -39,6 +45,7 @@ const page = () => {
   const [userRoadmaps, setUserRoadmaps] = useState<RoadmapMetaList | undefined>(
     undefined
   );
+  const [favorites, setFavorites] = useState<RoadmapMeta[]>([]);
   const [open, setOpen] = React.useState(0);
 
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
@@ -55,17 +62,25 @@ const page = () => {
     });
   };
 
-  useEffect(() => {
-    const fetchUserRoadmaps = async () => {
-      if (!session || !session.user || !session.user.email) {
-        return;
-      }
-      const currentUser = session.user.email;
-      const roadmapMetas = await getUsersRoadmapMetas(currentUser);
-      setUserRoadmaps(roadmapMetas);
-    };
+  const fetchUserRoadmaps = async () => {
+    if (!session || !session.user || !session.user.email) {
+      return;
+    }
+    const roadmapMetas = await getUsersRoadmapMetas(session.user.email);
+    setUserRoadmaps(roadmapMetas);
+  };
 
+  const fetchUserFavorites = async () => {
+    if (!session || !session.user || !session.user.email) {
+      return;
+    }
+    const favoriteRoadmaps = await getUserFavorites(session?.user?.email);
+    setFavorites(favoriteRoadmaps);
+  };
+
+  useEffect(() => {
     fetchUserRoadmaps();
+    fetchUserFavorites();
   }, [session]);
 
   return (
@@ -78,14 +93,18 @@ const page = () => {
           <AccordionHeader
             onClick={() => handleOpen(1)}
             className="p-3 dark:border-opacity-50 text-white"
-            style={{ backgroundColor: "#141832"}}
+            style={{ backgroundColor: "#141832" }}
           >
             <h2>My Roadmaps</h2>
           </AccordionHeader>
           <AccordionBody>
             <ul className="flex flex-col justify-center">
-              {userRoadmaps?.roadmapMetaList.map((meta, index) => (
-                <PersonalRoadmapCard roadmapMeta={meta} key={index} handleDelete={handleDelete}/>
+              {userRoadmaps?.roadmapMetaList.map((roadmapMeta, index) => (
+                <PersonalRoadmapCard
+                  roadmapMeta={roadmapMeta}
+                  key={index}
+                  handleDelete={handleDelete}
+                />
               ))}
             </ul>
           </AccordionBody>
@@ -94,34 +113,14 @@ const page = () => {
           <AccordionHeader
             onClick={() => handleOpen(2)}
             className="p-3 dark:border-opacity-50 text-white"
-            style={{ backgroundColor: "#141832"}}
+            style={{ backgroundColor: "#141832" }}
           >
             My Favourites
           </AccordionHeader>
           <AccordionBody>
             <ul className="flex flex-col justify-center">
-              {userRoadmaps?.roadmapMetaList.map((meta, index) => (
-                <li
-                  key={index}
-                  className="bg-slate-300 shadow-md w-full border-t-2 border-opacity-100 dark:border-opacity-50"
-                >
-                  <div className="flex justify-between items-center p-2">
-                    <Link
-                      className="text-left overflow-hidden"
-                      href={`/explore/${meta.id}`}
-                    >
-                      <p className="overflow-ellipsis overflow-hidden whitespace-nowrap pl-1">
-                        {meta.name}
-                      </p>
-                    </Link>
-                    <div className="flex-shrink-0 min-w-max">
-                      <DeleteModal
-                        id={meta.id}
-                        onDelete={(id) => handleDelete(id)}
-                      />
-                    </div>
-                  </div>
-                </li>
+              {favorites.map((roadmapMeta, index) => (
+                <FavoriteRoadmapCard roadmapMeta={roadmapMeta} key={index} />
               ))}
             </ul>
           </AccordionBody>
