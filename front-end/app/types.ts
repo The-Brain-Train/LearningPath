@@ -12,6 +12,10 @@ export type PersonalRoadmapCardProps = {
   handleDelete: (id: string) => Promise<void>
 }
 
+export type FavoriteRoadmapCardProps = {
+  roadmapMeta: RoadmapMeta;
+}
+
 export type RoadmapMetaList = {
   roadmapMetaList: RoadmapMeta[];
 };
