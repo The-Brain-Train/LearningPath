@@ -39,6 +39,4 @@ public class UserController {
         User user = userService.getUserByEmail(userEmail);
         return ResponseEntity.ok(userService.getUsersFavorites(user));
     }
-
-
 }

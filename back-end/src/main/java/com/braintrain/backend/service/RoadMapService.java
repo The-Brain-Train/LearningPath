@@ -52,6 +52,18 @@ public class RoadMapService {
         metaRepo.deleteById(id);
     }
 
+    public UserFavoritesDTO addRoadmapToFavorites(User user, RoadMapMeta roadMapMeta) {
+        List<RoadMapMeta> favorites = user.getFavorites();
+
+        if (!favorites.contains(roadMapMeta)) {
+            favorites.add(roadMapMeta);
+            user.setFavorites(favorites);
+            userRepo.save(user);
+        }
+
+        return new UserFavoritesDTO(user.getFavorites());
+    }
+
     private static void validateDTONameInput(String roadMapDTOName, String Invalid_name) {
         if (roadMapDTOName == null || roadMapDTOName.isEmpty()) {
             throw new IllegalArgumentException(Invalid_name);
@@ -70,15 +82,5 @@ public class RoadMapService {
         }
     }
 
-    public UserFavoritesDTO addRoadmapToFavorites(User user, RoadMapMeta roadMapMeta) {
-        List<RoadMapMeta> favorites = user.getFavorites();
 
-        if (!favorites.contains(roadMapMeta)) {
-            favorites.add(roadMapMeta);
-            user.setFavorites(favorites);
-            userRepo.save(user);
-        }
-
-        return new UserFavoritesDTO(user.getFavorites());
-    }
 }
