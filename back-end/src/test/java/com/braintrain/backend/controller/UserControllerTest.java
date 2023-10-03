@@ -1,6 +1,6 @@
 package com.braintrain.backend.controller;
 
-import com.braintrain.backend.model.RoadMapMeta;
+import com.braintrain.backend.model.RoadmapMeta;
 import com.braintrain.backend.model.User;
 import com.braintrain.backend.model.UserFavoritesDTO;
 import com.braintrain.backend.service.UserService;
@@ -65,13 +65,13 @@ class UserControllerTest {
     @Test
     void shouldGetFavoritesForExistingUser() {
         User user = new User("Edward", "edwardsemail@gmail.com", new ArrayList<>());
-        RoadMapMeta roadMapMeta = new RoadMapMeta("Java", "1245", "anotherEmail@gmail.com", "Beginner", 50);
+        RoadmapMeta roadmapMeta = new RoadmapMeta("Java", "1245", "anotherEmail@gmail.com", "Beginner", 50);
 
         String uriForCreateUser = "http://localhost:%s/api/user".formatted(port);
         restTemplate.exchange(uriForCreateUser, HttpMethod.POST, new HttpEntity<>(user), User.class);
 
         String postUri = "http://localhost:%s/api/roadmaps/%s/favorites".formatted(port, user.getEmail());
-        restTemplate.exchange(postUri, HttpMethod.POST, new HttpEntity<>(roadMapMeta), UserFavoritesDTO.class);
+        restTemplate.exchange(postUri, HttpMethod.POST, new HttpEntity<>(roadmapMeta), UserFavoritesDTO.class);
 
         String getUri = "http://localhost:%s/api/user/%s/favorites".formatted(port, user.getEmail());
         ResponseEntity<UserFavoritesDTO> getExchange = restTemplate.exchange(getUri, HttpMethod.GET, HttpEntity.EMPTY, UserFavoritesDTO.class);

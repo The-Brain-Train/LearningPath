@@ -16,14 +16,14 @@ public class User {
     private String id;
     private String name;
     private String email;
-    private List<RoadMapMeta> favorites;
+    private List<RoadmapMeta> favorites;
 
     public User(String name, String email) {
         this.name = name;
         this.email = email;
     }
 
-    public User(String name, String email, List<RoadMapMeta> favorites) {
+    public User(String name, String email, List<RoadmapMeta> favorites) {
         this.name = name;
         this.email = email;
         this.favorites = new ArrayList<>();

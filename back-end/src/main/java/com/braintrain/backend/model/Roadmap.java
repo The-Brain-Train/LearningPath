@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "roadmap")
 @Data
 @NoArgsConstructor
-public class RoadMap {
+public class Roadmap {
     @Id
     private String id;
 
@@ -22,7 +22,7 @@ public class RoadMap {
 
     private int hours;
 
-    public RoadMap(String obj, String userEmail, String experienceLevel, int hours) {
+    public Roadmap(String obj, String userEmail, String experienceLevel, int hours) {
         this.obj = obj;
         this.userEmail = userEmail;
         this.experienceLevel = experienceLevel;

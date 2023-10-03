@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")
-class RoadMapControllerTest {
+class RoadmapControllerTest {
     @Value("${server.port}")
     private int port;
 
@@ -38,13 +38,13 @@ class RoadMapControllerTest {
 
     private static final String BASE_URL = "http://localhost:%s/api/roadmaps";
 
-    ResponseEntity<RoadMapMeta> exchange;
+    ResponseEntity<RoadmapMeta> exchange;
 
     @BeforeEach
     public void setup() throws IOException {
         String uri = BASE_URL.formatted(port);
-        RoadMapDTO dto = TestHelper.createRoadMapDTO("Java", Paths.get("src/test/resources/java.json"));
-        exchange = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(dto), RoadMapMeta.class);
+        RoadmapDTO dto = TestHelper.createRoadmapDTO("Java", Paths.get("src/test/resources/java.json"));
+        exchange = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(dto), RoadmapMeta.class);
     }
 
     @AfterEach
@@ -62,23 +62,23 @@ class RoadMapControllerTest {
     }
 
     @Test
-    void shouldGetRoadMaps() {
+    void shouldGetRoadmaps() {
         String uri = BASE_URL.formatted(port);
-        ResponseEntity<RoadMapMetaListDTO> exchange = restTemplate.exchange(uri, HttpMethod.GET, HttpEntity.EMPTY, RoadMapMetaListDTO.class);
+        ResponseEntity<RoadmapMetaListDTO> exchange = restTemplate.exchange(uri, HttpMethod.GET, HttpEntity.EMPTY, RoadmapMetaListDTO.class);
         assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(exchange.hasBody()).isTrue();
     }
 
     @Test
-    void shouldCreateRoadMap() throws IOException {
+    void shouldCreateRoadmap() throws IOException {
         assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(exchange.getHeaders().getLocation()).isNotNull();
     }
 
     @Test
-    void shouldGetRoadMap() {
-        String uri = "http://localhost:%s/api/roadmaps/%s".formatted(port, exchange.getBody().getRoadMapReferenceId());
-        ResponseEntity<RoadMap> response = restTemplate.exchange(uri, HttpMethod.GET, HttpEntity.EMPTY, RoadMap.class);
+    void shouldGetRoadmap() {
+        String uri = "http://localhost:%s/api/roadmaps/%s".formatted(port, exchange.getBody().getRoadmapReferenceId());
+        ResponseEntity<Roadmap> response = restTemplate.exchange(uri, HttpMethod.GET, HttpEntity.EMPTY, Roadmap.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.hasBody()).isTrue();
     }
@@ -90,17 +90,17 @@ class RoadMapControllerTest {
 
         restTemplate.exchange(uriForPost, HttpMethod.POST, new HttpEntity<>(user), User.class);
 
-        String uriForGet = "http://localhost:%s/api/roadmaps/%s/roadMapMetas".formatted(port, user.getEmail());
+        String uriForGet = "http://localhost:%s/api/roadmaps/%s/roadmapMetas".formatted(port, user.getEmail());
 
-        ResponseEntity<RoadMapMetaListDTO> getResponse = restTemplate.exchange(uriForGet, HttpMethod.GET, HttpEntity.EMPTY, RoadMapMetaListDTO.class);
+        ResponseEntity<RoadmapMetaListDTO> getResponse = restTemplate.exchange(uriForGet, HttpMethod.GET, HttpEntity.EMPTY, RoadmapMetaListDTO.class);
         assertThat(getResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(getResponse.hasBody()).isTrue();
-        assertThat(getResponse.getBody().roadMapMetaList().size()).isEqualTo(1);
+        assertThat(getResponse.getBody().roadmapMetaList().size()).isEqualTo(1);
     }
 
     @Test
     void getRoadmapMetaListForUserWithInvalidEmailShouldReturn404() {
-        String uri = "http://localhost:%s/api/roadmaps/gegerg/roadMapMetas".formatted(port);
+        String uri = "http://localhost:%s/api/roadmaps/gegerg/roadmapMetas".formatted(port);
 
         HttpClientErrorException exception = assertThrows(HttpClientErrorException.NotFound.class, () -> {
             restTemplate.exchange(uri, HttpMethod.GET, HttpEntity.EMPTY, Void.class);
@@ -121,16 +121,16 @@ class RoadMapControllerTest {
     }
 
     @Test
-    void shouldDeleteRoadMap() {
+    void shouldDeleteRoadmap() {
         String uri = "http://localhost:%s/api/roadmaps/%s".formatted(port, exchange.getBody().getId());
         ResponseEntity<Void> response = restTemplate.exchange(uri, HttpMethod.DELETE, HttpEntity.EMPTY, Void.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }
 
     @Test
-    void shouldReturn400WhenCreatingRoadMapWithEmptyName() throws IOException {
+    void shouldReturn400WhenCreatingRoadmapWithEmptyName() throws IOException {
         String uri = BASE_URL.formatted(port);
-        RoadMapDTO dto = TestHelper.createRoadMapDTO("", Paths.get("src/test/resources/java.json"));
+        RoadmapDTO dto = TestHelper.createRoadmapDTO("", Paths.get("src/test/resources/java.json"));
 
         try {
             ResponseEntity<Void> exchange = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(dto), Void.class);
@@ -141,9 +141,9 @@ class RoadMapControllerTest {
     }
 
     @Test
-    void shouldReturn400WhenCreatingRoadMapWithEmptyRoadmap() {
+    void shouldReturn400WhenCreatingRoadmapWithEmptyRoadmap() {
         String uri = BASE_URL.formatted(port);
-        RoadMapDTO dto = new RoadMapDTO("Java", "", "My email", "", 10);
+        RoadmapDTO dto = new RoadmapDTO("Java", "", "My email", "", 10);
 
         try {
             ResponseEntity<Void> exchange = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(dto), Void.class);
@@ -154,9 +154,9 @@ class RoadMapControllerTest {
     }
 
     @Test
-    void shouldReturn400WhenCreatingRoadMapWithInvalidRoadmapData() throws IOException {
+    void shouldReturn400WhenCreatingRoadmapWithInvalidRoadmapData() throws IOException {
         String uri = BASE_URL.formatted(port);
-        RoadMapDTO dto = TestHelper.createRoadMapDTO("JavaScript", Paths.get("src/test/resources/javascript.json"));
+        RoadmapDTO dto = TestHelper.createRoadmapDTO("JavaScript", Paths.get("src/test/resources/javascript.json"));
 
         try {
             ResponseEntity<Void> exchange = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(dto), Void.class);
@@ -169,13 +169,13 @@ class RoadMapControllerTest {
     @Test
     void shouldAddRoadmapMetaToFavoritesForExistingUser() {
         User user = new User("Edward", "edwardsemail@gmail.com", new ArrayList<>());
-        RoadMapMeta roadMapMeta = new RoadMapMeta("Java", "1245", "anotherEmail@gmail.com", "Beginner", 50);
+        RoadmapMeta roadmapMeta = new RoadmapMeta("Java", "1245", "anotherEmail@gmail.com", "Beginner", 50);
 
         String uriForCreateUser = "http://localhost:%s/api/user".formatted(port);
         restTemplate.exchange(uriForCreateUser, HttpMethod.POST, new HttpEntity<>(user), User.class);
 
         String uri = "http://localhost:%s/api/roadmaps/%s/favorites".formatted(port, user.getEmail());
-        ResponseEntity<UserFavoritesDTO> exchange = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(roadMapMeta), UserFavoritesDTO.class);
+        ResponseEntity<UserFavoritesDTO> exchange = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(roadmapMeta), UserFavoritesDTO.class);
 
         assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(exchange.getHeaders().getLocation()).isNotNull();
