@@ -67,6 +67,19 @@ public class RoadmapController {
         return ResponseEntity.created(uri).body(userFavorites);
     }
 
+    @DeleteMapping("/{userEmail}/favorites")
+    public ResponseEntity<Void> removeRoadmapMetaFromFavorites(@PathVariable String userEmail, @RequestBody RoadmapMeta roadmapMeta) {
+        User user = userService.getUserByEmail(userEmail);
+
+        if (user == null) {
+            throw new UserNotFoundException("User not found for email: " + userEmail);
+        }
+
+        UserFavoritesDTO userFavorites = service.removeRoadmapFromFavorites(user, roadmapMeta);
+
+        return ResponseEntity.noContent().build();
+    }
+
     @PostMapping
     public ResponseEntity<RoadmapMeta> createRoadmap(@RequestBody RoadmapDTO roadmapDTO){
         RoadmapMeta roadmapMeta = service.createRoadmap(roadmapDTO);
