@@ -61,23 +61,23 @@ public class RoadmapController {
             throw new UserNotFoundException("User not found for email: " + userEmail);
         }
 
-        UserFavoritesDTO userFavorites = service.addRoadmapToFavorites(user, roadmapMeta);
+        UserFavoritesDTO userFavorites = service.addRoadmapMetaToFavorites(user, roadmapMeta);
 
         URI uri = URI.create("/api/roadmaps" + user.getEmail() + "/favorites" + roadmapMeta.getRoadmapReferenceId());
         return ResponseEntity.created(uri).body(userFavorites);
     }
 
     @DeleteMapping("/{userEmail}/favorites")
-    public ResponseEntity<Void> removeRoadmapMetaFromFavorites(@PathVariable String userEmail, @RequestBody RoadmapMeta roadmapMeta) {
+    public ResponseEntity<UserFavoritesDTO> removeRoadmapMetaFromFavorites(@PathVariable String userEmail, @RequestBody RoadmapMeta roadmapMeta) {
         User user = userService.getUserByEmail(userEmail);
 
         if (user == null) {
             throw new UserNotFoundException("User not found for email: " + userEmail);
         }
 
-        UserFavoritesDTO userFavorites = service.removeRoadmapFromFavorites(user, roadmapMeta);
+        UserFavoritesDTO userFavorites = service.removeRoadmapMetaFromFavorites(user, roadmapMeta);
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(userFavorites);
     }
 
     @PostMapping

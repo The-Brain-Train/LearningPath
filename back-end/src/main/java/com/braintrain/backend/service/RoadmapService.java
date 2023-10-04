@@ -52,11 +52,23 @@ public class RoadmapService {
         metaRepo.deleteById(id);
     }
 
-    public UserFavoritesDTO addRoadmapToFavorites(User user, RoadmapMeta roadmapMeta) {
+    public UserFavoritesDTO addRoadmapMetaToFavorites(User user, RoadmapMeta roadmapMeta) {
         List<RoadmapMeta> favorites = user.getFavorites();
 
         if (!favorites.contains(roadmapMeta)) {
             favorites.add(roadmapMeta);
+            user.setFavorites(favorites);
+            userRepo.save(user);
+        }
+
+        return new UserFavoritesDTO(user.getFavorites());
+    }
+
+    public UserFavoritesDTO removeRoadmapMetaFromFavorites(User user, RoadmapMeta roadmapMeta) {
+        List<RoadmapMeta> favorites = user.getFavorites();
+
+        if (favorites.contains(roadmapMeta)) {
+            favorites.remove(roadmapMeta);
             user.setFavorites(favorites);
             userRepo.save(user);
         }
@@ -81,6 +93,7 @@ public class RoadmapService {
             throw new IllegalArgumentException("Roadmap has an invalid data structure");
         }
     }
+
 
 
 }
