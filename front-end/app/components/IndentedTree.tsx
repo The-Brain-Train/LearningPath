@@ -48,7 +48,10 @@ const IndentedTree = ({
       );
       console.log(response);
       const jsonData = await JSON.parse(response.choices[0].message.content);
-      setData(jsonData);
+      console.log("test json respose: " + JSON.stringify(jsonData));
+      const updatedJsonData = updateValues(jsonData);
+      setData(updatedJsonData);
+
     } catch (error) {
       setCreateError(
         `Unable to generate roadmap. Please try again. Error: ${error}`
@@ -58,6 +61,21 @@ const IndentedTree = ({
       setLoading(false);
     }
   };
+
+  const updateValues = (jsonData: any) => {
+    let grandTotal = 0;
+    for (let i = 0; i < jsonData.children.length; i++) {
+      let chapter = jsonData.children[i];
+      let total = 0;
+      for (let j = 0; j < chapter.children.length; j++) {
+        total = total + chapter.children[j].value;
+      }
+      grandTotal = grandTotal + total;
+      chapter.value = total;
+    }
+    jsonData.value = grandTotal;
+    return jsonData;
+  }
 
   const graph = () => {
     d3.select(svgRef.current).selectAll("*").remove();
@@ -154,8 +172,8 @@ const IndentedTree = ({
         .attr("x", x)
         .attr("text-anchor", "end")
         .attr("fill", (d) => (d.children ? null : "#cbd5e1"))
-        .data(root.copy().sum(value).descendants())
-        .text((d) => format(d.value, d));
+        .data(root.copy().descendants())
+        .text((d) => format(d.data.value, d));
     }
   };
 
