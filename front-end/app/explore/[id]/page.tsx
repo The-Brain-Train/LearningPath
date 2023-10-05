@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 
 type Props = {
   params: {
-    roadmapId: string;
+    id: string;
   };
 };
 
