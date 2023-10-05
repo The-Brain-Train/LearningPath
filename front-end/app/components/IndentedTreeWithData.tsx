@@ -112,8 +112,8 @@ const IndentedTreeWithData = ({ data }: IndentedTreeProps) => {
         .attr("x", x)
         .attr("text-anchor", "end")
         .attr("fill", (d) => (d.children ? null : "#cbd5e1"))
-        .data(root.copy().sum(value).descendants())
-        .text((d) => format(d.value, d));
+        .data(root.copy().descendants())
+        .text((d) => format(d.data.value, d));
     }
   };
 
