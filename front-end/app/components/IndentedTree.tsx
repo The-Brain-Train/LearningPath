@@ -12,7 +12,7 @@ import { Button, CircularProgress } from "@mui/material";
 type IndentedTreeProps = {
   topic: string | null;
   experienceLevel: string | null;
-  hours: number | null;
+  hours: number;
   userEmail: string | null | undefined;
 };
 
@@ -26,6 +26,7 @@ const IndentedTree = ({
   const svgRef = useRef(null);
   const [isLoading, setLoading] = useState(false);
   const [createError, setCreateError] = useState<string | null>(null);
+  const [totalHours, setTotalHours] = useState(0);
 
   const saveRoadMap = async () => {
     if (topic == null || userEmail == null) return;
@@ -34,7 +35,7 @@ const IndentedTree = ({
       roadmap: JSON.stringify(data),
       userEmail: userEmail,
       experienceLevel: experienceLevel,
-      hours: hours,
+      hours: totalHours
     };
     postRoadmap(requestData);
   };
@@ -46,12 +47,14 @@ const IndentedTree = ({
       const response = await getResponseFromOpenAI(
         chatHistory(topic, experienceLevel, hours)
       );
-      console.log(response);
+      console.log(JSON.stringify(response));
       const jsonData = await JSON.parse(response.choices[0].message.content);
-      console.log("test json respose: " + JSON.stringify(jsonData));
-      const updatedJsonData = updateValues(jsonData);
-      setData(updatedJsonData);
-
+      console.log("original json respose: " + JSON.stringify(jsonData));
+      const updatedJsonData = calculateTotalAndSubTotalValues(jsonData);
+      const scaledJsonData = scaleValues(hours, updatedJsonData);
+      const correctJsonData = calculateTotalAndSubTotalValues(scaledJsonData);
+      console.log("corrected json respose: " + JSON.stringify(correctJsonData));
+      setData(correctJsonData);
     } catch (error) {
       setCreateError(
         `Unable to generate roadmap. Please try again. Error: ${error}`
@@ -62,11 +65,17 @@ const IndentedTree = ({
     }
   };
 
-  const updateValues = (jsonData: any) => {
+  const calculateTotalAndSubTotalValues = (jsonData: any) => {
     let grandTotal = 0;
+    console.log("jsonData.children: " + jsonData.children);
     for (let i = 0; i < jsonData.children.length; i++) {
       let chapter = jsonData.children[i];
       let total = 0;
+      console.log("chapter.children : " + chapter.children)
+      if(!chapter.children) {
+        total = chapter.value;
+        continue;
+      }
       for (let j = 0; j < chapter.children.length; j++) {
         total = total + chapter.children[j].value;
       }
@@ -74,7 +83,20 @@ const IndentedTree = ({
       chapter.value = total;
     }
     jsonData.value = grandTotal;
+    setTotalHours(grandTotal);
     return jsonData;
+  }
+
+  const scaleValues = (userInputHours: number, jsonData: any) => {
+      console.log("ratio generatedTotal:userInput = " + jsonData.value + " : " + userInputHours);
+      const scalingFactor = userInputHours/ jsonData.value ;
+      for (let i = 0; i < jsonData.children.length; i++) {
+        let chapter = jsonData.children[i];
+        for (let j = 0; j < chapter.children.length; j++) {
+           chapter.children[j].value = Math.round(chapter.children[j].value * scalingFactor);
+        }
+      }
+      return jsonData;
   }
 
   const graph = () => {
@@ -172,6 +194,7 @@ const IndentedTree = ({
         .attr("x", x)
         .attr("text-anchor", "end")
         .attr("fill", (d) => (d.children ? null : "#cbd5e1"))
+        .attr("font-weight", (d) => (d.height == 0 ? 100: 900))
         .data(root.copy().descendants())
         .text((d) => format(d.data.value, d));
     }
