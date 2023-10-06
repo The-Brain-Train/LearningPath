@@ -11,7 +11,6 @@ export const chatHistory = (topic: string | null, experienceLevel: string | null
         "children": [],
       }
       in the last set of children in the data there should be a '"value": provide hours for task' that represents the hours for that task. These combined should equal around ${hours} hours.
-      The total sum of "value": should be exactly equal to ${hours} hours, it should not exceed ${hours} hours or should not less than ${hours} hours.
       ` },
   ];
 };
