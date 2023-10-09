@@ -1,14 +1,17 @@
 import Link from "next/link";
 import { PersonalRoadmapCardProps } from "../types";
-import DeleteModal from "./DeleteModal";
 import { generateStarsforExperienceLevel } from "../functions/generateStarsForExperience";
+import Delete from "@mui/icons-material/Delete";
 
 export default function PersonalRoadmapCard({
   roadmapMeta,
   handleDelete,
 }: PersonalRoadmapCardProps) {
+  const handleDeleteClick = () => {
+    handleDelete(roadmapMeta);
+  };
   return (
-    <li className="shadow-md w-full border-t-2 border-opacity-100 dark:border-opacity-50 bg-slate-300" >
+    <li className="shadow-md w-full border-t-2 border-opacity-100 dark:border-opacity-50 bg-slate-300">
       <div className="flex items-center p-2">
         <Link
           className="text-left overflow-hidden flex flex-1 justify-center items-center"
@@ -26,12 +29,8 @@ export default function PersonalRoadmapCard({
             </p>
           </div>
         </Link>
-        <div className="flex-shrink-0 min-w-max flex">
-          
-          <DeleteModal
-            id={roadmapMeta.id}
-            onDelete={(id) => handleDelete(id)}
-          />
+        <div className="flex-shrink-0 min-w-max flex mx-2 cursor-pointer">
+          <Delete id={roadmapMeta.id} onClick={handleDeleteClick} />
         </div>
       </div>
     </li>

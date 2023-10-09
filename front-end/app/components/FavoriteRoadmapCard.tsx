@@ -2,10 +2,15 @@ import Link from "next/link";
 import { FavoriteRoadmapCardProps } from "../types";
 import { generateStarsforExperienceLevel } from "../functions/generateStarsForExperience";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import { RemoveCircle, RemoveCircleOutline } from "@mui/icons-material";
 
 export default function FavoriteRoadmapCard({
   roadmapMeta,
+  removeFavorite,
 }: FavoriteRoadmapCardProps) {
+  const handleRemoveFavoriteClick = () => {
+    removeFavorite(roadmapMeta);
+  };
   return (
     <li className="shadow-md w-full border-t-2 border-opacity-100 dark:border-opacity-50 bg-slate-300">
       <div className="flex items-center p-2">
@@ -25,8 +30,8 @@ export default function FavoriteRoadmapCard({
             </p>
           </div>
         </Link>
-        <div className="flex-shrink-0 min-w-max flex">
-          <FavoriteIcon />
+        <div className="flex-shrink-0 min-w-max flex mx-2 cursor-pointer">
+          <RemoveCircle onClick={handleRemoveFavoriteClick} />
         </div>
       </div>
     </li>
