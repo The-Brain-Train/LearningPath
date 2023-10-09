@@ -112,9 +112,36 @@ export const addRoadmapMetaToUserFavorites = async (
       }
     );
     if (!res.ok) {
-      throw new Error(`Failed to add user. Status code: ${res.status}`);
+      throw new Error(
+        `Failed to add roadmap to favorites. Status code: ${res.status}`
+      );
     }
   } catch (error) {
-    console.error("Error adding user to DB:", error);
+    console.error("Error adding roadmap to favorites:", error);
+  }
+};
+
+export const removeRoadmapMetaFromUserFavorites = async (
+  userEmail: string | null | undefined,
+  roadmapMeta: RoadmapMeta
+) => {
+  try {
+    const res = await fetch(
+      `http://localhost:8080/api/roadmaps/${userEmail}/favorites`,
+      {
+        method: "DELETE",
+        body: JSON.stringify(roadmapMeta),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!res.ok) {
+      throw new Error(
+        `Failed to remove roadmap from favorties. Status code: ${res.status}`
+      );
+    }
+  } catch (error) {
+    console.error("Error removing roadmap from favorites:", error);
   }
 };
