@@ -4,17 +4,18 @@ export type RoadmapMeta = {
   roadmapReferenceId: string;
   userEmail: string;
   experienceLevel: string;
-  hours: number
+  hours: number;
 };
 
 export type PersonalRoadmapCardProps = {
   roadmapMeta: RoadmapMeta;
-  handleDelete: (id: string) => Promise<void>
-}
+  handleDelete: (roadmapMeta: RoadmapMeta) => void;
+};
 
 export type FavoriteRoadmapCardProps = {
   roadmapMeta: RoadmapMeta;
-}
+  removeFavorite: (roadmapMeta: RoadmapMeta) => void;
+};
 
 export type RoadmapMetaList = {
   roadmapMetaList: RoadmapMeta[];
