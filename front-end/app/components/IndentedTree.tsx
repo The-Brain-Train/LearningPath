@@ -50,11 +50,14 @@ const IndentedTree = ({
       console.log(JSON.stringify(response));
       const jsonData = await JSON.parse(response.choices[0].message.content);
       console.log("original json respose: " + JSON.stringify(jsonData));
-      const updatedJsonData = calculateTotalAndSubTotalValues(jsonData);
-      const scaledJsonData = scaleValues(hours, updatedJsonData);
-      const correctJsonData = calculateTotalAndSubTotalValues(scaledJsonData);
-      console.log("corrected json respose: " + JSON.stringify(correctJsonData));
-      setData(correctJsonData);
+
+      calculateTotalValuesRecursive(jsonData)
+      const scaledJsonData = scaleValues(hours, jsonData);
+      calculateTotalValuesRecursive(scaledJsonData);
+
+      setTotalHours(scaledJsonData.value);
+      setData(scaledJsonData);
+
     } catch (error) {
       setCreateError(
         `Unable to generate roadmap. Please try again. Error: ${error}`
@@ -65,38 +68,35 @@ const IndentedTree = ({
     }
   };
 
-  const calculateTotalAndSubTotalValues = (jsonData: any) => {
-    let grandTotal = 0;
-    console.log("jsonData.children: " + jsonData.children);
-    for (let i = 0; i < jsonData.children.length; i++) {
-      let chapter = jsonData.children[i];
-      let total = 0;
-      console.log("chapter.children : " + chapter.children)
-      if(!chapter.children) {
-        total = chapter.value;
-        continue;
-      }
-      for (let j = 0; j < chapter.children.length; j++) {
-        total = total + chapter.children[j].value;
-      }
-      grandTotal = grandTotal + total;
-      chapter.value = total;
+  const calculateTotalValuesRecursive = (jsonData: any) => {
+    if (!jsonData.children || jsonData.children.length === 0) {
+      return jsonData.value;
     }
-    jsonData.value = grandTotal;
-    setTotalHours(grandTotal);
-    return jsonData;
+    let total = 0;
+    for (let i = 0; i < jsonData.children.length; i++) {
+      total = total + calculateTotalValuesRecursive(jsonData.children[i]);
+    }
+    jsonData.value = total;
+    return total;
   }
 
   const scaleValues = (userInputHours: number, jsonData: any) => {
       console.log("ratio generatedTotal:userInput = " + jsonData.value + " : " + userInputHours);
       const scalingFactor = userInputHours/ jsonData.value ;
-      for (let i = 0; i < jsonData.children.length; i++) {
-        let chapter = jsonData.children[i];
-        for (let j = 0; j < chapter.children.length; j++) {
-           chapter.children[j].value = Math.round(chapter.children[j].value * scalingFactor);
-        }
-      }
+      scaleValuesRecursive(scalingFactor, jsonData);
+      console.log("Scaled output: " + JSON.stringify(jsonData));
       return jsonData;
+  }
+
+  const scaleValuesRecursive = (scalingFactor: number, jsonData: any) => {
+    if (!jsonData.children || jsonData.children.length === 0) {
+      jsonData.value = Math.round(jsonData.value * scalingFactor);
+      return jsonData;
+    }
+    for (let i = 0; i < jsonData.children.length; i++) {
+      let chapter = jsonData.children[i];
+      scaleValuesRecursive(scalingFactor, chapter);
+    }
   }
 
   const graph = () => {
