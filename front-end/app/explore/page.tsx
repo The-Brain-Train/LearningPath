@@ -10,6 +10,7 @@ import {
   addRoadmapMetaToUserFavorites,
   getRoadmaps,
   getUserFavorites,
+  removeRoadmapMetaFromUserFavorites,
 } from "../functions/httpRequests";
 import { RoadmapMeta, RoadmapMetaList } from "../types";
 import { generateStarsforExperienceLevel } from "../functions/generateStarsForExperience";
@@ -48,7 +49,21 @@ export default function Explore() {
     }
   };
 
-  const handleAddToFavorite = async (roadmapMeta: RoadmapMeta) => {
+  const handleRemoveFromFavorites = async (roadmapMeta: RoadmapMeta) => {
+    try {
+      await removeRoadmapMetaFromUserFavorites(
+        session?.user?.email,
+        roadmapMeta
+      );
+      setFavorites((prevFavorites) =>
+        prevFavorites.filter((favorite) => favorite.id !== roadmapMeta.id)
+      );
+    } catch (error) {
+      console.error("Error removing roadmap from favorites:", error);
+    }
+  };
+
+  const handleAddToFavorites = async (roadmapMeta: RoadmapMeta) => {
     try {
       await addRoadmapMetaToUserFavorites(session?.user?.email, roadmapMeta);
       setFavorites((prevFavorites) => [...prevFavorites, roadmapMeta]);
@@ -190,7 +205,11 @@ export default function Explore() {
                 </div>
               </Link>
               <span
-                onClick={() => handleAddToFavorite(roadmap)}
+                onClick={() =>
+                  favorites.some((favorite) => favorite.id === roadmap.id)
+                    ? handleRemoveFromFavorites(roadmap)
+                    : handleAddToFavorites(roadmap)
+                }
                 style={{ cursor: "pointer" }}
               >
                 {favorites.some((favorite) => favorite.id === roadmap.id) ? (
