@@ -139,7 +139,6 @@ export default function Explore() {
           </Tooltip>
         </Button>
       </div>
-
       <div style={{ maxWidth: "300px", width: "80%" }}>
         {showFilters && (
           <div
@@ -180,44 +179,47 @@ export default function Explore() {
               className=" rounded-lg shadow-md text-white"
               style={{ backgroundColor: "#141832" }}
             >
-              <Link
-                className="text-left overflow-hidden flex justify-between"
-                href={`/explore/${roadmap.id}`}
-              >
-                <div className="flex items-center px-2 py-1">
-                  <p className="overflow-ellipsis overflow-hidden whitespace-nowrap">
-                    {roadmap.name}
-                  </p>
-                </div>
-                <div className="flex items-center flex-col px-2 py-1">
-                  <p className="overflow-ellipsis overflow-hidden whitespace-nowrap">
-                    <Tooltip title={roadmap.experienceLevel} arrow>
-                      <span>
-                        {generateStarsforExperienceLevel(
-                          roadmap.experienceLevel
-                        )}
-                      </span>
-                    </Tooltip>
-                  </p>
-                  <p className="overflow-ellipsis overflow-hidden whitespace-nowrap">
-                    {roadmap.hours} hours
-                  </p>
-                </div>
-              </Link>
-              <span
-                onClick={() =>
-                  favorites.some((favorite) => favorite.id === roadmap.id)
-                    ? handleRemoveFromFavorites(roadmap)
-                    : handleAddToFavorites(roadmap)
-                }
-                style={{ cursor: "pointer" }}
-              >
-                {favorites.some((favorite) => favorite.id === roadmap.id) ? (
-                  <FavoriteIcon />
-                ) : (
-                  <FavoriteBorderIcon />
-                )}
-              </span>
+              <div className="flex items-center">
+                <Link
+                  className="text-left overflow-hidden flex justify-between flex-1"
+                  href={`/explore/${roadmap.id}`}
+                >
+                  <div className="flex items-center px-2 py-1">
+                    <p className="overflow-ellipsis overflow-hidden whitespace-nowrap">
+                      {roadmap.name}
+                    </p>
+                  </div>
+                  <div className="flex items-center flex-col px-2 py-1">
+                    <p className="overflow-ellipsis overflow-hidden whitespace-nowrap">
+                      <Tooltip title={roadmap.experienceLevel} arrow>
+                        <span>
+                          {generateStarsforExperienceLevel(
+                            roadmap.experienceLevel
+                          )}
+                        </span>
+                      </Tooltip>
+                    </p>
+                    <p className="overflow-ellipsis overflow-hidden whitespace-nowrap">
+                      {roadmap.hours} hours
+                    </p>
+                  </div>
+                </Link>
+                <span
+                className="mx-2"
+                  onClick={() =>
+                    favorites.some((favorite) => favorite.id === roadmap.id)
+                      ? handleRemoveFromFavorites(roadmap)
+                      : handleAddToFavorites(roadmap)
+                  }
+                  style={{ cursor: "pointer" }}
+                >
+                  {favorites.some((favorite) => favorite.id === roadmap.id) ? (
+                    <FavoriteIcon />
+                  ) : (
+                    <FavoriteBorderIcon />
+                  )}
+                </span>
+              </div>
             </li>
           ))}
         </ul>
