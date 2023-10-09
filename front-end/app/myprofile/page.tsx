@@ -5,18 +5,16 @@ import {
   deleteRoadmap,
   getUserFavorites,
   getUsersRoadmapMetas,
+  removeRoadmapMetaFromUserFavorites,
 } from "../functions/httpRequests";
 import { useSession } from "next-auth/react";
 import { RoadmapMeta, RoadmapMetaList } from "../types";
-import Link from "next/link";
-import DeleteModal from "../components/DeleteModal";
 import {
   Accordion,
   AccordionHeader,
   AccordionBody,
 } from "@material-tailwind/react";
 import PersonalRoadmapCard from "../components/PersonalRoadmapCard";
-import { generateStarsforExperienceLevel } from "../functions/generateStarsForExperience";
 import FavoriteRoadmapCard from "../components/FavoriteRoadmapCard";
 
 function Icon({ id, open }: { id: string | number; open: number }) {
@@ -50,13 +48,13 @@ const page = () => {
 
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
 
-  const handleDelete = async (id: string) => {
-    await deleteRoadmap(id);
+  const handleDelete = async (roadmapMeta: RoadmapMeta) => {
+    await deleteRoadmap(roadmapMeta.id);
     setUserRoadmaps((prevRoadmaps) => {
       if (!prevRoadmaps) return prevRoadmaps;
       return {
         roadmapMetaList: prevRoadmaps.roadmapMetaList?.filter(
-          (roadmap) => roadmap.id !== id
+          (roadmap) => roadmap.id !== roadmapMeta.id
         ),
       };
     });
@@ -76,6 +74,20 @@ const page = () => {
     }
     const favoriteRoadmaps = await getUserFavorites(session?.user?.email);
     setFavorites(favoriteRoadmaps);
+  };
+
+  const handleRemoveFromFavorites = async (roadmapMeta: RoadmapMeta) => {
+    try {
+      await removeRoadmapMetaFromUserFavorites(
+        session?.user?.email,
+        roadmapMeta
+      );
+      setFavorites((prevFavorites) =>
+        prevFavorites.filter((favorite) => favorite.id !== roadmapMeta.id)
+      );
+    } catch (error) {
+      console.error("Error removing roadmap from favorites:", error);
+    }
   };
 
   useEffect(() => {
@@ -120,7 +132,11 @@ const page = () => {
           <AccordionBody>
             <ul className="flex flex-col justify-center">
               {favorites.map((roadmapMeta, index) => (
-                <FavoriteRoadmapCard roadmapMeta={roadmapMeta} key={index} />
+                <FavoriteRoadmapCard
+                  removeFavorite={handleRemoveFromFavorites}
+                  roadmapMeta={roadmapMeta}
+                  key={index}
+                />
               ))}
             </ul>
           </AccordionBody>
