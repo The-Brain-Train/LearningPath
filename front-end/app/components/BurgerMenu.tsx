@@ -13,12 +13,16 @@ import CloseIcon from '@mui/icons-material/Close';
 import LogoutIcon from '@mui/icons-material/Logout';
 import LoginIcon from '@mui/icons-material/Login';
 import { useSession } from "next-auth/react";
+import { useCookies } from 'react-cookie';
+import jwtDecode from "jwt-decode";
 
 
 export default function BurgerMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const router = useRouter();
   const isOpen = Boolean(anchorEl);
+  const [cookies, setCookie] = useCookies(["user"]);
+  var user = jwtDecode(cookies.user);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -89,6 +93,12 @@ export default function BurgerMenu() {
         </MenuItem>
         <MenuItem onClick={() => router.push("/myprofile")}>
           <AccountCircleIcon /> <p className='pl-2'>My Profile</p>
+        </MenuItem>
+        <MenuItem onClick={() => router.push("/signin")}>
+          <AccountCircleIcon /> <p className='pl-2'>Sign in</p>
+        </MenuItem>
+        <MenuItem onClick={() => router.push("/")}>
+          <AccountCircleIcon /> <p className='pl-2'>Sign out</p>
         </MenuItem>
       </Menu>
 
