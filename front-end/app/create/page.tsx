@@ -2,7 +2,6 @@
 import { useState } from "react";
 import IndentedTree from "../components/IndentedTree";
 import InputForm from "../components/InputForm";
-import { useSession } from "next-auth/react";
 
 
 export default function  Create() {
@@ -10,7 +9,6 @@ export default function  Create() {
   const [experienceLevel, setExperienceLevel] = useState<string| null>(null);
   const [topic, setTopic] = useState<string | null>(null);
 
-  const {data: session} = useSession();
 
   const resetForm = () => {
     setHours(null);

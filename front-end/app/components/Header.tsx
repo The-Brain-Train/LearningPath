@@ -1,26 +1,10 @@
 "use client";
 import BurgerMenu from "./BurgerMenu";
-import Image from "next/image"
 import Link from "next/link";
 
-type HeaderProp = {
-  userImage: string | null | undefined;
-}
 
-export default function Header({userImage}: HeaderProp) {
 
-  const userPic = userImage ? (
-    <Link href="/myprofile">
-      <Image
-        className="dark:border-slate-500 drop-shadow-xl shadow-black rounded-full mx-auto"
-        src={userImage}
-        width={40}
-        height={40}
-        alt={"Profile Pic"}
-        priority={true}
-      />
-  </Link>
-) : null
+export default function Header() {
 
 
   return (
@@ -48,7 +32,6 @@ export default function Header({userImage}: HeaderProp) {
             </span>
           </Link>
           <div className="flex flex-row">
-          {userPic}
           <BurgerMenu />
           </div>
         </div>

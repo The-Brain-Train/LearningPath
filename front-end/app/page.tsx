@@ -1,10 +1,6 @@
 "use client";
 import Link from "next/link";
 import TextAnimation from "./components/TextAnimation";
-import { useSession } from "next-auth/react";
-import { User } from "./types";
-import { useEffect } from "react";
-import { addUser } from "./functions/httpRequests";
 import CreateIcon from "@mui/icons-material/Create";
 import ThumbsUpDownIcon from '@mui/icons-material/ThumbsUpDown';
 import SaveIcon from '@mui/icons-material/Save';
@@ -19,18 +15,7 @@ const topSectionButtonStyles = (backgroundImageUrl: string) => ({
 });
 
 export default function Home() {
-  const { data: session, status } = useSession();
-
-  const user: User = {
-    email: session?.user?.email!,
-    name: session?.user?.name!,
-  };
-
-  useEffect(() => {
-    if (status === "authenticated") {
-      addUser(user);
-    }
-  }, [status]);
+ 
 
   return (
     <main className="main-background">

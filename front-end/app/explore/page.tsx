@@ -19,7 +19,6 @@ import { Button } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { useSession } from "next-auth/react";
 
 export default function Explore() {
   const [roadmaps, setRoadmaps] = useState<RoadmapMeta[]>([]);
@@ -30,7 +29,6 @@ export default function Explore() {
   const [showFilters, setShowFilters] = useState(false);
   const [favorites, setFavorites] = useState<RoadmapMeta[]>([]);
 
-  const { data: session, status } = useSession();
 
   const fetchRoadmaps = async () => {
     const roadmaps = await getRoadmaps();
