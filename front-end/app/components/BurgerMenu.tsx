@@ -22,7 +22,18 @@ export default function BurgerMenu() {
   const router = useRouter();
   const isOpen = Boolean(anchorEl);
   const [cookies, setCookie] = useCookies(["user"]);
-  var user = jwtDecode(cookies.user);
+
+  if (cookies.user) {
+    var user = jwtDecode(cookies.user);
+  }
+  
+  const [, , removeCookie] = useCookies(["user"]);
+  const handleSignOut = () => {
+    removeCookie("user", {
+      path: "/"
+    });
+    router.push("/")
+  };
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -97,11 +108,10 @@ export default function BurgerMenu() {
         <MenuItem onClick={() => router.push("/signin")}>
           <AccountCircleIcon /> <p className='pl-2'>Sign in</p>
         </MenuItem>
-        <MenuItem onClick={() => router.push("/")}>
+        <MenuItem onClick={handleSignOut}>
           <AccountCircleIcon /> <p className='pl-2'>Sign out</p>
         </MenuItem>
       </Menu>
-
     </React.Fragment>
   );
 }
