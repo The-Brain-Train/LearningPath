@@ -20,8 +20,6 @@ export default function BurgerMenu() {
   const router = useRouter();
   const isOpen = Boolean(anchorEl);
 
-  const { data: session, status } = useSession();
-
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -92,15 +90,6 @@ export default function BurgerMenu() {
         <MenuItem onClick={() => router.push("/myprofile")}>
           <AccountCircleIcon /> <p className='pl-2'>My Profile</p>
         </MenuItem>
-        {session ? (
-          <MenuItem onClick={() => router.push("/api/auth/signout")}>
-            <LogoutIcon /> <p className='pl-2'>Sign Out</p>
-          </MenuItem>
-        ) : (
-          <MenuItem onClick={() => router.push("/api/auth/signin")}>
-            <LoginIcon /> <p className='pl-2'>Sign In</p>
-          </MenuItem>
-        )}
       </Menu>
 
     </React.Fragment>
