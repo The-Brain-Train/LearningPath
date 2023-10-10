@@ -6,15 +6,14 @@ import { User } from "../types";
 
 const Profile = () => {
   const [cookies, setCookie] = useCookies(["user"]);
-  var currentUser: User | null = null;
+  const [currentUser, setCurrentUser] = useState<User | null>(null)
 
-  if (cookies.user) {
-    currentUser = jwtDecode(cookies.user);
-  }
-
-  useEffect(()=> {
-    console.log(currentUser);
-  }, [currentUser])
+  useEffect(() => {
+    if (cookies.user) {
+      const decodedUser = jwtDecode(cookies.user) as User;
+      setCurrentUser(decodedUser);
+    }
+  }, [cookies.user]);
 
   return (
     <div className="mt-20">
