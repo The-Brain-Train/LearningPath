@@ -1,6 +1,7 @@
 'use client'
 import React, { useState } from 'react';
 import { useCookies } from 'react-cookie';
+import { useRouter } from "next/navigation";
 // import Cookies from 'js-cookie'
 
 const Signin = () => {
@@ -9,6 +10,7 @@ const Signin = () => {
     password: '',
   });
   const [cookies, setCookie] = useCookies(["user"]);
+  const router = useRouter(); 
 
   const handleInputChange = (e: { target: { name: any; value: any; }; }) => {
     const { name, value } = e.target;
@@ -35,6 +37,7 @@ const Signin = () => {
         });
         console.log('Form data submitted successfully:', formData);
         console.log(cookies.user);
+        router.push('/');
       } else {
 
         console.error('Error submitting form data:', response.statusText);

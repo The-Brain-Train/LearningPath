@@ -9,10 +9,9 @@ import ExploreIcon from "@mui/icons-material/Explore";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useRouter } from "next/navigation";
 import MenuIcon from '@mui/icons-material/Menu';
-import CloseIcon from '@mui/icons-material/Close'; 
+import CloseIcon from '@mui/icons-material/Close';
 import LogoutIcon from '@mui/icons-material/Logout';
 import LoginIcon from '@mui/icons-material/Login';
-import { useSession } from "next-auth/react";
 import { useCookies } from 'react-cookie';
 import jwtDecode from "jwt-decode";
 
@@ -105,12 +104,15 @@ export default function BurgerMenu() {
         <MenuItem onClick={() => router.push("/myprofile")}>
           <AccountCircleIcon /> <p className='pl-2'>My Profile</p>
         </MenuItem>
-        <MenuItem onClick={() => router.push("/signin")}>
-          <AccountCircleIcon /> <p className='pl-2'>Sign in</p>
-        </MenuItem>
-        <MenuItem onClick={handleSignOut}>
-          <AccountCircleIcon /> <p className='pl-2'>Sign out</p>
-        </MenuItem>
+        {cookies.user ? (
+          <MenuItem onClick={handleSignOut}>
+            <LoginIcon /> <p className='pl-2'>Sign Out</p>
+          </MenuItem>
+        ) : (
+          <MenuItem onClick={() => router.push("/signin")}>
+            <LogoutIcon /> <p className='pl-2'>Sign In</p>
+          </MenuItem>
+        )}
       </Menu>
     </React.Fragment>
   );
