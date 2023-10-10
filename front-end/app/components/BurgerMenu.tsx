@@ -27,6 +27,7 @@ export default function BurgerMenu() {
   }
   
   const [, , removeCookie] = useCookies(["user"]);
+  
   const handleSignOut = () => {
     removeCookie("user", {
       path: "/"

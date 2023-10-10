@@ -1,11 +1,23 @@
 "use client";
 import BurgerMenu from "./BurgerMenu";
 import Link from "next/link";
-
+import { useCookies } from 'react-cookie';
+import jwtDecode from "jwt-decode";
+import { User } from "../types";
+import { useState, useEffect } from "react";
 
 
 export default function Header() {
 
+  const [cookies, setCookie] = useCookies(["user"]);
+  const [currentUser, setCurrentUser] = useState<User | null>(null)
+
+  useEffect(() => {
+    if (cookies.user) {
+      const decodedUser = jwtDecode(cookies.user) as User;
+      setCurrentUser(decodedUser);
+    }
+  }, [cookies.user]);
 
   return (
     <>
@@ -32,7 +44,8 @@ export default function Header() {
             </span>
           </Link>
           <div className="flex flex-row">
-          <BurgerMenu />
+          <p>{currentUser.name}</p>
+            <BurgerMenu />
           </div>
         </div>
       </header>
