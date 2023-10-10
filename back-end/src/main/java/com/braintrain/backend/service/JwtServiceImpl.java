@@ -68,8 +68,8 @@ public class JwtServiceImpl implements JwtService{
     public String generateToken(User user){
         Map<String,Object> claims=new HashMap<>();
         claims.put("name", user.getName());
-        claims.put("role", user.getRole());
-        return createToken(claims,user.getUsername());
+        claims.put("email", user.getEmail());
+        return createToken(claims);
     }
 
 //    private String createToken(Map<String, Object> claims, String userName) {
@@ -81,10 +81,9 @@ public class JwtServiceImpl implements JwtService{
 //                .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
 //    }
 
-    private String createToken(Map<String, Object> claims, String userName) {
+    private String createToken(Map<String, Object> claims) {
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(userName)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis()+1000*60*30))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
