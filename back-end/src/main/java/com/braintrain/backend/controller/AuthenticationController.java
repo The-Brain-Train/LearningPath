@@ -25,13 +25,3 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.signin(request));
     }
 }
-
-
-
-
-
-
-
-
-
-

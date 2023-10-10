@@ -1,5 +1,7 @@
 package com.braintrain.backend.service;
 
+import com.braintrain.backend.model.Role;
+import com.braintrain.backend.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -58,10 +60,26 @@ public class JwtServiceImpl implements JwtService{
     }
 
 
-    public String generateToken(UserDetails userDetails){
+//    public String generateToken(UserDetails userDetails){
+//        Map<String,Object> claims=new HashMap<>();
+//        return createToken(claims,userDetails.getUsername());
+//    }
+
+    public String generateToken(User user){
         Map<String,Object> claims=new HashMap<>();
-        return createToken(claims,userDetails.getUsername());
+        claims.put("name", user.getName());
+        claims.put("role", user.getRole());
+        return createToken(claims,user.getUsername());
     }
+
+//    private String createToken(Map<String, Object> claims, String userName) {
+//        return Jwts.builder()
+//                .setClaims(claims)
+//                .setSubject(userName)
+//                .setIssuedAt(new Date(System.currentTimeMillis()))
+//                .setExpiration(new Date(System.currentTimeMillis()+1000*60*30))
+//                .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
+//    }
 
     private String createToken(Map<String, Object> claims, String userName) {
         return Jwts.builder()
