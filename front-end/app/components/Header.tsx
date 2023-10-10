@@ -44,7 +44,7 @@ export default function Header() {
             </span>
           </Link>
           <div className="flex flex-row">
-          <p>{currentUser.name}</p>
+          {currentUser?.name && <p>{currentUser.name}</p>}
             <BurgerMenu />
           </div>
         </div>
