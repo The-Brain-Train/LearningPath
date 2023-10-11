@@ -59,33 +59,19 @@ public class JwtServiceImpl implements JwtService{
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-
-//    public String generateToken(UserDetails userDetails){
-//        Map<String,Object> claims=new HashMap<>();
-//        return createToken(claims,userDetails.getUsername());
-//    }
-
     public String generateToken(User user){
         Map<String,Object> claims=new HashMap<>();
         claims.put("name", user.getName());
         claims.put("email", user.getEmail());
-        return createToken(claims);
+        return createToken(claims, user.getUsername());
     }
 
-//    private String createToken(Map<String, Object> claims, String userName) {
-//        return Jwts.builder()
-//                .setClaims(claims)
-//                .setSubject(userName)
-//                .setIssuedAt(new Date(System.currentTimeMillis()))
-//                .setExpiration(new Date(System.currentTimeMillis()+1000*60*30))
-//                .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
-//    }
-
-    private String createToken(Map<String, Object> claims) {
+    private String createToken(Map<String, Object> claims, String userName) {
         return Jwts.builder()
                 .setClaims(claims)
+                .setSubject(userName)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+1000*60*30))
+                .setExpiration(new Date(System.currentTimeMillis()+1000*60*300))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
     }
 
