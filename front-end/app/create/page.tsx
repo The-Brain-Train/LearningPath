@@ -2,12 +2,16 @@
 import { useState } from "react";
 import IndentedTree from "../components/IndentedTree";
 import InputForm from "../components/InputForm";
+import { useCookies } from "react-cookie";
+import { User } from "../types";
 
 
 export default function  Create() {
   const [hours, setHours] = useState<number | null>(null);
   const [experienceLevel, setExperienceLevel] = useState<string| null>(null);
   const [topic, setTopic] = useState<string | null>(null);
+  const [cookies, setCookie] = useCookies(["user"]);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
 
   const resetForm = () => {
@@ -19,7 +23,7 @@ export default function  Create() {
   return (
     <main className="main-background">
       <InputForm setTopic={setTopic} setHours={setHours} setExperienceLevel={setExperienceLevel} resetForm={resetForm}/>
-      <IndentedTree topic={topic} experienceLevel={experienceLevel} hours={hours} userEmail={session?.user?.email} />
+      <IndentedTree topic={topic} experienceLevel={experienceLevel} hours={hours} userEmail={currentUser?.email} />
     </main>
   );
 }
