@@ -52,14 +52,18 @@ export const postRoadmap = async (roadmap: RoadmapDTO) => {
   }
 };
 
-export const getUsersRoadmapMetas = async (userEmail: string) => {
+export const getUsersRoadmapMetas = async (userEmail: string, token: any) => {
   const response = await fetch(
-    `http://localhost:8080/api/roadmaps/${userEmail}/roadmapMetas`
-  );
+    `http://localhost:8080/api/roadmaps/${userEmail}/roadmapMetas`,{
+      headers: {
+        "Authorization": "Bearer " + token, 
+      }
+    });
   if (!response.ok) {
     throw new Error("Failed to fetch roadmaps");
   }
   const data: RoadmapMetaList = await response.json();
+  console.log(data);
   return data;
 };
 
