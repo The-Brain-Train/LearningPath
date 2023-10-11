@@ -18,12 +18,6 @@ const topSectionButtonStyles = (backgroundImageUrl: string) => ({
 });
 
 export default function Home() {
-  const [cookies, setCookie] = useCookies(["user"]);
-
-  if (cookies.user) {
-    var user = jwtDecode(cookies.user);
-  }
-
   return (
     <main className="main-background">
       <section className="flex flex-col p-3 gap-2 mt-5">
