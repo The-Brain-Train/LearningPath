@@ -30,22 +30,16 @@ public class User  implements UserDetails {
     public User(String name, String email) {
         this.name = name;
         this.email = email;
-    }
-
-    public User(String name, String email, List<RoadmapMeta> favorites) {
-        this.name = name;
-        this.email = email;
         this.favorites = new ArrayList<>();
     }
 
-    public User(String name, String password, String email, Role role) {
+    public User(String name, String password, String email) {
         this.name = name;
+        this.password = password;
         this.email = email;
         this.role = Role.USER;
-        this.password = password;
+        this.favorites = new ArrayList<>();
     }
-
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

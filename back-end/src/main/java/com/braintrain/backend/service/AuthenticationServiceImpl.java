@@ -25,7 +25,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final AuthenticationManager authenticationManager;
     @Override
     public JwtAuthenticationResponse signup(SignUpRequest request) {
-        User user = new User(request.getName(), passwordEncoder.encode(request.getPassword()), request.getEmail(), Role.USER);
+        User user = new User(request.getName(), passwordEncoder.encode(request.getPassword()), request.getEmail());
 
         userRepository.save(user);
         var jwt = jwtService.generateToken(user);
