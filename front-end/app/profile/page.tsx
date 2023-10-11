@@ -4,6 +4,7 @@ import { useCookies } from "react-cookie";
 import jwtDecode from "jwt-decode";
 import { RoadmapMeta, User } from "../types";
 import { RoadmapMetaList } from "../types";
+import { useRouter } from "next/navigation";
 import {
   deleteRoadmap,
   getUserFavorites,
@@ -43,6 +44,7 @@ function Icon({ id, open }: { id: string | number; open: number }) {
 const Profile = () => {
   const [cookies, setCookie] = useCookies(["user"]);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const router = useRouter();
   const [userRoadmaps, setUserRoadmaps] = useState<RoadmapMetaList | undefined>(
     undefined
   );
@@ -107,7 +109,7 @@ const Profile = () => {
 
   const handleRemoveFromFavorites = async (roadmapMeta: RoadmapMeta) => {
     try {
-      await removeRoadmapMetaFromUserFavorites(currentUser?.email, roadmapMeta);
+      await removeRoadmapMetaFromUserFavorites(currentUser?.email, roadmapMeta, cookies.user);
       setFavorites((prevFavorites) =>
         prevFavorites.filter((favorite) => favorite.id !== roadmapMeta.id)
       );
@@ -118,57 +120,72 @@ const Profile = () => {
 
   return (
     <>
-      <main className="main-background min-h-max ">
-        <div className="flex items-center flex-col pb-3">
-          {currentUser && <UserCard user={currentUser} />}
-        </div>
-        <div className="mx-2">
-          <Accordion open={open === 1} icon={<Icon id={1} open={open} />}>
-            <AccordionHeader
-              onClick={() => handleOpen(1)}
-              className="p-3 dark:border-opacity-50 text-white"
-              style={{ backgroundColor: "#141832" }}
-            >
-              <h2>My Roadmaps</h2>
-            </AccordionHeader>
-            <AccordionBody>
-              <ul className="flex flex-col justify-center">
-                {userRoadmaps?.roadmapMetaList.map((roadmapMeta, index) => (
-                  <PersonalRoadmapCard
-                    roadmapMeta={roadmapMeta}
-                    key={index}
-                    handleDelete={handleDelete}
-                  />
-                ))}
-              </ul>
-            </AccordionBody>
-          </Accordion>
-          <Accordion open={open === 2} icon={<Icon id={2} open={open} />}>
-            <AccordionHeader
-              onClick={() => handleOpen(2)}
-              className="p-3 dark:border-opacity-50 text-white"
-              style={{ backgroundColor: "#141832" }}
-            >
-              My Favourites
-            </AccordionHeader>
-            <AccordionBody>
-              {favorites ? (
+      {currentUser ? (
+        <main className="main-background min-h-max ">
+          <div className="flex items-center flex-col pb-3">
+            {currentUser && <UserCard user={currentUser} />}
+          </div>
+          <div className="mx-2">
+            <Accordion open={open === 1} icon={<Icon id={1} open={open} />}>
+              <AccordionHeader
+                onClick={() => handleOpen(1)}
+                className="p-3 dark:border-opacity-50 text-white"
+                style={{ backgroundColor: "#141832" }}
+              >
+                <h2>My Roadmaps</h2>
+              </AccordionHeader>
+              <AccordionBody>
                 <ul className="flex flex-col justify-center">
-                  {favorites.map((roadmapMeta, index) => (
-                    <FavoriteRoadmapCard
-                      removeFavorite={handleRemoveFromFavorites}
+                  {userRoadmaps?.roadmapMetaList.map((roadmapMeta, index) => (
+                    <PersonalRoadmapCard
                       roadmapMeta={roadmapMeta}
                       key={index}
+                      handleDelete={handleDelete}
                     />
                   ))}
                 </ul>
-              ) : (
-                <p className="text-slate-300">Your favorites list is empty.</p>
-              )}
-            </AccordionBody>
-          </Accordion>
+              </AccordionBody>
+            </Accordion>
+            <Accordion open={open === 2} icon={<Icon id={2} open={open} />}>
+              <AccordionHeader
+                onClick={() => handleOpen(2)}
+                className="p-3 dark:border-opacity-50 text-white"
+                style={{ backgroundColor: "#141832" }}
+              >
+                My Favourites
+              </AccordionHeader>
+              <AccordionBody>
+                {favorites ? (
+                  <ul className="flex flex-col justify-center">
+                    {favorites.map((roadmapMeta, index) => (
+                      <FavoriteRoadmapCard
+                        removeFavorite={handleRemoveFromFavorites}
+                        roadmapMeta={roadmapMeta}
+                        key={index}
+                      />
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-slate-300">
+                    Your favorites list is empty.
+                  </p>
+                )}
+              </AccordionBody>
+            </Accordion>
+          </div>
+        </main>
+      ) : (
+        <div className="main-background min-h-max  text-center items-center pt-20 rounded-lg font-bold text-xl text-white ">
+          <p>Please sign in to view your profile.</p>
+          <button
+            className="bg-transparent hover:bg-emerald-600text-lg text-white font-bold border-2 p-2 border-white rounded "
+            style={{ backgroundColor: "#141832" }}
+            onClick={() => router.push("/signin")}
+          >
+            Sign In
+          </button>
         </div>
-      </main>
+      )}
     </>
   );
 };
