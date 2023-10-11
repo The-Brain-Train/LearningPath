@@ -20,9 +20,13 @@ export const getRoadmaps = async (token: any) => {
   return data;
 };
 
-export const getRoadmap = async (roadMapId: string) => {
+export const getRoadmap = async (roadMapId: string, token: any) => {
   const response = await fetch(
-    `http://localhost:8080/api/roadmaps/${roadMapId}`
+    `http://localhost:8080/api/roadmaps/${roadMapId}`, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }
   );
   if (!response.ok) {
     throw new Error("Failed to fetch roadmaps");
