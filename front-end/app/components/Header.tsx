@@ -16,6 +16,8 @@ export default function Header() {
     if (cookies.user) {
       const decodedUser = jwtDecode(cookies.user) as User;
       setCurrentUser(decodedUser);
+    } else {
+      setCurrentUser(null);
     }
   }, [cookies.user]);
 
@@ -44,7 +46,7 @@ export default function Header() {
             </span>
           </Link>
           <div className="flex flex-row">
-          {currentUser?.name && <p>{currentUser.name}</p>}
+          {currentUser ? <p>{currentUser.name}</p> : null}
             <BurgerMenu />
           </div>
         </div>
