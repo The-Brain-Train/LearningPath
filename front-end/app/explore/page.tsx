@@ -12,13 +12,15 @@ import {
   getUserFavorites,
   removeRoadmapMetaFromUserFavorites,
 } from "../functions/httpRequests";
-import { RoadmapMeta, RoadmapMetaList } from "../types";
+import { RoadmapMeta, RoadmapMetaList, User } from "../types";
 import { generateStarsforExperienceLevel } from "../functions/generateStarsForExperience";
 import TuneIcon from "@mui/icons-material/Tune";
 import { Button } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import { useCookies } from "react-cookie";
+import jwtDecode from "jwt-decode";
 
 export default function Explore() {
   const [roadmaps, setRoadmaps] = useState<RoadmapMeta[]>([]);
@@ -28,21 +30,24 @@ export default function Explore() {
   const [hoursFilter, setHoursFilter] = useState<number | null>(null);
   const [showFilters, setShowFilters] = useState(false);
   const [favorites, setFavorites] = useState<RoadmapMeta[]>([]);
-
+  const [cookies, setCookie] = useCookies(["user"]);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   const fetchRoadmaps = async () => {
-    const roadmaps = await getRoadmaps();
+    const roadmaps = await getRoadmaps(cookies.user);
     setRoadmaps(roadmaps.roadmapMetaList);
   };
 
   const fetchUserFavorites = async () => {
-    if (status === "authenticated") {
+    if (currentUser?.email) {
       try {
-        const userEmail = session?.user?.email;
-        const favoriteRoadmaps = await getUserFavorites(userEmail);
+        const favoriteRoadmaps = await getUserFavorites(
+          currentUser?.email,
+          cookies.user
+        );
         setFavorites(favoriteRoadmaps);
       } catch (error) {
-        console.error("Error fetching user favorites:", error);
+        console.error("Error fetching user roadmaps:", error);
       }
     }
   };
@@ -50,8 +55,9 @@ export default function Explore() {
   const handleRemoveFromFavorites = async (roadmapMeta: RoadmapMeta) => {
     try {
       await removeRoadmapMetaFromUserFavorites(
-        session?.user?.email,
-        roadmapMeta
+        currentUser?.email,
+        roadmapMeta,
+        cookies.user
       );
       setFavorites((prevFavorites) =>
         prevFavorites.filter((favorite) => favorite.id !== roadmapMeta.id)
@@ -63,7 +69,11 @@ export default function Explore() {
 
   const handleAddToFavorites = async (roadmapMeta: RoadmapMeta) => {
     try {
-      await addRoadmapMetaToUserFavorites(session?.user?.email, roadmapMeta);
+      await addRoadmapMetaToUserFavorites(
+        currentUser?.email,
+        roadmapMeta,
+        cookies.user
+      );
       setFavorites((prevFavorites) => [...prevFavorites, roadmapMeta]);
     } catch (error) {
       console.error("Error adding roadmap to favorites:", error);
@@ -73,14 +83,6 @@ export default function Explore() {
   const toggleFilters = () => {
     setShowFilters(!showFilters);
   };
-
-  useEffect(() => {
-    fetchRoadmaps();
-  }, []);
-
-  useEffect(() => {
-    fetchUserFavorites();
-  }, [session, status]);
 
   const filterRoadmaps = (roadmap: RoadmapMeta) => {
     if (experienceFilter && roadmap.experienceLevel !== experienceFilter) {
@@ -92,6 +94,27 @@ export default function Explore() {
     return true;
   };
 
+  const handleSearchChange = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const searchText = event.currentTarget.value;
+    setSearch(searchText);
+  };
+
+  useEffect(() => {
+    if (cookies.user) {
+      const decodedUser: User | null = jwtDecode(cookies.user);
+      setCurrentUser(decodedUser);
+    }
+    fetchRoadmaps();
+  }, [cookies.user]);
+
+  useEffect(() => {
+    if (currentUser) {
+      fetchUserFavorites();
+    }
+  }, [currentUser, cookies.user]);
+
   useEffect(() => {
     const filtered = roadmaps.filter(
       (roadmap) =>
@@ -100,13 +123,6 @@ export default function Explore() {
     );
     setFilteredRoadmaps(filtered);
   }, [search, roadmaps, experienceFilter, hoursFilter]);
-
-  const handleSearchChange = (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const searchText = event.currentTarget.value;
-    setSearch(searchText);
-  };
 
   return (
     <main className="main-background min-h-max flex items-center flex-col">
@@ -203,7 +219,7 @@ export default function Explore() {
                   </div>
                 </Link>
                 <span
-                className="mx-2"
+                  className="mx-2"
                   onClick={() =>
                     favorites.some((favorite) => favorite.id === roadmap.id)
                       ? handleRemoveFromFavorites(roadmap)
