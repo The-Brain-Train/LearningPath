@@ -45,9 +45,9 @@ const Profile = () => {
           <h2>Hi {currentUser.name}, you are signed in with the email {currentUser.email}</h2>
           <h3>My Roadmaps</h3>
           {userRoadmaps ? (
-            userRoadmaps.roadmapMetaList.map((roadmapMeta: RoadmapMeta) => {
-              <p>{roadmapMeta.name}</p>
-            })
+            userRoadmaps.roadmapMetaList.map((roadmapMeta: RoadmapMeta, index) => (
+              <p key={index}>{roadmapMeta.name}</p>
+            ))
           ): (
             <p>Loading Roadmaps</p>
           )}
