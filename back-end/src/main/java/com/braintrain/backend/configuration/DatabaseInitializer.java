@@ -38,7 +38,7 @@ public class DatabaseInitializer {
             for (String name : startingData) {
                 String path = String.format("src/main/resources/%s.json", name);
                 JsonNode jsonNode = objectMapper.readTree(new File(path));
-                service.createRoadmap(new RoadmapDTO(name, objectMapper.writeValueAsString(jsonNode), "lukewilliams10101@gmail.com", "beginner", 50));
+                service.createRoadmap(new RoadmapDTO(name, objectMapper.writeValueAsString(jsonNode), "123@gmail.com", "beginner", 50));
             }
 
         };
