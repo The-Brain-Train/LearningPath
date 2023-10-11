@@ -1,99 +1,18 @@
 "use client";
-
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
-import { getResponseFromOpenAI } from "../functions/openAIChat";
 import SaveButton from "./SaveButton";
-import { postRoadmap } from "../functions/httpRequests";
-import { RoadmapDTO, User } from "../types";
-import { chatHistory } from "../functions/chatPreHistory";
 import { Button, CircularProgress } from "@mui/material";
-
-
-type IndentedTreeProps = {
-  topic: string | null;
-  experienceLevel: string | null;
-  hours: number;
-  userEmail: string | null | undefined;
-};
+import { IndentedTreeProps } from "../types";
 
 const IndentedTree = ({
-  topic,
-  experienceLevel,
-  hours,
-  userEmail,
+  data,
+  isLoading,
+  createError,
+  saveRoadmap,
+  setData,
 }: IndentedTreeProps) => {
-  const [data, setData] = useState(null);
   const svgRef = useRef(null);
-  const [isLoading, setLoading] = useState(false);
-  const [createError, setCreateError] = useState<string | null>(null);
-  const [totalHours, setTotalHours] = useState(0);
-
-  const saveRoadMap = async () => {
-    if (topic == null || userEmail == null) return;
-    const requestData: RoadmapDTO = {
-      name: topic,
-      roadmap: JSON.stringify(data),
-      userEmail: userEmail,
-      experienceLevel: experienceLevel,
-      hours: totalHours
-    };
-    postRoadmap(requestData);
-  };
-
-  const handleSendMessage = async () => {
-    setLoading(true);
-    try {
-      const response = await getResponseFromOpenAI(
-        chatHistory(topic, experienceLevel, hours)
-      );
-      const jsonData = await JSON.parse(response.choices[0].message.content);
-
-      calculateTotalValuesRecursive(jsonData)
-      const scaledJsonData = scaleValues(hours, jsonData);
-      calculateTotalValuesRecursive(scaledJsonData);
-
-      setTotalHours(scaledJsonData.value);
-      setData(scaledJsonData);
-
-    } catch (error) {
-      setCreateError(
-        `Unable to generate roadmap. Please try again. Error: ${error}`
-      );
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const calculateTotalValuesRecursive = (jsonData: any) => {
-    if (!jsonData.children || jsonData.children.length === 0) {
-      return jsonData.value;
-    }
-    let total = 0;
-    for (let i = 0; i < jsonData.children.length; i++) {
-      total = total + calculateTotalValuesRecursive(jsonData.children[i]);
-    }
-    jsonData.value = total;
-    return total;
-  }
-
-  const scaleValues = (userInputHours: number, jsonData: any) => {
-      const scalingFactor = userInputHours/ jsonData.value ;
-      scaleValuesRecursive(scalingFactor, jsonData);
-      return jsonData;
-  }
-
-  const scaleValuesRecursive = (scalingFactor: number, jsonData: any) => {
-    if (!jsonData.children || jsonData.children.length === 0) {
-      jsonData.value = Math.round(jsonData.value * scalingFactor);
-      return jsonData;
-    }
-    for (let i = 0; i < jsonData.children.length; i++) {
-      let chapter = jsonData.children[i];
-      scaleValuesRecursive(scalingFactor, chapter);
-    }
-  }
 
   const graph = () => {
     d3.select(svgRef.current).selectAll("*").remove();
@@ -190,17 +109,11 @@ const IndentedTree = ({
         .attr("x", x)
         .attr("text-anchor", "end")
         .attr("fill", (d) => (d.children ? null : "#cbd5e1"))
-        .attr("font-weight", (d) => (d.height == 0 ? 100: 900))
+        .attr("font-weight", (d) => (d.height == 0 ? 100 : 900))
         .data(root.copy().descendants())
         .text((d) => format(d.data.value, d));
     }
   };
-
-  useEffect(() => {
-    if (topic != null) {
-      handleSendMessage();
-    }
-  }, [topic]);
 
   useEffect(() => {
     if (data == null) return;
@@ -218,13 +131,13 @@ const IndentedTree = ({
     <div className="flex flex-col px-3">
       {isLoading ? (
         <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "70vh",
-        }}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "70vh",
+          }}
         >
           <div className="text-center font-bold text-xl text-slate-300">
             Creating Roadmap
@@ -257,7 +170,7 @@ const IndentedTree = ({
               <svg className="overflow-hidden pb-10" ref={svgRef}></svg>
               {data !== null && (
                 <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 flex justify-center gap-3">
-                  <SaveButton saveClick={saveRoadMap} />
+                  <SaveButton saveClick={saveRoadmap} />
                   <Button
                     onClick={() => {
                       setData(null);
