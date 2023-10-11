@@ -9,6 +9,7 @@ import { RoadmapDTO, User } from "../types";
 import { chatHistory } from "../functions/chatPreHistory";
 import { Button, CircularProgress } from "@mui/material";
 
+
 type IndentedTreeProps = {
   topic: string | null;
   experienceLevel: string | null;
@@ -43,13 +44,10 @@ const IndentedTree = ({
   const handleSendMessage = async () => {
     setLoading(true);
     try {
-      console.log(hours, experienceLevel, topic);
       const response = await getResponseFromOpenAI(
         chatHistory(topic, experienceLevel, hours)
       );
-      console.log(JSON.stringify(response));
       const jsonData = await JSON.parse(response.choices[0].message.content);
-      console.log("original json respose: " + JSON.stringify(jsonData));
 
       calculateTotalValuesRecursive(jsonData)
       const scaledJsonData = scaleValues(hours, jsonData);
@@ -81,10 +79,8 @@ const IndentedTree = ({
   }
 
   const scaleValues = (userInputHours: number, jsonData: any) => {
-      console.log("ratio generatedTotal:userInput = " + jsonData.value + " : " + userInputHours);
       const scalingFactor = userInputHours/ jsonData.value ;
       scaleValuesRecursive(scalingFactor, jsonData);
-      console.log("Scaled output: " + JSON.stringify(jsonData));
       return jsonData;
   }
 

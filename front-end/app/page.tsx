@@ -24,11 +24,6 @@ export default function Home() {
     var user = jwtDecode(cookies.user);
   }
 
-  useEffect(() => {
-    console.log(user);
-  }, [])
- 
-
   return (
     <main className="main-background">
       <section className="flex flex-col p-3 gap-2 mt-5">

@@ -15,22 +15,14 @@ const Signup = () => {
 
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
-  
     try {
-      const response = await fetch('http://localhost:8080/api/auth/signup', {
+      await fetch('http://localhost:8080/api/auth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
       });
-  
-      if (response.ok) {
-        console.log('Form data submitted successfully:', formData);
-      } else {
-
-        console.error('Error submitting form data:', response.statusText);
-      }
     } catch (error) {
       console.error('Error:', error);
     }

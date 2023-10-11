@@ -1,5 +1,4 @@
 export const chatHistory = (topic: string | null, experienceLevel: string | null, hours: number | null) => {
-  console.log("hours inside chatHistory: " + hours)
   return [
     {
       role: "user",
