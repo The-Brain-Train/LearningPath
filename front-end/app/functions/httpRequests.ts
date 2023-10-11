@@ -54,11 +54,13 @@ export const postRoadmap = async (roadmap: RoadmapDTO) => {
 
 export const getUsersRoadmapMetas = async (userEmail: string, token: any) => {
   const response = await fetch(
-    `http://localhost:8080/api/roadmaps/${userEmail}/roadmapMetas`,{
+    `http://localhost:8080/api/roadmaps/${userEmail}/roadmapMetas`,
+    {
       headers: {
-        "Authorization": "Bearer " + token, 
-      }
-    });
+        Authorization: "Bearer " + token,
+      },
+    }
+  );
   if (!response.ok) {
     throw new Error("Failed to fetch roadmaps");
   }
@@ -87,16 +89,20 @@ export const addUser = async (user: User) => {
   }
 };
 
-export const getUserFavorites = async (
-  userEmail: string | null | undefined
-) => {
+export const getUserFavorites = async (userEmail: string, token: any) => {
   const response = await fetch(
-    `http://localhost:8080/api/users/${userEmail}/favorites`
+    `http://localhost:8080/api/users/${userEmail}/favorites`,
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }
   );
   if (!response.ok) {
     throw new Error("Failed to fetch user favorites");
   }
   const data = await response.json();
+  console.log(data.favorites);
   return data.favorites;
 };
 

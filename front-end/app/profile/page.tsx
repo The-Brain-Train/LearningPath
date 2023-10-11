@@ -4,7 +4,7 @@ import { useCookies } from "react-cookie";
 import jwtDecode from "jwt-decode";
 import { RoadmapMeta, User } from "../types";
 import { RoadmapMetaList } from "../types";
-import { getUsersRoadmapMetas } from "../functions/httpRequests";
+import { getUserFavorites, getUsersRoadmapMetas } from "../functions/httpRequests";
 
 const Profile = () => {
   const [cookies, setCookie] = useCookies(["user"]);
@@ -12,6 +12,29 @@ const Profile = () => {
   const [userRoadmaps, setUserRoadmaps] = useState<RoadmapMetaList | undefined>(
     undefined
   );
+  const [favorites, setFavorites] = useState<RoadmapMeta[]>([]);
+
+  const fetchUserRoadmaps = async () => {
+    try {
+      if (currentUser?.email) { 
+        const roadmapMetas = await getUsersRoadmapMetas(currentUser.email, cookies.user);
+        setUserRoadmaps(roadmapMetas);
+      }
+    } catch (error) {
+      console.error("Error fetching user roadmaps:", error);
+    }
+  };
+
+  const fetchUserFavorites = async () => {
+    try {
+      if (currentUser?.email) { 
+        const favoriteRoadmaps = await getUserFavorites(currentUser?.email, cookies.user);
+        setFavorites(favoriteRoadmaps);
+      }
+    } catch (error) {
+      console.error("Error fetching user roadmaps:", error);
+    }
+  };
 
   useEffect(() => {
     if (cookies.user) {
@@ -21,19 +44,8 @@ const Profile = () => {
   }, [cookies.user]);
 
   useEffect(() => {
-    const fetchUserRoadmaps = async () => {
-      try {
-        if (currentUser?.email) { 
-          const roadmapMetas = await getUsersRoadmapMetas(currentUser.email, cookies.user);
-          setUserRoadmaps(roadmapMetas);
-          console.log(userRoadmaps)
-        }
-      } catch (error) {
-        console.error("Error fetching user roadmaps:", error);
-      }
-    };
-  
     fetchUserRoadmaps();
+    fetchUserFavorites();
   }, [currentUser, cookies.user]);
 
   return (
