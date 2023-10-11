@@ -6,8 +6,13 @@ import {
   RoadmapMeta,
 } from "../types";
 
-export const getRoadmaps = async () => {
-  const response = await fetch(`http://localhost:8080/api/roadmaps`);
+export const getRoadmaps = async (token: any) => {
+  const response = await fetch(`http://localhost:8080/api/roadmaps`,
+  {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  });
   if (!response.ok) {
     throw Error("Failed to fetch roadmaps");
   }
@@ -65,7 +70,6 @@ export const getUsersRoadmapMetas = async (userEmail: string, token: any) => {
     throw new Error("Failed to fetch roadmaps");
   }
   const data: RoadmapMetaList = await response.json();
-  console.log(data);
   return data;
 };
 
@@ -102,13 +106,13 @@ export const getUserFavorites = async (userEmail: string, token: any) => {
     throw new Error("Failed to fetch user favorites");
   }
   const data = await response.json();
-  console.log(data.favorites);
   return data.favorites;
 };
 
 export const addRoadmapMetaToUserFavorites = async (
   userEmail: string | null | undefined,
-  roadmapMeta: RoadmapMeta
+  roadmapMeta: RoadmapMeta,
+  token: any
 ) => {
   try {
     const res = await fetch(
@@ -118,6 +122,7 @@ export const addRoadmapMetaToUserFavorites = async (
         body: JSON.stringify(roadmapMeta),
         headers: {
           "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
         },
       }
     );
@@ -133,7 +138,8 @@ export const addRoadmapMetaToUserFavorites = async (
 
 export const removeRoadmapMetaFromUserFavorites = async (
   userEmail: string | null | undefined,
-  roadmapMeta: RoadmapMeta
+  roadmapMeta: RoadmapMeta,
+  token: any
 ) => {
   try {
     const res = await fetch(
@@ -143,6 +149,7 @@ export const removeRoadmapMetaFromUserFavorites = async (
         body: JSON.stringify(roadmapMeta),
         headers: {
           "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
         },
       }
     );
