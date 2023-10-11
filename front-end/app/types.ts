@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from "react";
+
 export type RoadmapMeta = {
   id: string;
   name: string;
@@ -49,4 +51,12 @@ export type UserProfile =
 
 export type UserCardProps = {
   user: UserProfile;
+};
+
+export type IndentedTreeProps = {
+  data: string | null,
+  isLoading: boolean,
+  createError: string | null,
+  saveRoadmap: () => Promise<void>
+  setData: Dispatch<SetStateAction<string | null>>
 };
