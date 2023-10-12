@@ -10,6 +10,8 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import { useCookies } from "react-cookie";
+import { useRouter } from "next/navigation";
 
 const Signin = () => {
   const [formData, setFormData] = React.useState({
@@ -17,17 +19,17 @@ const Signin = () => {
     password: "",
   });
   const [error, setError] = React.useState<string | null>(null);
+  const [cookies, setCookie] = useCookies(["user"]);
+  const router = useRouter();
 
-  const handleInputChange = (e: { target: { name: any; value: any; }; }) => {
+  const handleInputChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
- 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError(null);
-  
+
     try {
       const response = await fetch("http://localhost:8080/api/auth/signin", {
         method: "POST",
@@ -36,20 +38,28 @@ const Signin = () => {
         },
         body: JSON.stringify(formData),
       });
+
+      if (response.ok) {
+        const data = await response.json();
+        const token = data.token;
+        setCookie("user", token, {
+          path: "/",
+        });
+        router.push("/");
+      } else {
+        console.error("Error submitting form data:", response.statusText);
+      }
+
       if (response.status === 403) {
         setError("Invalid email or password. Please try again.");
         setTimeout(() => {
           setError(null);
-        }, 3000);
-      } else {
-        console.error("Error submitting form data:", response.statusText);
+        }, 5000);
       }
     } catch (error) {
       setError("An error occurred while signing in.");
     }
   };
-  
-  
 
   return (
     <Container component="main" maxWidth="xs">
@@ -93,13 +103,11 @@ const Signin = () => {
             value={formData.password}
             autoComplete="current-password"
           />
-
           {error && (
             <Typography variant="body2" color="error" sx={{ mt: 1 }}>
               {error}
             </Typography>
           )}
-
           <Button
             type="submit"
             fullWidth
