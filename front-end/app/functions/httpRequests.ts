@@ -6,13 +6,8 @@ import {
   RoadmapMeta,
 } from "../types";
 
-export const getRoadmaps = async (token: any) => {
-  const response = await fetch(`http://localhost:8080/api/roadmaps`,
-  {
-    headers: {
-      Authorization: "Bearer " + token,
-    },
-  });
+export const getRoadmaps = async () => {
+  const response = await fetch(`http://localhost:8080/api/roadmaps`);
   if (!response.ok) {
     throw Error("Failed to fetch roadmaps");
   }
@@ -20,14 +15,9 @@ export const getRoadmaps = async (token: any) => {
   return data;
 };
 
-export const getRoadmap = async (roadMapId: string, token: any) => {
+export const getRoadmap = async (roadMapId: string) => {
   const response = await fetch(
-    `http://localhost:8080/api/roadmaps/${roadMapId}`, {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    }
-  );
+    `http://localhost:8080/api/roadmaps/${roadMapId}`);
   if (!response.ok) {
     throw new Error("Failed to fetch roadmaps");
   }

@@ -34,7 +34,7 @@ export default function Explore() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   const fetchRoadmaps = async () => {
-    const roadmaps = await getRoadmaps(cookies.user);
+    const roadmaps = await getRoadmaps();
     setRoadmaps(roadmaps.roadmapMetaList);
   };
 
