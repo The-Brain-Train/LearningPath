@@ -3,7 +3,6 @@ package com.braintrain.backend.service;
 
 import com.braintrain.backend.exceptionHandler.EmailAlreadyExistsException;
 import com.braintrain.backend.exceptionHandler.UserNotFoundException;
-import com.braintrain.backend.model.Role;
 import com.braintrain.backend.model.User;
 import com.braintrain.backend.repository.UserRepository;
 import com.braintrain.backend.security.dao.JwtAuthenticationResponse;

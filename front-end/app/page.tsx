@@ -4,9 +4,6 @@ import TextAnimation from "./components/TextAnimation";
 import CreateIcon from "@mui/icons-material/Create";
 import ThumbsUpDownIcon from '@mui/icons-material/ThumbsUpDown';
 import SaveIcon from '@mui/icons-material/Save';
-import { useCookies } from 'react-cookie';
-import jwtDecode from "jwt-decode";
-import { useEffect } from "react";
 
 const topSectionButtonStyles = (backgroundImageUrl: string) => ({
   backgroundImage: `url(${backgroundImageUrl})`,

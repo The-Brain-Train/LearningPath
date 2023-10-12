@@ -1,6 +1,5 @@
 package com.braintrain.backend.service;
 
-import com.braintrain.backend.model.Role;
 import com.braintrain.backend.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
