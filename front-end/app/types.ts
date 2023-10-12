@@ -54,9 +54,10 @@ export type UserCardProps = {
 };
 
 export type IndentedTreeProps = {
-  data: string | null,
-  isLoading: boolean,
-  createError: string | null,
-  saveRoadmap: () => Promise<void>
-  setData: Dispatch<SetStateAction<string | null>>
+  data: string | null;
+  isLoading: boolean;
+  createError: string | null;
+  saveRoadmap: () => Promise<void>;
+  setData: Dispatch<SetStateAction<string | null>>;
+  currentUser: User | null
 };

@@ -48,8 +48,8 @@ function SaveButton({saveClick }: saveButtonProps) {
               Are you sure you want to Save?
             </Typography>
             <div className='flex justify-between'>
-              <Button onClick={handleClose}>no</Button>
-              <Button className='text-green-500	' onClick={handleClick}>yes</Button>
+              <Button onClick={handleClose}>No</Button>
+              <Button className='text-green-500	' onClick={handleClick}>Yes</Button>
             </div>
           </Box>
         </Modal>

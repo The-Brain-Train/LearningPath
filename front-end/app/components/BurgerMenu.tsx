@@ -32,7 +32,7 @@ export default function BurgerMenu() {
       removeCookie("user", {
         path: "/",
       });
-    }, 50);
+    }, 1000);
     router.push("/");
   };
 

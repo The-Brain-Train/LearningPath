@@ -34,7 +34,10 @@ export default function  Create() {
   };
 
   const saveRoadMap = async () => {
-    if (topic == null || currentUser?.email == null) return;
+    if (topic == null || currentUser?.email == null) {
+      return;
+    };
+
     const requestData: RoadmapDTO = {
       name: topic,
       roadmap: JSON.stringify(data),
@@ -109,7 +112,7 @@ export default function  Create() {
   return (
     <main className="main-background">
       <InputForm setTopic={setTopic} setHours={setHours} setExperienceLevel={setExperienceLevel} resetForm={resetForm}/>
-      <IndentedTree data={data} createError={createError} isLoading={isLoading} saveRoadmap={saveRoadMap} setData={setData} />
+      <IndentedTree data={data} createError={createError} isLoading={isLoading} saveRoadmap={saveRoadMap} setData={setData} currentUser={currentUser} />
     </main>
   );
 }

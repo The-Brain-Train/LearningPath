@@ -4,6 +4,7 @@ import * as d3 from "d3";
 import SaveButton from "./SaveButton";
 import { Button, CircularProgress } from "@mui/material";
 import { IndentedTreeProps } from "../types";
+import Link from "next/link";
 
 const IndentedTree = ({
   data,
@@ -11,6 +12,7 @@ const IndentedTree = ({
   createError,
   saveRoadmap,
   setData,
+  currentUser,
 }: IndentedTreeProps) => {
   const svgRef = useRef(null);
 
@@ -153,34 +155,40 @@ const IndentedTree = ({
           ) : (
             <>
               {data !== null ? (
-                <div className="flex content-between justify-between flex-nowrap">
-                  <p className="text-slate-300 pt-4 pl-2 font-bold">
-                    Learning Path
-                  </p>
-                  <p className="text-slate-300 pt-4 pr-2 font-bold">Hours</p>
-                </div>
+                <>
+                  <div className="flex content-between justify-between flex-nowrap">
+                    <p className="text-slate-300 pt-4 pl-2 font-bold">
+                      Learning Path
+                    </p>
+                    <p className="text-slate-300 pt-4 pr-2 font-bold">Hours</p>
+                  </div>
+                  <svg className="overflow-hidden pb-10" ref={svgRef}></svg>
+                  {currentUser ? (
+                    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 flex justify-center gap-3">
+                      <SaveButton saveClick={saveRoadmap} />
+                      <Button
+                        onClick={() => {
+                          setData(null);
+                          d3.select(svgRef.current).selectAll("*").remove();
+                        }}
+                        className="bg-red-500 hover-bg-red-600 py-2 px-4 rounded text-white"
+                      >
+                        Reset
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="text-white font-bold text-center mb-2">
+                      <p>You must <Link href="/signin" className="underline cursor-pointer">sign in</Link> to save roadmaps</p>
+                    </div>
+                  )}
+                </>
               ) : (
                 <p
-                  className="text-slate-300 font-bold flex flex-col justify-center items-center h-screen  "
+                  className="text-slate-300 font-bold flex flex-col justify-center items-center h-screen"
                   style={{ maxHeight: "90vw" }}
                 >
-                  Your RoadMap will be displayed Here!
+                  Your Roadmap will be displayed Here!
                 </p>
-              )}
-              <svg className="overflow-hidden pb-10" ref={svgRef}></svg>
-              {data !== null && (
-                <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 flex justify-center gap-3">
-                  <SaveButton saveClick={saveRoadmap} />
-                  <Button
-                    onClick={() => {
-                      setData(null);
-                      d3.select(svgRef.current).selectAll("*").remove();
-                    }}
-                    className="bg-red-500 hover:bg-red-600 py-2 px-4 rounded text-white"
-                  >
-                    Reset
-                  </Button>
-                </div>
               )}
             </>
           )}
