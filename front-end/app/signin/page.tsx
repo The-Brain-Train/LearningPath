@@ -4,33 +4,30 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { useCookies } from "react-cookie";
-import { useRouter } from "next/navigation";
-// import Cookies from 'js-cookie'
 
 const Signin = () => {
   const [formData, setFormData] = React.useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
-  const [cookies, setCookie] = useCookies(["user"]);
-  const router = useRouter();
+  const [error, setError] = React.useState<string | null>(null);
 
   const handleInputChange = (e: { target: { name: any; value: any; }; }) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+ 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError(null);
+  
     try {
       const response = await fetch("http://localhost:8080/api/auth/signin", {
         method: "POST",
@@ -39,20 +36,20 @@ const Signin = () => {
         },
         body: JSON.stringify(formData),
       });
-      if (response.ok) {
-        const data = await response.json();
-        const token = data.token;
-        setCookie("user", token, {
-          path: "/",
-        });
-        router.push("/");
+      if (response.status === 403) {
+        setError("Invalid email or password. Please try again.");
+        setTimeout(() => {
+          setError(null);
+        }, 3000);
       } else {
         console.error("Error submitting form data:", response.statusText);
       }
     } catch (error) {
-      console.error("Error:", error);
+      setError("An error occurred while signing in.");
     }
   };
+  
+  
 
   return (
     <Container component="main" maxWidth="xs">
@@ -96,10 +93,13 @@ const Signin = () => {
             value={formData.password}
             autoComplete="current-password"
           />
-          {/* <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          /> */}
+
+          {error && (
+            <Typography variant="body2" color="error" sx={{ mt: 1 }}>
+              {error}
+            </Typography>
+          )}
+
           <Button
             type="submit"
             fullWidth
@@ -109,11 +109,6 @@ const Signin = () => {
             Sign In
           </Button>
           <Grid container>
-            {/* <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid> */}
             <Grid item>
               <Link href="#" variant="body2">
                 {"Don't have an account? Sign Up"}
