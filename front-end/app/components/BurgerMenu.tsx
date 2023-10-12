@@ -28,9 +28,11 @@ export default function BurgerMenu() {
   const [, , removeCookie] = useCookies(["user"]);
 
   const handleSignOut = () => {
-    removeCookie("user", {
-      path: "/",
-    });
+    setTimeout(() => {
+      removeCookie("user", {
+        path: "/",
+      });
+    }, 50);
     router.push("/");
   };
 
