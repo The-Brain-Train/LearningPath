@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 
 const Signup = () => {
   const router = useRouter();
+  const [error, setError] = React.useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -46,6 +47,12 @@ const Signup = () => {
             router.push("/signin");
           },
         });
+      }
+      if (response.status == 409) {
+        setError("Email address already in use. Please sign in or use a different email.");
+        setTimeout(() => {
+          setError(null);
+        }, 6000);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -110,6 +117,11 @@ const Signup = () => {
               />
             </Grid>
           </Grid>
+          {error && (
+            <Typography variant="body2" color="error" sx={{ mt: 1 }}>
+              {error}
+            </Typography>
+          )}
           <Button
             type="submit"
             fullWidth
