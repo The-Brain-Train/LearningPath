@@ -5,6 +5,7 @@ import { useCookies } from 'react-cookie';
 import jwtDecode from "jwt-decode";
 import { User } from "../types";
 import { useState, useEffect } from "react";
+import AccountCircleSharpIcon from "@mui/icons-material/AccountCircleSharp";
 
 
 export default function Header() {
@@ -46,7 +47,12 @@ export default function Header() {
             </span>
           </Link>
           <div className="flex flex-row">
-          {currentUser ? <p>{currentUser.name}</p> : null}
+          {currentUser ? 
+          <Link href="/profile" className="flex gap-1 mr-3 items-center">
+            <AccountCircleSharpIcon style={{ width: '35px', height: '35px' }}/>
+            <p>{currentUser.name}</p>
+          </Link>
+           : null}
             <BurgerMenu />
           </div>
         </div>
