@@ -1,6 +1,7 @@
 package com.braintrain.backend.service;
 
 
+import com.braintrain.backend.exceptionHandler.EmailAlreadyExistsException;
 import com.braintrain.backend.exceptionHandler.UserNotFoundException;
 import com.braintrain.backend.model.Role;
 import com.braintrain.backend.model.User;
@@ -26,6 +27,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public JwtAuthenticationResponse signup(SignUpRequest request) {
         User user = new User(request.getName(), passwordEncoder.encode(request.getPassword()), request.getEmail());
+
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new EmailAlreadyExistsException("Email address already in use. Please choose a different email.");
+        }
 
         userRepository.save(user);
         var jwt = jwtService.generateToken(user);
