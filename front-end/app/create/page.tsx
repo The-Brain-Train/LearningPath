@@ -3,14 +3,14 @@ import { useEffect, useState } from "react";
 import IndentedTree from "../components/IndentedTree";
 import InputForm from "../components/InputForm";
 import { useCookies } from "react-cookie";
-import { RoadmapDTO, User } from "../types";
+import { RoadmapDTO, TreeNode, User } from "../types";
 import jwtDecode from "jwt-decode";
 import { postRoadmap } from "../functions/httpRequests";
 import { getResponseFromOpenAI } from "../functions/openAIChat";
 import { chatHistory } from "../functions/chatPreHistory";
 
 export default function  Create() {
-  const [data, setData] = useState<string | null>(null);
+  const [data, setData] = useState<TreeNode | null>(null);
   const [hours, setHours] = useState<number | null>(null);
   const [experienceLevel, setExperienceLevel] = useState<string | null>(null);
   const [topic, setTopic] = useState<string | null>(null);

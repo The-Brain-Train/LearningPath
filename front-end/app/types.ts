@@ -53,11 +53,25 @@ export type UserCardProps = {
   user: UserProfile;
 };
 
-export type IndentedTreeProps = {
-  data: string | null;
+export type CreateIndentedTreeProps = {
+  data: TreeNode | null;
   isLoading: boolean;
   createError: string | null;
   saveRoadmap: () => Promise<void>;
-  setData: Dispatch<SetStateAction<string | null>>;
+  setData: Dispatch<SetStateAction<TreeNode | null>>;
   currentUser: User | null
 };
+
+export type ExploreIndentedTreeProps = {
+  data: TreeNode | undefined;
+};
+
+export type TreeNode = {
+  name: string;
+  children: TreeNode[];
+  value: number;
+}
+
+export interface CustomNode extends d3.HierarchyPointNode<any> {
+  index: number;
+}

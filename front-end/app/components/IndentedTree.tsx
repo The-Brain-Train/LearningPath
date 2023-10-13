@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
 import SaveButton from "./SaveButton";
 import { Button, CircularProgress } from "@mui/material";
-import { IndentedTreeProps } from "../types";
+import { CustomNode, CreateIndentedTreeProps } from "../types";
 import Link from "next/link";
 
 const IndentedTree = ({
@@ -13,18 +13,18 @@ const IndentedTree = ({
   saveRoadmap,
   setData,
   currentUser,
-}: IndentedTreeProps) => {
-  const svgRef = useRef(null);
+}: CreateIndentedTreeProps) => {
+  const svgRef = useRef<SVGSVGElement | null>(null);
 
   const graph = () => {
+    if (data == null) return;
     d3.select(svgRef.current).selectAll("*").remove();
     const format = d3.format(",");
     const nodeSize = 21;
     const root = d3.hierarchy(data).eachBefore(
-      (
-        (i) => (d) =>
-          (d.index = i++)
-      )(0)
+      ((i) => (d) => {
+        (d as CustomNode).index = i++;
+      })(0)
     );
     const nodes = root.descendants();
 
@@ -34,7 +34,7 @@ const IndentedTree = ({
 
     const columns = [
       {
-        value: (d) => d.value,
+        value: (d: any) => d.value,
         format,
         x: screenWidth - 25,
       },
@@ -60,8 +60,8 @@ const IndentedTree = ({
       .attr(
         "d",
         (d) => `
-        M${d.source.depth * nodeSize},${d.source.index * nodeSize}
-        V${d.target.index * nodeSize}
+        M${(d).source.depth * nodeSize},${(d as any).source.index * nodeSize}
+        V${(d as any).target.index * nodeSize}
         h${nodeSize}
       `
       );
@@ -71,7 +71,7 @@ const IndentedTree = ({
       .selectAll()
       .data(nodes)
       .join("g")
-      .attr("transform", (d) => `translate(0,${d.index * nodeSize})`)
+      .attr("transform", (d) => `translate(0,${(d as CustomNode).index * nodeSize})`)
       .attr("fill", "#cbd5e1");
 
     node
@@ -95,7 +95,7 @@ const IndentedTree = ({
         .join("/")
     );
 
-    for (const { label, value, format, x } of columns) {
+    for (const { value, format, x } of columns) {
       svg
         .append("text")
         .attr("dy", "0.32em")
@@ -103,7 +103,7 @@ const IndentedTree = ({
         .attr("x", x)
         .attr("text-anchor", "end")
         .attr("font-weight", "bold")
-        .text(label);
+
 
       node
         .append("text")
@@ -113,7 +113,7 @@ const IndentedTree = ({
         .attr("fill", (d) => (d.children ? null : "#cbd5e1"))
         .attr("font-weight", (d) => (d.height == 0 ? 100 : 900))
         .data(root.copy().descendants())
-        .text((d) => format(d.data.value, d));
+        .text((d) => format(d.data.value));
     }
   };
 
@@ -178,7 +178,16 @@ const IndentedTree = ({
                     </div>
                   ) : (
                     <div className="text-white font-bold text-center mb-2">
-                      <p>You must <Link href="/signin" className="underline cursor-pointer">sign in</Link> to save roadmaps</p>
+                      <p>
+                        You must{" "}
+                        <Link
+                          href="/signin"
+                          className="underline cursor-pointer"
+                        >
+                          sign in
+                        </Link>{" "}
+                        to save roadmaps
+                      </p>
                     </div>
                   )}
                 </>
