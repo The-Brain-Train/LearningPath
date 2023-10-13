@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import jwtDecode from "jwt-decode";
 import { RoadmapMeta, User } from "../types";
@@ -19,7 +19,6 @@ import {
 } from "@material-tailwind/react";
 import PersonalRoadmapCard from "../components/PersonalRoadmapCard";
 import FavoriteRoadmapCard from "../components/FavoriteRoadmapCard";
-import { useMutation, useQuery, useQueryClient } from "react-query";
 
 function Icon({ id, open }: { id: string | number; open: number }) {
   return (
@@ -43,62 +42,81 @@ function Icon({ id, open }: { id: string | number; open: number }) {
 }
 
 const Profile = () => {
-  const [cookies] = useCookies(["user"]);
+  const [cookies, setCookie] = useCookies(["user"]);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const router = useRouter();
-  const [open, setOpen] = useState(0);
-  const queryClient = useQueryClient();
-
-  const { data: currentUser } = useQuery<User | null>("currentUser", async () => {
-    if (cookies.user) {
-      const user = jwtDecode(cookies.user) as User | null;
-      return user;
-    }
-    return null;
-  });
-
-  const { data: userRoadmaps } = useQuery<RoadmapMetaList | undefined>(
-    "userRoadmaps",
-    () => getUsersRoadmapMetas(currentUser?.email as string, cookies.user),
-    {
-      enabled: currentUser?.email !== null,
-    }
+  const [userRoadmaps, setUserRoadmaps] = useState<RoadmapMetaList | undefined>(
+    undefined
   );
+  const [favorites, setFavorites] = useState<RoadmapMeta[]>([]);
+  const [open, setOpen] = React.useState(0);
 
-  const { data: favorites } = useQuery<RoadmapMeta[]>("favorites", () =>
-    getUserFavorites(currentUser?.email as string, cookies.user),
-    {
-      enabled: currentUser?.email !== null,
-    }
-  );
-  
-  const deleteRoadmapMutation = useMutation((roadmapMeta: RoadmapMeta) =>
-    deleteRoadmap(roadmapMeta.id)
-  );
-
-  const removeFavoriteMutation = useMutation((roadmapMeta: RoadmapMeta) =>
-    removeRoadmapMetaFromUserFavorites(currentUser?.email, roadmapMeta, cookies.user)
-  );
+  const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
 
   const handleDelete = async (roadmapMeta: RoadmapMeta) => {
+    await deleteRoadmap(roadmapMeta.id);
+    setUserRoadmaps((prevRoadmaps) => {
+      if (!prevRoadmaps) return prevRoadmaps;
+      return {
+        roadmapMetaList: prevRoadmaps.roadmapMetaList?.filter(
+          (roadmap) => roadmap.id !== roadmapMeta.id
+        ),
+      };
+    });
+  };
+
+  const fetchUserRoadmaps = async () => {
     try {
-      await deleteRoadmapMutation.mutateAsync(roadmapMeta);
-      queryClient.invalidateQueries("userRoadmaps");
+      if (currentUser?.email) {
+        const roadmapMetas = await getUsersRoadmapMetas(
+          currentUser.email,
+          cookies.user
+        );
+        setUserRoadmaps(roadmapMetas);
+      }
     } catch (error) {
-      console.error("Error deleting roadmap:", error);
+      console.error("Error fetching user roadmaps:", error);
     }
   };
 
+  const fetchUserFavorites = async () => {
+    try {
+      if (currentUser?.email) {
+        const favoriteRoadmaps = await getUserFavorites(
+          currentUser?.email,
+          cookies.user
+        );
+        setFavorites(favoriteRoadmaps);
+      }
+    } catch (error) {
+      console.error("Error fetching user roadmaps:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (cookies.user) {
+      const decodedUser: User | null = jwtDecode(cookies.user);
+      setCurrentUser(decodedUser);
+    }
+  }, [cookies.user]);
+
+  useEffect(() => {
+    if (currentUser) {
+      fetchUserRoadmaps();
+      fetchUserFavorites();
+    }
+  }, [currentUser, cookies.user]);
+
   const handleRemoveFromFavorites = async (roadmapMeta: RoadmapMeta) => {
     try {
-      await removeFavoriteMutation.mutateAsync(roadmapMeta);
-      queryClient.invalidateQueries("favorites");
+      await removeRoadmapMetaFromUserFavorites(currentUser?.email, roadmapMeta, cookies.user);
+      setFavorites((prevFavorites) =>
+        prevFavorites.filter((favorite) => favorite.id !== roadmapMeta.id)
+      );
     } catch (error) {
       console.error("Error removing roadmap from favorites:", error);
     }
   };
-
-  const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
-
 
   return (
     <>
