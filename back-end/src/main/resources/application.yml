@@ -5,13 +5,6 @@ spring:
     mongodb:
       uri: mongodb://root:example@localhost:27017/learningPath?authSource=admin
       database: learningPath
-
-
-  jpa:
-    show-sql: true
-    defer-datasource-initialization: true
-    hibernate:
-      ddl-auto: create-drop
 logging:
   level:
     org:
