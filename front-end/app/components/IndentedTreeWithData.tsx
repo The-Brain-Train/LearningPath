@@ -1,18 +1,10 @@
 "use client";
-
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
-import { useRouter } from "next/navigation";
-import { deleteRoadmap } from "../functions/httpRequests";
-import DeleteModal from "./DeleteModal";
+import { CustomNode, ExploreIndentedTreeProps } from "../types";
 
-type IndentedTreeProps = {
-  data: JSON | null;
-};
-
-const IndentedTreeWithData = ({ data }: IndentedTreeProps) => {
+const IndentedTreeWithData = ({ data }: ExploreIndentedTreeProps) => {
   const svgRef = useRef(null);
-  const router = useRouter();
 
   const graph = () => {
     if (data == null) return;
@@ -21,21 +13,19 @@ const IndentedTreeWithData = ({ data }: IndentedTreeProps) => {
     const format = d3.format(",");
     const nodeSize = 21;
     const root = d3.hierarchy(data).eachBefore(
-      (
-        (i) => (d) =>
-          (d.index = i++)
-      )(0)
+      ((i) => (d) => {
+        (d as CustomNode).index = i++;
+      })(0)
     );
     const nodes = root.descendants();
 
     const screenWidth = window.innerWidth;
-    const screenHeight = window.innerHeight;
     const width = screenWidth;
     const height = (nodes.length + 1) * nodeSize;
 
     const columns = [
       {
-        value: (d) => d.value,
+        value: (d: any) => d.value,
         format,
         x: screenWidth - 25,
       },
@@ -61,8 +51,8 @@ const IndentedTreeWithData = ({ data }: IndentedTreeProps) => {
       .attr(
         "d",
         (d) => `
-        M${d.source.depth * nodeSize},${d.source.index * nodeSize}
-        V${d.target.index * nodeSize}
+        M${(d).source.depth * nodeSize},${(d as any).source.index * nodeSize}
+        V${(d as any).target.index * nodeSize}
         h${nodeSize}
       `
       );
@@ -72,7 +62,7 @@ const IndentedTreeWithData = ({ data }: IndentedTreeProps) => {
       .selectAll()
       .data(nodes)
       .join("g")
-      .attr("transform", (d) => `translate(0,${d.index * nodeSize})`)
+      .attr("transform", (d) => `translate(0,${(d as CustomNode).index * nodeSize})`)
       .attr("fill", "#cbd5e1");
 
     node
@@ -96,7 +86,7 @@ const IndentedTreeWithData = ({ data }: IndentedTreeProps) => {
         .join("/")
     );
 
-    for (const { label, value, format, x } of columns) {
+    for (const { value, format, x } of columns) {
       svg
         .append("text")
         .attr("dy", "0.32em")
@@ -104,8 +94,6 @@ const IndentedTreeWithData = ({ data }: IndentedTreeProps) => {
         .attr("x", x)
         .attr("text-anchor", "end")
         .attr("font-weight", "bold")
-        .text(label);
-
       node
         .append("text")
         .attr("dy", "0.32em")
@@ -114,7 +102,7 @@ const IndentedTreeWithData = ({ data }: IndentedTreeProps) => {
         .attr("fill", (d) => (d.children ? null : "#cbd5e1"))
         .attr("font-weight", (d) => (d.height == 0 ? 100: 900))
         .data(root.copy().descendants())
-        .text((d) => format(d.data.value, d));
+        .text((d) => format(d.data.value));
     }
   };
 
@@ -129,11 +117,6 @@ const IndentedTreeWithData = ({ data }: IndentedTreeProps) => {
     };
   }, [data]);
 
-  // const handleDelete = async (id: string) => {
-  //   await deleteRoadmap(id);
-  //   router.back();
-  // };
-
   return (
     <div className="flex flex-col px-3">
       <div>
@@ -143,12 +126,6 @@ const IndentedTreeWithData = ({ data }: IndentedTreeProps) => {
         </div>
         <svg className="overflow-hidden mb-20" ref={svgRef}></svg>
       </div>
-      {/* <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 flex justify-center">
-        <DeleteModal
-          id={roadMapRefId}
-          onDelete={() => handleDelete(roadMapRefId)}
-        />
-      </div> */}
     </div>
   );
 };

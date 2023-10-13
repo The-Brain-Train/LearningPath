@@ -4,6 +4,7 @@ import { getRoadmap, getRoadmaps } from "@/app/functions/httpRequests";
 import { useEffect, useState } from "react";
 import { ArrowBack } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
+import { TreeNode } from "@/app/types";
 
 type Props = {
   params: {
@@ -12,7 +13,7 @@ type Props = {
 };
 
 export default function roadMapId(props: Props) {
-  const [roadmap, setRoadmap] = useState<JSON | null>(null);
+  const [roadmap, setRoadmap] = useState<TreeNode | undefined>();
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
 
