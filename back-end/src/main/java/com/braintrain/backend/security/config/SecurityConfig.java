@@ -2,7 +2,6 @@ package com.braintrain.backend.security.config;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
-import com.braintrain.backend.repository.UserRepository;
 import com.braintrain.backend.security.filter.JwtAuthenticationFilter;
 import com.braintrain.backend.service.UserServiceSpringSecurity;
 import lombok.AllArgsConstructor;
@@ -26,7 +25,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private JwtAuthenticationFilter authFilter;
-    private UserRepository repository;
     private UserServiceSpringSecurity userServiceSpringSecurity;
 
     @Bean
