@@ -218,7 +218,8 @@ export default function Explore() {
                     </p>
                   </div>
                 </Link>
-                <span
+                {currentUser ? (
+                  <span
                   className="mx-2"
                   onClick={() =>
                     favorites.some((favorite) => favorite.id === roadmap.id)
@@ -233,6 +234,7 @@ export default function Explore() {
                     <FavoriteBorderIcon />
                   )}
                 </span>
+                ) : null}           
               </div>
             </li>
           ))}
