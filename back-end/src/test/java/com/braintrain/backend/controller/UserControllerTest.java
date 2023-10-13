@@ -2,7 +2,7 @@ package com.braintrain.backend.controller;
 
 import com.braintrain.backend.model.RoadmapMeta;
 import com.braintrain.backend.model.User;
-import com.braintrain.backend.model.UserFavoritesDTO;
+import com.braintrain.backend.controller.dtos.UserFavoritesDTO;
 import com.braintrain.backend.service.UserService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;

@@ -1,5 +1,8 @@
 package com.braintrain.backend.service;
 
+import com.braintrain.backend.controller.dtos.RoadmapDTO;
+import com.braintrain.backend.controller.dtos.RoadmapMetaListDTO;
+import com.braintrain.backend.controller.dtos.UserFavoritesDTO;
 import com.braintrain.backend.model.*;
 import com.braintrain.backend.repository.RoadmapMetaRepository;
 import com.braintrain.backend.repository.RoadmapRepository;

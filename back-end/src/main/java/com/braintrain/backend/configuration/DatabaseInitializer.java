@@ -1,9 +1,9 @@
 package com.braintrain.backend.configuration;
 
 import com.braintrain.backend.model.Roadmap;
-import com.braintrain.backend.model.RoadmapDTO;
+import com.braintrain.backend.controller.dtos.RoadmapDTO;
 import com.braintrain.backend.model.RoadmapMeta;
-import com.braintrain.backend.repository.RoadmapMetaRepository;
+import com.braintrain.backend.model.User;
 import com.braintrain.backend.service.RoadmapService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,7 +22,7 @@ public class DatabaseInitializer {
     private final MongoTemplate mongoTemplate;
 
     @Autowired
-    public DatabaseInitializer(MongoTemplate mongoTemplate, RoadmapMetaRepository roadmapMetaRepository) {
+    public DatabaseInitializer(MongoTemplate mongoTemplate) {
         this.mongoTemplate = mongoTemplate;
     }
 
@@ -30,6 +30,8 @@ public class DatabaseInitializer {
     CommandLineRunner initDatabase(RoadmapService service) {
         mongoTemplate.dropCollection(RoadmapMeta.class);
         mongoTemplate.dropCollection(Roadmap.class);
+        mongoTemplate.dropCollection(User.class);
+
         return args -> {
             ObjectMapper objectMapper = new ObjectMapper();
 

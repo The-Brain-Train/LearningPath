@@ -28,7 +28,7 @@ export default function Header() {
         <div className="flex h-16 items-center justify-between mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
           <Link
             href="/"
-            className="flex text-xl font-semibold subpixel-antialiased font-serif	"
+            className="flex text-xl font-semibold subpixel-antialiased font-serif"
           >
             <img
               src="/learningpath-logo-cropped.png"
@@ -37,7 +37,6 @@ export default function Header() {
             />
             <span
               style={{
-                fontFamily: "Roboto",
                 fontWeight: 900,
                 marginTop: "5px",
                 marginLeft: "10px",

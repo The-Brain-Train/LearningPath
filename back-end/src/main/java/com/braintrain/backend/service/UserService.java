@@ -1,8 +1,8 @@
 package com.braintrain.backend.service;
 
 import com.braintrain.backend.model.User;
-import com.braintrain.backend.model.UserFavoritesDTO;
-import com.braintrain.backend.model.UserListDTO;
+import com.braintrain.backend.controller.dtos.UserFavoritesDTO;
+import com.braintrain.backend.controller.dtos.UserListDTO;
 import com.braintrain.backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

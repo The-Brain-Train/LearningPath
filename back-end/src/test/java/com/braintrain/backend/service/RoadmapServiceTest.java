@@ -2,7 +2,7 @@ package com.braintrain.backend.service;
 
 import com.braintrain.backend.TestHelper;
 import com.braintrain.backend.model.Roadmap;
-import com.braintrain.backend.model.RoadmapDTO;
+import com.braintrain.backend.controller.dtos.RoadmapDTO;
 import com.braintrain.backend.model.RoadmapMeta;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
