@@ -75,3 +75,9 @@ export type TreeNode = {
 export interface CustomNode extends d3.HierarchyPointNode<any> {
   index: number;
 }
+
+export type CreateRoadmapFormData = {
+  topic: string | null;
+  hours: number | null;
+  experienceLevel: string | null;
+};

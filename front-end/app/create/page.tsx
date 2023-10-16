@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import IndentedTree from "../components/IndentedTree";
 import InputForm from "../components/InputForm";
 import { useCookies } from "react-cookie";
-import { RoadmapDTO, TreeNode, User } from "../types";
+import { CreateRoadmapFormData, RoadmapDTO, TreeNode, User } from "../types";
 import jwtDecode from "jwt-decode";
 import { postRoadmap } from "../functions/httpRequests";
 import { getResponseFromOpenAI } from "../functions/openAIChat";
@@ -16,9 +16,11 @@ import { useQuery } from "@tanstack/react-query";
 
 export default function Create() {
   const [data, setData] = useState<TreeNode | null>(null);
-  const [hours, setHours] = useState<number | null>(null);
-  const [experienceLevel, setExperienceLevel] = useState<string | null>(null);
-  const [topic, setTopic] = useState<string | null>(null);
+  const [formData, setFormData] = useState<CreateRoadmapFormData>({
+    topic: null,
+    hours: null,
+    experienceLevel: null,
+  });
   const [isLoading, setLoading] = useState(false);
   const [createError, setCreateError] = useState<string | null>(null);
   const [totalHours, setTotalHours] = useState(0);
@@ -36,21 +38,23 @@ export default function Create() {
   );
 
   const resetForm = () => {
-    setHours(null);
-    setExperienceLevel(null);
-    setTopic(null);
+    setFormData({
+      hours: null,
+      experienceLevel: null,
+      topic: null,
+    });
   };
 
   const saveRoadMap = async () => {
-    if (topic == null || currentUser?.email == null) {
+    if (formData.topic == null || currentUser?.email == null) {
       return;
     }
 
     const requestData: RoadmapDTO = {
-      name: topic,
+      name: formData.topic,
       roadmap: JSON.stringify(data),
       userEmail: currentUser.email,
-      experienceLevel: experienceLevel,
+      experienceLevel: formData.experienceLevel,
       hours: totalHours,
     };
     postRoadmap(requestData, cookies.user);
@@ -60,12 +64,12 @@ export default function Create() {
     setLoading(true);
     try {
       const response = await getResponseFromOpenAI(
-        chatHistory(topic, experienceLevel, hours)
+        chatHistory(formData.topic, formData.experienceLevel, formData.hours)
       );
       const jsonData = await JSON.parse(response.choices[0].message.content);
 
       calculateTotalValuesRecursive(jsonData);
-      const scaledJsonData = scaleValues(hours, jsonData);
+      const scaledJsonData = scaleValues(formData.hours, jsonData);
       calculateTotalValuesRecursive(scaledJsonData);
 
       setTotalHours(scaledJsonData.value);
@@ -80,18 +84,22 @@ export default function Create() {
     }
   };
 
-  useEffect(() => {
-    if (topic != null) {
-      handleSendMessage();
-    }
-  }, [topic]);
+  useQuery(["sendMessage", formData.topic], handleSendMessage, {
+    enabled: !!formData.topic,
+  });
 
   return (
     <main className="main-background">
       <InputForm
-        setTopic={setTopic}
-        setHours={setHours}
-        setExperienceLevel={setExperienceLevel}
+        setTopic={(topic) =>
+          setFormData((prevData) => ({ ...prevData, topic }))
+        }
+        setHours={(hours) =>
+          setFormData((prevData) => ({ ...prevData, hours }))
+        }
+        setExperienceLevel={(experienceLevel) =>
+          setFormData((prevData) => ({ ...prevData, experienceLevel }))
+        }
         resetForm={resetForm}
       />
       <IndentedTree

@@ -49,10 +49,10 @@ function valuetext(value: number) {
 }
 
 type InputFormProps = {
-  setTopic: React.Dispatch<React.SetStateAction<string | null>>;
-  setHours: React.Dispatch<React.SetStateAction<number | null>>;
-  setExperienceLevel: React.Dispatch<React.SetStateAction<string | null>>;
-  resetForm: () => void; 
+  setTopic: (topic: string | null) => void;
+  setHours: (hours: number | null) => void;
+  setExperienceLevel: (experienceLevel: string | null) => void;
+  resetForm: () => void;
 };
 
 const InputForm = ({
