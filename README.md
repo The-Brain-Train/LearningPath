@@ -2,12 +2,9 @@
 LearningPath is an AI-driven learning management tool that creates personalized learning plans, estimates time required to reach skill levels, and provides a guided roadmap with achievable goals based on users' academic level, available learning time, and existing skills.
 Personalized Learning Plans.
 
-![Banner](/LearningPathExcalidraw.png)
-
 ### Table of Contents
 - [📱 Tech Stack](#-tech-stack)
 - [💸 Pitch](#-pitch)
-- [🔌 Usage](#-usage)
 - [🔧 Key Features:](#-key-features)
 - [🚀 Getting Started / Installation](#-getting-started--installation)
 - [📧 Contact Information](#-contact-information)
@@ -31,17 +28,20 @@ Personalized Learning Plans.
 [![Pitch](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=DIG7I0K4k7E)
 
 ### 🎬 Demos
-| Week                   |    Video                 |
-| -----------------------| ------------------------- |
-| 1 | [![Pitch](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=irIGIqszUs4) |
-### 🔌 Usage 
-<!--[![DemoVideo](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)]()-->
+| Week                            | Video                | Week                 | Video                | Week                 | Video                | Week                 | Video                |  
+| ---------------------------------| ------------------------- | ------------------------- |-------------------------| ------------------------- |-------------------------| ------------------------- |-------------------------| 
+| 1 | [![Pitch](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=irIGIqszUs4) | 2 | [![Pitch](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/dNXfMzevpEk) | 3 | [![Pitch](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/bIJbNG9ycUw)  | 4 | [![Pitch](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/2ShBF69TTlk) 
+| 5 | [![Pitch](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=saG49JPxUE0) |
 
 ### 🔧 Key Features:
-- Generating learning path with AI 
-- Visually display the learning path
-- Each learning path should include time to complete and difficulty
-- Store roadmaps on a database with these showing on the frontend in an explore page with search and/or filter functionality.
+- **Create Personalized Learning Pathways:** Users can craft their unique learning roadmaps by specifying topics, the number of hours they intend to spend, and their current skill level.
+- **Visualized Learning Paths:** Learning pathways are visually represented as hierarchical trees, allowing users to easily grasp the structure and progression of their educational journey.
+- **Detailed Pathway Information:** Each learning path displays vital information, including estimated completion time and difficulty level, aiding users in making informed decisions.
+- **Profile Integration:** Registered users can save and manage their learning pathways within their personal profiles, providing easy access to their educational goals.
+- **Global Explore Page:** All created learning roadmaps are showcased on a global explore page, promoting knowledge sharing and enabling users to discover diverse learning opportunities.
+- **Interactive Filtering:** Users can employ powerful search and filtering tools to refine their explore page experience, enabling them to find roadmaps that match their specific criteria, such as topic, hours, and difficulty.
+- **Bookmark Favorites:** Logged-in users have the option to bookmark and curate a collection of their favorite learning paths, ensuring quick and convenient access to the resources they value most.
+- **Hierarchical Learning Structure:** Learning pathways support multi-level hierarchies, allowing users to structure their education with topics, subtopics, and even further sub-subtopics, all with designated time allocations.
 
 ### 🚀 Getting Started / Installation
 Follow these steps to get the application up and running in your local environment:
@@ -65,6 +65,7 @@ Follow these steps to get the application up and running in your local environme
 | Atufa Shabnam Nelmandi |[![Github-Atufa](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/atufashabnam)[![LinkIn-Atufa](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/atufashabnam/)[![Gmail-Atufa](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:atufa.shabnam@gmail.com)[![Youtube-Cesar](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/channel/UCEok2ugZhT5IVQkG3vDr2rw)|
 | Edward Arvinius |[![Github-Edward](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/EdwardArvinius)[![LinkIn-Edward](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/edward-arvinius-248819117/)[![Gmail-Edward](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:edward.arvinius@gmail.com)|
 | Mona Talebian |[![Github-Mona](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/monatm)[![LinkIn-Mona](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/mona-talebian/)[![Gmail-Mona](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:mona.talebian@gmail.com)
+| Vijani Piyawardana |[![Github-Vijani](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/vijanipiyawardana)[![LinkIn-Vijani](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/vijanisupeshalapiyawardana/)[![Gmail-Vijani](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:vijanipiyawardana@gmail.com)
 
 
 
