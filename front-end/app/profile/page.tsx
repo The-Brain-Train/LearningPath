@@ -178,11 +178,11 @@ const Profile = () => {
         <div className="main-background min-h-max  text-center items-center pt-20 rounded-lg font-bold text-xl text-white ">
           <p>Please sign in to view your profile.</p>
           <button
-            className="bg-transparent hover:bg-emerald-600text-lg text-white font-bold border-2 p-2 border-white rounded "
+            className="bg-transparent hover:bg-emerald-600text-lg text-white font-bold border-2 p-2 mt-2 border-white rounded "
             style={{ backgroundColor: "#141832" }}
             onClick={() => router.push("/signin")}
           >
-            Sign In
+            Sign in / Sign up
           </button>
         </div>
       )}
