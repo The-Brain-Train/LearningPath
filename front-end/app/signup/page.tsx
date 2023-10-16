@@ -1,9 +1,9 @@
 "use client"
 import React from 'react';
-import SignupComponent from '../components/SignupComponent';
+import SignupForm from '../components/SignupForm';
 
 const Signup = () => {
-  return <SignupComponent />;
+  return <SignupForm />;
 };
 
 export default Signup;

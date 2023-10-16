@@ -14,7 +14,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useRouter } from "next/navigation";
 
-const Signup = () => {
+const SignupForm = () => {
   const router = useRouter();
   const [error, setError] = React.useState<string | null>(null);
   const [formData, setFormData] = useState({
@@ -144,4 +144,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default SignupForm;
