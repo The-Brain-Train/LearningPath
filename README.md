@@ -5,7 +5,6 @@ Personalized Learning Plans.
 ### Table of Contents
 - [📱 Tech Stack](#-tech-stack)
 - [💸 Pitch](#-pitch)
-- [🔌 Usage](#-usage)
 - [🔧 Key Features:](#-key-features)
 - [🚀 Getting Started / Installation](#-getting-started--installation)
 - [📧 Contact Information](#-contact-information)
@@ -36,8 +35,6 @@ Personalized Learning Plans.
 | 3 | [![Pitch](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/bIJbNG9ycUw) |
 | 4 | [![Pitch](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/2ShBF69TTlk) |
 | 5 | [![Pitch](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=saG49JPxUE0) |
-### 🔌 Usage 
-<!--[![DemoVideo](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)]()-->
 
 ### 🔧 Key Features:
 - **Create Personalized Learning Pathways:** Users can craft their unique learning roadmaps by specifying topics, the number of hours they intend to spend, and their current skill level.
