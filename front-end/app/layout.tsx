@@ -3,6 +3,8 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import Header from "./components/Header";
 import { Metadata } from "next";
+import { QueryClientProvider, queryClient } from "./queryClient";
+ "./queryClient";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,7 +24,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Header/>
-        {children}
+        <body className={inter.className}> <QueryClientProvider client={queryClient}>{children}</QueryClientProvider></body>
       </body>
     </html>
   );
