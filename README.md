@@ -40,10 +40,8 @@ Personalized Learning Plans.
 <!--[![DemoVideo](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)]()-->
 
 ### 🔧 Key Features:
-- Generating learning path with AI 
-- Visually display the learning path
-- Each learning path should include time to complete and difficulty
-- Store roadmaps on a database with these showing on the frontend in an explore page with search and/or filter functionality.
+- **Create Personalized Learning Pathways:** Users can craft their unique learning roadmaps by specifying topics, the number of hours they intend to spend, and their current skill level.
+- 
 
 ### 🚀 Getting Started / Installation
 Follow these steps to get the application up and running in your local environment:
