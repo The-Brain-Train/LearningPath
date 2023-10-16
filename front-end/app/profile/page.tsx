@@ -48,13 +48,16 @@ const Profile = () => {
   const [open, setOpen] = useState(0);
   const queryClient = useQueryClient();
 
-  const { data: currentUser } = useQuery<User | null>(["currentUser"], async () => {
-    if (cookies.user) {
-      const user = jwtDecode(cookies.user) as User | null;
-      return user;
+  const { data: currentUser } = useQuery<User | null>(
+    ["currentUser"],
+    async () => {
+      if (cookies.user) {
+        const user = jwtDecode(cookies.user) as User | null;
+        return user;
+      }
+      return null;
     }
-    return null;
-  });
+  );
 
   const { data: userRoadmaps } = useQuery<RoadmapMetaList | undefined>(
     ["userRoadmaps"],
@@ -64,8 +67,9 @@ const Profile = () => {
     }
   );
 
-  const { data: favorites } = useQuery<RoadmapMeta[]>(["favorites"], () =>
-    getUserFavorites(currentUser?.email as string, cookies.user),
+  const { data: favorites } = useQuery<RoadmapMeta[]>(
+    ["favorites"],
+    () => getUserFavorites(currentUser?.email as string, cookies.user),
     {
       enabled: !!currentUser,
     }
@@ -76,7 +80,11 @@ const Profile = () => {
   );
 
   const removeFavoriteMutation = useMutation((roadmapMeta: RoadmapMeta) =>
-    removeRoadmapMetaFromUserFavorites(currentUser?.email, roadmapMeta, cookies.user)
+    removeRoadmapMetaFromUserFavorites(
+      currentUser?.email,
+      roadmapMeta,
+      cookies.user
+    )
   );
 
   const handleDelete = async (roadmapMeta: RoadmapMeta) => {
@@ -98,7 +106,6 @@ const Profile = () => {
   };
 
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
-
 
   return (
     <>

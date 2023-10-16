@@ -8,6 +8,7 @@ import jwtDecode from "jwt-decode";
 import { postRoadmap } from "../functions/httpRequests";
 import { getResponseFromOpenAI } from "../functions/openAIChat";
 import { chatHistory } from "../functions/chatPreHistory";
+import { calculateTotalValuesRecursive, scaleValues } from "../functions/roadmapHoursCalculator";
 
 export default function  Create() {
   const [data, setData] = useState<TreeNode | null>(null);
@@ -17,7 +18,7 @@ export default function  Create() {
   const [isLoading, setLoading] = useState(false);
   const [createError, setCreateError] = useState<string | null>(null);
   const [totalHours, setTotalHours] = useState(0);
-  const [cookies, setCookie] = useCookies(["user"]);
+  const [cookies] = useCookies(["user"]);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -72,36 +73,6 @@ export default function  Create() {
       setLoading(false);
     }
   };
-
-  const calculateTotalValuesRecursive = (jsonData: any) => {
-    if (!jsonData.children || jsonData.children.length === 0) {
-      return jsonData.value;
-    }
-    let total = 0;
-    for (let i = 0; i < jsonData.children.length; i++) {
-      total = total + calculateTotalValuesRecursive(jsonData.children[i]);
-    }
-    jsonData.value = total;
-    return total;
-  }
-
-  const scaleValues = (userInputHours: number | null, jsonData: any) => {
-    if(userInputHours == null) return;
-      const scalingFactor = userInputHours/ jsonData.value ;
-      scaleValuesRecursive(scalingFactor, jsonData);
-      return jsonData;
-  }
-
-  const scaleValuesRecursive = (scalingFactor: number, jsonData: any) => {
-    if (!jsonData.children || jsonData.children.length === 0) {
-      jsonData.value = Math.round(jsonData.value * scalingFactor);
-      return jsonData;
-    }
-    for (let i = 0; i < jsonData.children.length; i++) {
-      let chapter = jsonData.children[i];
-      scaleValuesRecursive(scalingFactor, chapter);
-    }
-  }
 
   useEffect(() => {
     if (topic != null) {
