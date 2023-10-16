@@ -34,6 +34,10 @@ Personalized Learning Plans.
 | Week                   |    Video                 |
 | -----------------------| ------------------------- |
 | 1 | [![Pitch](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=irIGIqszUs4) |
+| 2 | [![Pitch](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/dNXfMzevpEk) |
+| 3 | [![Pitch](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/bIJbNG9ycUw) |
+| 4 | [![Pitch](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/2ShBF69TTlk) |
+| 5 | [![Pitch](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=saG49JPxUE0) |
 ### 🔌 Usage 
 <!--[![DemoVideo](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)]()-->
 
