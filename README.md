@@ -41,7 +41,15 @@ Personalized Learning Plans.
 
 ### 🔧 Key Features:
 - **Create Personalized Learning Pathways:** Users can craft their unique learning roadmaps by specifying topics, the number of hours they intend to spend, and their current skill level.
-- 
+- **Visualized Learning Paths:** Learning pathways are visually represented as hierarchical trees, allowing users to easily grasp the structure and progression of their educational journey.
+- **Detailed Pathway Information:** Each learning path displays vital information, including estimated completion time and difficulty level, aiding users in making informed decisions.
+- **Profile Integration:** Registered users can save and manage their learning pathways within their personal profiles, providing easy access to their educational goals.
+- **Global Explore Page:** All created learning roadmaps are showcased on a global explore page, promoting knowledge sharing and enabling users to discover diverse learning opportunities.
+- **Interactive Filtering:** Users can employ powerful search and filtering tools to refine their explore page experience, enabling them to find roadmaps that match their specific criteria, such as topic, hours, and difficulty.
+- **Bookmark Favorites:** Logged-in users have the option to bookmark and curate a collection of their favorite learning paths, ensuring quick and convenient access to the resources they value most.
+- **Hierarchical Learning Structure:** Learning pathways support multi-level hierarchies, allowing users to structure their education with topics, subtopics, and even further sub-subtopics, all with designated time allocations.
+- **Robust Database Integration:** Roadmaps and user data are securely stored in a database, ensuring data persistence and providing a reliable foundation for your application.
+- **Seamless User Experience:** The application is designed for an intuitive and user-friendly experience, making it easy for users to create, explore, and manage their learning journeys.
 
 ### 🚀 Getting Started / Installation
 Follow these steps to get the application up and running in your local environment:
