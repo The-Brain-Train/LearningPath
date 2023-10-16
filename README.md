@@ -2,8 +2,6 @@
 LearningPath is an AI-driven learning management tool that creates personalized learning plans, estimates time required to reach skill levels, and provides a guided roadmap with achievable goals based on users' academic level, available learning time, and existing skills.
 Personalized Learning Plans.
 
-![Banner](/LearningPathExcalidraw.png)
-
 ### Table of Contents
 - [📱 Tech Stack](#-tech-stack)
 - [💸 Pitch](#-pitch)
