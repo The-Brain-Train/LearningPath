@@ -59,7 +59,7 @@ export type CreateIndentedTreeProps = {
   createError: string | null;
   saveRoadmap: () => Promise<void>;
   setData: Dispatch<SetStateAction<TreeNode | null>>;
-  currentUser: User | null
+  currentUser: User | null | undefined;
 };
 
 export type ExploreIndentedTreeProps = {
