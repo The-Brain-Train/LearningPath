@@ -2,9 +2,7 @@
 import { useState } from "react";
 import IndentedTree from "../components/IndentedTree";
 import InputForm from "../components/InputForm";
-import { useCookies } from "react-cookie";
 import { CreateRoadmapFormData, RoadmapDTO, TreeNode, User } from "../types";
-import jwtDecode from "jwt-decode";
 import { postRoadmap } from "../functions/httpRequests";
 import { getResponseFromOpenAI } from "../functions/openAIChat";
 import { chatHistory } from "../functions/chatPreHistory";
@@ -13,6 +11,7 @@ import {
   scaleValues,
 } from "../functions/roadmapHoursCalculator";
 import { useQuery } from "@tanstack/react-query";
+import useCurrentUser, { getUserToken } from "../useCurrentUser";
 
 export default function Create() {
   const [data, setData] = useState<TreeNode | null>(null);
@@ -24,18 +23,8 @@ export default function Create() {
   const [isLoading, setLoading] = useState(false);
   const [createError, setCreateError] = useState<string | null>(null);
   const [totalHours, setTotalHours] = useState(0);
-  const [cookies] = useCookies(["user"]);
-
-  const { data: currentUser } = useQuery<User | null>(
-    ["currentUser"],
-    async () => {
-      if (cookies.user) {
-        const user = jwtDecode(cookies.user) as User | null;
-        return user;
-      }
-      return null;
-    }
-  );
+  const { data: currentUser } = useCurrentUser();
+  const userToken = getUserToken();
 
   const resetForm = () => {
     setFormData({
@@ -57,7 +46,7 @@ export default function Create() {
       experienceLevel: formData.experienceLevel,
       hours: totalHours,
     };
-    postRoadmap(requestData, cookies.user);
+    postRoadmap(requestData, userToken);
   };
 
   const handleSendMessage = async () => {
