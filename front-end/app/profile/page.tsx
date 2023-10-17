@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import { useCookies } from "react-cookie";
 import jwtDecode from "jwt-decode";
 import { RoadmapMeta, User } from "../types";
