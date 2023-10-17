@@ -88,7 +88,7 @@ export const addUser = async (user: User) => {
   }
 };
 
-export const getUserFavorites = async (userEmail: string, token: any) => {
+export const getUserFavorites = async (userEmail: string | null, token: any) => {
   const response = await fetch(
     `http://localhost:8080/api/users/${userEmail}/favorites`,
     {
