@@ -1,7 +1,5 @@
 "use client";
 import React, { useState} from "react";
-import { useCookies } from "react-cookie";
-import jwtDecode from "jwt-decode";
 import { RoadmapMeta, User } from "../types";
 import { RoadmapMetaList } from "../types";
 import { useRouter } from "next/navigation";
@@ -20,6 +18,7 @@ import {
 import PersonalRoadmapCard from "../components/PersonalRoadmapCard";
 import FavoriteRoadmapCard from "../components/FavoriteRoadmapCard";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import useCurrentUser, { getUserToken } from "../useCurrentUser";
 
 function Icon({ id, open }: { id: string | number; open: number }) {
   return (
@@ -43,25 +42,15 @@ function Icon({ id, open }: { id: string | number; open: number }) {
 }
 
 const Profile = () => {
-  const [cookies] = useCookies(["user"]);
   const router = useRouter();
   const [open, setOpen] = useState(0);
   const queryClient = useQueryClient();
-
-  const { data: currentUser } = useQuery<User | null>(
-    ["currentUser"],
-    async () => {
-      if (cookies.user) {
-        const user = jwtDecode(cookies.user) as User | null;
-        return user;
-      }
-      return null;
-    }
-  );
+  const { data: currentUser } = useCurrentUser();
+  const userToken = getUserToken();
 
   const { data: userRoadmaps } = useQuery<RoadmapMetaList | undefined>(
     ["userRoadmaps"],
-    () => getUsersRoadmapMetas(currentUser?.email as string, cookies.user),
+    () => getUsersRoadmapMetas(currentUser?.email as string, userToken),
     {
       enabled: !!currentUser,
     }
@@ -69,7 +58,7 @@ const Profile = () => {
 
   const { data: favorites } = useQuery<RoadmapMeta[]>(
     ["favorites"],
-    () => getUserFavorites(currentUser?.email as string, cookies.user),
+    () => getUserFavorites(currentUser?.email as string, userToken),
     {
       enabled: !!currentUser,
     }
@@ -83,7 +72,7 @@ const Profile = () => {
     removeRoadmapMetaFromUserFavorites(
       currentUser?.email,
       roadmapMeta,
-      cookies.user
+      userToken
     )
   );
 
