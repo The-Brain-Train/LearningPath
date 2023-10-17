@@ -72,7 +72,7 @@ if (response.status === 409) {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container className="main-background" component="main" >
       <CssBaseline />
       <Box
         sx={{
@@ -82,15 +82,15 @@ if (response.status === 409) {
           alignItems: "center",
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+        <Avatar sx={{ m: 1, bgcolor: "#141832" }}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5">
+        <Typography className="text-white" component="h2" variant="h5">
           Sign up
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12}>
               <TextField
                 autoComplete="given-name"
                 name="name"

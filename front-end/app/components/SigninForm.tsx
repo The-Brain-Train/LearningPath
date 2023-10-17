@@ -73,7 +73,7 @@ const SigninForm = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" className="main-background">
       <CssBaseline />
       <Box
         sx={{
@@ -83,10 +83,10 @@ const SigninForm = () => {
           alignItems: "center",
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+        <Avatar sx={{ m: 1, bgcolor: "#141832" }}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5">
+        <Typography className="text-white" component="h2" variant="h5">
           Sign in
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
