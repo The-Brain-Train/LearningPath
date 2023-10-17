@@ -72,7 +72,7 @@ public class RoadmapController {
 
         UserFavoritesDTO userFavorites = service.addRoadmapMetaToFavorites(user, roadmapMeta);
 
-        URI uri = URI.create("/api/roadmaps" + user.getEmail() + "/favorites" + roadmapMeta.getRoadmapReferenceId());
+        URI uri = URI.create("/api/roadmaps/" + user.getEmail() + "/favorites/" + roadmapMeta.getRoadmapReferenceId());
         return ResponseEntity.created(uri).body(userFavorites);
     }
 
@@ -102,6 +102,4 @@ public class RoadmapController {
         service.delete(roadmapMeta);
         return ResponseEntity.noContent().build();
     }
-
-
 }
