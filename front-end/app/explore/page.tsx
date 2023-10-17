@@ -11,16 +11,15 @@ import {
   getUserFavorites,
   removeRoadmapMetaFromUserFavorites,
 } from "../functions/httpRequests";
-import { RoadmapMeta, User } from "../types";
+import { RoadmapMeta } from "../types";
 import { generateStarsforExperienceLevel } from "../functions/generateStarsForExperience";
 import TuneIcon from "@mui/icons-material/Tune";
 import { Button } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { useCookies } from "react-cookie";
-import jwtDecode from "jwt-decode";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import useCurrentUser, { getUserToken } from "../useCurrentUser";
 
 export default function Explore() {
   const [filteredRoadmaps, setFilteredRoadmaps] = useState<RoadmapMeta[]>([]);
@@ -28,24 +27,15 @@ export default function Explore() {
   const [experienceFilter, setExperienceFilter] = useState<string | null>(null);
   const [hoursFilter, setHoursFilter] = useState<number | null>(null);
   const [showFilters, setShowFilters] = useState(false);
-  const [cookies] = useCookies(["user"]);
   const queryClient = useQueryClient();
-
-  const { data: currentUser } = useQuery<User | null>(
-    ["currentUser"],
-    async () => {
-      if (cookies.user) {
-        const user = jwtDecode(cookies.user) as User | null;
-        return user;
-      }
-      return null;
-    }
-  );
+  const { data: currentUser } = useCurrentUser();
+  const userToken = getUserToken();
 
   const fetchUserFavorites = async () => {
+    console.log("inside fetchUserFavorites")
     return await getUserFavorites(
       currentUser ? currentUser?.email : null,
-      cookies.user
+      userToken
     );
   }
 
@@ -63,7 +53,7 @@ export default function Explore() {
       await removeRoadmapMetaFromUserFavorites(
         currentUser?.email,
         roadmapMeta,
-        cookies.user
+        userToken
       );
     },
     onSuccess: () => {
@@ -76,7 +66,7 @@ export default function Explore() {
       await addRoadmapMetaToUserFavorites(
         currentUser?.email,
         roadmapMeta,
-        cookies.user
+        userToken
       );
     },
     onSuccess: () => {
