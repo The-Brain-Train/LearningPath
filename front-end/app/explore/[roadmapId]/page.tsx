@@ -1,10 +1,10 @@
 "use client";
 import IndentedTreeWithData from "@/app/components/IndentedTreeWithData";
 import { getRoadmap, getRoadmaps } from "@/app/functions/httpRequests";
-import { useEffect, useState } from "react";
 import { ArrowBack } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { TreeNode } from "@/app/util/types";
+import { useQuery } from "@tanstack/react-query";
 
 type Props = {
   params: {
@@ -13,37 +13,38 @@ type Props = {
 };
 
 export default function roadMapId(props: Props) {
-  const [roadmap, setRoadmap] = useState<TreeNode | undefined>();
   const router = useRouter();
-  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const roadmaps = await getRoadmaps();
+  const { data: roadmaps, isLoading, isError } = useQuery(
+    ["roadmaps"],
+    getRoadmaps
+  );
+
+  const roadmapId = props.params.roadmapId;
+
+  const { data: roadmapData } = useQuery(
+    ["roadmap", roadmapId],
+    async () => {
+      if (roadmaps) {
         const foundRoadmap = roadmaps.roadmapMetaList.find(
-          (roadmap) => roadmap.id === props.params.roadmapId
+          (roadmap) => roadmap.id === roadmapId
         );
 
         if (foundRoadmap) {
           const roadmapData = await getRoadmap(foundRoadmap.roadmapReferenceId);
-          const parsedData = JSON.parse(roadmapData.obj);
-          setRoadmap(parsedData);
-        } else {
-          console.error("Roadmap not found");
+          return JSON.parse(roadmapData.obj);
         }
-      } catch (error) {
-        setError(`Error fetching roadmap. Error: ${error}`);
-        console.error("Error fetching data:", error);
       }
-    };
-    fetchData();
-  }, []);
+      return undefined;
+    }
+  );
 
   return (
     <main className="main-background">
-      {error ? (
-        <p  className="text-red-500 font-bold">{error}</p>
+      {isError ? (
+        <p className="text-red-500 font-bold">Error fetching roadmap.</p>
+      ) : isLoading ? (
+        <p>Loading...</p>
       ) : (
         <>
           <ArrowBack
@@ -52,7 +53,7 @@ export default function roadMapId(props: Props) {
             onClick={() => router.back()}
           />
           <IndentedTreeWithData
-            data={roadmap}
+            data={roadmapData}
           />
         </>
       )}
