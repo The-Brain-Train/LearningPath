@@ -68,29 +68,9 @@ export const getUsersRoadmapMetas = async (userEmail: string, token: any) => {
   return data;
 };
 
-export const addUser = async (user: User) => {
-  if (!user.email) {
-    return;
-  }
-  try {
-    const res = await fetch("http://localhost:8080/api/users", {
-      method: "POST",
-      body: JSON.stringify(user),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    if (!res.ok) {
-      throw new Error(`Failed to add user. Status code: ${res.status}`);
-    }
-  } catch (error) {
-    console.error("Error adding user to DB:", error);
-  }
-};
-
 export const getUserFavorites = async (userEmail: string | null, token: any) => {
   const response = await fetch(
-    `http://localhost:8080/api/users/${userEmail}/favorites`,
+    `http://localhost:8080/api/roadmaps/${userEmail}/favorites`,
     {
       headers: {
         Authorization: "Bearer " + token,
