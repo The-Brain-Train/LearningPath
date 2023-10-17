@@ -15,6 +15,8 @@ import Container from "@mui/material/Container";
 import { useRouter } from "next/navigation";
 
 const SignupForm = () => {
+  const [isFormValid, setIsFormValid] = useState(false);
+  const [isEmailValid, setIsEmailValid] = useState(true);
   const router = useRouter();
   const [error, setError] = React.useState<string | null>(null);
   const [formData, setFormData] = useState({
@@ -26,6 +28,16 @@ const SignupForm = () => {
   const handleInputChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+
+    if (name === "email") {
+      const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+      setIsEmailValid(emailRegex.test(value));
+    }
+    setIsFormValid(
+      formData.name.trim() !== "" &&
+        isEmailValid &&
+        formData.password.trim() !== ""
+    );
   };
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
@@ -49,7 +61,9 @@ const SignupForm = () => {
         });
       }
       if (response.status == 409) {
-        setError("Email address already in use. Please sign in or use a different email.");
+        setError(
+          "Email address already in use. Please sign in or use a different email."
+        );
         setTimeout(() => {
           setError(null);
         }, 6000);
@@ -101,6 +115,8 @@ const SignupForm = () => {
                 autoComplete="email"
                 onChange={handleInputChange}
                 value={formData.email}
+                error={!isEmailValid}
+                helperText={!isEmailValid ? "Invalid email format" : ""}
               />
             </Grid>
             <Grid item xs={12}>
@@ -127,6 +143,7 @@ const SignupForm = () => {
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2, bgcolor: "#1976d2 !important" }}
+            disabled={!isFormValid}
           >
             Sign Up
           </Button>
