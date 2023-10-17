@@ -23,21 +23,4 @@ public class UserController {
     public UserListDTO getUsers() {
         return userService.getUserList();
     }
-
-    @PostMapping
-    public ResponseEntity<User> addUser(@RequestBody User user) {
-        User existingUser = userService.getUserByEmail(user.getEmail());
-        if (existingUser == null) {
-            User newUser = userService.createUser(user);
-            URI uri = URI.create("/api/user/" + user.getId());
-            return ResponseEntity.created(uri).body(newUser);
-        }
-        return ResponseEntity.ok(existingUser);
-    }
-
-    @GetMapping("/{userEmail}/favorites")
-    public ResponseEntity<UserFavoritesDTO> getUsersFavorites(@PathVariable String userEmail){
-        User user = userService.getUserByEmail(userEmail);
-        return ResponseEntity.ok(userService.getUsersFavorites(user));
-    }
 }
