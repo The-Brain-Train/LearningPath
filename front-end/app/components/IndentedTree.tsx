@@ -194,7 +194,13 @@ const IndentedTree = ({
               ) : (
                 <p
                   className="text-slate-300 font-bold flex flex-col justify-center items-center h-screen"
-                  style={{ maxHeight: "90vw" }}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "70vh",
+                  }}
                 >
                   Your Roadmap will be displayed Here!
                 </p>
