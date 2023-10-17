@@ -5,7 +5,7 @@ server:
 spring:
   data:
     mongodb:
-      uri: mongodb://root:example@localhost:27017/learningPath?authSource=admin
+      uri: mongodb://root:example@localhost:27017/learningPathTest?authSource=admin
       database: learningPathTest
 token:
   signing:
