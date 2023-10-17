@@ -1,4 +1,3 @@
-import * as React from "react";
 import Box from "@mui/material/Box";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -14,18 +13,16 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import LoginIcon from "@mui/icons-material/Login";
 import { useCookies } from "react-cookie";
 import jwtDecode from "jwt-decode";
+import { useState } from "react";
 
 export default function BurgerMenu() {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const router = useRouter();
   const isOpen = Boolean(anchorEl);
-  const [cookies, setCookie] = useCookies(["user"]);
-
+  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
   if (cookies.user) {
     var user = jwtDecode(cookies.user);
   }
-
-  const [, , removeCookie] = useCookies(["user"]);
 
   const handleSignOut = () => {
     setTimeout(() => {
@@ -43,7 +40,7 @@ export default function BurgerMenu() {
     setAnchorEl(null);
   };
   return (
-    <React.Fragment>
+    <>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
         <IconButton
           onClick={isOpen ? handleClose : handleClick}
@@ -65,34 +62,6 @@ export default function BurgerMenu() {
         open={isOpen}
         onClose={handleClose}
         onClick={handleClose}
-        PaperProps={{
-          elevation: 0,
-          sx: {
-            overflow: "visible",
-            filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-            mt: 1.5,
-            "& .MuiAvatar-root": {
-              width: 32,
-              height: 32,
-              ml: -0.5,
-              mr: 1,
-            },
-            "&:before": {
-              content: '""',
-              display: "block",
-              position: "absolute",
-              top: 0,
-              right: 14,
-              width: 10,
-              height: 10,
-              bgcolor: "background.paper",
-              transform: "translateY(-50%) rotate(45deg)",
-              zIndex: 0,
-            },
-          },
-        }}
-        transformOrigin={{ horizontal: "right", vertical: "top" }}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
         <MenuItem onClick={() => router.push("/")}>
           <HomeIcon /> <p className="pl-2">Home</p>
@@ -120,6 +89,6 @@ export default function BurgerMenu() {
           </MenuItem>
         )}
       </Menu>
-    </React.Fragment>
+    </>
   );
 }
