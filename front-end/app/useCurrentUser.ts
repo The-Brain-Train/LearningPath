@@ -3,7 +3,7 @@ import jwtDecode from 'jwt-decode';
 import { useCookies } from 'react-cookie';
 import { User } from "./types";
 
-export function useCurrentUser() {
+const useCurrentUser = () => {
   const [cookies] = useCookies(['user']);
 
   return useQuery<User | null>(
@@ -16,4 +16,6 @@ export function useCurrentUser() {
       return null;
     }
   );
-}
+};
+
+export default useCurrentUser;
