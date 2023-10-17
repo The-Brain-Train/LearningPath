@@ -5,21 +5,20 @@ import { useCookies } from 'react-cookie';
 import jwtDecode from "jwt-decode";
 import { User } from "../types";
 import AccountCircleSharpIcon from "@mui/icons-material/AccountCircleSharp";
-import { useQuery } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
 
 export default function Header() {
-  const [cookies] = useCookies(['user']);
+  const [cookies, setCookie] = useCookies(["user"]);
+  const [currentUser, setCurrentUser] = useState<User | null>(null)
 
-  const { data: currentUser } = useQuery<User | null>(
-    ["currentUser"],
-    async () => {
-      if (cookies.user) {
-        const user = jwtDecode(cookies.user) as User | null;
-        return user;
-      }
-      return null;
+  useEffect(() => {
+    if (cookies.user) {
+      const decodedUser = jwtDecode(cookies.user) as User;
+      setCurrentUser(decodedUser);
+    } else {
+      setCurrentUser(null);
     }
-  );
+  }, [cookies.user]);
 
   return (
     <>
