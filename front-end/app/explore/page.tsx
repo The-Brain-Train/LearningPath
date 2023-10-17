@@ -32,7 +32,6 @@ export default function Explore() {
   const userToken = getUserToken();
 
   const fetchUserFavorites = async () => {
-    console.log("inside fetchUserFavorites")
     return await getUserFavorites(
       currentUser ? currentUser?.email : null,
       userToken

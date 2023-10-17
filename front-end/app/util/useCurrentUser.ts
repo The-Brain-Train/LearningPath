@@ -14,7 +14,6 @@ const useCurrentUser = () => {
   return useQuery<User | null>(
     ['currentUser'],
     async () => {
-        console.log("cu > " + cookies.user)
       if (cookies.user) {
         const user = jwtDecode(cookies.user) as User | null;
         return user;
