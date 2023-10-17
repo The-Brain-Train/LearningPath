@@ -11,7 +11,7 @@ import {
   getUserFavorites,
   removeRoadmapMetaFromUserFavorites,
 } from "../functions/httpRequests";
-import { RoadmapMeta, RoadmapMetaList, User } from "../types";
+import { RoadmapMeta, User } from "../types";
 import { generateStarsforExperienceLevel } from "../functions/generateStarsForExperience";
 import TuneIcon from "@mui/icons-material/Tune";
 import { Button } from "@mui/material";
@@ -28,9 +28,19 @@ export default function Explore() {
   const [experienceFilter, setExperienceFilter] = useState<string | null>(null);
   const [hoursFilter, setHoursFilter] = useState<number | null>(null);
   const [showFilters, setShowFilters] = useState(false);
-  const [cookies, setCookie] = useCookies(["user"]);
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [cookies] = useCookies(["user"]);
   const queryClient = useQueryClient();
+
+  const { data: currentUser } = useQuery<User | null>(
+    ["currentUser"],
+    async () => {
+      if (cookies.user) {
+        const user = jwtDecode(cookies.user) as User | null;
+        return user;
+      }
+      return null;
+    }
+  );
 
   const fetchUserFavorites = async () => {
     return await getUserFavorites(
@@ -44,7 +54,7 @@ export default function Explore() {
     ["favorites"],
     fetchUserFavorites,
     {
-      enabled: currentUser != undefined && currentUser?.email != undefined
+      enabled: !!currentUser
     }
   );
 
@@ -94,13 +104,6 @@ export default function Explore() {
     const searchText = event.currentTarget.value;
     setSearch(searchText);
   };
-
-  useEffect(() => {
-    if (cookies.user) {
-      const decodedUser: User | null = jwtDecode(cookies.user);
-      setCurrentUser(decodedUser);
-    }
-  }, [cookies.user]);
 
   useEffect(() => {
     const filtered = roadmaps?.roadmapMetaList.filter(
