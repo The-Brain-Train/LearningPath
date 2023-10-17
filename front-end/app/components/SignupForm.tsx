@@ -15,17 +15,17 @@ import Container from "@mui/material/Container";
 import { useRouter } from "next/navigation";
 
 const SignupForm = () => {
-  const [isFormValid, setIsFormValid] = useState(false);
-  const [isEmailValid, setIsEmailValid] = useState(true);
-  const router = useRouter();
-  const [error, setError] = React.useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
   });
+  const [isFormValid, setIsFormValid] = useState(false);
+  const [isEmailValid, setIsEmailValid] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
-  const handleInputChange = (e: { target: { name: any; value: any } }) => {
+  const handleInputChange = (e: { target: { name: any; value: any; }; }) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
 
@@ -34,13 +34,11 @@ const SignupForm = () => {
       setIsEmailValid(emailRegex.test(value));
     }
     setIsFormValid(
-      formData.name.trim() !== "" &&
-        isEmailValid &&
-        formData.password.trim() !== ""
+      formData.name.trim() !== "" && isEmailValid && formData.password.trim() !== ""
     );
   };
 
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
+  const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     try {
       const response = await fetch("http://localhost:8080/api/auth/signup", {
@@ -50,7 +48,7 @@ const SignupForm = () => {
         },
         body: JSON.stringify(formData),
       });
-      if (response.status == 200) {
+      if (response.status === 200) {
         console.log(response.status);
         toast.success("Successful! Being redirected to login page", {
           position: "top-center",
@@ -60,7 +58,7 @@ const SignupForm = () => {
           },
         });
       }
-      if (response.status == 409) {
+if (response.status === 409) {
         setError(
           "Email address already in use. Please sign in or use a different email."
         );
