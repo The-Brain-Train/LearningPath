@@ -1,7 +1,7 @@
 "use client";
 import React, { useState} from "react";
-import { RoadmapMeta, User } from "../types";
-import { RoadmapMetaList } from "../types";
+import { RoadmapMeta, User } from "../util/types";
+import { RoadmapMetaList } from "../util/types";
 import { useRouter } from "next/navigation";
 import {
   deleteRoadmap,
@@ -18,7 +18,7 @@ import {
 import PersonalRoadmapCard from "../components/PersonalRoadmapCard";
 import FavoriteRoadmapCard from "../components/FavoriteRoadmapCard";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import useCurrentUser, { getUserToken } from "../useCurrentUser";
+import useCurrentUser, { getUserToken } from "../util/useCurrentUser";
 
 function Icon({ id, open }: { id: string | number; open: number }) {
   return (

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { PersonalRoadmapCardProps } from "../types";
+import { PersonalRoadmapCardProps } from "../util/types";
 import { generateStarsforExperienceLevel } from "../functions/generateStarsForExperience";
 import Delete from "@mui/icons-material/Delete";
 

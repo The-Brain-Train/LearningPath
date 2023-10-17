@@ -4,7 +4,7 @@ import {
   RoadmapDTO,
   User,
   RoadmapMeta,
-} from "../types";
+} from "../util/types";
 
 export const getRoadmaps = async () => {
   const response = await fetch(`http://localhost:8080/api/roadmaps`);

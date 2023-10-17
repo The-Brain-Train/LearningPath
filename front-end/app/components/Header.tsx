@@ -3,7 +3,7 @@ import BurgerMenu from "./BurgerMenu";
 import Link from "next/link";
 import { useCookies } from 'react-cookie';
 import jwtDecode from "jwt-decode";
-import { User } from "../types";
+import { User } from "../util/types";
 import AccountCircleSharpIcon from "@mui/icons-material/AccountCircleSharp";
 import { useState, useEffect } from "react";
 

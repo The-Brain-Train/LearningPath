@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FavoriteRoadmapCardProps } from "../types";
+import { FavoriteRoadmapCardProps } from "../util/types";
 import { generateStarsforExperienceLevel } from "../functions/generateStarsForExperience";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { RemoveCircle, RemoveCircleOutline } from "@mui/icons-material";

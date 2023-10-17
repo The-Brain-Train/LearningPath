@@ -4,7 +4,7 @@ import { getRoadmap, getRoadmaps } from "@/app/functions/httpRequests";
 import { useEffect, useState } from "react";
 import { ArrowBack } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
-import { TreeNode } from "@/app/types";
+import { TreeNode } from "@/app/util/types";
 
 type Props = {
   params: {

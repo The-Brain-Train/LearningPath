@@ -2,7 +2,7 @@
 import { useState } from "react";
 import IndentedTree from "../components/IndentedTree";
 import InputForm from "../components/InputForm";
-import { CreateRoadmapFormData, RoadmapDTO, TreeNode, User } from "../types";
+import { CreateRoadmapFormData, RoadmapDTO, TreeNode, User } from "../util/types";
 import { postRoadmap } from "../functions/httpRequests";
 import { getResponseFromOpenAI } from "../functions/openAIChat";
 import { chatHistory } from "../functions/chatPreHistory";
@@ -11,7 +11,7 @@ import {
   scaleValues,
 } from "../functions/roadmapHoursCalculator";
 import { useQuery } from "@tanstack/react-query";
-import useCurrentUser, { getUserToken } from "../useCurrentUser";
+import useCurrentUser, { getUserToken } from "../util/useCurrentUser";
 
 export default function Create() {
   const [data, setData] = useState<TreeNode | null>(null);

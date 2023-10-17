@@ -11,7 +11,7 @@ import {
   getUserFavorites,
   removeRoadmapMetaFromUserFavorites,
 } from "../functions/httpRequests";
-import { RoadmapMeta } from "../types";
+import { RoadmapMeta } from "../util/types";
 import { generateStarsforExperienceLevel } from "../functions/generateStarsForExperience";
 import TuneIcon from "@mui/icons-material/Tune";
 import { Button } from "@mui/material";
@@ -19,7 +19,7 @@ import Tooltip from "@mui/material/Tooltip";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import useCurrentUser, { getUserToken } from "../useCurrentUser";
+import useCurrentUser, { getUserToken } from "../util/useCurrentUser";
 
 export default function Explore() {
   const [filteredRoadmaps, setFilteredRoadmaps] = useState<RoadmapMeta[]>([]);

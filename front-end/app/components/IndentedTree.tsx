@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
 import SaveButton from "./SaveButton";
 import { Button, CircularProgress } from "@mui/material";
-import { CustomNode, CreateIndentedTreeProps } from "../types";
+import { CustomNode, CreateIndentedTreeProps } from "../util/types";
 import Link from "next/link";
 
 const IndentedTree = ({

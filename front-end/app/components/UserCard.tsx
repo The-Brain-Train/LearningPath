@@ -1,4 +1,4 @@
-import { UserCardProps } from "../types";
+import { UserCardProps } from "../util/types";
 import AccountCircleSharpIcon from "@mui/icons-material/AccountCircleSharp";
 
 export default function Card({ user }: UserCardProps) {

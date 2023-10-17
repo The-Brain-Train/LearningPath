@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
-import { CustomNode, ExploreIndentedTreeProps } from "../types";
+import { CustomNode, ExploreIndentedTreeProps } from "../util/types";
 
 const IndentedTreeWithData = ({ data }: ExploreIndentedTreeProps) => {
   const svgRef = useRef(null);
