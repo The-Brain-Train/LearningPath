@@ -22,7 +22,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -88,7 +87,7 @@ class RoadmapControllerTest {
 
     @Test
     void shouldGetRoadmapMetasForUser() {
-        User user = new User("Edward", "edwardsemail@gmail.com", new ArrayList<>());
+        User user = new User("Edward", "edwardsemail@gmail.com");
         String uriForPost = "http://localhost:%s/api/user".formatted(port);
 
         restTemplate.exchange(uriForPost, HttpMethod.POST, new HttpEntity<>(user), User.class);
@@ -171,7 +170,7 @@ class RoadmapControllerTest {
 
     @Test
     void shouldAddRoadmapMetaToFavoritesForExistingUser() {
-        User user = new User("Edward", "edwardsemail@gmail.com", new ArrayList<>());
+        User user = new User("Edward", "edwardsemail@gmail.com");
         RoadmapMeta roadmapMeta = new RoadmapMeta("Java", "1245", "anotherEmail@gmail.com", "Beginner", 50);
 
         String uriForCreateUser = "http://localhost:%s/api/user".formatted(port);
@@ -183,4 +182,22 @@ class RoadmapControllerTest {
         assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(exchange.getHeaders().getLocation()).isNotNull();
     }
+
+//    @Test
+//    void shouldGetFavoritesForExistingUser() {
+//        User user = new User("Edward", "edwardsemail@gmail.com");
+//        RoadmapMeta roadmapMeta = new RoadmapMeta("Java", "1245", "anotherEmail@gmail.com", "Beginner", 50);
+//
+//        String uriForCreateUser = "http://localhost:%s/api/user".formatted(port);
+//        restTemplate.exchange(uriForCreateUser, HttpMethod.POST, new HttpEntity<>(user), User.class);
+//
+//        String postUri = "http://localhost:%s/api/roadmaps/%s/favorites".formatted(port, user.getEmail());
+//        restTemplate.exchange(postUri, HttpMethod.POST, new HttpEntity<>(roadmapMeta), UserFavoritesDTO.class);
+//
+//        String getUri = "http://localhost:%s/api/user/%s/favorites".formatted(port, user.getEmail());
+//        ResponseEntity<UserFavoritesDTO> getExchange = restTemplate.exchange(getUri, HttpMethod.GET, HttpEntity.EMPTY, UserFavoritesDTO.class);
+//
+//        assertThat(getExchange.getStatusCode()).isEqualTo(HttpStatus.OK);
+//        assertThat(getExchange.getBody()).isNotNull();
+//    }
 }
