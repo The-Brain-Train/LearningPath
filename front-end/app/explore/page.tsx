@@ -1,5 +1,4 @@
 "use client";
-
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
@@ -21,64 +20,59 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useCookies } from "react-cookie";
 import jwtDecode from "jwt-decode";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export default function Explore() {
-  const [roadmaps, setRoadmaps] = useState<RoadmapMeta[]>([]);
   const [filteredRoadmaps, setFilteredRoadmaps] = useState<RoadmapMeta[]>([]);
   const [search, setSearch] = useState("");
   const [experienceFilter, setExperienceFilter] = useState<string | null>(null);
   const [hoursFilter, setHoursFilter] = useState<number | null>(null);
   const [showFilters, setShowFilters] = useState(false);
-  const [favorites, setFavorites] = useState<RoadmapMeta[]>([]);
   const [cookies, setCookie] = useCookies(["user"]);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-
-  const fetchRoadmaps = async () => {
-    const roadmaps = await getRoadmaps();
-    setRoadmaps(roadmaps.roadmapMetaList);
-  };
+  const queryClient = useQueryClient();
 
   const fetchUserFavorites = async () => {
-    if (currentUser?.email) {
-      try {
-        const favoriteRoadmaps = await getUserFavorites(
-          currentUser?.email,
-          cookies.user
-        );
-        setFavorites(favoriteRoadmaps);
-      } catch (error) {
-        console.error("Error fetching user roadmaps:", error);
-      }
-    }
-  };
+    return await getUserFavorites(
+      currentUser ? currentUser?.email : null,
+      cookies.user
+    );
+  }
 
-  const handleRemoveFromFavorites = async (roadmapMeta: RoadmapMeta) => {
-    try {
+  const { data: roadmaps } = useQuery(["roadmaps"], getRoadmaps);
+  const { data: favorites } = useQuery(
+    ["favorites"],
+    fetchUserFavorites,
+    {
+      enabled: currentUser != undefined && currentUser?.email != undefined
+    }
+  );
+
+  const { mutateAsync: handleRemoveFromFavorites } = useMutation({
+    mutationFn: async (roadmapMeta: RoadmapMeta) => {
       await removeRoadmapMetaFromUserFavorites(
         currentUser?.email,
         roadmapMeta,
         cookies.user
       );
-      setFavorites((prevFavorites) =>
-        prevFavorites.filter((favorite) => favorite.id !== roadmapMeta.id)
-      );
-    } catch (error) {
-      console.error("Error removing roadmap from favorites:", error);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["favorites"]);
     }
-  };
+  });
 
-  const handleAddToFavorites = async (roadmapMeta: RoadmapMeta) => {
-    try {
+  const { mutateAsync: handleAddToFavorites } = useMutation({
+    mutationFn: async (roadmapMeta: RoadmapMeta) => {
       await addRoadmapMetaToUserFavorites(
         currentUser?.email,
         roadmapMeta,
         cookies.user
       );
-      setFavorites((prevFavorites) => [...prevFavorites, roadmapMeta]);
-    } catch (error) {
-      console.error("Error adding roadmap to favorites:", error);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["favorites"]);
     }
-  };
+  });
 
   const toggleFilters = () => {
     setShowFilters(!showFilters);
@@ -106,22 +100,17 @@ export default function Explore() {
       const decodedUser: User | null = jwtDecode(cookies.user);
       setCurrentUser(decodedUser);
     }
-    fetchRoadmaps();
   }, [cookies.user]);
 
   useEffect(() => {
-    if (currentUser) {
-      fetchUserFavorites();
-    }
-  }, [currentUser, cookies.user]);
-
-  useEffect(() => {
-    const filtered = roadmaps.filter(
+    const filtered = roadmaps?.roadmapMetaList.filter(
       (roadmap) =>
         roadmap.name.toLowerCase().includes(search.toLowerCase()) &&
         filterRoadmaps(roadmap)
     );
-    setFilteredRoadmaps(filtered);
+    if (filtered) {
+      setFilteredRoadmaps(filtered);
+    }
   }, [search, roadmaps, experienceFilter, hoursFilter]);
 
   return (
@@ -218,23 +207,23 @@ export default function Explore() {
                     </p>
                   </div>
                 </Link>
-                {currentUser ? (
+                {currentUser && favorites ? (
                   <span
-                  className="mx-2"
-                  onClick={() =>
-                    favorites.some((favorite) => favorite.id === roadmap.id)
-                      ? handleRemoveFromFavorites(roadmap)
-                      : handleAddToFavorites(roadmap)
-                  }
-                  style={{ cursor: "pointer" }}
-                >
-                  {favorites.some((favorite) => favorite.id === roadmap.id) ? (
-                    <FavoriteIcon />
-                  ) : (
-                    <FavoriteBorderIcon />
-                  )}
-                </span>
-                ) : null}           
+                    className="mx-2"
+                    onClick={() =>
+                      favorites.some((favorite: any) => favorite.id === roadmap.id)
+                        ? handleRemoveFromFavorites(roadmap)
+                        : handleAddToFavorites(roadmap)
+                    }
+                    style={{ cursor: "pointer" }}
+                  >
+                    {favorites.some((favorite: any) => favorite.id === roadmap.id) ? (
+                      <FavoriteIcon />
+                    ) : (
+                      <FavoriteBorderIcon />
+                    )}
+                  </span>
+                ) : null}
               </div>
             </li>
           ))}
