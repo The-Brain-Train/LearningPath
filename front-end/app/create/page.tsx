@@ -1,8 +1,10 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import IndentedTree from "../components/IndentedTree";
 import InputForm from "../components/InputForm";
-import { CreateRoadmapFormData, RoadmapDTO, TreeNode, User } from "../util/types";
+import { useCookies } from "react-cookie";
+import { RoadmapDTO, TreeNode, User } from "../util/types";
+import jwtDecode from "jwt-decode";
 import { postRoadmap } from "../functions/httpRequests";
 import { getResponseFromOpenAI } from "../functions/openAIChat";
 import { chatHistory } from "../functions/chatPreHistory";
@@ -11,54 +13,58 @@ import {
   scaleValues,
 } from "../functions/roadmapHoursCalculator";
 import { useQuery } from "@tanstack/react-query";
-import useCurrentUser, { getUserToken } from "../util/useCurrentUser";
 
 export default function Create() {
   const [data, setData] = useState<TreeNode | null>(null);
-  const [formData, setFormData] = useState<CreateRoadmapFormData>({
-    topic: null,
-    hours: null,
-    experienceLevel: null,
-  });
+  const [hours, setHours] = useState<number | null>(null);
+  const [experienceLevel, setExperienceLevel] = useState<string | null>(null);
+  const [topic, setTopic] = useState<string | null>(null);
   const [isLoading, setLoading] = useState(false);
   const [createError, setCreateError] = useState<string | null>(null);
   const [totalHours, setTotalHours] = useState(0);
-  const { data: currentUser } = useCurrentUser();
-  const userToken = getUserToken();
+  const [cookies] = useCookies(["user"]);
+  
+  const { data: currentUser } = useQuery<User | null>(
+    ["currentUser"],
+    async () => {
+      if (cookies.user) {
+        const user = jwtDecode(cookies.user) as User | null;
+        return user;
+      }
+      return null;
+    }
+  );
 
   const resetForm = () => {
-    setFormData({
-      hours: null,
-      experienceLevel: null,
-      topic: null,
-    });
+    setHours(null);
+    setExperienceLevel(null);
+    setTopic(null);
   };
 
   const saveRoadMap = async () => {
-    if (formData.topic == null || currentUser?.email == null) {
+    if (topic == null || currentUser?.email == null) {
       return;
     }
 
     const requestData: RoadmapDTO = {
-      name: formData.topic,
+      name: topic,
       roadmap: JSON.stringify(data),
       userEmail: currentUser.email,
-      experienceLevel: formData.experienceLevel,
+      experienceLevel: experienceLevel,
       hours: totalHours,
     };
-    postRoadmap(requestData, userToken);
+    postRoadmap(requestData, cookies.user);
   };
-
   const handleSendMessage = async () => {
     setLoading(true);
     try {
       const response = await getResponseFromOpenAI(
-        chatHistory(formData.topic, formData.experienceLevel, formData.hours)
+        chatHistory(topic, experienceLevel, hours)
       );
       const jsonData = await JSON.parse(response.choices[0].message.content);
 
       calculateTotalValuesRecursive(jsonData);
-      const scaledJsonData = scaleValues(formData.hours, jsonData);
+      const scaledJsonData = scaleValues(hours, jsonData);
       calculateTotalValuesRecursive(scaledJsonData);
 
       setTotalHours(scaledJsonData.value);
@@ -73,22 +79,18 @@ export default function Create() {
     }
   };
 
-  useQuery(["sendMessage", formData.topic], handleSendMessage, {
-    enabled: !!formData.topic,
-  });
+  useEffect(() => {
+    if (topic != null) {
+      handleSendMessage();
+    }
+  }, [topic]);
 
   return (
     <main className="main-background">
       <InputForm
-        setTopic={(topic) =>
-          setFormData((prevData) => ({ ...prevData, topic }))
-        }
-        setHours={(hours) =>
-          setFormData((prevData) => ({ ...prevData, hours }))
-        }
-        setExperienceLevel={(experienceLevel) =>
-          setFormData((prevData) => ({ ...prevData, experienceLevel }))
-        }
+        setTopic={setTopic}
+        setHours={setHours}
+        setExperienceLevel={setExperienceLevel}
         resetForm={resetForm}
       />
       <IndentedTree
