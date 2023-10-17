@@ -12,20 +12,31 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useCookies } from "react-cookie";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const SigninForm = () => {
-  const [formData, setFormData] = React.useState({
+  const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-  const [error, setError] = React.useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [cookies, setCookie] = useCookies(["user"]);
   const router = useRouter();
+  const [isEmailValid, setIsEmailValid] = useState(true);
+  const [isFormValid, setIsFormValid] = useState(false);
 
-  const handleInputChange = (e: { target: { name: string; value: string } }) => {
+
+  const handleInputChange = (e: { target: { name: any; value: any; }; }) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  
+    if (name === "email") {
+      const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+      setIsEmailValid(emailRegex.test(value));
+    }
+    setIsFormValid(isEmailValid && formData.password.trim() !== "");
   };
+  
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -90,6 +101,8 @@ const SigninForm = () => {
             onChange={handleInputChange}
             value={formData.email}
             autoFocus
+            error={!isEmailValid}
+            helperText={!isEmailValid ? "Invalid email format" : ""}
           />
           <TextField
             margin="normal"
@@ -113,6 +126,7 @@ const SigninForm = () => {
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2, bgcolor: "#1976d2 !important" }}
+            disabled={!isFormValid}
           >
             Sign In
           </Button>

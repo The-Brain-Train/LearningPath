@@ -59,14 +59,15 @@ const InputForm = ({
   setTopic,
   setHours,
   setExperienceLevel,
-  resetForm
+  resetForm,
 }: InputFormProps) => {
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const [open, setOpen] = useState(false);
   const [experience, setExperience] = useState("");
   const [userMessage, setUserMessage] = useState<string>("");
   const [sliderValue, setSliderValue] = useState<number>(30);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const handleChange = (event: SelectChangeEvent) => {
     setExperience(event.target.value);
