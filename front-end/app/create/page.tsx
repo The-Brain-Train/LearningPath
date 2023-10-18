@@ -77,10 +77,12 @@ export default function Create() {
   return (
     <main className="main-background">
       <InputForm
+        data={data}
         setTopic={setTopic}
         setHours={setHours}
         setExperienceLevel={setExperienceLevel}
         resetForm={resetForm}
+        setData={setData}
       />
       <IndentedTree
         data={data}

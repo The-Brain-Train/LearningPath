@@ -7,6 +7,8 @@ import { Box, TextField } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import { useState } from "react";
 import Slider from "@mui/material/Slider";
+import { TreeNode } from "../util/types";
+import { ArrowBack } from "@mui/icons-material";
 
 const style = {
   position: "absolute" as "absolute",
@@ -27,10 +29,10 @@ const style = {
     color: "white",
   },
   "& .MuiSelect-icon": {
-    color: "white", 
+    color: "white",
   },
   "& .MuiSlider-root": {
-    color: "white", 
+    color: "white",
   },
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
@@ -53,13 +55,17 @@ type InputFormProps = {
   setHours: (hours: number | null) => void;
   setExperienceLevel: (experienceLevel: string | null) => void;
   resetForm: () => void;
+  data: TreeNode | null;
+  setData: (data: TreeNode | null) => void;
 };
 
 const InputForm = ({
+  data,
   setTopic,
   setHours,
   setExperienceLevel,
   resetForm,
+  setData,
 }: InputFormProps) => {
   const [open, setOpen] = useState(false);
   const [experience, setExperience] = useState("");
@@ -86,21 +92,32 @@ const InputForm = ({
   return (
     <>
       <div>
-        <h1 className="flex justify-center p-5 text-white">
-          What would you want to create?
-        </h1>
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <button
-            className="bg-transparent hover:bg-emerald-600text-lg text-white font-bold border-2 p-2 border-white rounded "
-            style={{ backgroundColor: "#141832" }}
-            onClick={() => {
-              handleOpen();
-              resetForm();
-            }}
-          >
-            Create Roadmap
-          </button>
-        </div>
+        {data === null && (
+          <div>
+            <h1 className="flex justify-center p-5 text-white">
+              What would you want to create?
+            </h1>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <button
+                className="bg-transparent hover:bg-emerald-600text-lg text-white font-bold border-2 p-2 border-white rounded "
+                style={{ backgroundColor: "#141832" }}
+                onClick={() => {
+                  handleOpen();
+                  resetForm();
+                }}
+              >
+                Create Roadmap
+              </button>
+            </div>
+          </div>
+        )}
+        {data !== null && (
+          <ArrowBack
+            fontSize="medium"
+            className="text-slate-300 m-3 mt-4"
+            onClick={() => setData(null)}
+          />
+        )}
         <Modal
           open={open}
           onClose={handleClose}
