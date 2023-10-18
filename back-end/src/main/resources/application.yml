@@ -3,15 +3,13 @@ debug: true
 spring:
   data:
     mongodb:
-      uri: mongodb://root:example@localhost:27017/learningPath?authSource=admin
-      database: learningPath
+      uri: mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@learningpathcluster.xszn5ys.mongodb.net/${DB_NAME}
 logging:
   level:
     org:
       springframework:
         boot:
           autoconfigure: ERROR
-
 token:
   signing:
-    key: 5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437
+    key: ${TOKEN_SIGNING_KEY}
