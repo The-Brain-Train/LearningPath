@@ -1,33 +1,15 @@
 version: '3.8'
 
+  
 services:
-  postgres:
-    image: 'postgres:10'
-    container_name: 'salt-postgres'
-    networks:
-      - postgres-network
-    environment:
-      - POSTGRES_USER=salt
-      - POSTGRES_PASSWORD=secret
-      - POSTGRES_DB=saltdb
-    volumes:
-      - ./data/pgdata:/var/lib/postgresql/data
-    ports:
-      - 5432:5432
-    restart: always
-  pgadmin:
-    image: dpage/pgadmin4
-    depends_on:
-      - postgres
-    container_name: 'salt-pgadmin'
-    networks:
-      - postgres-network
-    ports:
-      - 5050:80
-    environment:
-      PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
-      PGADMIN_DEFAULT_PASSWORD: admin
-    restart: always
+  # my-java-app:
+  #   image: amazoncorretto:17.0.8-alpine3.18
+  #   container_name: learningPath-container
+  #   ports:
+  #     - "8080:8080"
+  #   volumes:
+  #     - ./target/learningPath-0.0.1-SNAPSHOT.jar:/learningPath-0.0.1-SNAPSHOT.jar
+  #   command: ["java", "-jar", "/learningPath-0.0.1-SNAPSHOT.jar"]
   mongo:
     image: mongo
     restart: always
