@@ -17,11 +17,11 @@ const topSectionButtonStyles = (backgroundImageUrl: string) => ({
 export default function Home() {
   return (
     <main className="main-background">
-      <section className="flex flex-col p-3 gap-2 mt-5">
+      <section className="flex flex-col p-3 gap-2 mt-5 lg:content-center lg:items-center">
         <div className="mb-16 text-center">
           <TextAnimation />
         </div>
-        <div className="flex justify-center gap-4 mt-5 pt-32 mb-6">
+        <div className="flex justify-center gap-4 mt-5 pt-32 mb-6 lg:pt-10">
           <Link href="/explore">
             <div
               className="relative text-center rounded cursor-pointer group transition-opacity duration-300 border-2"
@@ -47,7 +47,7 @@ export default function Home() {
           <h2 className="text-white text-4xl mb-4 text-center font-bold">
             About LearningPath
           </h2>
-          <div className="rounded p-5 relative text-white text-base space-y-4 text-left">
+          <div className="rounded p-5 relative text-white text-base space-y-4 text-left lg:flex lg:flex-row-reverse lg:gap-4">
             <p>
               LearningPath is an exciting and innovative AI-powered learning
               management tool that's designed to make your learning journey both
@@ -56,7 +56,7 @@ export default function Home() {
             <img
               src="/home-about-img.jpeg"
               alt="Create Roadmap"
-              className="ml-2 w-70 h-52"
+              className="ml-2 w-70 h-52 mt-0 lg:h-72 lg:w-64"
             />
           </div>
           <div className="flex flex-col justify-center items-center pt-8">

@@ -18,3 +18,7 @@ main {
     background: linear-gradient(151deg, rgba(81,85,133,1) 0%, rgba(0,32,74,1) 50%, rgba(81,85,133,1) 100%);
     min-height: 100vh;
 }
+
+.space-y-4 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 0;
+}
