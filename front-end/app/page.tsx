@@ -21,7 +21,7 @@ export default function Home() {
         <div className="mb-16 text-center">
           <TextAnimation />
         </div>
-        <div className="flex justify-center gap-4 mt-5 pt-32 mb-6 lg:pt-10">
+        <div className="flex justify-center gap-4 mt-5 pt-32 lg:pt-10">
           <Link href="/explore">
             <div
               className="relative text-center rounded cursor-pointer group transition-opacity duration-300 border-2"
@@ -47,8 +47,8 @@ export default function Home() {
           <h2 className="text-white text-4xl mb-4 text-center font-bold">
             About LearningPath
           </h2>
-          <div className="rounded p-5 relative text-white text-base space-y-4 text-left lg:flex lg:flex-row-reverse lg:gap-4">
-            <p>
+          <div className="rounded p-5 max-w-3xl relative text-white text-base space-y-4 text-left lg:flex lg:flex-row-reverse gap-4">
+            <p className="pb-5 lg:py-10">
               LearningPath is an exciting and innovative AI-powered learning
               management tool that's designed to make your learning journey both
               enjoyable and productive.
@@ -56,14 +56,14 @@ export default function Home() {
             <img
               src="/home-about-img.jpeg"
               alt="Create Roadmap"
-              className="ml-2 w-70 h-52 mt-0 lg:h-72 lg:w-64"
+              className="w-70 h-52 mt-0"
             />
           </div>
           <div className="flex flex-col justify-center items-center pt-8">
             <h2 className="text-white text-4xl mb-8 text-center font-bold">
               Features of LearningPath
             </h2>
-            <div className="ml-6 space-y-2 flex flex-col gap-6">
+            <div className="space-y-2 flex flex-col gap-6 max-w-3xl">
               <div>
                 <div className="flex items-center mb-2">
                   <h2 className="text-white text-xl font-bold mb-2">
