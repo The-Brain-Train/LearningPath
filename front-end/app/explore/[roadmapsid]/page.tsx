@@ -3,12 +3,11 @@ import IndentedTreeWithData from "@/app/components/IndentedTreeWithData";
 import { getRoadmap, getRoadmaps } from "@/app/functions/httpRequests";
 import { ArrowBack } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
-import { TreeNode } from "@/app/util/types";
 import { useQuery } from "@tanstack/react-query";
 
 type Props = {
   params: {
-    roadmapId: string;
+    roadmapsid: string;
   };
 };
 
@@ -20,7 +19,7 @@ export default function roadMapId(props: Props) {
     getRoadmaps
   );
 
-  const roadmapId = props.params.roadmapId;
+  const roadmapId = props.params.roadmapsid;
 
   const { data: roadmapData } = useQuery(
     ["roadmap", roadmapId],

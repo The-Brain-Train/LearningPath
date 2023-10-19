@@ -6,6 +6,7 @@ import jwtDecode from "jwt-decode";
 import { User } from "../util/types";
 import AccountCircleSharpIcon from "@mui/icons-material/AccountCircleSharp";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 
 export default function Header() {
   const [cookies, setCookie] = useCookies(["user"]);
@@ -28,10 +29,12 @@ export default function Header() {
             href="/"
             className="flex text-xl font-semibold subpixel-antialiased font-serif"
           >
-            <img
+            <Image
               src="/learningpath-logo-cropped.png"
               alt="LP Logo"
               className="h-10"
+              width={40}
+              height={40}
             />
             <span
               style={{
