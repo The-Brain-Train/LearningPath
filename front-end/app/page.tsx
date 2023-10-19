@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import Link from "next/link";
 import TextAnimation from "./components/TextAnimation";
 import CreateIcon from "@mui/icons-material/Create";
@@ -51,7 +51,7 @@ export default function Home() {
           <div className="rounded p-5 max-w-3xl relative text-white text-base space-y-4 text-left lg:flex lg:flex-row-reverse gap-4">
             <p className="pb-5 lg:py-10">
               LearningPath is an exciting and innovative AI-powered learning
-              management tool that's designed to make your learning journey both
+              management tool that&apos;s designed to make your learning journey both
               enjoyable and productive.
             </p>
             <Image
@@ -83,7 +83,8 @@ export default function Home() {
               <div>
                 <div className="flex items-center mb-2">
                   <h2 className="text-white text-xl font-bold mb-2">
-                    <SaveIcon className="mr-2"/>Save & Manage Roadmaps:
+                    <SaveIcon className="mr-2"/>
+                    Save &amp; Manage Roadmaps:
                   </h2>
                 </div>
                 <p className="text-white">
@@ -94,7 +95,8 @@ export default function Home() {
               <div>
                 <div className="flex items-center mb-2">
                   <h2 className="text-white text-xl font-bold mb-2">
-                    <ThumbsUpDownIcon className="mr-2"/>Explore & Vote:
+                    <ThumbsUpDownIcon className="mr-2"/>
+                    Explore &amp; Vote:
                   </h2>
                 </div>
                 <p className="text-white">
