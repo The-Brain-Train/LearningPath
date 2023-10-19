@@ -1,5 +1,5 @@
 "use client";
-import React, { useState} from "react";
+import React, { useState } from "react";
 import { RoadmapMeta, User } from "../util/types";
 import { RoadmapMetaList } from "../util/types";
 import { useRouter } from "next/navigation";
@@ -18,8 +18,10 @@ import {
 import PersonalRoadmapCard from "../components/PersonalRoadmapCard";
 import FavoriteRoadmapCard from "../components/FavoriteRoadmapCard";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import jwtDecode from 'jwt-decode';
-import { useCookies } from 'react-cookie';
+import jwtDecode from "jwt-decode";
+import { useCookies } from "react-cookie";
+import Image from "next/image";
+import Link from "next/link";
 
 function Icon({ id, open }: { id: string | number; open: number }) {
   return (
@@ -164,15 +166,21 @@ const Profile = () => {
           </div>
         </main>
       ) : (
-        <div className="main-background min-h-max  text-center items-center pt-20 rounded-lg font-bold text-xl text-white ">
-          <p>Please sign in to view your profile.</p>
-          <button
-            className="bg-transparent hover:bg-emerald-600text-lg text-white font-bold border-2 p-2 mt-2 border-white rounded "
-            style={{ backgroundColor: "#141832" }}
-            onClick={() => router.push("/signin")}
-          >
-            Sign in / Sign up
-          </button>
+        <div className="main-background min-h-max gap-5 text-center items-center pt-20 rounded-lg text-xl text-white ">
+          <p className="font-semibold text-lg">
+            Please{" "}
+            <Link href="/signin" className="hover:text-blue-500 underline ">
+              SignIn/SignUp
+            </Link>{" "}
+            to view your profile.
+          </p>
+          <Image
+            src="/roadmap3.jpeg"
+            alt="Create Roadmap"
+            className="m-auto rounded-full"
+            height={100}
+            width={100}
+          />
         </div>
       )}
     </>
