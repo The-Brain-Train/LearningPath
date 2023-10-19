@@ -1,3 +1,5 @@
+import React from "react"; // Import React
+
 "use client";
 import IndentedTreeWithData from "@/app/components/IndentedTreeWithData";
 import { getRoadmap, getRoadmaps } from "@/app/functions/httpRequests";
@@ -11,7 +13,8 @@ type Props = {
   };
 };
 
-export default function roadMapId(props: Props) {
+
+function RoadMapId(props: Props) {
   const router = useRouter();
 
   const { data: roadmaps, isLoading, isError } = useQuery(
@@ -51,11 +54,11 @@ export default function roadMapId(props: Props) {
             className="text-slate-300 m-3 mt-4"
             onClick={() => router.back()}
           />
-          <IndentedTreeWithData
-            data={roadmapData}
-          />
+          <IndentedTreeWithData data={roadmapData} />
         </>
       )}
     </main>
   );
 }
+
+export default RoadMapId;
