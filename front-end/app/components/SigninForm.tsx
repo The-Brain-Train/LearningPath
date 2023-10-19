@@ -41,7 +41,7 @@ const SigninForm = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const BACKEND_URL = process.env.BACKEND_URL;
+    const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
     try {
       const response = await fetch(`${BACKEND_URL}/api/auth/signin`, {

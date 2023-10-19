@@ -4,6 +4,7 @@ import TextAnimation from "./components/TextAnimation";
 import CreateIcon from "@mui/icons-material/Create";
 import ThumbsUpDownIcon from '@mui/icons-material/ThumbsUpDown';
 import SaveIcon from '@mui/icons-material/Save';
+import Image from "next/image";
 
 const topSectionButtonStyles = (backgroundImageUrl: string) => ({
   backgroundImage: `url(${backgroundImageUrl})`,
@@ -53,10 +54,12 @@ export default function Home() {
               management tool that's designed to make your learning journey both
               enjoyable and productive.
             </p>
-            <img
+            <Image
               src="/home-about-img.jpeg"
               alt="Create Roadmap"
-              className="w-70 h-52 mt-0"
+              className="mt-0"
+              height={300}
+              width={300}
             />
           </div>
           <div className="flex flex-col justify-center items-center pt-8">
