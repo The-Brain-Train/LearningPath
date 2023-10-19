@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import IndentedTree from "../components/IndentedTree";
 import InputForm from "../components/InputForm";
-import { RoadmapDTO, TreeNode } from "../util/types";
+import { RoadmapDTO, TreeNode, User } from "../util/types";
 import { postRoadmap } from "../functions/httpRequests";
 import { getResponseFromOpenAI } from "../functions/openAIChat";
 import { chatHistory } from "../functions/chatPreHistory";
@@ -10,7 +10,9 @@ import {
   calculateTotalValuesRecursive,
   scaleValues,
 } from "../functions/roadmapHoursCalculator";
-import useCurrentUser, { getUserToken } from "../util/useCurrentUser";
+import jwtDecode from 'jwt-decode';
+import { useCookies } from 'react-cookie';
+import { useQuery } from "@tanstack/react-query";
 
 export default function Create() {
   const [data, setData] = useState<TreeNode | null>(null);
@@ -20,14 +22,24 @@ export default function Create() {
   const [isLoading, setLoading] = useState(false);
   const [createError, setCreateError] = useState<string | null>(null);
   const [totalHours, setTotalHours] = useState(0);
-  const { data: currentUser } = useCurrentUser();
-  const userToken = getUserToken();
+  const [cookies] = useCookies(["user"]);
   
   const resetForm = () => {
     setHours(null);
     setExperienceLevel(null);
     setTopic(null);
   };
+
+  const { data: currentUser } = useQuery<User | null>(
+    ["currentUser"],
+    async () => {
+      if (cookies.user) {
+        const user = jwtDecode(cookies.user) as User | null;
+        return user;
+      }
+      return null;
+    }
+  );
 
   const saveRoadMap = async () => {
     if (topic == null || currentUser?.email == null) {
@@ -41,7 +53,7 @@ export default function Create() {
       experienceLevel: experienceLevel,
       hours: totalHours,
     };
-    postRoadmap(requestData, userToken);
+    postRoadmap(requestData, cookies.user);
   };
   
   const handleSendMessage = async () => {
