@@ -21,12 +21,14 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import jwtDecode from 'jwt-decode';
 import { useCookies } from 'react-cookie';
+import './explore.css';
 
 export default function Explore() {
   const [filteredRoadmaps, setFilteredRoadmaps] = useState<RoadmapMeta[]>([]);
   const [search, setSearch] = useState("");
   const [experienceFilter, setExperienceFilter] = useState<string | null>(null);
-  const [hoursFilter, setHoursFilter] = useState<number | null>(null);
+  const [hoursFromFilter, setHoursFromFilter] = useState<number | null>(null);
+  const [hoursToFilter, setHoursToFilter] = useState<number | null>(null);
   const [showFilters, setShowFilters] = useState(false);
   const queryClient = useQueryClient();
   const [cookies] = useCookies(["user"]);
@@ -49,8 +51,6 @@ export default function Explore() {
     );
   }
 
-
-
   const { data: roadmaps } = useQuery(["roadmaps"], getRoadmaps);
   const { data: favorites } = useQuery(
     ["favorites"],
@@ -66,7 +66,7 @@ export default function Explore() {
         currentUser?.email,
         roadmapMeta,
         cookies.user
-        );
+      );
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["favorites"]);
@@ -95,7 +95,10 @@ export default function Explore() {
     if (experienceFilter && roadmap.experienceLevel !== experienceFilter) {
       return false;
     }
-    if (hoursFilter !== null && roadmap.hours !== hoursFilter) {
+    if (hoursFromFilter !== null && roadmap.hours <= hoursFromFilter) {
+      return false;
+    }
+    if (hoursToFilter !== null && roadmap.hours >= hoursToFilter) {
       return false;
     }
     return true;
@@ -117,11 +120,12 @@ export default function Explore() {
     if (filtered) {
       setFilteredRoadmaps(filtered);
     }
-  }, [search, roadmaps, experienceFilter, hoursFilter]);
+  }, [search, roadmaps, experienceFilter, hoursFromFilter, hoursToFilter]);
 
   return (
     <main className="main-background min-h-max flex items-center flex-col">
-      <div className="flex flex-row my-5" style={{ maxWidth: "300px" }}>
+
+      <div className="flex flex-row my-5 filter-options-mobile" style={{ maxWidth: "300px" }}>
         <Paper
           component="form"
           sx={{
@@ -148,10 +152,78 @@ export default function Explore() {
           </Tooltip>
         </Button>
       </div>
+
+      <div className="flex flex-row filter-options-desktop">
+
+        <div className="flex flex-row my-5" style={{ maxWidth: "300px" }}>
+          <Paper
+            component="form"
+            sx={{
+              p: "2px 4px",
+              display: "flex",
+              alignItems: "center",
+              width: 600,
+            }}
+          >
+            <InputBase
+              sx={{ ml: 1, flex: 1 }}
+              placeholder="Search"
+              inputProps={{ "aria-label": "search" }}
+              value={search}
+              onChange={handleSearchChange}
+            />
+            <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
+              <SearchIcon />
+            </IconButton>
+          </Paper>
+        </div>
+
+        <select
+          value={experienceFilter || ""}
+          onChange={(e) => setExperienceFilter(e.target.value || null)}
+          className="rounded-md h-11"
+          style={{ width: "200px" }}
+        >
+          <option value="">Experience Level</option>
+          <option value="beginner">Beginner</option>
+          <option value="intermediate">Intermediate</option>
+          <option value="expert">Expert</option>
+        </select>
+        <span className="text-white">Hour range:</span>
+        <input
+          type="number"
+          min="0"
+          step="10"
+          value={hoursFromFilter === null ? "" : hoursFromFilter}
+          onChange={(e) => {
+            setHoursFromFilter(
+              e.target.value === "" ? null : parseInt(e.target.value)
+            )
+          }
+          }
+          placeholder="From"
+          className="rounded-md h-7 hour-input"
+        />
+        <input
+          type="number"
+          min="0"
+          step="10"
+          value={hoursToFilter === null ? "" : hoursToFilter}
+          onChange={(e) =>
+            setHoursToFilter(
+              e.target.value === "" ? null : parseInt(e.target.value)
+            )
+          }
+          placeholder="To"
+          className="rounded-md h-7 hour-input"
+        />
+
+      </div>
+
       <div style={{ maxWidth: "300px", width: "80%" }}>
         {showFilters && (
           <div
-            className="flex flex-col gap-1 border-2 p-2 rounded-sm"
+            className="flex flex-col gap-1 border-2 p-2 rounded-sm filter-options-mobile"
             style={{ maxWidth: "200px", margin: "0 auto" }}
           >
             <span className="text-white">Filter:</span>
@@ -169,9 +241,22 @@ export default function Explore() {
               type="number"
               min="0"
               step="10"
-              value={hoursFilter === null ? "" : hoursFilter}
+              value={hoursFromFilter === null ? "" : hoursFromFilter}
               onChange={(e) =>
-                setHoursFilter(
+                setHoursFromFilter(
+                  e.target.value === "" ? null : parseInt(e.target.value)
+                )
+              }
+              placeholder="Hours"
+              className="rounded-md h-7"
+            />
+            <input
+              type="number"
+              min="0"
+              step="10"
+              value={hoursToFilter === null ? "" : hoursToFilter}
+              onChange={(e) =>
+                setHoursToFilter(
                   e.target.value === "" ? null : parseInt(e.target.value)
                 )
               }
@@ -235,6 +320,7 @@ export default function Explore() {
           ))}
         </ul>
       </div>
+
     </main>
   );
 }
