@@ -1,0 +1,15 @@
+/* desktop */
+@media only screen and (min-width: 1000px) {
+    .filter {
+        display: flex;
+        flex-direction: row; 
+        justify-content: space-between; 
+    }
+    .filter-menu {
+        /* background-color: green; */
+        max-width: 300px;
+    }
+    .filter-options {
+        max-width: 200px;
+    }
+  }
