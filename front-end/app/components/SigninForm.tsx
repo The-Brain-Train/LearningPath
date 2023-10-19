@@ -41,8 +41,10 @@ const SigninForm = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const BACKEND_URL = process.env.BACKEND_URL;
+
     try {
-      const response = await fetch("http://localhost:8080/api/auth/signin", {
+      const response = await fetch(`${BACKEND_URL}/api/auth/signin`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -2,12 +2,13 @@ import {
   RoadmapMetaList,
   Roadmap,
   RoadmapDTO,
-  User,
   RoadmapMeta,
 } from "../util/types";
 
+const BACKEND_URL = process.env.BACKEND_URL;
+
 export const getRoadmaps = async () => {
-  const response = await fetch(`http://localhost:8080/api/roadmaps`);
+  const response = await fetch(`${BACKEND_URL}/api/roadmaps`);
   if (!response.ok) {
     throw Error("Failed to fetch roadmaps");
   }
@@ -17,7 +18,7 @@ export const getRoadmaps = async () => {
 
 export const getRoadmap = async (roadMapId: string) => {
   const response = await fetch(
-    `http://localhost:8080/api/roadmaps/${roadMapId}`);
+    `${BACKEND_URL}/api/roadmaps/${roadMapId}`);
   if (!response.ok) {
     throw new Error("Failed to fetch roadmaps");
   }
@@ -27,7 +28,7 @@ export const getRoadmap = async (roadMapId: string) => {
 
 export const deleteRoadmap = async (roadMapId: string) => {
   const response = await fetch(
-    `http://localhost:8080/api/roadmaps/${roadMapId}`,
+    `${BACKEND_URL}/api/roadmaps/${roadMapId}`,
     {
       method: "DELETE",
     }
@@ -39,7 +40,7 @@ export const deleteRoadmap = async (roadMapId: string) => {
 };
 
 export const postRoadmap = async (roadmap: RoadmapDTO, token: any) => {
-  const response = await fetch(`http://localhost:8080/api/roadmaps`, {
+  const response = await fetch(`${BACKEND_URL}/api/roadmaps`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -54,7 +55,7 @@ export const postRoadmap = async (roadmap: RoadmapDTO, token: any) => {
 
 export const getUsersRoadmapMetas = async (userEmail: string, token: any) => {
   const response = await fetch(
-    `http://localhost:8080/api/roadmaps/${userEmail}/roadmapMetas`,
+    `${BACKEND_URL}/api/roadmaps/${userEmail}/roadmapMetas`,
     {
       headers: {
         Authorization: "Bearer " + token,
@@ -70,7 +71,7 @@ export const getUsersRoadmapMetas = async (userEmail: string, token: any) => {
 
 export const getUserFavorites = async (userEmail: string | null, token: any) => {
   const response = await fetch(
-    `http://localhost:8080/api/roadmaps/${userEmail}/favorites`,
+    `${BACKEND_URL}/api/roadmaps/${userEmail}/favorites`,
     {
       headers: {
         Authorization: "Bearer " + token,
@@ -91,7 +92,7 @@ export const addRoadmapMetaToUserFavorites = async (
 ) => {
   try {
     const res = await fetch(
-      `http://localhost:8080/api/roadmaps/${userEmail}/favorites`,
+      `${BACKEND_URL}/api/roadmaps/${userEmail}/favorites`,
       {
         method: "POST",
         body: JSON.stringify(roadmapMeta),
@@ -118,7 +119,7 @@ export const removeRoadmapMetaFromUserFavorites = async (
 ) => {
   try {
     const res = await fetch(
-      `http://localhost:8080/api/roadmaps/${userEmail}/favorites`,
+      `${BACKEND_URL}/api/roadmaps/${userEmail}/favorites`,
       {
         method: "DELETE",
         body: JSON.stringify(roadmapMeta),
