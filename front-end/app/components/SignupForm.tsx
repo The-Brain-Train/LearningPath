@@ -75,7 +75,7 @@ if (response.status === 409) {
   };
 
   return (
-    <Container className="main-background" component="main" >
+    <Container className="main-background m-0 min-w-full" component="main" >
       <CssBaseline />
       <Box
         sx={{
@@ -104,6 +104,17 @@ if (response.status === 409) {
                 onChange={handleInputChange}
                 autoFocus
                 value={formData.name}
+                InputProps={{
+                  style: { color: 'white' }
+                }}
+                InputLabelProps={{
+                  style: { color: 'white' }
+                }}
+                sx={{
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'white',
+                  },
+                }}
               />
             </Grid>
             <Grid item xs={12}>
@@ -118,6 +129,17 @@ if (response.status === 409) {
                 value={formData.email}
                 error={!isEmailValid}
                 helperText={!isEmailValid ? "Invalid email format" : ""}
+                InputProps={{
+                  style: { color: 'white' }
+                }}
+                InputLabelProps={{
+                  style: { color: 'white' }
+                }}
+                sx={{
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'white',
+                  },
+                }}
               />
             </Grid>
             <Grid item xs={12}>
@@ -131,6 +153,17 @@ if (response.status === 409) {
                 autoComplete="new-password"
                 onChange={handleInputChange}
                 value={formData.password}
+                InputProps={{
+                  style: { color: 'white' }
+                }}
+                InputLabelProps={{
+                  style: { color: 'white' }
+                }}
+                sx={{
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'white',
+                  },
+                }}
               />
             </Grid>
           </Grid>

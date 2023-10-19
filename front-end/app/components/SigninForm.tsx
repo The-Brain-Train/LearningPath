@@ -75,7 +75,7 @@ const SigninForm = () => {
   };
 
   return (
-    <Container component="main" className="main-background">
+    <Container component="main" className="main-background m-0 min-w-full">
       <CssBaseline />
       <Box
         sx={{
@@ -105,6 +105,17 @@ const SigninForm = () => {
             autoFocus
             error={!isEmailValid}
             helperText={!isEmailValid ? "Invalid email format" : ""}
+            InputProps={{
+              style: { color: 'white' }
+            }}
+            InputLabelProps={{
+              style: { color: 'white' }
+            }}
+            sx={{
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderColor: 'white',
+              },
+            }}
           />
           <TextField
             margin="normal"
@@ -117,6 +128,17 @@ const SigninForm = () => {
             onChange={handleInputChange}
             value={formData.password}
             autoComplete="current-password"
+            InputProps={{
+              style: { color: 'white' }
+            }}
+            InputLabelProps={{
+              style: { color: 'white' }
+            }}
+            sx={{
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderColor: 'white',
+              },
+            }}
           />
           {error && (
             <Typography variant="body2" color="error" sx={{ mt: 1 }}>
