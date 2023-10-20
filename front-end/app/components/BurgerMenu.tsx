@@ -40,8 +40,8 @@ export default function BurgerMenu() {
     setAnchorEl(null);
   };
   return (
-    <>
-      <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
+    <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
+      <div className="sm:hidden">
         <IconButton
           onClick={isOpen ? handleClose : handleClick}
           size="small"
@@ -55,25 +55,47 @@ export default function BurgerMenu() {
         >
           {isOpen ? <CloseIcon /> : <MenuIcon />}
         </IconButton>
-      </Box>
-      <Menu
-        anchorEl={anchorEl}
-        id="account-menu"
-        open={isOpen}
-        onClose={handleClose}
-        onClick={handleClose}
-      >
-        <MenuItem onClick={() => router.push("/")}>
-          <HomeIcon /> <p className="pl-2">Home</p>
-        </MenuItem>
+        <Menu
+          anchorEl={anchorEl}
+          id="account-menu"
+          open={isOpen}
+          onClose={handleClose}
+          onClick={handleClose}
+        >
+          <MenuItem onClick={() => router.push("/")}>
+            <HomeIcon /> <p className="pl-2">Home</p>
+          </MenuItem>
+          <MenuItem onClick={() => router.push("/create")}>
+            <CreateIcon /> <p className="pl-2">Create</p>
+          </MenuItem>
+          <MenuItem onClick={() => router.push("/explore")}>
+            <ExploreIcon /> <p className="pl-2">Explore</p>
+          </MenuItem>
+          <MenuItem onClick={() => router.push("/profile")}>
+            <AccountCircleIcon /> <p className="pl-2">My Profile</p>
+          </MenuItem>
+          {cookies.user ? (
+            <MenuItem onClick={handleSignOut}>
+              <LoginIcon /> <p className="pl-2">Sign Out</p>
+            </MenuItem>
+          ) : (
+            <MenuItem onClick={() => router.push("/signin")}>
+              <LogoutIcon />{" "}
+              <div className="flex flex-col">
+                <p className="pl-2">SignIn / </p>
+                <p className="pl-2">SignUp</p>
+              </div>
+            </MenuItem>
+          )}
+        </Menu>
+      </div>
+      <div className="hidden sm:flex">
+        
         <MenuItem onClick={() => router.push("/create")}>
           <CreateIcon /> <p className="pl-2">Create</p>
         </MenuItem>
         <MenuItem onClick={() => router.push("/explore")}>
           <ExploreIcon /> <p className="pl-2">Explore</p>
-        </MenuItem>
-        <MenuItem onClick={() => router.push("/profile")}>
-          <AccountCircleIcon /> <p className="pl-2">My Profile</p>
         </MenuItem>
         {cookies.user ? (
           <MenuItem onClick={handleSignOut}>
@@ -83,12 +105,12 @@ export default function BurgerMenu() {
           <MenuItem onClick={() => router.push("/signin")}>
             <LogoutIcon />{" "}
             <div className="flex flex-col">
-              <p className="pl-2">Sign In / </p>
-              <p className="pl-2">Sign Up</p>
+              <p className="pl-2">SignIn / </p>
+              <p className="pl-2">SignUp</p>
             </div>
           </MenuItem>
         )}
-      </Menu>
-    </>
+      </div>
+    </Box>
   );
 }
