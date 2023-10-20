@@ -25,34 +25,30 @@ export default function Header() {
     <>
       <header className="bg-white fixed w-full h-16	z-50 top-0 left-0">
         <div className="flex h-16 items-center justify-between mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
-          <Link
-            href="/"
-            className="flex text-xl font-semibold subpixel-antialiased font-serif"
-          >
+          <Link href="/">
             <Image
-              src="/learningpath-logo-cropped.png"
+              src="/Logo.png"
               alt="LP Logo"
-              className="h-10"
-              width={40}
-              height={40}
+              width={120}
+              height={60}
             />
-            <span
-              style={{
-                fontWeight: 900,
-                marginTop: "5px",
-                marginLeft: "10px",
-              }}
-            >
-              LearningPath
-            </span>
           </Link>
           <div className="flex flex-row">
-          {currentUser ? 
-          <Link href="/profile" className="flex gap-1 mr-3 items-center">
-            <AccountCircleSharpIcon style={{ width: '35px', height: '35px' }}/>
-            <p>{currentUser.name}</p>
-          </Link>
-           : null}
+            {currentUser ? (
+              <Link href="/profile" className="flex gap-1 mr-3 items-center">
+                <AccountCircleSharpIcon/>
+                {currentUser && (
+                  <p>
+                    {currentUser.name
+                      ? currentUser.name.split(" ")[0]
+                      : "No name"}
+                    {currentUser.name && currentUser.name.split(" ").length > 1
+                      ? "..."
+                      : ""}
+                  </p>
+                )}
+              </Link>
+            ) : null}
             <BurgerMenu />
           </div>
         </div>
