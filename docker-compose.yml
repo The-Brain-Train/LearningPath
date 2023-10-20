@@ -1,15 +1,6 @@
 version: '3.8'
-
   
 services:
-  # my-java-app:
-  #   image: amazoncorretto:17.0.8-alpine3.18
-  #   container_name: learningPath-container
-  #   ports:
-  #     - "8080:8080"
-  #   volumes:
-  #     - ./target/learningPath-0.0.1-SNAPSHOT.jar:/learningPath-0.0.1-SNAPSHOT.jar
-  #   command: ["java", "-jar", "/learningPath-0.0.1-SNAPSHOT.jar"]
   mongo:
     image: mongo
     restart: always

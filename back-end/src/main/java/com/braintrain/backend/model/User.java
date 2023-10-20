@@ -27,12 +27,6 @@ public class User  implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public User(String name, String email) {
-        this.name = name;
-        this.email = email;
-        this.favorites = new ArrayList<>();
-    }
-
     public User(String name, String password, String email) {
         this.name = name;
         this.password = password;
