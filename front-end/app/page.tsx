@@ -72,7 +72,7 @@ export default function Home() {
                 <Image
                   src="/roadmap3.jpeg"
                   alt="Create Roadmap"
-                  className="mt-2 pb-3 basis-9/12 rounded-lg"
+                  className="mt-2 pb-3 basis-10/12 rounded-lg"
                   height={250}
                   width={250}
                 />
@@ -102,7 +102,7 @@ export default function Home() {
                 <Image
                   src="/roadmap4.jpg"
                   alt="Create Roadmap"
-                  className="mt-2 pb-3 basis-9/12 rounded-lg"
+                  className="mt-2 pb-3 basis-10/12 rounded-lg"
                   height={250}
                   width={250}
                 />
@@ -133,7 +133,7 @@ export default function Home() {
                 <Image
                   src="/roadmap2.jpeg"
                   alt="Create Roadmap"
-                  className="mt-2 pb-3 basis-10/12 rounded-lg"
+                  className="mt-2 pb-3 basis-full rounded-lg"
                   height={250}
                   width={250}
                 />
