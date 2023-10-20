@@ -1,15 +1,33 @@
+/* mobile */
+@media only screen and (max-width: 999px) {
+    .filter-options-desktop {
+        display: none;
+    }
+}
+
 /* desktop */
 @media only screen and (min-width: 1000px) {
     .filter {
         display: flex;
-        flex-direction: row; 
-        justify-content: space-between; 
+        flex-direction: row;
+        justify-content: space-between;
     }
-    .filter-menu {
-        /* background-color: green; */
-        max-width: 300px;
-    }
+
     .filter-options {
-        max-width: 200px;
+        align-items: center;
     }
-  }
+
+    .filter-options-mobile {
+        display: none;
+    }
+
+    .filter-options-desktop {
+        align-items: center;
+        justify-content: center;
+        gap: 40px;
+    }
+
+    .hour-input {
+        width: 80px;
+    }
+}
