@@ -42,11 +42,14 @@ class RoadmapControllerTest {
 
     ResponseEntity<RoadmapMeta> exchange;
 
+    private RoadmapMeta createdRoadmapMeta;
+
     @BeforeEach
     public void setup() throws IOException {
         String uri = BASE_URL.formatted(port);
         RoadmapDTO dto = TestHelper.createRoadmapDTO("Java", Paths.get("src/test/resources/java.json"));
         exchange = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(dto), RoadmapMeta.class);
+        createdRoadmapMeta = exchange.getBody();
     }
 
     @AfterEach
@@ -187,7 +190,34 @@ class RoadmapControllerTest {
 //        String signUpURI = "http://localhost:%s/api/auth/signup".formatted(port);
 //        String signInURI = "http://localhost:%s/api/auth/signin".formatted(port);
 //
-//        RoadmapMeta roadmapMeta = new RoadmapMeta("Java", "1245", "edwardsemail@gmail.com", "Beginner", 50);
+//        SignUpRequest signUpRequest = new SignUpRequest("Edward", "edwardsemail@gmail.com", "123", "USER");
+//        SignInRequest signInRequest = new SignInRequest("edwardsemail@gmail.com", "123");
+//
+//        restTemplate.exchange(signUpURI, HttpMethod.POST, new HttpEntity<>(signUpRequest), JwtAuthenticationResponse.class);
+//        ResponseEntity<JwtAuthenticationResponse> signInResponse = restTemplate.exchange(signInURI, HttpMethod.POST, new HttpEntity<>(signInRequest), JwtAuthenticationResponse.class);
+//
+//        JwtAuthenticationResponse jwtAuthenticationResponse = signInResponse.getBody();
+//
+//        if (jwtAuthenticationResponse != null) {
+//            String jwtToken = jwtAuthenticationResponse.getToken();
+//            String uri = "http://localhost:%s/api/roadmaps/%s/favorites".formatted(port, signInRequest.getEmail());
+//
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.set("Authorization", "Bearer " + jwtToken);
+//            headers.set("Content-Type", "application/json");
+//            HttpEntity<RoadmapMeta> entity = new HttpEntity<>(createdRoadmapMeta, headers);
+//
+//            ResponseEntity<UserFavoritesDTO> exchange = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(entity), UserFavoritesDTO.class);
+//
+//            assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+//            assertThat(exchange.getHeaders().getLocation()).isNotNull();
+//        }
+//    }
+
+//    @Test
+//    void shouldGetFavoritesForExistingUser() {
+//        String signUpURI = "http://localhost:%s/api/auth/signup".formatted(port);
+//        String signInURI = "http://localhost:%s/api/auth/signin".formatted(port);
 //
 //        SignUpRequest signUpRequest = new SignUpRequest("Edward", "edwardsemail@gmail.com", "123", "USER");
 //        SignInRequest signInRequest = new SignInRequest("edwardsemail@gmail.com", "123");
@@ -203,30 +233,12 @@ class RoadmapControllerTest {
 //
 //            HttpHeaders headers = new HttpHeaders();
 //            headers.set("Authorization", "Bearer " + jwtToken);
-//            HttpEntity<RoadmapMeta> entity = new HttpEntity<>(roadmapMeta, headers);
+//            HttpEntity<String> entity = new HttpEntity<>(headers);
 //
-//            ResponseEntity<UserFavoritesDTO> exchange = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(entity), UserFavoritesDTO.class);
+//            ResponseEntity<UserFavoritesDTO> exchange = restTemplate.exchange(uri, HttpMethod.GET, new HttpEntity<>(entity), UserFavoritesDTO.class);
 //
-//            assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+//            assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
 //            assertThat(exchange.getHeaders().getLocation()).isNotNull();
 //        }
-//    }
-
-//    @Test
-//    void shouldGetFavoritesForExistingUser() {
-//        User user = new User("Edward", "edwardsemail@gmail.com");
-//        RoadmapMeta roadmapMeta = new RoadmapMeta("Java", "1245", "anotherEmail@gmail.com", "Beginner", 50);
-//
-//        String uriForCreateUser = "http://localhost:%s/api/user".formatted(port);
-//        restTemplate.exchange(uriForCreateUser, HttpMethod.POST, new HttpEntity<>(user), User.class);
-//
-//        String postUri = "http://localhost:%s/api/roadmaps/%s/favorites".formatted(port, user.getEmail());
-//        restTemplate.exchange(postUri, HttpMethod.POST, new HttpEntity<>(roadmapMeta), UserFavoritesDTO.class);
-//
-//        String getUri = "http://localhost:%s/api/user/%s/favorites".formatted(port, user.getEmail());
-//        ResponseEntity<UserFavoritesDTO> getExchange = restTemplate.exchange(getUri, HttpMethod.GET, HttpEntity.EMPTY, UserFavoritesDTO.class);
-//
-//        assertThat(getExchange.getStatusCode()).isEqualTo(HttpStatus.OK);
-//        assertThat(getExchange.getBody()).isNotNull();
 //    }
 }
