@@ -157,7 +157,7 @@ const SigninForm = () => {
           <Grid container>
             <Grid item>
               <Link href="/signup" className="text-lg hover:underline text-white">
-              Don't have an account?{" "}
+              Don&apos;t have an account?{" "}
                 <span className="text-blue-500 font-bold">Sign up</span>
               </Link>
             </Grid>
