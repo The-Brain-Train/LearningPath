@@ -21,7 +21,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import jwtDecode from 'jwt-decode';
 import { useCookies } from 'react-cookie';
-import './explore.css';
+import styles from '../explore/explore.module.css'
 
 export default function Explore() {
   const [filteredRoadmaps, setFilteredRoadmaps] = useState<RoadmapMeta[]>([]);
@@ -125,7 +125,7 @@ export default function Explore() {
   return (
     <main className="main-background min-h-max flex items-center flex-col">
 
-      <div className="flex flex-row my-5 filter-options-mobile" style={{ maxWidth: "300px" }}>
+      <div className={styles['filter-options-mobile-1']} style={{ maxWidth: "300px" }}>
         <Paper
           component="form"
           sx={{
@@ -153,7 +153,7 @@ export default function Explore() {
         </Button>
       </div>
 
-      <div className="flex flex-row filter-options-desktop">
+      <div className={styles['filter-options-desktop']}>
 
         <div className="flex flex-row my-5" style={{ maxWidth: "300px" }}>
           <Paper
@@ -189,7 +189,9 @@ export default function Explore() {
           <option value="intermediate">Intermediate</option>
           <option value="expert">Expert</option>
         </select>
-        <span className="text-white">Hour range:</span>
+
+        <div className="hours-div-desktop">
+        <span className="text-white">Hours:</span>
         <input
           type="number"
           min="0"
@@ -202,7 +204,7 @@ export default function Explore() {
           }
           }
           placeholder="From"
-          className="rounded-md h-7 hour-input"
+          className={styles['hour-input-desktop']}
         />
         <input
           type="number"
@@ -215,15 +217,16 @@ export default function Explore() {
             )
           }
           placeholder="To"
-          className="rounded-md h-7 hour-input"
+          className={styles['hour-input-desktop']}
         />
+        </div>
 
       </div>
 
       <div style={{ maxWidth: "300px", width: "80%" }}>
         {showFilters && (
           <div
-            className="flex flex-col gap-1 border-2 p-2 rounded-sm filter-options-mobile"
+            className={styles['filter-options-mobile-2']}
             style={{ maxWidth: "200px", margin: "0 auto" }}
           >
             <span className="text-white">Filter:</span>
@@ -237,32 +240,35 @@ export default function Explore() {
               <option value="intermediate">Intermediate</option>
               <option value="expert">Expert</option>
             </select>
-            <input
-              type="number"
-              min="0"
-              step="10"
-              value={hoursFromFilter === null ? "" : hoursFromFilter}
-              onChange={(e) =>
-                setHoursFromFilter(
-                  e.target.value === "" ? null : parseInt(e.target.value)
-                )
-              }
-              placeholder="Hours"
-              className="rounded-md h-7"
-            />
-            <input
-              type="number"
-              min="0"
-              step="10"
-              value={hoursToFilter === null ? "" : hoursToFilter}
-              onChange={(e) =>
-                setHoursToFilter(
-                  e.target.value === "" ? null : parseInt(e.target.value)
-                )
-              }
-              placeholder="Hours"
-              className="rounded-md h-7"
-            />
+            <span className="text-white">Hours:</span>
+            <div>
+              <input
+                type="number"
+                min="0"
+                step="10"
+                value={hoursFromFilter === null ? "" : hoursFromFilter}
+                onChange={(e) =>
+                  setHoursFromFilter(
+                    e.target.value === "" ? null : parseInt(e.target.value)
+                  )
+                }
+                placeholder="From"
+                className={styles['hour-input-mobile']}
+              />
+              <input
+                type="number"
+                min="0"
+                step="10"
+                value={hoursToFilter === null ? "" : hoursToFilter}
+                onChange={(e) =>
+                  setHoursToFilter(
+                    e.target.value === "" ? null : parseInt(e.target.value)
+                  )
+                }
+                placeholder="To"
+                className={styles['hour-input-mobile']}
+              />
+            </div>
           </div>
         )}
 
