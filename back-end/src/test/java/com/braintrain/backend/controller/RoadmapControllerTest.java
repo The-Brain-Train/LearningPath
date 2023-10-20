@@ -9,9 +9,7 @@ import com.braintrain.backend.security.dao.JwtAuthenticationResponse;
 import com.braintrain.backend.security.dao.SignInRequest;
 import com.braintrain.backend.security.dao.SignUpRequest;
 import com.braintrain.backend.service.UserService;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -44,16 +42,19 @@ class RoadmapControllerTest {
 
     private RoadmapMeta createdRoadmapMeta;
 
+    private static String authToken;
+
     @BeforeEach
-    public void setup() throws IOException {
+    public void setUp() throws IOException {
         String uri = BASE_URL.formatted(port);
         RoadmapDTO dto = TestHelper.createRoadmapDTO("Java", Paths.get("src/test/resources/java.json"));
         exchange = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(dto), RoadmapMeta.class);
         createdRoadmapMeta = exchange.getBody();
+        authToken = signUpAndSignInUser();
     }
 
     @AfterEach
-    public void tearDown() {
+    public void afterEach() {
         if(exchange != null) {
             String uri = "http://localhost:%s/api/roadmaps/%s".formatted(port, exchange.getBody().getId());
             ResponseEntity<Void> exchange = restTemplate.exchange(uri, HttpMethod.DELETE, HttpEntity.EMPTY, Void.class);
@@ -241,4 +242,23 @@ class RoadmapControllerTest {
 //            assertThat(exchange.getHeaders().getLocation()).isNotNull();
 //        }
 //    }
+
+
+    // Helper method to sign up and sign in a user
+    private String signUpAndSignInUser() {
+        String signUpURI = "http://localhost:%s/api/auth/signup".formatted(port);
+        String signInURI = "http://localhost:%s/api/auth/signin".formatted(port);
+
+        SignUpRequest signUpRequest = new SignUpRequest("Edward", "edwardsemail@gmail.com", "123", "USER");
+        SignInRequest signInRequest = new SignInRequest("edwardsemail@gmail.com", "123");
+
+        restTemplate.exchange(signUpURI, HttpMethod.POST, new HttpEntity<>(signUpRequest), JwtAuthenticationResponse.class);
+
+        ResponseEntity<JwtAuthenticationResponse> signInResponse = restTemplate.exchange(signInURI, HttpMethod.POST, new HttpEntity<>(signInRequest), JwtAuthenticationResponse.class);
+        JwtAuthenticationResponse jwtAuthenticationResponse = signInResponse.getBody();
+        if (jwtAuthenticationResponse != null) {
+            return jwtAuthenticationResponse.getToken();
+        }
+        return null;
+    }
 }
