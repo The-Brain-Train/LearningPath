@@ -38,6 +38,7 @@ function SaveButton({saveClick }: saveButtonProps) {
         <div>
         <Button 
         className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded"
+        style={{ marginTop: '10px', marginBottom: '10px' }}
         onClick={handleOpen}>Save</Button>
         <Modal
           open={open}
