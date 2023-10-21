@@ -27,11 +27,12 @@ export default function Explore() {
   const [filteredRoadmaps, setFilteredRoadmaps] = useState<RoadmapMeta[]>([]);
   const [search, setSearch] = useState("");
   const [experienceFilter, setExperienceFilter] = useState<string | null>(null);
-  const [hoursFromFilter, setHoursFromFilter] = useState<number | null>(null);
-  const [hoursToFilter, setHoursToFilter] = useState<number | null>(null);
+  const [hoursFromFilter, setHoursFromFilter] = useState<number | null>(0);
+  const [hoursToFilter, setHoursToFilter] = useState<number | null>(500);
   const [showFilters, setShowFilters] = useState(false);
   const queryClient = useQueryClient();
   const [cookies] = useCookies(["user"]);
+  const [hourValidationMessage, setHourValidationMessage] = useState<string | null>(null);
 
   const { data: currentUser } = useQuery<User | null>(
     ["currentUser"],
@@ -104,6 +105,19 @@ export default function Explore() {
     return true;
   };
 
+  const validateHours = (from: number | null, to: number | null): boolean => {
+    if (from === null || to === null) {
+      setHourValidationMessage(null);
+      return true;
+    }
+    if (to <= from) {
+      setHourValidationMessage("To should be greater than From");
+      return false;
+    }
+    setHourValidationMessage(null);
+    return true;
+  }
+
   const handleSearchChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -155,7 +169,7 @@ export default function Explore() {
 
       <div className={styles['filter-options-desktop']}>
 
-        <div className="flex flex-row my-5" style={{ maxWidth: "300px" }}>
+        <div className="flex flex-row mb-5" style={{ maxWidth: "300px" }}>
           <Paper
             component="form"
             sx={{
@@ -190,35 +204,39 @@ export default function Explore() {
           <option value="expert">Expert</option>
         </select>
 
-        <div className="hours-div-desktop">
-        <span className="text-white">Hours:</span>
-        <input
-          type="number"
-          min="0"
-          step="10"
-          value={hoursFromFilter === null ? "" : hoursFromFilter}
-          onChange={(e) => {
-            setHoursFromFilter(
-              e.target.value === "" ? null : parseInt(e.target.value)
-            )
-          }
-          }
-          placeholder="From"
-          className={styles['hour-input-desktop']}
-        />
-        <input
-          type="number"
-          min="0"
-          step="10"
-          value={hoursToFilter === null ? "" : hoursToFilter}
-          onChange={(e) =>
-            setHoursToFilter(
-              e.target.value === "" ? null : parseInt(e.target.value)
-            )
-          }
-          placeholder="To"
-          className={styles['hour-input-desktop']}
-        />
+        <div className={styles['hours-desktop']}>
+          <div className={styles['hours-div-desktop']}>
+            <span className="text-white">Hours:</span>
+            <input
+              type="number"
+              min="0"
+              max="500"
+              step="10"
+              value={hoursFromFilter === null ? "" : hoursFromFilter}
+              onChange={(e) => {
+                const newValue = e.target.value === "" ? null : parseInt(e.target.value);
+                validateHours(newValue, hoursToFilter) &&
+                  setHoursFromFilter(newValue)
+              }}
+              placeholder="From"
+              className={styles['hour-input-desktop']}
+            />
+            <input
+              type="number"
+              min="0"
+              max="500"
+              step="10"
+              value={hoursToFilter === null ? "" : hoursToFilter}
+              onChange={(e) => {
+                const newValue = e.target.value === "" ? null : parseInt(e.target.value);
+                validateHours(hoursFromFilter, newValue) &&
+                  setHoursToFilter(newValue)
+              }}
+              placeholder="To"
+              className={styles['hour-input-desktop']}
+            />
+          </div>
+          <span className={styles['hour-validation']}>{hourValidationMessage}</span>
         </div>
 
       </div>
@@ -245,30 +263,33 @@ export default function Explore() {
               <input
                 type="number"
                 min="0"
+                max="500"
                 step="10"
                 value={hoursFromFilter === null ? "" : hoursFromFilter}
-                onChange={(e) =>
-                  setHoursFromFilter(
-                    e.target.value === "" ? null : parseInt(e.target.value)
-                  )
-                }
+                onChange={(e) => {
+                  const newValue = e.target.value === "" ? null : parseInt(e.target.value);
+                  validateHours(newValue, hoursToFilter) &&
+                    setHoursFromFilter(newValue)
+                }}
                 placeholder="From"
                 className={styles['hour-input-mobile']}
               />
               <input
                 type="number"
                 min="0"
+                max="500"
                 step="10"
                 value={hoursToFilter === null ? "" : hoursToFilter}
-                onChange={(e) =>
-                  setHoursToFilter(
-                    e.target.value === "" ? null : parseInt(e.target.value)
-                  )
-                }
+                onChange={(e) => {
+                  const newValue = e.target.value === "" ? null : parseInt(e.target.value);
+                  validateHours(hoursFromFilter, newValue) &&
+                    setHoursToFilter(newValue)
+                }}
                 placeholder="To"
                 className={styles['hour-input-mobile']}
               />
             </div>
+            <span className={styles['hour-validation']}>{hourValidationMessage}</span>
           </div>
         )}
 

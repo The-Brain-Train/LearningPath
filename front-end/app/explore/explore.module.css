@@ -26,6 +26,12 @@
         margin-left: 2.5%;
         margin-right: 2.5%;
     }
+
+    .hour-validation {
+        color: red;
+        width: 100%;
+        text-align: center;
+    }
 }
 
 /* desktop */
@@ -42,7 +48,8 @@
     .filter-options-desktop {
         display: flex;
         flex-direction: row;
-        align-items: center;
+        /* align-items: center; */
+        margin-top: 20px;
         justify-content: center;
         gap: 40px;
     }
@@ -54,10 +61,21 @@
         text-align: center;
     }
 
+    .hours-desktop {
+        display: flex;
+        flex-direction: column;
+    }
+
     .hours-div-desktop {
         display: flex;
         flex-direction: row;
         gap: 10px;
         align-items: center;
+    }
+
+    .hour-validation {
+        color: red;
+        width: 100%;
+        text-align: right;
     }
 }
