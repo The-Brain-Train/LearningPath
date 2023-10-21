@@ -112,6 +112,7 @@ export default function Explore() {
     }
     if (to <= from) {
       setHourValidationMessage("To should be greater than From");
+      setTimeout(() => setHourValidationMessage(null), 2000)
       return false;
     }
     setHourValidationMessage(null);
