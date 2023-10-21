@@ -5,6 +5,8 @@ import SaveButton from "./SaveButton";
 import { Button, CircularProgress } from "@mui/material";
 import { CustomNode, CreateIndentedTreeProps } from "../util/types";
 import Link from "next/link";
+import styles from '../create/create.module.css'
+import { getHoursFontSize, getLabelFontSize, getLinkLength, getTextXOffset } from "../util/IndentedTreeUtil";
 
 const IndentedTree = ({
   data,
@@ -62,7 +64,7 @@ const IndentedTree = ({
         (d) => `
         M${(d).source.depth * nodeSize},${(d as any).source.index * nodeSize}
         V${(d as any).target.index * nodeSize}
-        h${nodeSize}
+        h${nodeSize + getLinkLength()}
       `
       );
 
@@ -75,15 +77,28 @@ const IndentedTree = ({
       .attr("fill", "#cbd5e1");
 
     node
-      .append("circle")
-      .attr("cx", (d) => d.depth * nodeSize)
-      .attr("r", 2.5)
-      .attr("fill", (d) => (d.children ? null : "#cbd5e1"));
+      .append("text")
+      .attr("x", (d) => (d.depth * nodeSize) + getTextXOffset(d, -10, 40))
+      .attr("y", 5)
+      .style("font-size", "16px")
+      .style("fill", (d) => (d.children ? "black" : "#cbd5e1"))
+      .text((d) => {
+        if (d.depth === 0) {
+          return "📚";
+        } else if (d.height === 0) {
+          return "📖";
+        } else {
+          return "📕";
+        }
+      })
 
     node
       .append("text")
       .attr("dy", "0.32em")
-      .attr("x", (d) => d.depth * nodeSize + 6)
+      .attr("x", (d) => d.depth * nodeSize + getTextXOffset(d, 10, 60))
+      .attr("y", 0)
+      .attr("font-weight", (d) => (d.depth === 0 ? 900 : 100))
+      .style("font-size", (d) => getLabelFontSize(d))
       .text((d) => d.data.name)
       .attr("fill", "#cbd5e1");
 
@@ -112,6 +127,7 @@ const IndentedTree = ({
         .attr("text-anchor", "end")
         .attr("fill", (d) => (d.children ? null : "#cbd5e1"))
         .attr("font-weight", (d) => (d.height == 0 ? 100 : 900))
+        .style("font-size", d => getHoursFontSize(d))
         .data(root.copy().descendants())
         .text((d) => format(d.data.value));
     }
@@ -156,13 +172,13 @@ const IndentedTree = ({
             <>
               {data !== null ? (
                 <>
-                  <div className="flex content-between justify-between flex-nowrap">
+                  <div className={styles['roadmap-tree-title']}>
                     <p className="text-slate-300 pt-4 pl-2 font-bold">
                       Learning Path
                     </p>
                     <p className="text-slate-300 pt-4 pr-2 font-bold">Hours</p>
                   </div>
-                  <svg className="overflow-hidden pb-10" ref={svgRef}></svg>
+                  <svg className={styles['roadmap-tree-structure']} ref={svgRef}></svg>
                   {currentUser ? (
                     <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 flex justify-center gap-3">
                       <SaveButton saveClick={saveRoadmap} />
@@ -172,6 +188,7 @@ const IndentedTree = ({
                           d3.select(svgRef.current).selectAll("*").remove();
                         }}
                         className="bg-red-500 hover-bg-red-600 py-2 px-4 rounded text-white"
+                        style={{ marginTop: '10px', marginBottom: '10px' }}
                       >
                         Reset
                       </Button>
