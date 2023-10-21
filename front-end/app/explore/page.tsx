@@ -247,7 +247,6 @@ export default function Explore() {
             className={styles['filter-options-mobile-2']}
             style={{ maxWidth: "200px", margin: "0 auto" }}
           >
-            <span className="text-white">Filter:</span>
             <select
               value={experienceFilter || ""}
               onChange={(e) => setExperienceFilter(e.target.value || null)}
