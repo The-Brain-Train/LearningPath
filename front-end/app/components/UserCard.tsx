@@ -10,7 +10,7 @@ export default function Card({ user }: UserCardProps) {
       <div
         className="border-4 dark:border-slate-500 drop-shadow-xl text-slate-300 rounded-full mx-auto "
       >
-        <AccountCircleSharpIcon style={{ width: '150px', height: '150px' }}/>
+        <AccountCircleSharpIcon className="sm:h-32" style={{ width: '200px', height: '200px' }}/>
       </div>
     </section>
   );

@@ -116,8 +116,12 @@ const Profile = () => {
           <div className="flex items-center flex-col pb-3">
             {currentUser && <UserCard user={currentUser} />}
           </div>
-          <div className="mx-2">
-            <Accordion open={open === 1} icon={<Icon id={1} open={open} />}>
+          <div className="flex items-center flex-col mx-2">
+            <Accordion
+              className="sm:max-w-2xl"
+              open={open === 1}
+              icon={<Icon id={1} open={open} />}
+            >
               <AccordionHeader
                 onClick={() => handleOpen(1)}
                 className="p-3 dark:border-opacity-50 text-white"
@@ -126,18 +130,26 @@ const Profile = () => {
                 <h2>My Roadmaps</h2>
               </AccordionHeader>
               <AccordionBody>
-                <ul className="flex flex-col justify-center">
-                  {userRoadmaps?.roadmapMetaList.map((roadmapMeta, index) => (
-                    <PersonalRoadmapCard
-                      roadmapMeta={roadmapMeta}
-                      key={index}
-                      handleDelete={handleDelete}
-                    />
-                  ))}
-                </ul>
+                {userRoadmaps && userRoadmaps.roadmapMetaList.length > 0 ? (
+                  <ul className="flex flex-col justify-center">
+                    {userRoadmaps?.roadmapMetaList.map((roadmapMeta, index) => (
+                      <PersonalRoadmapCard
+                        roadmapMeta={roadmapMeta}
+                        key={index}
+                        handleDelete={handleDelete}
+                      />
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-slate-300">You have no roadmaps.</p>
+                )}
               </AccordionBody>
             </Accordion>
-            <Accordion open={open === 2} icon={<Icon id={2} open={open} />}>
+            <Accordion
+              className="sm:max-w-2xl"
+              open={open === 2}
+              icon={<Icon id={2} open={open} />}
+            >
               <AccordionHeader
                 onClick={() => handleOpen(2)}
                 className="p-3 dark:border-opacity-50 text-white"
@@ -146,7 +158,7 @@ const Profile = () => {
                 My Favourites
               </AccordionHeader>
               <AccordionBody>
-                {favorites ? (
+                {favorites && favorites.length > 0 ? (
                   <ul className="flex flex-col justify-center">
                     {favorites.map((roadmapMeta, index) => (
                       <FavoriteRoadmapCard
