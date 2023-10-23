@@ -36,7 +36,7 @@ export default function Header() {
           <div className="flex flex-row">
             {currentUser ? (
               <Link href="/profile" className="flex gap-1 mr-3 items-center">
-                <AccountCircleSharpIcon/>
+                <Image src="/icon-profile.png" width={25} height={25} alt="User profile picture"/>
                 {currentUser && (
                   <p>
                     {currentUser.name
