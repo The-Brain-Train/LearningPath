@@ -65,3 +65,11 @@ export const getNodeSize = () => {
         return 55;
     }
 }
+
+export const getScreenWidthAdjustValue = () => {
+    if (isMobileView()) {
+        return 25;
+    } else {
+        return 45;
+    }
+}
