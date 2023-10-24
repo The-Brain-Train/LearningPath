@@ -1,10 +1,11 @@
 # LearningPath
 LearningPath is an AI-driven learning management tool that creates personalized learning plans, estimates time required to reach skill levels, and provides a guided roadmap with achievable goals based on users' academic level, available learning time, and existing skills.
 Personalized Learning Plans.
+### 💸 Pitch
+[![Pitch](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=DIG7I0K4k7E)
 
 ### Table of Contents
 - [📱 Tech Stack](#-tech-stack)
-- [💸 Pitch](#-pitch)
 - [🔧 Key Features:](#-key-features)
 - [🚀 Getting Started / Installation](#-getting-started--installation)
 - [📧 Contact Information](#-contact-information)
@@ -23,9 +24,6 @@ Personalized Learning Plans.
 ![Azure](https://img.shields.io/badge/microsoft%20azure-0089D6?style=for-the-badge&logo=microsoft-azure&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 ![Github Action](https://img.shields.io/badge/Github%20Actions-282a2e?style=for-the-badge&logo=githubactions&logoColor=367cfe)
-
-### 💸 Pitch
-[![Pitch](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=DIG7I0K4k7E)
 
 ### 🎬 Demos
 | Week                            | Video                | Week                 | Video                | Week                 | Video                | Week                 | Video                |  
