@@ -1,0 +1,109 @@
+/* mobile */
+@media only screen and (max-width: 999px) {
+    .filter-options-mobile-1 {
+        display: flex;
+        flex-direction: row;
+        margin: 20px 0;
+    }
+
+    .filter-options-mobile-2 {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        border: 2px solid;
+        padding: 0.5rem;
+        border-radius: 0.125rem;
+    }
+
+    .filter-options-desktop {
+        display: none;
+    }
+
+    .hour-input-mobile {
+        border-radius: 0.375rem;
+        height: 1.75rem;
+        width: 45%;
+        margin-left: 2.5%;
+        margin-right: 2.5%;
+        text-align: center;
+    }
+
+    .hour-validation {
+        color: red;
+        width: 100%;
+        text-align: center;
+    }
+    .roadmap-tree-title {
+        /* flex content-between justify-between flex-nowrap */
+        display: flex;
+        justify-content: space-between;
+        align-content: space-between;
+        flex-wrap: nowrap;
+    }
+    .roadmap-tree-structure {
+        /* overflow-hidden mb-20 */
+        overflow: hidden;
+        margin-bottom: 20px;
+    }
+}
+
+/* desktop */
+@media only screen and (min-width: 1000px) {
+
+    .filter-options-mobile-1 {
+        display: none;
+    }
+
+    .filter-options-mobile-2 {
+        display: none;
+    }
+
+    .filter-options-desktop {
+        display: flex;
+        flex-direction: row;
+        /* align-items: center; */
+        margin-top: 20px;
+        justify-content: center;
+        gap: 40px;
+    }
+
+    .hour-input-desktop {
+        border-radius: 0.375rem;
+        height: 2.75rem;
+        width: 80px;
+        text-align: center;
+    }
+
+    .hours-desktop {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .hours-div-desktop {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .hour-validation {
+        color: red;
+        width: 100%;
+        text-align: right;
+        font-size: 14px;
+    }
+    .roadmap-tree-title {
+        display: flex;
+        justify-content: space-between;
+        align-content: space-between;
+        flex-wrap: nowrap;
+        padding-left: 50px;
+        padding-right: 50px;
+    }
+    .roadmap-tree-structure {
+        overflow: hidden;
+        margin-bottom: 20px;
+        padding-left: 50px;
+        padding-right: 50px;
+    }
+}

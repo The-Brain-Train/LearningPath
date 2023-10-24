@@ -21,15 +21,18 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import jwtDecode from 'jwt-decode';
 import { useCookies } from 'react-cookie';
+import styles from '../explore/explore.module.css'
 
 export default function Explore() {
   const [filteredRoadmaps, setFilteredRoadmaps] = useState<RoadmapMeta[]>([]);
   const [search, setSearch] = useState("");
   const [experienceFilter, setExperienceFilter] = useState<string | null>(null);
-  const [hoursFilter, setHoursFilter] = useState<number | null>(null);
+  const [hoursFromFilter, setHoursFromFilter] = useState<number | null>(0);
+  const [hoursToFilter, setHoursToFilter] = useState<number | null>(500);
   const [showFilters, setShowFilters] = useState(false);
   const queryClient = useQueryClient();
   const [cookies] = useCookies(["user"]);
+  const [hourValidationMessage, setHourValidationMessage] = useState<string | null>(null);
 
   const { data: currentUser } = useQuery<User | null>(
     ["currentUser"],
@@ -49,8 +52,6 @@ export default function Explore() {
     );
   }
 
-
-
   const { data: roadmaps } = useQuery(["roadmaps"], getRoadmaps);
   const { data: favorites } = useQuery(
     ["favorites"],
@@ -66,7 +67,7 @@ export default function Explore() {
         currentUser?.email,
         roadmapMeta,
         cookies.user
-        );
+      );
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["favorites"]);
@@ -95,11 +96,28 @@ export default function Explore() {
     if (experienceFilter && roadmap.experienceLevel !== experienceFilter) {
       return false;
     }
-    if (hoursFilter !== null && roadmap.hours !== hoursFilter) {
+    if (hoursFromFilter !== null && roadmap.hours <= hoursFromFilter) {
+      return false;
+    }
+    if (hoursToFilter !== null && roadmap.hours >= hoursToFilter) {
       return false;
     }
     return true;
   };
+
+  const validateHours = (from: number | null, to: number | null): boolean => {
+    if (from === null || to === null) {
+      setHourValidationMessage(null);
+      return true;
+    }
+    if (to <= from) {
+      setHourValidationMessage("To should be greater than From");
+      setTimeout(() => setHourValidationMessage(null), 2000)
+      return false;
+    }
+    setHourValidationMessage(null);
+    return true;
+  }
 
   const handleSearchChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -117,11 +135,12 @@ export default function Explore() {
     if (filtered) {
       setFilteredRoadmaps(filtered);
     }
-  }, [search, roadmaps, experienceFilter, hoursFilter]);
+  }, [search, roadmaps, experienceFilter, hoursFromFilter, hoursToFilter]);
 
   return (
     <main className="main-background min-h-max flex items-center flex-col">
-      <div className="flex flex-row my-5" style={{ maxWidth: "300px" }}>
+
+      <div className={styles['filter-options-mobile-1']} style={{ maxWidth: "300px" }}>
         <Paper
           component="form"
           sx={{
@@ -148,13 +167,87 @@ export default function Explore() {
           </Tooltip>
         </Button>
       </div>
+
+      <div className={styles['filter-options-desktop']}>
+
+        <div className="flex flex-row mb-5" style={{ maxWidth: "300px" }}>
+          <Paper
+            component="form"
+            sx={{
+              p: "2px 4px",
+              display: "flex",
+              alignItems: "center",
+              width: 600,
+            }}
+          >
+            <InputBase
+              sx={{ ml: 1, flex: 1 }}
+              placeholder="Search"
+              inputProps={{ "aria-label": "search" }}
+              value={search}
+              onChange={handleSearchChange}
+            />
+            <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
+              <SearchIcon />
+            </IconButton>
+          </Paper>
+        </div>
+
+        <select
+          value={experienceFilter || ""}
+          onChange={(e) => setExperienceFilter(e.target.value || null)}
+          className="rounded-md h-11"
+          style={{ width: "200px" }}
+        >
+          <option value="">Experience Level</option>
+          <option value="beginner">Beginner</option>
+          <option value="intermediate">Intermediate</option>
+          <option value="expert">Expert</option>
+        </select>
+
+        <div className={styles['hours-desktop']}>
+          <div className={styles['hours-div-desktop']}>
+            <span className="text-white">Hours:</span>
+            <input
+              type="number"
+              min="0"
+              max="500"
+              step="10"
+              value={hoursFromFilter === null ? "" : hoursFromFilter}
+              onChange={(e) => {
+                const newValue = e.target.value === "" ? null : parseInt(e.target.value);
+                validateHours(newValue, hoursToFilter) &&
+                  setHoursFromFilter(newValue)
+              }}
+              placeholder="From"
+              className={styles['hour-input-desktop']}
+            />
+            <input
+              type="number"
+              min="0"
+              max="500"
+              step="10"
+              value={hoursToFilter === null ? "" : hoursToFilter}
+              onChange={(e) => {
+                const newValue = e.target.value === "" ? null : parseInt(e.target.value);
+                validateHours(hoursFromFilter, newValue) &&
+                  setHoursToFilter(newValue)
+              }}
+              placeholder="To"
+              className={styles['hour-input-desktop']}
+            />
+          </div>
+          <span className={styles['hour-validation']}>{hourValidationMessage}</span>
+        </div>
+
+      </div>
+
       <div style={{ maxWidth: "300px", width: "80%" }}>
         {showFilters && (
           <div
-            className="flex flex-col gap-1 border-2 p-2 rounded-sm"
+            className={styles['filter-options-mobile-2']}
             style={{ maxWidth: "200px", margin: "0 auto" }}
           >
-            <span className="text-white">Filter:</span>
             <select
               value={experienceFilter || ""}
               onChange={(e) => setExperienceFilter(e.target.value || null)}
@@ -165,19 +258,38 @@ export default function Explore() {
               <option value="intermediate">Intermediate</option>
               <option value="expert">Expert</option>
             </select>
-            <input
-              type="number"
-              min="0"
-              step="10"
-              value={hoursFilter === null ? "" : hoursFilter}
-              onChange={(e) =>
-                setHoursFilter(
-                  e.target.value === "" ? null : parseInt(e.target.value)
-                )
-              }
-              placeholder="Hours"
-              className="rounded-md h-7"
-            />
+            <span className="text-white">Hours:</span>
+            <div>
+              <input
+                type="number"
+                min="0"
+                max="500"
+                step="10"
+                value={hoursFromFilter === null ? "" : hoursFromFilter}
+                onChange={(e) => {
+                  const newValue = e.target.value === "" ? null : parseInt(e.target.value);
+                  validateHours(newValue, hoursToFilter) &&
+                    setHoursFromFilter(newValue)
+                }}
+                placeholder="From"
+                className={styles['hour-input-mobile']}
+              />
+              <input
+                type="number"
+                min="0"
+                max="500"
+                step="10"
+                value={hoursToFilter === null ? "" : hoursToFilter}
+                onChange={(e) => {
+                  const newValue = e.target.value === "" ? null : parseInt(e.target.value);
+                  validateHours(hoursFromFilter, newValue) &&
+                    setHoursToFilter(newValue)
+                }}
+                placeholder="To"
+                className={styles['hour-input-mobile']}
+              />
+            </div>
+            <span className={styles['hour-validation']}>{hourValidationMessage}</span>
           </div>
         )}
 
@@ -235,6 +347,7 @@ export default function Explore() {
           ))}
         </ul>
       </div>
+
     </main>
   );
 }

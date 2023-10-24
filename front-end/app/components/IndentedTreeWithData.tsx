@@ -1,7 +1,9 @@
 "use client";
 import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
-import { CustomNode, ExploreIndentedTreeProps } from "../util/types";
+import { CustomNode, ExploreIndentedTreeProps, TreeNode } from "../util/types";
+import styles from '../explore/explore.module.css';
+import { getHoursFontSize, getLabelFontSize, getLinkLength, getTextXOffset } from "../util/IndentedTreeUtil";
 
 const IndentedTreeWithData = ({ data }: ExploreIndentedTreeProps) => {
   const svgRef = useRef(null);
@@ -53,9 +55,10 @@ const IndentedTreeWithData = ({ data }: ExploreIndentedTreeProps) => {
         (d) => `
         M${(d).source.depth * nodeSize},${(d as any).source.index * nodeSize}
         V${(d as any).target.index * nodeSize}
-        h${nodeSize}
+        h${nodeSize + getLinkLength()} 
       `
       );
+
 
     const node = svg
       .append("g")
@@ -66,15 +69,28 @@ const IndentedTreeWithData = ({ data }: ExploreIndentedTreeProps) => {
       .attr("fill", "#cbd5e1");
 
     node
-      .append("circle")
-      .attr("cx", (d) => d.depth * nodeSize)
-      .attr("r", 2.5)
-      .attr("fill", (d) => (d.children ? null : "#cbd5e1"));
+      .append("text")
+      .attr("x", (d) => (d.depth * nodeSize) + getTextXOffset(d, -10, 40))
+      .attr("y", 5)
+      .style("font-size", "16px")
+      .style("fill", (d) => (d.children ? "black" : "#cbd5e1"))
+      .text((d) => {
+        if (d.depth === 0) {
+          return "📚";
+        } else if (d.height === 0) {
+          return "📖";
+        } else {
+          return "📕";
+        }
+      })
 
     node
       .append("text")
       .attr("dy", "0.32em")
-      .attr("x", (d) => d.depth * nodeSize + 6)
+      .attr("x", (d) => d.depth * nodeSize + getTextXOffset(d, 10, 60))
+      .attr("y", 0)
+      .attr("font-weight", (d) => (d.depth === 0 ? 900 : 100))
+      .style("font-size", (d) => getLabelFontSize(d))
       .text((d) => d.data.name)
       .attr("fill", "#cbd5e1");
 
@@ -100,7 +116,8 @@ const IndentedTreeWithData = ({ data }: ExploreIndentedTreeProps) => {
         .attr("x", x)
         .attr("text-anchor", "end")
         .attr("fill", (d) => (d.children ? null : "#cbd5e1"))
-        .attr("font-weight", (d) => (d.height == 0 ? 100: 900))
+        .attr("font-weight", (d) => (d.height == 0 ? 100 : 900))
+        .style("font-size", d => getHoursFontSize(d))
         .data(root.copy().descendants())
         .text((d) => format(d.data.value));
     }
@@ -120,11 +137,11 @@ const IndentedTreeWithData = ({ data }: ExploreIndentedTreeProps) => {
   return (
     <div className="flex flex-col px-3">
       <div>
-        <div className="flex content-between justify-between flex-nowrap">
+        <div className={styles['roadmap-tree-title']}>
           <p className="text-slate-300 pl-2 font-bold">Learning Path</p>
           <p className="text-slate-300 pr-2 font-bold">Hours</p>
         </div>
-        <svg className="overflow-hidden mb-20" ref={svgRef}></svg>
+        <svg className={styles['roadmap-tree-structure']} ref={svgRef}></svg>
       </div>
     </div>
   );

@@ -1,11 +1,14 @@
 # LearningPath
 LearningPath is an AI-driven learning management tool that creates personalized learning plans, estimates time required to reach skill levels, and provides a guided roadmap with achievable goals based on users' academic level, available learning time, and existing skills.
 Personalized Learning Plans.
+### 💸 Pitch
+[![Pitch](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=DIG7I0K4k7E)
 
 ### Table of Contents
 - [📱 Tech Stack](#-tech-stack)
-- [💸 Pitch](#-pitch)
-- [🔧 Key Features:](#-key-features)
+- [🎬 Demos](#-demos)
+- [🚧 Project Board](#-project-board-track-our-progress)
+- [🔧 Key Features](#-key-features)
 - [🚀 Getting Started / Installation](#-getting-started--installation)
 - [📧 Contact Information](#-contact-information)
 
@@ -24,14 +27,14 @@ Personalized Learning Plans.
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 ![Github Action](https://img.shields.io/badge/Github%20Actions-282a2e?style=for-the-badge&logo=githubactions&logoColor=367cfe)
 
-### 💸 Pitch
-[![Pitch](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=DIG7I0K4k7E)
-
 ### 🎬 Demos
 | Week                            | Video                | Week                 | Video                | Week                 | Video                | Week                 | Video                |  
 | ---------------------------------| ------------------------- | ------------------------- |-------------------------| ------------------------- |-------------------------| ------------------------- |-------------------------| 
 | 1 | [![Pitch](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=irIGIqszUs4) | 2 | [![Pitch](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/dNXfMzevpEk) | 3 | [![Pitch](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/bIJbNG9ycUw)  | 4 | [![Pitch](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/2ShBF69TTlk) 
 | 5 | [![Pitch](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=saG49JPxUE0) | 6 | [![Pitch](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=ywreq_HwpFc) |
+
+### 🚧 Project Board: Track Our Progress 
+[![Github-Project-Board](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/orgs/The-Brain-Train/projects/2)
 
 ### 🔧 Key Features:
 - **Create Personalized Learning Pathways:** Users can craft their unique learning roadmaps by specifying topics, the number of hours they intend to spend, and their current skill level.

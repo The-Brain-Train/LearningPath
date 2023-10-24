@@ -25,7 +25,7 @@ const SignupForm = () => {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  const handleInputChange = (e: { target: { name: any; value: any; }; }) => {
+  const handleInputChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
 
@@ -34,11 +34,13 @@ const SignupForm = () => {
       setIsEmailValid(emailRegex.test(value));
     }
     setIsFormValid(
-      formData.name.trim() !== "" && isEmailValid && formData.password.trim() !== ""
+      formData.name.trim() !== "" &&
+        isEmailValid &&
+        formData.password.trim() !== ""
     );
   };
 
-  const handleSubmit = async (e: { preventDefault: () => void; }) => {
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
     const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -61,7 +63,7 @@ const SignupForm = () => {
           },
         });
       }
-if (response.status === 409) {
+      if (response.status === 409) {
         setError(
           "Email address already in use. Please sign in or use a different email."
         );
@@ -75,7 +77,7 @@ if (response.status === 409) {
   };
 
   return (
-    <Container className="main-background" component="main" >
+    <Container className="main-background m-0 min-w-full" component="main">
       <CssBaseline />
       <Box
         sx={{
@@ -104,6 +106,17 @@ if (response.status === 409) {
                 onChange={handleInputChange}
                 autoFocus
                 value={formData.name}
+                InputProps={{
+                  style: { color: "white" },
+                }}
+                InputLabelProps={{
+                  style: { color: "white" },
+                }}
+                sx={{
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "white",
+                  },
+                }}
               />
             </Grid>
             <Grid item xs={12}>
@@ -118,6 +131,17 @@ if (response.status === 409) {
                 value={formData.email}
                 error={!isEmailValid}
                 helperText={!isEmailValid ? "Invalid email format" : ""}
+                InputProps={{
+                  style: { color: "white" },
+                }}
+                InputLabelProps={{
+                  style: { color: "white" },
+                }}
+                sx={{
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "white",
+                  },
+                }}
               />
             </Grid>
             <Grid item xs={12}>
@@ -131,6 +155,17 @@ if (response.status === 409) {
                 autoComplete="new-password"
                 onChange={handleInputChange}
                 value={formData.password}
+                InputProps={{
+                  style: { color: "white" },
+                }}
+                InputLabelProps={{
+                  style: { color: "white" },
+                }}
+                sx={{
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "white",
+                  },
+                }}
               />
             </Grid>
           </Grid>
@@ -151,8 +186,9 @@ if (response.status === 409) {
           <ToastContainer />
           <Grid container justifyContent="flex-start">
             <Grid item>
-              <Link href="/signin" variant="body2">
-                Already have an account? Sign in
+              <Link href="/signin" className="text-lg hover:underline text-white">
+                Already have an account?{" "}
+                <span className="text-blue-500 font-bold">Sign in</span>
               </Link>
             </Grid>
           </Grid>

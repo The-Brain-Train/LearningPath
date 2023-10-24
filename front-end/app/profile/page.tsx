@@ -1,5 +1,5 @@
 "use client";
-import React, { useState} from "react";
+import React, { useState } from "react";
 import { RoadmapMeta, User } from "../util/types";
 import { RoadmapMetaList } from "../util/types";
 import { useRouter } from "next/navigation";
@@ -18,8 +18,10 @@ import {
 import PersonalRoadmapCard from "../components/PersonalRoadmapCard";
 import FavoriteRoadmapCard from "../components/FavoriteRoadmapCard";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import jwtDecode from 'jwt-decode';
-import { useCookies } from 'react-cookie';
+import jwtDecode from "jwt-decode";
+import { useCookies } from "react-cookie";
+import Image from "next/image";
+import Link from "next/link";
 
 function Icon({ id, open }: { id: string | number; open: number }) {
   return (
@@ -114,8 +116,12 @@ const Profile = () => {
           <div className="flex items-center flex-col pb-3">
             {currentUser && <UserCard user={currentUser} />}
           </div>
-          <div className="mx-2">
-            <Accordion open={open === 1} icon={<Icon id={1} open={open} />}>
+          <div className="flex items-center flex-col mx-2">
+            <Accordion
+              className="sm:max-w-2xl"
+              open={open === 1}
+              icon={<Icon id={1} open={open} />}
+            >
               <AccordionHeader
                 onClick={() => handleOpen(1)}
                 className="p-3 dark:border-opacity-50 text-white"
@@ -124,18 +130,26 @@ const Profile = () => {
                 <h2>My Roadmaps</h2>
               </AccordionHeader>
               <AccordionBody>
-                <ul className="flex flex-col justify-center">
-                  {userRoadmaps?.roadmapMetaList.map((roadmapMeta, index) => (
-                    <PersonalRoadmapCard
-                      roadmapMeta={roadmapMeta}
-                      key={index}
-                      handleDelete={handleDelete}
-                    />
-                  ))}
-                </ul>
+                {userRoadmaps && userRoadmaps.roadmapMetaList.length > 0 ? (
+                  <ul className="flex flex-col justify-center">
+                    {userRoadmaps?.roadmapMetaList.map((roadmapMeta, index) => (
+                      <PersonalRoadmapCard
+                        roadmapMeta={roadmapMeta}
+                        key={index}
+                        handleDelete={handleDelete}
+                      />
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-slate-300">You have no roadmaps.</p>
+                )}
               </AccordionBody>
             </Accordion>
-            <Accordion open={open === 2} icon={<Icon id={2} open={open} />}>
+            <Accordion
+              className="sm:max-w-2xl"
+              open={open === 2}
+              icon={<Icon id={2} open={open} />}
+            >
               <AccordionHeader
                 onClick={() => handleOpen(2)}
                 className="p-3 dark:border-opacity-50 text-white"
@@ -144,7 +158,7 @@ const Profile = () => {
                 My Favourites
               </AccordionHeader>
               <AccordionBody>
-                {favorites ? (
+                {favorites && favorites.length > 0 ? (
                   <ul className="flex flex-col justify-center">
                     {favorites.map((roadmapMeta, index) => (
                       <FavoriteRoadmapCard
@@ -164,15 +178,21 @@ const Profile = () => {
           </div>
         </main>
       ) : (
-        <div className="main-background min-h-max  text-center items-center pt-20 rounded-lg font-bold text-xl text-white ">
-          <p>Please sign in to view your profile.</p>
-          <button
-            className="bg-transparent hover:bg-emerald-600text-lg text-white font-bold border-2 p-2 mt-2 border-white rounded "
-            style={{ backgroundColor: "#141832" }}
-            onClick={() => router.push("/signin")}
-          >
-            Sign in / Sign up
-          </button>
+        <div className="main-background min-h-max gap-5 text-center items-center pt-20 rounded-lg text-xl text-white ">
+          <p className="font-semibold text-lg">
+            Please{" "}
+            <Link href="/signin" className="hover:text-blue-500 underline ">
+              SignIn/SignUp
+            </Link>{" "}
+            to view your profile.
+          </p>
+          <Image
+            src="/roadmap3.jpeg"
+            alt="Create Roadmap"
+            className="m-auto rounded-full"
+            height={100}
+            width={100}
+          />
         </div>
       )}
     </>

@@ -23,7 +23,7 @@ export default function Create() {
   const [createError, setCreateError] = useState<string | null>(null);
   const [totalHours, setTotalHours] = useState(0);
   const [cookies] = useCookies(["user"]);
-  
+
   const resetForm = () => {
     setHours(null);
     setExperienceLevel(null);
@@ -55,7 +55,7 @@ export default function Create() {
     };
     postRoadmap(requestData, cookies.user);
   };
-  
+
   const handleSendMessage = async () => {
     setLoading(true);
     try {

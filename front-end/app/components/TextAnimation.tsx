@@ -56,7 +56,7 @@ const TextAnimation: React.FC = () => {
   
     return (
       <div className={styles['console-container']}>
-        Welcome to LearningPath! Here you can&nbsp; 
+        Start your journey with LearningPath today &&nbsp; 
         <span style={{ color: color }}>{text}</span>
       </div>
     );
