@@ -35,6 +35,7 @@ Personalized Learning Plans.
 
 ### 🚧 Project Board: Track Our Progress 
 [![Github-Project-Board](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/orgs/The-Brain-Train/projects/2)
+![Banner](/project-board-img.JPG)
 
 ### 🔧 Key Features:
 - **Create Personalized Learning Pathways:** Users can craft their unique learning roadmaps by specifying topics, the number of hours they intend to spend, and their current skill level.
