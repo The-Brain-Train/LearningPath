@@ -6,8 +6,8 @@ Personalized Learning Plans.
 
 ### Table of Contents
 - [📱 Tech Stack](#-tech-stack)
-- [🎬 Demos](#-demo)
-- [🚧 Project Board](#-project-board)
+- [🎬 Demos](#-demos)
+- [🚧 Project Board](#-project-board:-track-our-progress)
 - [🔧 Key Features:](#-key-features)
 - [🚀 Getting Started / Installation](#-getting-started--installation)
 - [📧 Contact Information](#-contact-information)
