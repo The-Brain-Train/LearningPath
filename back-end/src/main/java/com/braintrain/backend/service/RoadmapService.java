@@ -3,6 +3,7 @@ package com.braintrain.backend.service;
 import com.braintrain.backend.controller.dtos.RoadmapDTO;
 import com.braintrain.backend.controller.dtos.RoadmapMetaListDTO;
 import com.braintrain.backend.controller.dtos.UserFavoritesDTO;
+import com.braintrain.backend.exceptionHandler.exception.RoadmapCountExceededException;
 import com.braintrain.backend.model.*;
 import com.braintrain.backend.repository.RoadmapMetaRepository;
 import com.braintrain.backend.repository.RoadmapRepository;
@@ -19,12 +20,12 @@ import java.util.Optional;
 public class RoadmapService {
     private final RoadmapMetaRepository metaRepo;
     private final RoadmapRepository repo;
-
     private final UserRepository userRepo;
 
     public RoadmapMeta createRoadmap(RoadmapDTO roadmapDTO) {
         validateDTONameInput(roadmapDTO.name(), "Invalid name");
         validateDTORoadmapInput(roadmapDTO.roadmap());
+        validateRoadmapcount(roadmapDTO.userEmail());
         Roadmap roadmap = repo.save(new Roadmap(roadmapDTO.roadmap(), roadmapDTO.userEmail(), roadmapDTO.experienceLevel(), roadmapDTO.hours()));
         return metaRepo.save(new RoadmapMeta(roadmapDTO.name(), roadmap.getId(), roadmapDTO.userEmail(), roadmapDTO.experienceLevel(), roadmapDTO.hours()));
     }
@@ -97,6 +98,11 @@ public class RoadmapService {
         }
     }
 
-
-
+    private void validateRoadmapcount(String userEmail) {
+        Long roadmapCount = repo.countByUserEmail(userEmail);
+        Long MAX_ROADMAP_COUNT = 4L;
+        if (roadmapCount > MAX_ROADMAP_COUNT) {
+            throw new RoadmapCountExceededException();
+        }
+    }
 }
