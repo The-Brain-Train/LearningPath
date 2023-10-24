@@ -6,7 +6,7 @@ import { Button, CircularProgress } from "@mui/material";
 import { CustomNode, CreateIndentedTreeProps } from "../util/types";
 import Link from "next/link";
 import styles from '../create/create.module.css'
-import { getHoursFontSize, getLabelFontSize, getLinkLength, getTextXOffset, getNodeSize, getIconFontSize, getScreenWidthAdjustValue } from "../util/IndentedTreeUtil";
+import { getHoursFontSize, getLabelFontSize, getLinkLength, getTextXOffset, getLabelXOffset, getNodeSize, getIconFontSize, getScreenWidthAdjustValue } from "../util/IndentedTreeUtil";
 
 const IndentedTree = ({
   data,
@@ -78,7 +78,7 @@ const IndentedTree = ({
 
     node
       .append("text")
-      .attr("x", (d) => (d.depth * nodeSize) + getTextXOffset(d, -10, 40))
+      .attr("x", (d) => (d.depth * nodeSize) + getLabelXOffset(d, -10, 40))
       .attr("y", 5)
       .style("font-size", getIconFontSize())
       .style("fill", (d) => (d.children ? "black" : "#cbd5e1"))

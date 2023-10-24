@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
 import { CustomNode, ExploreIndentedTreeProps, TreeNode } from "../util/types";
 import styles from '../explore/explore.module.css';
-import { getHoursFontSize, getLabelFontSize, getLinkLength, getTextXOffset, getNodeSize, getIconFontSize, getScreenWidthAdjustValue } from "../util/IndentedTreeUtil";
+import { getHoursFontSize, getLabelFontSize, getLinkLength, getTextXOffset, getLabelXOffset, getNodeSize, getIconFontSize, getScreenWidthAdjustValue } from "../util/IndentedTreeUtil";
 
 const IndentedTreeWithData = ({ data }: ExploreIndentedTreeProps) => {
   const svgRef = useRef(null);
@@ -70,7 +70,7 @@ const IndentedTreeWithData = ({ data }: ExploreIndentedTreeProps) => {
 
     node
       .append("text")
-      .attr("x", (d) => (d.depth * nodeSize) + getTextXOffset(d, -10, 40))
+      .attr("x", (d) => (d.depth * nodeSize) + getLabelXOffset(d, -10, 40))
       .attr("y", 5)
       .style("font-size", getIconFontSize())
       .style("fill", (d) => (d.children ? "black" : "#cbd5e1"))

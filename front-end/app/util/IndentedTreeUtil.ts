@@ -46,6 +46,14 @@ export const getTextXOffset = (d: d3.HierarchyNode<TreeNode>, mobile: number, de
     if (isMobileView()) {
         return mobile;
     } else {
+        return d.depth === 0 ? mobile + 20 : desktop;
+    }
+}
+
+export const getLabelXOffset = (d: d3.HierarchyNode<TreeNode>, mobile: number, desktop: number) => {
+    if (isMobileView()) {
+        return mobile;
+    } else {
         return d.depth === 0 ? mobile : desktop;
     }
 }
