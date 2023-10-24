@@ -4,7 +4,7 @@ package com.braintrain.backend.controller;
 import com.braintrain.backend.controller.dtos.RoadmapDTO;
 import com.braintrain.backend.controller.dtos.RoadmapMetaListDTO;
 import com.braintrain.backend.controller.dtos.UserFavoritesDTO;
-import com.braintrain.backend.exceptionHandler.UserNotFoundException;
+import com.braintrain.backend.exceptionHandler.exception.UserNotFoundException;
 import com.braintrain.backend.model.*;
 import com.braintrain.backend.service.RoadmapService;
 import com.braintrain.backend.service.UserService;
