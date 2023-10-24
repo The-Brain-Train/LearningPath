@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
 import { CustomNode, ExploreIndentedTreeProps, TreeNode } from "../util/types";
 import styles from '../explore/explore.module.css';
-import { getHoursFontSize, getLabelFontSize, getLinkLength, getTextXOffset } from "../util/IndentedTreeUtil";
+import { getHoursFontSize, getLabelFontSize, getLinkLength, getTextXOffset, getNodeSize } from "../util/IndentedTreeUtil";
 
 const IndentedTreeWithData = ({ data }: ExploreIndentedTreeProps) => {
   const svgRef = useRef(null);
@@ -13,7 +13,7 @@ const IndentedTreeWithData = ({ data }: ExploreIndentedTreeProps) => {
 
     d3.select(svgRef.current).selectAll("*").remove();
     const format = d3.format(",");
-    const nodeSize = 21;
+    const nodeSize = getNodeSize();
     const root = d3.hierarchy(data).eachBefore(
       ((i) => (d) => {
         (d as CustomNode).index = i++;

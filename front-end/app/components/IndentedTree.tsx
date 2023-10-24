@@ -6,7 +6,7 @@ import { Button, CircularProgress } from "@mui/material";
 import { CustomNode, CreateIndentedTreeProps } from "../util/types";
 import Link from "next/link";
 import styles from '../create/create.module.css'
-import { getHoursFontSize, getLabelFontSize, getLinkLength, getTextXOffset } from "../util/IndentedTreeUtil";
+import { getHoursFontSize, getLabelFontSize, getLinkLength, getTextXOffset, getNodeSize  } from "../util/IndentedTreeUtil";
 
 const IndentedTree = ({
   data,
@@ -22,7 +22,7 @@ const IndentedTree = ({
     if (data == null) return;
     d3.select(svgRef.current).selectAll("*").remove();
     const format = d3.format(",");
-    const nodeSize = 21;
+    const nodeSize = getNodeSize();
     const root = d3.hierarchy(data).eachBefore(
       ((i) => (d) => {
         (d as CustomNode).index = i++;
