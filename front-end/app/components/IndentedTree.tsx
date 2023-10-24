@@ -6,7 +6,7 @@ import { Button, CircularProgress } from "@mui/material";
 import { CustomNode, CreateIndentedTreeProps } from "../util/types";
 import Link from "next/link";
 import styles from '../create/create.module.css'
-import { getHoursFontSize, getLabelFontSize, getLinkLength, getTextXOffset } from "../util/IndentedTreeUtil";
+import { getHoursFontSize, getLabelFontSize, getLinkLength, getTextXOffset, getNodeSize, getIconFontSize, getScreenWidthAdjustValue } from "../util/IndentedTreeUtil";
 
 const IndentedTree = ({
   data,
@@ -22,7 +22,7 @@ const IndentedTree = ({
     if (data == null) return;
     d3.select(svgRef.current).selectAll("*").remove();
     const format = d3.format(",");
-    const nodeSize = 21;
+    const nodeSize = getNodeSize();
     const root = d3.hierarchy(data).eachBefore(
       ((i) => (d) => {
         (d as CustomNode).index = i++;
@@ -38,7 +38,7 @@ const IndentedTree = ({
       {
         value: (d: any) => d.value,
         format,
-        x: screenWidth - 25,
+        x: screenWidth - getScreenWidthAdjustValue(),
       },
     ];
 
@@ -80,7 +80,7 @@ const IndentedTree = ({
       .append("text")
       .attr("x", (d) => (d.depth * nodeSize) + getTextXOffset(d, -10, 40))
       .attr("y", 5)
-      .style("font-size", "16px")
+      .style("font-size", getIconFontSize())
       .style("fill", (d) => (d.children ? "black" : "#cbd5e1"))
       .text((d) => {
         if (d.depth === 0) {
@@ -95,7 +95,7 @@ const IndentedTree = ({
     node
       .append("text")
       .attr("dy", "0.32em")
-      .attr("x", (d) => d.depth * nodeSize + getTextXOffset(d, 10, 60))
+      .attr("x", (d) => d.depth * nodeSize + getTextXOffset(d, 10, 80))
       .attr("y", 0)
       .attr("font-weight", (d) => (d.depth === 0 ? 900 : 100))
       .style("font-size", (d) => getLabelFontSize(d))
