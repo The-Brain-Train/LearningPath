@@ -21,6 +21,7 @@
         flex-wrap: nowrap;
         padding-left: 200px;
         padding-right: 200px;
+        font-size: larger;
     }
     .roadmap-tree-structure {
         overflow: hidden;
