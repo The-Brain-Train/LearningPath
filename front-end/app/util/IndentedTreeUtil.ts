@@ -4,6 +4,14 @@ export const isMobileView = () => {
     return window.innerWidth < 1000;
 }
 
+export const getIconFontSize = () => {
+    if (isMobileView()) {
+        return "16px";
+    } else {
+        return "24px"
+    }
+}
+
 export const getLabelFontSize = (d: d3.HierarchyNode<TreeNode>) => {
     if (isMobileView()) {
         return "14px";
