@@ -45,7 +45,7 @@ export type UserProfile =
   | {
       name?: string | null | undefined;
       email?: string | null | undefined;
-      image?: string | null | undefined;
+      profilePicture?: string | null | undefined;
     }
   | undefined;
 
