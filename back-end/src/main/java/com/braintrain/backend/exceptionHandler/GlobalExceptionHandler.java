@@ -1,5 +1,7 @@
 package com.braintrain.backend.exceptionHandler;
 
+import com.braintrain.backend.exceptionHandler.exception.EmailAlreadyExistsException;
+import com.braintrain.backend.exceptionHandler.exception.UserNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

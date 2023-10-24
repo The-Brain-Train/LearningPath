@@ -1,4 +1,4 @@
-package com.braintrain.backend.exceptionHandler;
+package com.braintrain.backend.exceptionHandler.exception;
 
 public class UserNotFoundException extends RuntimeException {
     public UserNotFoundException(String message) {
