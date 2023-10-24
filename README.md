@@ -8,7 +8,7 @@ Personalized Learning Plans.
 - [📱 Tech Stack](#-tech-stack)
 - [🎬 Demos](#-demos)
 - [🚧 Project Board](#-project-board-track-our-progress)
-- [🔧 Key Features:](#-key-features)
+- [🔧 Key Features](#-key-features)
 - [🚀 Getting Started / Installation](#-getting-started--installation)
 - [📧 Contact Information](#-contact-information)
 
