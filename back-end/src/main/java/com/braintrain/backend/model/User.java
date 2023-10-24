@@ -28,20 +28,12 @@ public class User  implements UserDetails {
     private Role role;
     private String profilePicture;
 
-    public User(String name, String password, String email) {
+    public User(String name, String password, String email, String profilePicture) {
         this.name = name;
         this.password = password;
         this.email = email;
         this.role = Role.USER;
         this.favorites = new ArrayList<>();
-    }
-
-    public User(String name, String email, String password, String profilePicture) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.favorites = new ArrayList<>();
-        this.role = Role.USER;
         this.profilePicture = profilePicture;
     }
 

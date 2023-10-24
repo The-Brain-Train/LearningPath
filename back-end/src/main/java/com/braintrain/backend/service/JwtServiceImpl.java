@@ -18,14 +18,8 @@ import java.util.function.Function;
 
 @Component
 public class JwtServiceImpl implements JwtService{
-
-
-    //public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
-
     @Value("${token.signing.key}")
     private String jwtSigningKey;
-
-
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -62,7 +56,6 @@ public class JwtServiceImpl implements JwtService{
         Map<String,Object> claims=new HashMap<>();
         claims.put("name", user.getName());
         claims.put("email", user.getEmail());
-        claims.put("profilePicture", user.getProfilePicture());
         return createToken(claims, user.getUsername());
     }
 
@@ -80,9 +73,3 @@ public class JwtServiceImpl implements JwtService{
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }
-
-
-
-
-
-
