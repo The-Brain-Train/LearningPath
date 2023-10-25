@@ -20,13 +20,10 @@ import java.util.UUID;
 public class FileService {
     @Value("${gcp.config.file}")
     private String gcpConfigFile;
-
     @Value("${gcp.project.id}")
     private String gcpProjectId;
-
     @Value("${gcp.bucket.id}")
     private String gcpBucketId;
-
     @Value("${gcp.dir.name}")
     private String gcpDirectoryName;
 

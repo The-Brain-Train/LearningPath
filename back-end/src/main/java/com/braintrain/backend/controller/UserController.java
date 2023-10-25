@@ -7,10 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-
-import java.io.IOException;
-
-
 @RestController
 @RequestMapping("api/users")
 @AllArgsConstructor
@@ -20,7 +16,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/{userEmail}/profileImage")
-    public ResponseEntity<String> updateProfilePicture(@PathVariable String userEmail, @RequestParam("file") MultipartFile file) throws IOException {
+    public ResponseEntity<String> updateProfilePicture(@PathVariable String userEmail, @RequestParam("file") MultipartFile file) {
         return ResponseEntity.ok(userService.uploadFile(userEmail, file));
     }
 
