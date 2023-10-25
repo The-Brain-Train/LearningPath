@@ -8,7 +8,6 @@ import com.google.cloud.storage.Bucket;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
@@ -31,9 +30,9 @@ public class FileService {
     @Value("${gcp.dir.name}")
     private String gcpDirectoryName;
 
-    public FileDTO uploadFile(MultipartFile multipartFile, String fileName, String contentType) throws IOException {
+    public FileDTO uploadFile(MultipartFile multipartFile, String fileName, String contentType) {
         try {
-            byte[] fileData = FileUtils.readFileToByteArray(convertFile(multipartFile));
+            byte[] fileData = multipartFile.getBytes();
 
             InputStream inputStream = new ClassPathResource(gcpConfigFile).getInputStream();
 
@@ -55,14 +54,6 @@ public class FileService {
             throw new GCPFileUploadException("An error occurred while storing data to GCS");
         }
         throw new GCPFileUploadException("An error occurred while storing data to GCS");
-    }
-
-    private File convertFile(MultipartFile file) throws IOException {
-        File convertedFile = new File(file.getOriginalFilename());
-        FileOutputStream outputStream = new FileOutputStream(convertedFile);
-        outputStream.write(file.getBytes());
-        outputStream.close();
-        return convertedFile;
     }
 
     private String checkFileExtension(String fileName) {
