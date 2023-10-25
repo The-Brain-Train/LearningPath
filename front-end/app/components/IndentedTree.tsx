@@ -7,6 +7,7 @@ import { CustomNode, CreateIndentedTreeProps } from "../util/types";
 import Link from "next/link";
 import styles from '../create/create.module.css'
 import { getHoursFontSize, getLabelFontSize, getLinkLength, getTextXOffset, getLabelXOffset, getNodeSize, getIconFontSize, getScreenWidthAdjustValue } from "../util/IndentedTreeUtil";
+import addGoogleFont from "../util/fontFamily";
 
 const IndentedTree = ({
   data,
@@ -99,6 +100,7 @@ const IndentedTree = ({
       .attr("y", 0)
       .attr("font-weight", (d) => (d.depth === 0 ? 900 : 100))
       .style("font-size", (d) => getLabelFontSize(d))
+      .style("font-family", "'Poppins', sans-serif")
       .text((d) => d.data.name)
       .attr("fill", "#cbd5e1");
 
@@ -135,6 +137,7 @@ const IndentedTree = ({
 
   useEffect(() => {
     if (data == null) return;
+    addGoogleFont();
     graph();
     const createGraph = () => {
       window.addEventListener("resize", graph);
