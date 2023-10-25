@@ -1,45 +1,24 @@
-"use client"
+"use client";
 import { UserCardProps } from "../util/types";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
+import { getUserProfilePicture, postUserProfilePicture } from "../functions/httpRequests";
 
 export default function Card({ user }: UserCardProps) {
-  const [selectedFile, setSelectedFile] = useState(null);
   const [imageSrc, setImageSrc] = useState<string>("");
   const [cookies] = useCookies(["user"]);
-  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-  const handleFileChange = (e: any) => {
+  const handleFileChange = async (e: any) => {
     const file = e.target.files[0];
-    setSelectedFile(file);
-    console.log(user);
-  };
 
-  const handleUpload = async (e: any) => {
-    e.preventDefault();
-
-    if (selectedFile) {
+    if (file) {
+      if (user?.email == undefined) return;
       const formData = new FormData();
-      formData.append("file", selectedFile);
-
+      formData.append("file", file);
       try {
-        if (user?.email == undefined) return;
-        const response = await fetch(`${BACKEND_URL}/api/users/${user.email}/profileImage`, {
-          method: "POST",
-          headers: {
-            Authorization: "Bearer " + cookies.user,
-          },
-          body: formData,
-        });
-
-        if (response.ok) {
-          const responseText = await response.text();
-          console.log(responseText);
-          console.log("Profile picture uploaded successfully");
-        } else {
-          console.error("Profile picture upload failed");
-        }
+        const profilePictureUrl = await postUserProfilePicture(user?.email, formData, cookies.user)
+          setImageSrc(profilePictureUrl);
       } catch (error) {
         console.error("An error occurred:", error);
       }
@@ -48,20 +27,9 @@ export default function Card({ user }: UserCardProps) {
 
   const fetchImageSource = async () => {
     if (user?.email == undefined) return;
-
     try {
-      const response = await fetch(`${BACKEND_URL}/api/users/${user.email}/profileImage`, {
-        headers: {
-          Authorization: "Bearer " + cookies.user,
-        },
-      });
-
-      if (response.ok) {
-        const imageUrl = await response.text();
-        setImageSrc(imageUrl);
-      } else {
-        console.error("Failed to fetch image source");
-      }
+      const profilePictureUrl = await getUserProfilePicture(user?.email, cookies.user);
+      setImageSrc(profilePictureUrl);
     } catch (error) {
       console.error("An error occurred while fetching image source:", error);
     }
@@ -78,15 +46,36 @@ export default function Card({ user }: UserCardProps) {
       <div className="flex flex-col text-center items-center p-6  rounded-lg font-bold text-2xl text-white">
         Hello {user?.name}!
       </div>
-      <div className="border-4 dark:border-slate-500 drop-shadow-xl text-slate-300 rounded-full mx-auto ">
+      <div className="h-64 w-64 relative rounded-full overflow-hidden">
         {imageSrc ? (
-          <Image src={imageSrc} width={220} height={220} alt="User profile picture" />
+          <Image
+            src={imageSrc}
+            width={250}
+            height={250}
+            layout="responsive"
+            alt="User profile picture"
+            className="rounded-full"
+          />
         ) : (
-          <Image src="/icon-profile.png" width={220} height={220} alt="User profile picture" />
-        )}
+          <Image
+            src="/icon-profile.png"
+            width={250}
+            height={250}
+            alt="User profile picture"
+          />
+        )}  
       </div>
-      <input type="file" onChange={handleFileChange} required />
-      <button onClick={handleUpload}>Confirm</button>
+      <div className="ml-14">
+          <label className="text-white underline cursor-pointer text-sm">
+            Change Profile Picture
+            <input
+              type="file"
+              className="hidden"
+              onChange={handleFileChange}
+              required
+            />
+          </label>
+        </div>
     </section>
   );
 }
