@@ -4,8 +4,10 @@ import * as d3 from "d3";
 import { CustomNode, ExploreIndentedTreeProps, TreeNode } from "../util/types";
 import styles from '../explore/explore.module.css';
 import { getHoursFontSize, getLabelFontSize, getLinkLength, getTextXOffset, getLabelXOffset, getNodeSize, getIconFontSize, getScreenWidthAdjustValue } from "../util/IndentedTreeUtil";
+import addGoogleFont from "../util/fontFamily";
 
 const IndentedTreeWithData = ({ data }: ExploreIndentedTreeProps) => {
+
   const svgRef = useRef(null);
 
   const graph = () => {
@@ -91,6 +93,7 @@ const IndentedTreeWithData = ({ data }: ExploreIndentedTreeProps) => {
       .attr("y", 0)
       .attr("font-weight", (d) => (d.depth === 0 ? 900 : 100))
       .style("font-size", (d) => getLabelFontSize(d))
+      .style("font-family", "'Poppins', sans-serif")
       .text((d) => d.data.name)
       .attr("fill", "#cbd5e1");
 
@@ -124,6 +127,7 @@ const IndentedTreeWithData = ({ data }: ExploreIndentedTreeProps) => {
   };
 
   useEffect(() => {
+    addGoogleFont();
     graph();
     const createGraph = () => {
       window.addEventListener("resize", graph);
