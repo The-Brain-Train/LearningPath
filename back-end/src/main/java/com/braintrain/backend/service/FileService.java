@@ -9,7 +9,6 @@ import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,10 +30,16 @@ public class FileService {
         try {
             byte[] fileData = multipartFile.getBytes();
 
-            InputStream inputStream = new ClassPathResource(gcpConfigFile).getInputStream();
+            byte[] jsonBytes = gcpConfigFile.getBytes();
 
-            StorageOptions options = StorageOptions.newBuilder().setProjectId(gcpProjectId)
-                    .setCredentials(GoogleCredentials.fromStream(inputStream)).build();
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(jsonBytes);
+
+            GoogleCredentials credentials = GoogleCredentials.fromStream(inputStream);
+
+            StorageOptions options = StorageOptions.newBuilder()
+                    .setProjectId(gcpProjectId)
+                    .setCredentials(credentials)
+                    .build();
 
             Storage storage = options.getService();
             Bucket bucket = storage.get(gcpBucketId, Storage.BucketGetOption.fields());

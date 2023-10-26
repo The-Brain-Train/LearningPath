@@ -8,7 +8,7 @@ spring:
       database: learningPathTest
 gcp:
   config:
-    file: gcp-account-file.json
+    file: ${GCP_SERVICE}
   project:
     id: ${GCP_PROJECT_ID}
   bucket:
