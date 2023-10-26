@@ -1,45 +1,53 @@
 "use client";
 import { UserCardProps } from "../util/types";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
-import { getUserProfilePicture, postUserProfilePicture } from "../functions/httpRequests";
+import {
+  getUserProfilePicture,
+  postUserProfilePicture,
+} from "../functions/httpRequests";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { queryClient } from "../util/queryClient";
 
 export default function Card({ user }: UserCardProps) {
-  const [imageSrc, setImageSrc] = useState<string>("");
   const [cookies] = useCookies(["user"]);
+
+  const uploadProfilePicture = useMutation(
+    (formData: FormData) => {
+      if (user?.email == undefined) {
+        throw new Error("User email is undefined.");
+      }
+      return postUserProfilePicture(user.email, formData, cookies.user);
+    },
+    {
+      onSettled: () => {
+        queryClient.invalidateQueries(["profilePictureUrl"]);
+      },
+    }
+  );
 
   const handleFileChange = async (e: any) => {
     const file = e.target.files[0];
 
     if (file) {
-      if (user?.email == undefined) return;
       const formData = new FormData();
       formData.append("file", file);
+
       try {
-        const profilePictureUrl = await postUserProfilePicture(user?.email, formData, cookies.user)
-          setImageSrc(profilePictureUrl);
+        await uploadProfilePicture.mutateAsync(formData);
       } catch (error) {
         console.error("An error occurred:", error);
       }
     }
   };
 
-  const fetchImageSource = async () => {
-    if (user?.email == undefined) return;
-    try {
-      const profilePictureUrl = await getUserProfilePicture(user?.email, cookies.user);
-      setImageSrc(profilePictureUrl);
-    } catch (error) {
-      console.error("An error occurred while fetching image source:", error);
+  const { data: profilePictureUrl } = useQuery<string>(
+    ["profilePictureUrl"],
+    () => getUserProfilePicture(user?.email as string, cookies.user),
+    {
+      enabled: !!cookies.user,
     }
-  };
-
-  useEffect(() => {
-    if (user) {
-      fetchImageSource();
-    }
-  }, [user]);
+  );
 
   return (
     <section className="flex flex-col gap-1 ">
@@ -47,9 +55,9 @@ export default function Card({ user }: UserCardProps) {
         Hello {user?.name}!
       </div>
       <div className="h-64 w-64 relative rounded-full overflow-hidden">
-        {imageSrc ? (
+        {profilePictureUrl ? (
           <Image
-            src={imageSrc}
+            src={profilePictureUrl}
             width={250}
             height={250}
             layout="responsive"
@@ -63,19 +71,19 @@ export default function Card({ user }: UserCardProps) {
             height={250}
             alt="User profile picture"
           />
-        )}  
+        )}
       </div>
       <div className="ml-14">
-          <label className="text-white underline cursor-pointer text-sm">
-            Change Profile Picture
-            <input
-              type="file"
-              className="hidden"
-              onChange={handleFileChange}
-              required
-            />
-          </label>
-        </div>
+        <label className="text-white underline cursor-pointer text-sm">
+          Change Profile Picture
+          <input
+            type="file"
+            className="hidden"
+            onChange={handleFileChange}
+            required
+          />
+        </label>
+      </div>
     </section>
   );
 }
