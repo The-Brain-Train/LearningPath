@@ -14,7 +14,7 @@ import {
 import { RoadmapMeta, User } from "../util/types";
 import { generateStarsforExperienceLevel } from "../functions/generateStarsForExperience";
 import TuneIcon from "@mui/icons-material/Tune";
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -34,7 +34,7 @@ export default function Explore() {
   const [cookies] = useCookies(["user"]);
   const [hourValidationMessage, setHourValidationMessage] = useState<string | null>(null);
 
-  const { data: currentUser } = useQuery<User | null>(
+  const { data: currentUser, isLoading } = useQuery<User | null>(
     ["currentUser"],
     async () => {
       if (cookies.user) {
@@ -136,6 +136,18 @@ export default function Explore() {
       setFilteredRoadmaps(filtered);
     }
   }, [search, roadmaps, experienceFilter, hoursFromFilter, hoursToFilter]);
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col justify-center items-center mt-32">
+        <div className="flex items-center gap-4">
+          <p>Loading</p>
+          <CircularProgress />
+        </div>
+        <p>May take extra time on first time use due to server sleeping</p>
+      </div>
+    );
+  }
 
   return (
     <main className="main-background min-h-max flex items-center flex-col">

@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { RoadmapMeta, User } from "../util/types";
 import { RoadmapMetaList } from "../util/types";
-import { useRouter } from "next/navigation";
 import {
   deleteRoadmap,
   getUserFavorites,
@@ -22,35 +21,15 @@ import jwtDecode from "jwt-decode";
 import { useCookies } from "react-cookie";
 import Image from "next/image";
 import Link from "next/link";
-
-function Icon({ id, open }: { id: string | number; open: number }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={2}
-      stroke="currentColor"
-      className={`${
-        id === open ? "rotate-180" : ""
-      } h-5 w-5 transition-transform`}
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-      />
-    </svg>
-  );
-}
+import { Icon } from "../components/AccordionIcon";
+import { CircularProgress } from "@mui/material";
 
 const Profile = () => {
-  const router = useRouter();
   const [open, setOpen] = useState(0);
   const queryClient = useQueryClient();
   const [cookies] = useCookies(["user"]);
 
-  const { data: currentUser } = useQuery<User | null>(
+  const { data: currentUser, isLoading } = useQuery<User | null>(
     ["currentUser"],
     async () => {
       if (cookies.user) {
@@ -108,6 +87,18 @@ const Profile = () => {
   };
 
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col justify-center items-center mt-32">
+        <div className="flex items-center gap-4">
+          <p>Loading</p>
+          <CircularProgress />
+        </div>
+        <p>May take extra time on first time use due to server sleeping</p>
+      </div>
+    );
+  }
 
   return (
     <>
