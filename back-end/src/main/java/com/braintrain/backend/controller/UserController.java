@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController {
 
     private final UserService userService;
-
     @PostMapping("/{userEmail}/profileImage")
     public ResponseEntity<String> updateProfilePicture(@PathVariable String userEmail, @RequestParam("file") MultipartFile file) {
         return ResponseEntity.ok(userService.uploadFile(userEmail, file));

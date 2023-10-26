@@ -22,10 +22,6 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    public void saveUser(User user) {
-        userRepository.save(user);
-    }
-
     public UserFavoritesDTO getUsersFavorites(User user) {
         return new UserFavoritesDTO(user.getFavorites());
     }

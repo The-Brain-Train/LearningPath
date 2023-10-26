@@ -3,10 +3,7 @@ package com.braintrain.backend.service;
 import com.braintrain.backend.controller.dtos.FileDTO;
 import com.braintrain.backend.exceptionHandler.exception.GCPFileUploadException;
 import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.storage.Blob;
-import com.google.cloud.storage.Bucket;
-import com.google.cloud.storage.Storage;
-import com.google.cloud.storage.StorageOptions;
+import com.google.cloud.storage.*;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
