@@ -100,8 +100,8 @@ public class RoadmapService {
 
     private void validateRoadmapcount(String userEmail) {
         Long roadmapCount = repo.countByUserEmail(userEmail);
-        Long MAX_ROADMAP_COUNT = 4L;
-        if (roadmapCount > MAX_ROADMAP_COUNT) {
+        Long MAX_ROADMAP_COUNT = 10L;
+        if (roadmapCount == MAX_ROADMAP_COUNT) {
             throw new RoadmapCountExceededException();
         }
     }
