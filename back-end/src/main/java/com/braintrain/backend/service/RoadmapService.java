@@ -25,7 +25,7 @@ public class RoadmapService {
     public RoadmapMeta createRoadmap(RoadmapDTO roadmapDTO) {
         validateDTONameInput(roadmapDTO.name(), "Invalid name");
         validateDTORoadmapInput(roadmapDTO.roadmap());
-        validateRoadmapcount(roadmapDTO.userEmail());
+        validateRoadmapCount(roadmapDTO.userEmail());
         Roadmap roadmap = repo.save(new Roadmap(roadmapDTO.roadmap(), roadmapDTO.userEmail(), roadmapDTO.experienceLevel(), roadmapDTO.hours()));
         return metaRepo.save(new RoadmapMeta(roadmapDTO.name(), roadmap.getId(), roadmapDTO.userEmail(), roadmapDTO.experienceLevel(), roadmapDTO.hours()));
     }
@@ -98,10 +98,10 @@ public class RoadmapService {
         }
     }
 
-    private void validateRoadmapcount(String userEmail) {
+    private void validateRoadmapCount(String userEmail) {
         Long roadmapCount = repo.countByUserEmail(userEmail);
         Long MAX_ROADMAP_COUNT = 10L;
-        if (roadmapCount == MAX_ROADMAP_COUNT) {
+        if (roadmapCount.equals(MAX_ROADMAP_COUNT)) {
             throw new RoadmapCountExceededException();
         }
     }
