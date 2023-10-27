@@ -46,6 +46,10 @@ public class RoadmapService {
         return metaRepo.findById(id).orElse(null);
     }
 
+    public Long getRoadmapCountOfUser(String userEmail) {
+        return repo.countByUserEmail(userEmail);
+    }
+
     public void delete(RoadmapMeta roadmapMeta) {
         if(roadmapMeta == null) return;
         repo.deleteById(roadmapMeta.getRoadmapReferenceId());

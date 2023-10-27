@@ -62,6 +62,12 @@ public class RoadmapController {
         return ResponseEntity.ok(userService.getUsersFavorites(user));
     }
 
+    @GetMapping("/{userEmail}/count")
+    public ResponseEntity<Long> getRoadmapCountOfUser(@PathVariable String userEmail) {
+        Long roadmapCount = service.getRoadmapCountOfUser(userEmail);
+        return ResponseEntity.ok(roadmapCount);
+    }
+
     @PostMapping("/{userEmail}/favorites")
     public ResponseEntity<UserFavoritesDTO> addRoadmapMetaToFavorites(@PathVariable String userEmail, @RequestBody RoadmapMeta roadmapMeta) {
         User user = userService.getUserByEmail(userEmail);
