@@ -50,7 +50,7 @@ export default function Card({ user }: UserCardProps) {
   );
 
   return (
-    <section className="flex flex-col gap-1 ">
+    <section className="flex flex-col gap-1 justify-center items-center">
       <div className="flex flex-col text-center items-center p-6  rounded-lg font-bold text-2xl text-white">
         Hello {user?.name}!
       </div>
@@ -73,7 +73,7 @@ export default function Card({ user }: UserCardProps) {
           />
         )}
       </div>
-      <div className="ml-14">
+      <div>
         <label className="text-white underline cursor-pointer text-sm">
           Change Profile Picture
           <input
