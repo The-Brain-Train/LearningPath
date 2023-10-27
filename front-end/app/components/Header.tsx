@@ -38,7 +38,7 @@ export default function Header() {
             <Image src="/Logo.png" alt="LP Logo" width={140} height={60} />
           </Link>
           <div className="flex flex-row">
-            {currentUser ? (
+            {cookies.user ? (
               <Link href="/profile" className="flex gap-1 mr-3 items-center">
                 <div className="h-8 w-8 relative rounded-full overflow-hidden">
                   {profilePictureUrl ? (
