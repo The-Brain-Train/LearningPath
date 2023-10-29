@@ -178,3 +178,19 @@ export const postUserProfilePicture = async (
   const data = await response.text();
   return data;
 };
+
+export const getRoadmapCountOfUser = async (userEmail: string | null, token: any) => {
+  const response = await fetch(
+    `${BACKEND_URL}/api/roadmaps/${userEmail}/count`,
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch roadmap count");
+  }
+  const data = await response.json();
+  return data;
+}
