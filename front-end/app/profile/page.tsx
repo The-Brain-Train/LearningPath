@@ -7,6 +7,7 @@ import {
   getUserFavorites,
   getUsersRoadmapMetas,
   removeRoadmapMetaFromUserFavorites,
+  getRoadmapCountOfUser
 } from "../functions/httpRequests";
 import UserCard from "../components/UserCard";
 import {
@@ -23,6 +24,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "../components/AccordionIcon";
 import { CircularProgress } from "@mui/material";
+import styles from "../profile/profile.module.css"
 
 const Profile = () => {
   const [open, setOpen] = useState(0);
@@ -55,6 +57,31 @@ const Profile = () => {
       enabled: !!currentUser,
     }
   );
+
+  const { data: roadmapCount } = useQuery<number>(
+    ["roadmapCount"],
+    () => getRoadmapCountOfUser(currentUser?.email as string, cookies.user),
+    {
+      enabled: !!currentUser,
+    }
+  );
+
+  const maxRoadmaps = 10;
+  const progressBooks = [];
+
+  if (roadmapCount) {
+    progressBooks.length = 0;
+    for (let i = 0; i < roadmapCount; i++) {
+      progressBooks.push(<span>📚</span>);
+    }
+    for (let i = 0; i < maxRoadmaps - roadmapCount; i++) {
+      progressBooks.push(
+        <span style={{ color: "grey", filter: "grayscale(100%)" }}>
+          📚
+        </span>
+      )
+    }
+  }
 
   const deleteRoadmapMutation = useMutation((roadmapMeta: RoadmapMeta) =>
     deleteRoadmap(roadmapMeta.id)
@@ -107,7 +134,15 @@ const Profile = () => {
           <div className="flex items-center flex-col pb-3">
             {currentUser && <UserCard user={currentUser} />}
           </div>
-          <div className="flex items-center flex-col mx-2">
+
+          <div className={styles['roadmaps']}>
+            <div className={styles['roadmaps_progress-icons']}>
+              &nbsp;{progressBooks.map(bookicon => bookicon)}
+            </div>
+            <p className={styles['roadmaps_progress-label']}>
+              {roadmapCount} out of {maxRoadmaps} roadmaps created
+            </p>
+
             <Accordion
               className="sm:max-w-2xl"
               open={open === 1}
