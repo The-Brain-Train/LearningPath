@@ -54,7 +54,7 @@ export default function Card({ user }: UserCardProps) {
       <div className="flex flex-col text-center items-center p-6  rounded-lg font-bold text-2xl text-white">
         Hello {user?.name}!
       </div>
-      <div className="h-64 w-64 relative rounded-full overflow-hidden">
+      <div className="rounded-full overflow-hidden">
         {profilePictureUrl ? (
           <Image
             src={profilePictureUrl}

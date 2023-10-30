@@ -23,8 +23,7 @@ import { useCookies } from "react-cookie";
 import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "../components/AccordionIcon";
-import { CircularProgress } from "@mui/material";
-import styles from "../profile/profile.module.css"
+import { Box, CircularProgress } from "@mui/material";
 
 const Profile = () => {
   const [open, setOpen] = useState(0);
@@ -72,14 +71,24 @@ const Profile = () => {
   if (roadmapCount) {
     progressBooks.length = 0;
     for (let i = 0; i < roadmapCount; i++) {
-      progressBooks.push(<span>📚</span>);
+      progressBooks.push(
+        <Image
+          src="/navigation.png"
+          width={35}
+          height={35}
+          alt=""
+        />
+      );
     }
     for (let i = 0; i < maxRoadmaps - roadmapCount; i++) {
       progressBooks.push(
-        <span style={{ color: "grey", filter: "grayscale(100%)" }}>
-          📚
-        </span>
-      )
+        <Image
+          src="/route.png"
+          width={35}
+          height={35}
+          alt=""
+        />
+      );
     }
   }
 
@@ -117,13 +126,26 @@ const Profile = () => {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col justify-center items-center mt-32">
-        <div className="flex items-center gap-4">
-          <p>Loading</p>
-          <CircularProgress />
-        </div>
-        <p>May take extra time on first time use due to server sleeping</p>
-      </div>
+      <div
+      style={{
+        width: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "100vh",
+      }}
+    >
+      <Box
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexDirection: "column",
+        }}
+      >
+        <CircularProgress color="inherit" size={150} />
+      </Box>
+    </div>
     );
   }
 
@@ -135,12 +157,12 @@ const Profile = () => {
             {currentUser && <UserCard user={currentUser} />}
           </div>
 
-          <div className={styles['roadmaps']}>
-            <div className={styles['roadmaps_progress-icons']}>
+          <div className="flex items-center flex-col mx-2">
+            {/* <div className="flex flex-row justify-center items-center">
               &nbsp;{progressBooks.map(bookicon => bookicon)}
-            </div>
-            <p className={styles['roadmaps_progress-label']}>
-              {roadmapCount} out of {maxRoadmaps} roadmaps created
+            </div> */}
+            <p className="text-center text-white font-semibold">
+              {roadmapCount} / {maxRoadmaps} roadmaps saved
             </p>
 
             <Accordion

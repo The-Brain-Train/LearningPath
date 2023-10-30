@@ -23,7 +23,7 @@ public class RoadmapService {
     private final UserRepository userRepo;
 
     public RoadmapMeta createRoadmap(RoadmapDTO roadmapDTO) {
-        validateDTONameInput(roadmapDTO.name(), "Invalid name");
+        validateDTONameInput(roadmapDTO.name());
         validateDTORoadmapInput(roadmapDTO.roadmap());
         validateRoadmapCount(roadmapDTO.userEmail());
         Roadmap roadmap = repo.save(new Roadmap(roadmapDTO.roadmap(), roadmapDTO.userEmail(), roadmapDTO.experienceLevel(), roadmapDTO.hours()));
@@ -84,9 +84,9 @@ public class RoadmapService {
         return new UserFavoritesDTO(user.getFavorites());
     }
 
-    private static void validateDTONameInput(String roadmapDTOName, String Invalid_name) {
+    private static void validateDTONameInput(String roadmapDTOName) {
         if (roadmapDTOName == null || roadmapDTOName.isEmpty()) {
-            throw new IllegalArgumentException(Invalid_name);
+            throw new IllegalArgumentException("Invalid name");
         }
     }
 
