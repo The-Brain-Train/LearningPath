@@ -4,7 +4,7 @@ package com.braintrain.backend.controller;
 import com.braintrain.backend.controller.dtos.RoadmapDTO;
 import com.braintrain.backend.controller.dtos.RoadmapMetaListDTO;
 import com.braintrain.backend.controller.dtos.UserFavoritesDTO;
-import com.braintrain.backend.exceptionHandler.UserNotFoundException;
+import com.braintrain.backend.exceptionHandler.exception.UserNotFoundException;
 import com.braintrain.backend.model.*;
 import com.braintrain.backend.service.RoadmapService;
 import com.braintrain.backend.service.UserService;
@@ -21,13 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 public class RoadmapController {
     private final RoadmapService service;
-
     private final UserService userService;
-
-    @GetMapping("/status")
-    public ResponseEntity<String> getStatus() {
-        return ResponseEntity.ok().body("Server is up and running!");
-    }
 
     @GetMapping
     public ResponseEntity<RoadmapMetaListDTO> getRoadmap() {
@@ -60,6 +54,12 @@ public class RoadmapController {
     public ResponseEntity<UserFavoritesDTO> getUsersFavorites(@PathVariable String userEmail){
         User user = userService.getUserByEmail(userEmail);
         return ResponseEntity.ok(userService.getUsersFavorites(user));
+    }
+
+    @GetMapping("/{userEmail}/count")
+    public ResponseEntity<Long> getRoadmapCountOfUser(@PathVariable String userEmail) {
+        Long roadmapCount = service.getRoadmapCountOfUser(userEmail);
+        return ResponseEntity.ok(roadmapCount);
     }
 
     @PostMapping("/{userEmail}/favorites")

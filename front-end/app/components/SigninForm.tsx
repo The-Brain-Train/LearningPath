@@ -13,6 +13,7 @@ import Container from "@mui/material/Container";
 import { useCookies } from "react-cookie";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import "react-toastify/dist/ReactToastify.css";
 
 const SigninForm = () => {
   const [formData, setFormData] = useState({
@@ -25,22 +26,21 @@ const SigninForm = () => {
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isFormValid, setIsFormValid] = useState(false);
 
-
-  const handleInputChange = (e: { target: { name: any; value: any; }; }) => {
+  const handleInputChange = (e: {
+    target: { name: string; value: string };
+  }) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-  
+
     if (name === "email") {
       const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
       setIsEmailValid(emailRegex.test(value));
     }
     setIsFormValid(isEmailValid && formData.password.trim() !== "");
   };
-  
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
     try {
@@ -51,7 +51,6 @@ const SigninForm = () => {
         },
         body: JSON.stringify(formData),
       });
-
       if (response.ok) {
         const data = await response.json();
         const token = data.token;
@@ -62,7 +61,6 @@ const SigninForm = () => {
       } else {
         console.error("Error submitting form data:", response.statusText);
       }
-
       if (response.status === 403) {
         setError("Invalid email or password. Please try again.");
         setTimeout(() => {
@@ -106,14 +104,14 @@ const SigninForm = () => {
             error={!isEmailValid}
             helperText={!isEmailValid ? "Invalid email format" : ""}
             InputProps={{
-              style: { color: 'white' }
+              style: { color: "white" },
             }}
             InputLabelProps={{
-              style: { color: 'white' }
+              style: { color: "white" },
             }}
             sx={{
-              '& .MuiOutlinedInput-notchedOutline': {
-                borderColor: 'white',
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: "white",
               },
             }}
           />
@@ -129,14 +127,14 @@ const SigninForm = () => {
             value={formData.password}
             autoComplete="current-password"
             InputProps={{
-              style: { color: 'white' }
+              style: { color: "white" },
             }}
             InputLabelProps={{
-              style: { color: 'white' }
+              style: { color: "white" },
             }}
             sx={{
-              '& .MuiOutlinedInput-notchedOutline': {
-                borderColor: 'white',
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: "white",
               },
             }}
           />
@@ -156,8 +154,11 @@ const SigninForm = () => {
           </Button>
           <Grid container>
             <Grid item>
-              <Link href="/signup" className="text-lg hover:underline text-white">
-              Don&apos;t have an account?{" "}
+              <Link
+                href="/signup"
+                className="text-lg hover:underline text-white"
+              >
+                Don&apos;t have an account?{" "}
                 <span className="text-blue-500 font-bold">Sign up</span>
               </Link>
             </Grid>

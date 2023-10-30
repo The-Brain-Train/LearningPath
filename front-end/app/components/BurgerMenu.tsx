@@ -29,7 +29,7 @@ export default function BurgerMenu() {
       removeCookie("user", {
         path: "/",
       });
-    }, 1000);
+    }, 50);
     router.push("/");
   };
 

@@ -2,12 +2,12 @@
 import React, { useState } from "react";
 import { RoadmapMeta, User } from "../util/types";
 import { RoadmapMetaList } from "../util/types";
-import { useRouter } from "next/navigation";
 import {
   deleteRoadmap,
   getUserFavorites,
   getUsersRoadmapMetas,
   removeRoadmapMetaFromUserFavorites,
+  getRoadmapCountOfUser
 } from "../functions/httpRequests";
 import UserCard from "../components/UserCard";
 import {
@@ -22,35 +22,15 @@ import jwtDecode from "jwt-decode";
 import { useCookies } from "react-cookie";
 import Image from "next/image";
 import Link from "next/link";
-
-function Icon({ id, open }: { id: string | number; open: number }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={2}
-      stroke="currentColor"
-      className={`${
-        id === open ? "rotate-180" : ""
-      } h-5 w-5 transition-transform`}
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-      />
-    </svg>
-  );
-}
+import { Icon } from "../components/AccordionIcon";
+import { Box, CircularProgress } from "@mui/material";
 
 const Profile = () => {
-  const router = useRouter();
   const [open, setOpen] = useState(0);
   const queryClient = useQueryClient();
   const [cookies] = useCookies(["user"]);
 
-  const { data: currentUser } = useQuery<User | null>(
+  const { data: currentUser, isLoading } = useQuery<User | null>(
     ["currentUser"],
     async () => {
       if (cookies.user) {
@@ -76,6 +56,41 @@ const Profile = () => {
       enabled: !!currentUser,
     }
   );
+
+  const { data: roadmapCount } = useQuery<number>(
+    ["roadmapCount"],
+    () => getRoadmapCountOfUser(currentUser?.email as string, cookies.user),
+    {
+      enabled: !!currentUser,
+    }
+  );
+
+  const maxRoadmaps = 10;
+  const progressBooks = [];
+
+  if (roadmapCount) {
+    progressBooks.length = 0;
+    for (let i = 0; i < roadmapCount; i++) {
+      progressBooks.push(
+        <Image
+          src="/navigation.png"
+          width={35}
+          height={35}
+          alt=""
+        />
+      );
+    }
+    for (let i = 0; i < maxRoadmaps - roadmapCount; i++) {
+      progressBooks.push(
+        <Image
+          src="/route.png"
+          width={35}
+          height={35}
+          alt=""
+        />
+      );
+    }
+  }
 
   const deleteRoadmapMutation = useMutation((roadmapMeta: RoadmapMeta) =>
     deleteRoadmap(roadmapMeta.id)
@@ -109,6 +124,31 @@ const Profile = () => {
 
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
 
+  if (isLoading) {
+    return (
+      <div
+      style={{
+        width: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "100vh",
+      }}
+    >
+      <Box
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexDirection: "column",
+        }}
+      >
+        <CircularProgress color="inherit" size={150} />
+      </Box>
+    </div>
+    );
+  }
+
   return (
     <>
       {currentUser ? (
@@ -116,7 +156,15 @@ const Profile = () => {
           <div className="flex items-center flex-col pb-3">
             {currentUser && <UserCard user={currentUser} />}
           </div>
+
           <div className="flex items-center flex-col mx-2">
+            {/* <div className="flex flex-row justify-center items-center">
+              &nbsp;{progressBooks.map(bookicon => bookicon)}
+            </div> */}
+            <p className="text-center text-white font-semibold">
+              {roadmapCount} / {maxRoadmaps} roadmaps saved
+            </p>
+
             <Accordion
               className="sm:max-w-2xl"
               open={open === 1}

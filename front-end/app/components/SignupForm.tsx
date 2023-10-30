@@ -54,7 +54,6 @@ const SignupForm = () => {
         body: JSON.stringify(formData),
       });
       if (response.status === 200) {
-        console.log(response.status);
         toast.success("Successful! Being redirected to login page", {
           position: "top-center",
           autoClose: 3000,

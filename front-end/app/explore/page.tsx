@@ -14,7 +14,7 @@ import {
 import { RoadmapMeta, User } from "../util/types";
 import { generateStarsforExperienceLevel } from "../functions/generateStarsForExperience";
 import TuneIcon from "@mui/icons-material/Tune";
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -34,7 +34,7 @@ export default function Explore() {
   const [cookies] = useCookies(["user"]);
   const [hourValidationMessage, setHourValidationMessage] = useState<string | null>(null);
 
-  const { data: currentUser } = useQuery<User | null>(
+  const { data: currentUser, isLoading } = useQuery<User | null>(
     ["currentUser"],
     async () => {
       if (cookies.user) {
@@ -136,6 +136,18 @@ export default function Explore() {
       setFilteredRoadmaps(filtered);
     }
   }, [search, roadmaps, experienceFilter, hoursFromFilter, hoursToFilter]);
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col justify-center items-center mt-32">
+        <div className="flex items-center gap-4">
+          <p>Loading</p>
+          <CircularProgress />
+        </div>
+        <p>May take extra time on first time use due to server sleeping</p>
+      </div>
+    );
+  }
 
   return (
     <main className="main-background min-h-max flex items-center flex-col">
@@ -293,11 +305,11 @@ export default function Explore() {
           </div>
         )}
 
-        <ul className="flex flex-col justify-center mt-2 gap-3">
+        <ul className={styles['roadmap-list']}>
           {filteredRoadmaps.map((roadmap: RoadmapMeta) => (
             <li
               key={roadmap.id}
-              className=" rounded-lg shadow-md text-white"
+              className="rounded-lg shadow-md text-white"
               style={{ backgroundColor: "#141832" }}
             >
               <div className="flex items-center">
@@ -346,6 +358,58 @@ export default function Explore() {
             </li>
           ))}
         </ul>
+      </div>
+
+      <div className={styles['roadmap-grid']}>
+        {filteredRoadmaps.map((roadmap: RoadmapMeta) => (
+          <div
+            key={roadmap.id}
+            className={styles['roadmap-card']}
+          >
+            <Link href={`/explore/${roadmap.id}`}>
+              <div className="flex flex-col justify-between h-full">
+                <div>
+                  <div className={styles['roadmap-card_content']}>
+                    <h2 className="text-xl font-bold overflow-ellipsis overflow-hidden whitespace-nowrap">
+                      {roadmap.name}
+                    </h2>
+
+                    {currentUser && favorites ? (
+                      <span
+                        onClick={() =>
+                          favorites.some((favorite: any) => favorite.id === roadmap.id)
+                            ? handleRemoveFromFavorites(roadmap)
+                            : handleAddToFavorites(roadmap)
+                        }
+                        style={{ cursor: "pointer" }}
+                      >
+                        {favorites.some((favorite: any) => favorite.id === roadmap.id) ? (
+                          <FavoriteIcon />
+                        ) : (
+                          <FavoriteBorderIcon />
+                        )}
+                      </span>
+                    ) : null}
+                  </div>
+
+                  <div className={styles['roadmap-card_content']}>
+                    <p className="overflow-ellipsis overflow-hidden whitespace-nowrap">
+                      <Tooltip title={roadmap.experienceLevel} arrow>
+                        <span>
+                          {generateStarsforExperienceLevel(roadmap.experienceLevel)}
+                        </span>
+                      </Tooltip>
+                    </p>
+                    <p className="overflow-ellipsis overflow-hidden whitespace-nowrap">
+                      {roadmap.hours} hours
+                    </p>
+                  </div>
+                </div>
+
+              </div>
+            </Link>
+          </div>
+        ))}
       </div>
 
     </main>

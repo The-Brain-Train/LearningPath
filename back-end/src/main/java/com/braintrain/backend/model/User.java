@@ -26,13 +26,15 @@ public class User  implements UserDetails {
     private List<RoadmapMeta> favorites;
     @Enumerated(EnumType.STRING)
     private Role role;
+    private String profilePicture;
 
-    public User(String name, String password, String email) {
+    public User(String name, String password, String email, String profilePicture) {
         this.name = name;
         this.password = password;
         this.email = email;
         this.role = Role.USER;
         this.favorites = new ArrayList<>();
+        this.profilePicture = profilePicture;
     }
 
     @Override

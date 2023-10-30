@@ -17,8 +17,7 @@ export const getRoadmaps = async () => {
 };
 
 export const getRoadmap = async (roadMapId: string) => {
-  const response = await fetch(
-    `${BACKEND_URL}/api/roadmaps/${roadMapId}`);
+  const response = await fetch(`${BACKEND_URL}/api/roadmaps/${roadMapId}`);
   if (!response.ok) {
     throw new Error("Failed to fetch roadmaps");
   }
@@ -27,12 +26,9 @@ export const getRoadmap = async (roadMapId: string) => {
 };
 
 export const deleteRoadmap = async (roadMapId: string) => {
-  const response = await fetch(
-    `${BACKEND_URL}/api/roadmaps/${roadMapId}`,
-    {
-      method: "DELETE",
-    }
-  );
+  const response = await fetch(`${BACKEND_URL}/api/roadmaps/${roadMapId}`, {
+    method: "DELETE",
+  });
   if (!response.ok) {
     throw new Error("Failed to delete roadmap");
   }
@@ -69,7 +65,10 @@ export const getUsersRoadmapMetas = async (userEmail: string, token: any) => {
   return data;
 };
 
-export const getUserFavorites = async (userEmail: string | null, token: any) => {
+export const getUserFavorites = async (
+  userEmail: string | null,
+  token: any
+) => {
   const response = await fetch(
     `${BACKEND_URL}/api/roadmaps/${userEmail}/favorites`,
     {
@@ -138,3 +137,60 @@ export const removeRoadmapMetaFromUserFavorites = async (
     console.error("Error removing roadmap from favorites:", error);
   }
 };
+
+export const getUserProfilePicture = async (
+  userEmail: string | null,
+  token: any
+) => {
+  const response = await fetch(
+    `${BACKEND_URL}/api/users/${userEmail}/profileImage`,
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch users profile picture");
+  }
+  const data = await response.text();
+  return data;
+};
+
+export const postUserProfilePicture = async (
+  userEmail: string | null,
+  formData: FormData,
+  token: any
+) => {
+  const response = await fetch(
+    `${BACKEND_URL}/api/users/${userEmail}/profileImage`,
+    {
+      method: "POST",
+      body: formData,
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Profile picture upload failed");
+  }
+  const data = await response.text();
+  return data;
+};
+
+export const getRoadmapCountOfUser = async (userEmail: string | null, token: any) => {
+  const response = await fetch(
+    `${BACKEND_URL}/api/roadmaps/${userEmail}/count`,
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch roadmap count");
+  }
+  const data = await response.json();
+  return data;
+}

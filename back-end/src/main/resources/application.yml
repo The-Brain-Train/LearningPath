@@ -3,7 +3,18 @@ debug: true
 spring:
   data:
     mongodb:
-      uri: mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@learningpathcluster.xszn5ys.mongodb.net/${DB_NAME}
+#      uri: mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@learningpathcluster.xszn5ys.mongodb.net/${DB_NAME}
+      uri: mongodb://root:example@localhost:27017/learningPathTest?authSource=admin
+      database: learningPathTest
+gcp:
+  config:
+    file: ${GCP_SERVICE}
+  project:
+    id: ${GCP_PROJECT_ID}
+  bucket:
+    id: ${GCP_BUCKET_ID}
+  dir:
+    name: profile-pictures
 logging:
   level:
     org:
@@ -12,4 +23,4 @@ logging:
           autoconfigure: ERROR
 token:
   signing:
-    key: ${TOKEN_SIGNING_KEY}
+    key: 5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437

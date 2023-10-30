@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap");
+
 /* mobile */
 @media only screen and (max-width: 999px) {
     .filter-options-mobile-1 {
@@ -34,16 +36,24 @@
         text-align: center;
     }
     .roadmap-tree-title {
-        /* flex content-between justify-between flex-nowrap */
         display: flex;
         justify-content: space-between;
         align-content: space-between;
         flex-wrap: nowrap;
     }
     .roadmap-tree-structure {
-        /* overflow-hidden mb-20 */
         overflow: hidden;
         margin-bottom: 20px;
+    }
+    .roadmap-list {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-top: 0.5rem;
+        gap: 0.75rem;
+    }
+    .roadmap-grid {
+        display: none;
     }
 }
 
@@ -61,7 +71,6 @@
     .filter-options-desktop {
         display: flex;
         flex-direction: row;
-        /* align-items: center; */
         margin-top: 20px;
         justify-content: center;
         gap: 40px;
@@ -97,13 +106,42 @@
         justify-content: space-between;
         align-content: space-between;
         flex-wrap: nowrap;
-        padding-left: 50px;
-        padding-right: 50px;
+        padding-left: 200px;
+        padding-right: 200px;
+        font-size: larger;
+        font-family: 'Poppins', sans-serif;
     }
     .roadmap-tree-structure {
         overflow: hidden;
+        padding-left: 200px;
+        padding-right: 200px;
+        padding-bottom: 100px;
+    }
+    .roadmap-list {
+        display: none;
+    }
+    .roadmap-grid {
+        display: grid;
+        margin-top: 2%;
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+    }
+
+    .roadmap-card {
+        background-color: #141832;
+        color: #ffffff;
+        padding: 1rem;
+        margin: 1rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        width: 300px;
+    }
+    .roadmap-card_content {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-top: 20px;
         margin-bottom: 20px;
-        padding-left: 50px;
-        padding-right: 50px;
     }
 }

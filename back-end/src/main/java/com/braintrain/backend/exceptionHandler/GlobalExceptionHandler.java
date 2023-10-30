@@ -1,5 +1,8 @@
 package com.braintrain.backend.exceptionHandler;
 
+import com.braintrain.backend.exceptionHandler.exception.EmailAlreadyExistsException;
+import com.braintrain.backend.exceptionHandler.exception.RoadmapCountExceededException;
+import com.braintrain.backend.exceptionHandler.exception.UserNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -9,7 +12,7 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(IllegalArgumentException.class)
+    @ExceptionHandler({IllegalArgumentException.class, RoadmapCountExceededException.class})
     public ResponseEntity<ErrorMessageResponse> handleIllegalArgumentException(IllegalArgumentException ex) {
         ErrorMessageResponse errorResponse = new ErrorMessageResponse(
                 LocalDateTime.now(),
