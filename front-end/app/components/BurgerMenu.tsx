@@ -82,8 +82,8 @@ export default function BurgerMenu() {
             <MenuItem onClick={() => router.push("/signin")}>
               <LogoutIcon />{" "}
               <div className="flex flex-col">
-                <p className="pl-2">SignIn / </p>
-                <p className="pl-2">SignUp</p>
+                <p className="pl-2">Sign In / </p>
+                <p className="pl-2">Sign Up</p>
               </div>
             </MenuItem>
           )}
@@ -104,10 +104,7 @@ export default function BurgerMenu() {
         ) : (
           <MenuItem onClick={() => router.push("/signin")}>
             <LogoutIcon />{" "}
-            <div className="flex flex-col">
-              <p className="pl-2">SignIn / </p>
-              <p className="pl-2">SignUp</p>
-            </div>
+              <p className="pl-2">Sign In / Sign Up</p>
           </MenuItem>
         )}
       </div>
