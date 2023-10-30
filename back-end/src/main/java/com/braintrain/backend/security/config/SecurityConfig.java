@@ -30,7 +30,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(request -> request.requestMatchers("/api/auth/**", "/api/roadmaps", "/api/roadmaps/{id}")
+                .authorizeHttpRequests(request -> request.requestMatchers("/status","/api/auth/**", "/api/roadmaps", "/api/roadmaps/{id}")
                         .permitAll().anyRequest().authenticated())
                 .cors(withDefaults())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
