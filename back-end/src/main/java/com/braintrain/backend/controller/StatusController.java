@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("status")
 @AllArgsConstructor
-@CrossOrigin
+@CrossOrigin(origins = "*")
 public class StatusController {
     @GetMapping
     public ResponseEntity<String> getStatus() {
