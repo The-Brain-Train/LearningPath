@@ -12,8 +12,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useCookies } from "react-cookie";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
 
 const SigninForm = () => {
@@ -26,10 +25,10 @@ const SigninForm = () => {
   const router = useRouter();
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isFormValid, setIsFormValid] = useState(false);
-  // const [loginButtonClicked, setLoginButtonClicked] = useState(false);
 
-
-  const handleInputChange = (e: { target: { name: string; value: string; }; }) => {
+  const handleInputChange = (e: {
+    target: { name: string; value: string };
+  }) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
 
@@ -39,13 +38,10 @@ const SigninForm = () => {
     }
     setIsFormValid(isEmailValid && formData.password.trim() !== "");
   };
-  
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
-
-    // setLoginButtonClicked(true);
 
     try {
       const response = await fetch(`${BACKEND_URL}/api/auth/signin`, {
@@ -73,19 +69,8 @@ const SigninForm = () => {
       }
     } catch (error) {
       setError("An error occurred while signing in.");
-    } 
+    }
   };
-
-  // useEffect(() => {
-  //   if (loginButtonClicked) {
-  //     setTimeout(() => {
-  //       toast.info("Server was sleeping. Give it a few seconds and try again.", {
-  //         position: "top-center",
-  //         autoClose: 3000,
-  //       });
-  //     }, 2000)
-  //   }
-  // }, [loginButtonClicked]);
 
   return (
     <Container component="main" className="main-background m-0 min-w-full">
@@ -119,14 +104,14 @@ const SigninForm = () => {
             error={!isEmailValid}
             helperText={!isEmailValid ? "Invalid email format" : ""}
             InputProps={{
-              style: { color: 'white' }
+              style: { color: "white" },
             }}
             InputLabelProps={{
-              style: { color: 'white' }
+              style: { color: "white" },
             }}
             sx={{
-              '& .MuiOutlinedInput-notchedOutline': {
-                borderColor: 'white',
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: "white",
               },
             }}
           />
@@ -142,14 +127,14 @@ const SigninForm = () => {
             value={formData.password}
             autoComplete="current-password"
             InputProps={{
-              style: { color: 'white' }
+              style: { color: "white" },
             }}
             InputLabelProps={{
-              style: { color: 'white' }
+              style: { color: "white" },
             }}
             sx={{
-              '& .MuiOutlinedInput-notchedOutline': {
-                borderColor: 'white',
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: "white",
               },
             }}
           />
@@ -167,11 +152,13 @@ const SigninForm = () => {
           >
             Sign In
           </Button>
-          {/* <ToastContainer /> */}
           <Grid container>
             <Grid item>
-              <Link href="/signup" className="text-lg hover:underline text-white">
-              Don&apos;t have an account?{" "}
+              <Link
+                href="/signup"
+                className="text-lg hover:underline text-white"
+              >
+                Don&apos;t have an account?{" "}
                 <span className="text-blue-500 font-bold">Sign up</span>
               </Link>
             </Grid>

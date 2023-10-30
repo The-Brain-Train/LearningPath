@@ -151,7 +151,7 @@ export const getUserProfilePicture = async (
     }
   );
   if (!response.ok) {
-    throw new Error("Failed to fetch user favorites");
+    throw new Error("Failed to fetch users profile picture");
   }
   const data = await response.text();
   return data;
