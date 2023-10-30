@@ -21,13 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 public class RoadmapController {
     private final RoadmapService service;
-
     private final UserService userService;
-
-    @GetMapping("/status")
-    public ResponseEntity<String> getStatus() {
-        return ResponseEntity.ok().body("Server is up and running!");
-    }
 
     @GetMapping
     public ResponseEntity<RoadmapMetaListDTO> getRoadmap() {
