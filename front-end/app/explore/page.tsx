@@ -19,9 +19,9 @@ import Tooltip from "@mui/material/Tooltip";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import jwtDecode from 'jwt-decode';
-import { useCookies } from 'react-cookie';
-import styles from '../explore/explore.module.css'
+import jwtDecode from "jwt-decode";
+import { useCookies } from "react-cookie";
+import styles from "../explore/explore.module.css";
 
 export default function Explore() {
   const [filteredRoadmaps, setFilteredRoadmaps] = useState<RoadmapMeta[]>([]);
@@ -32,7 +32,9 @@ export default function Explore() {
   const [showFilters, setShowFilters] = useState(false);
   const queryClient = useQueryClient();
   const [cookies] = useCookies(["user"]);
-  const [hourValidationMessage, setHourValidationMessage] = useState<string | null>(null);
+  const [hourValidationMessage, setHourValidationMessage] = useState<
+    string | null
+  >(null);
 
   const { data: currentUser, isLoading } = useQuery<User | null>(
     ["currentUser"],
@@ -50,16 +52,12 @@ export default function Explore() {
       currentUser ? currentUser?.email : null,
       cookies.user
     );
-  }
+  };
 
   const { data: roadmaps } = useQuery(["roadmaps"], getRoadmaps);
-  const { data: favorites } = useQuery(
-    ["favorites"],
-    fetchUserFavorites,
-    {
-      enabled: !!currentUser
-    }
-  );
+  const { data: favorites } = useQuery(["favorites"], fetchUserFavorites, {
+    enabled: !!currentUser,
+  });
 
   const { mutateAsync: handleRemoveFromFavorites } = useMutation({
     mutationFn: async (roadmapMeta: RoadmapMeta) => {
@@ -71,7 +69,7 @@ export default function Explore() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["favorites"]);
-    }
+    },
   });
 
   const { mutateAsync: handleAddToFavorites } = useMutation({
@@ -80,12 +78,11 @@ export default function Explore() {
         currentUser?.email,
         roadmapMeta,
         cookies.user
-
       );
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["favorites"]);
-    }
+    },
   });
 
   const toggleFilters = () => {
@@ -112,12 +109,12 @@ export default function Explore() {
     }
     if (to <= from) {
       setHourValidationMessage("To should be greater than From");
-      setTimeout(() => setHourValidationMessage(null), 2000)
+      setTimeout(() => setHourValidationMessage(null), 2000);
       return false;
     }
     setHourValidationMessage(null);
     return true;
-  }
+  };
 
   const handleSearchChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -151,10 +148,12 @@ export default function Explore() {
 
   return (
     <main className="main-background min-h-max flex items-center flex-col">
-
-      <div className={styles['filter-options-mobile-1']} style={{ maxWidth: "300px" }}>
+      <div
+        className={styles["filter-options-mobile-1"]}
+        style={{ maxWidth: "300px" }}
+      >
         <Paper
-          component="form"
+          component="div"
           sx={{
             p: "2px 4px",
             display: "flex",
@@ -180,11 +179,10 @@ export default function Explore() {
         </Button>
       </div>
 
-      <div className={styles['filter-options-desktop']}>
-
+      <div className={styles["filter-options-desktop"]}>
         <div className="flex flex-row mb-5" style={{ maxWidth: "300px" }}>
           <Paper
-            component="form"
+            component="div"
             sx={{
               p: "2px 4px",
               display: "flex",
@@ -217,8 +215,8 @@ export default function Explore() {
           <option value="expert">Expert</option>
         </select>
 
-        <div className={styles['hours-desktop']}>
-          <div className={styles['hours-div-desktop']}>
+        <div className={styles["hours-desktop"]}>
+          <div className={styles["hours-div-desktop"]}>
             <span className="text-white">Hours:</span>
             <input
               type="number"
@@ -227,12 +225,13 @@ export default function Explore() {
               step="10"
               value={hoursFromFilter === null ? "" : hoursFromFilter}
               onChange={(e) => {
-                const newValue = e.target.value === "" ? null : parseInt(e.target.value);
+                const newValue =
+                  e.target.value === "" ? null : parseInt(e.target.value);
                 validateHours(newValue, hoursToFilter) &&
-                  setHoursFromFilter(newValue)
+                  setHoursFromFilter(newValue);
               }}
               placeholder="From"
-              className={styles['hour-input-desktop']}
+              className={styles["hour-input-desktop"]}
             />
             <input
               type="number"
@@ -241,23 +240,25 @@ export default function Explore() {
               step="10"
               value={hoursToFilter === null ? "" : hoursToFilter}
               onChange={(e) => {
-                const newValue = e.target.value === "" ? null : parseInt(e.target.value);
+                const newValue =
+                  e.target.value === "" ? null : parseInt(e.target.value);
                 validateHours(hoursFromFilter, newValue) &&
-                  setHoursToFilter(newValue)
+                  setHoursToFilter(newValue);
               }}
               placeholder="To"
-              className={styles['hour-input-desktop']}
+              className={styles["hour-input-desktop"]}
             />
           </div>
-          <span className={styles['hour-validation']}>{hourValidationMessage}</span>
+          <span className={styles["hour-validation"]}>
+            {hourValidationMessage}
+          </span>
         </div>
-
       </div>
 
       <div style={{ maxWidth: "300px", width: "80%" }}>
         {showFilters && (
           <div
-            className={styles['filter-options-mobile-2']}
+            className={styles["filter-options-mobile-2"]}
             style={{ maxWidth: "200px", margin: "0 auto" }}
           >
             <select
@@ -279,12 +280,13 @@ export default function Explore() {
                 step="10"
                 value={hoursFromFilter === null ? "" : hoursFromFilter}
                 onChange={(e) => {
-                  const newValue = e.target.value === "" ? null : parseInt(e.target.value);
+                  const newValue =
+                    e.target.value === "" ? null : parseInt(e.target.value);
                   validateHours(newValue, hoursToFilter) &&
-                    setHoursFromFilter(newValue)
+                    setHoursFromFilter(newValue);
                 }}
                 placeholder="From"
-                className={styles['hour-input-mobile']}
+                className={styles["hour-input-mobile"]}
               />
               <input
                 type="number"
@@ -293,19 +295,22 @@ export default function Explore() {
                 step="10"
                 value={hoursToFilter === null ? "" : hoursToFilter}
                 onChange={(e) => {
-                  const newValue = e.target.value === "" ? null : parseInt(e.target.value);
+                  const newValue =
+                    e.target.value === "" ? null : parseInt(e.target.value);
                   validateHours(hoursFromFilter, newValue) &&
-                    setHoursToFilter(newValue)
+                    setHoursToFilter(newValue);
                 }}
                 placeholder="To"
-                className={styles['hour-input-mobile']}
+                className={styles["hour-input-mobile"]}
               />
             </div>
-            <span className={styles['hour-validation']}>{hourValidationMessage}</span>
+            <span className={styles["hour-validation"]}>
+              {hourValidationMessage}
+            </span>
           </div>
         )}
 
-        <ul className={styles['roadmap-list']}>
+        <ul className={styles["roadmap-list"]}>
           {filteredRoadmaps.map((roadmap: RoadmapMeta) => (
             <li
               key={roadmap.id}
@@ -341,13 +346,17 @@ export default function Explore() {
                   <span
                     className="mx-2"
                     onClick={() =>
-                      favorites.some((favorite: any) => favorite.id === roadmap.id)
+                      favorites.some(
+                        (favorite: any) => favorite.id === roadmap.id
+                      )
                         ? handleRemoveFromFavorites(roadmap)
                         : handleAddToFavorites(roadmap)
                     }
                     style={{ cursor: "pointer" }}
                   >
-                    {favorites.some((favorite: any) => favorite.id === roadmap.id) ? (
+                    {favorites.some(
+                      (favorite: any) => favorite.id === roadmap.id
+                    ) ? (
                       <FavoriteIcon />
                     ) : (
                       <FavoriteBorderIcon />
@@ -360,43 +369,44 @@ export default function Explore() {
         </ul>
       </div>
 
-      <div className={styles['roadmap-grid']}>
+      <div className={styles["roadmap-grid"]}>
         {filteredRoadmaps.map((roadmap: RoadmapMeta) => (
-          <div
-            key={roadmap.id}
-            className={styles['roadmap-card']}
-          >
+          <div key={roadmap.id} className={styles["roadmap-card"]}>
+            {currentUser && favorites ? (
+              <span
+              className="flex justify-end"
+                onClick={() =>
+                  favorites.some((favorite: any) => favorite.id === roadmap.id)
+                    ? handleRemoveFromFavorites(roadmap)
+                    : handleAddToFavorites(roadmap)
+                }
+                style={{ cursor: "pointer" }}
+              >
+                {favorites.some(
+                  (favorite: any) => favorite.id === roadmap.id
+                ) ? (
+                  <FavoriteIcon />
+                ) : (
+                  <FavoriteBorderIcon />
+                )}
+              </span>
+            ) : null}
             <Link href={`/explore/${roadmap.id}`}>
               <div className="flex flex-col justify-between h-full">
                 <div>
-                  <div className={styles['roadmap-card_content']}>
+                  <div className={styles["roadmap-card_content"]}>
                     <h2 className="text-xl font-bold overflow-ellipsis overflow-hidden whitespace-nowrap">
                       {roadmap.name}
                     </h2>
-
-                    {currentUser && favorites ? (
-                      <span
-                        onClick={() =>
-                          favorites.some((favorite: any) => favorite.id === roadmap.id)
-                            ? handleRemoveFromFavorites(roadmap)
-                            : handleAddToFavorites(roadmap)
-                        }
-                        style={{ cursor: "pointer" }}
-                      >
-                        {favorites.some((favorite: any) => favorite.id === roadmap.id) ? (
-                          <FavoriteIcon />
-                        ) : (
-                          <FavoriteBorderIcon />
-                        )}
-                      </span>
-                    ) : null}
                   </div>
 
-                  <div className={styles['roadmap-card_content']}>
+                  <div className={styles["roadmap-card_content"]}>
                     <p className="overflow-ellipsis overflow-hidden whitespace-nowrap">
                       <Tooltip title={roadmap.experienceLevel} arrow>
                         <span>
-                          {generateStarsforExperienceLevel(roadmap.experienceLevel)}
+                          {generateStarsforExperienceLevel(
+                            roadmap.experienceLevel
+                          )}
                         </span>
                       </Tooltip>
                     </p>
@@ -405,13 +415,11 @@ export default function Explore() {
                     </p>
                   </div>
                 </div>
-
               </div>
             </Link>
           </div>
         ))}
       </div>
-
     </main>
   );
 }
