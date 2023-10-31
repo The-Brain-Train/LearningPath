@@ -14,7 +14,7 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '80%',
+  width: '300px',
   bgcolor: '#cbd5e1',
   boxShadow: 24,
   p: 2,
@@ -43,10 +43,10 @@ function SaveButton({saveClick }: saveButtonProps) {
         <Modal
           open={open}
           onClose={handleClose}
-        >
+                 >
           <Box sx={style}>
             <Typography id="modal-modal-title" variant="h6" component="h2">
-              Are you sure you want to Save?
+              Are you sure you want to save?
             </Typography>
             <div className='flex justify-between'>
               <Button onClick={handleClose}>No</Button>

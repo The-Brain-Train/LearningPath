@@ -5,8 +5,16 @@ import SaveButton from "./SaveButton";
 import { Button, CircularProgress } from "@mui/material";
 import { CustomNode, CreateIndentedTreeProps } from "../util/types";
 import Link from "next/link";
-import styles from '../create/create.module.css'
-import { getHoursFontSize, getLabelFontSize, getLinkLength, getTextXOffset, getLabelXOffset, getNodeSize, getIconFontSize, getScreenWidthAdjustValue } from "../util/IndentedTreeUtil";
+import {
+  getHoursFontSize,
+  getLabelFontSize,
+  getLinkLength,
+  getTextXOffset,
+  getLabelXOffset,
+  getNodeSize,
+  getIconFontSize,
+  getScreenWidthAdjustValue,
+} from "../util/IndentedTreeUtil";
 import addGoogleFont from "../util/fontFamily";
 
 const IndentedTree = ({
@@ -50,7 +58,7 @@ const IndentedTree = ({
       .attr("viewBox", [-nodeSize / 2, (-nodeSize * 3) / 2, width, height])
       .attr(
         "style",
-        "max-width: 100%; height: auto; font: 14px sans-serif; overflow: visible;"
+        "max-width: 100%; height: auto; font: 10px sans-serif; overflow: visible;"
       );
 
     const link = svg
@@ -63,7 +71,7 @@ const IndentedTree = ({
       .attr(
         "d",
         (d) => `
-        M${(d).source.depth * nodeSize},${(d as any).source.index * nodeSize}
+        M${d.source.depth * nodeSize},${(d as any).source.index * nodeSize}
         V${(d as any).target.index * nodeSize}
         h${nodeSize + getLinkLength()}
       `
@@ -74,12 +82,15 @@ const IndentedTree = ({
       .selectAll()
       .data(nodes)
       .join("g")
-      .attr("transform", (d) => `translate(0,${(d as CustomNode).index * nodeSize})`)
+      .attr(
+        "transform",
+        (d) => `translate(0,${(d as CustomNode).index * nodeSize})`
+      )
       .attr("fill", "#cbd5e1");
 
     node
       .append("text")
-      .attr("x", (d) => (d.depth * nodeSize) + getLabelXOffset(d, -10, 40))
+      .attr("x", (d) => d.depth * nodeSize + getLabelXOffset(d, -10, 40))
       .attr("y", 5)
       .style("font-size", getIconFontSize())
       .style("fill", (d) => (d.children ? "black" : "#cbd5e1"))
@@ -91,7 +102,7 @@ const IndentedTree = ({
         } else {
           return "📕";
         }
-      })
+      });
 
     node
       .append("text")
@@ -119,8 +130,7 @@ const IndentedTree = ({
         .attr("y", -nodeSize)
         .attr("x", x)
         .attr("text-anchor", "end")
-        .attr("font-weight", "bold")
-
+        .attr("font-weight", "bold");
 
       node
         .append("text")
@@ -129,7 +139,7 @@ const IndentedTree = ({
         .attr("text-anchor", "end")
         .attr("fill", (d) => (d.children ? null : "#cbd5e1"))
         .attr("font-weight", (d) => (d.height == 0 ? 100 : 900))
-        .style("font-size", d => getHoursFontSize(d))
+        .style("font-size", (d) => getHoursFontSize(d))
         .data(root.copy().descendants())
         .text((d) => format(d.data.value));
     }
@@ -172,16 +182,18 @@ const IndentedTree = ({
           {createError ? (
             <p className="text-red-500 font-bold">{createError}</p>
           ) : (
-            <>
+            <div className="flex flex-col px-3 justify-center items-center ">
               {data !== null ? (
-                <>
-                  <div className={styles['roadmap-tree-title']}>
-                    <p className="text-xl mb-8 text-center font-bold sm:text-5xl lg:text-2xl">
+                <div className="max-w-6xl " >
+                  <div className="flex justify-between px-4 ">
+                    <p className="text-xl text-center font-bold text-white lg:text-2xl">
                       Learning Path
                     </p>
-                    <p className="text-xl mb-8 text-center font-bold sm:text-5xl lg:text-2xl">Hours</p>
+                    <p className="text-xl text-center font-bold text-white lg:text-2xl">Hours</p>
                   </div>
-                  <svg className={styles['roadmap-tree-structure']} ref={svgRef}></svg>
+                  <svg className="mb-20"
+                    ref={svgRef}
+                  ></svg>
                   {currentUser ? (
                     <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 flex justify-center gap-3">
                       <SaveButton saveClick={saveRoadmap} />
@@ -191,7 +203,7 @@ const IndentedTree = ({
                           d3.select(svgRef.current).selectAll("*").remove();
                         }}
                         className="bg-red-500 hover-bg-red-600 py-2 px-4 rounded text-white"
-                        style={{ marginTop: '10px', marginBottom: '10px' }}
+                        style={{ marginTop: "10px", marginBottom: "10px" }}
                       >
                         Reset
                       </Button>
@@ -210,7 +222,7 @@ const IndentedTree = ({
                       </p>
                     </div>
                   )}
-                </>
+                </div>
               ) : (
                 <p
                   className="text-slate-300 font-bold flex flex-col justify-center items-center h-screen"
@@ -225,7 +237,7 @@ const IndentedTree = ({
                   Your Roadmap will be displayed Here!
                 </p>
               )}
-            </>
+            </div>
           )}
         </>
       )}
