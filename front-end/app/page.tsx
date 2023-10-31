@@ -10,10 +10,10 @@ export default function Home() {
   return (
     <main className="main-background text-white">
       <section className="flex flex-col p-3 gap-2 mt-5 sm:items-center">
-        <h1 className="text-center pb-5 text-5xl font-extrabold sm:text-7xl sm:mb-5 sm:py-10">
+        <h1 className="text-center pb-5 text-5xl font-extrabold sm:text-7xl sm:mb-5 sm:py-10 lg:text-8xl">
           Welcome to LearningPath
         </h1>
-        <div className="flex flex-col items-center max-w-4xl sm:flex-row-reverse sm:item sm:gap-3">
+        <div className="flex flex-col items-center max-w-6xl sm:flex-row-reverse sm:item sm:gap-3">
           <Image
             src="/roadmap1.jpeg"
             alt="Create Roadmap"
@@ -43,17 +43,17 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="flex flex-col pt-8 max-w-4xl text-center">
-          <h2 className="text-3xl mb-8 text-center font-bold sm:text-5xl">
+        <div className="flex flex-col pt-8 max-w-6xl text-center">
+          <h2 className="text-4xl mb-8 text-center font-bold sm:text-5xl lg:text-6xl">
             Features of LearningPath
           </h2>
           <div className="space-y-2 flex flex-col gap-6 sm:gap-8">
             <div className="flex flex-col items-center sm:ite">
               <div className="flex mb-2">
-                <h2 className="text-white text-2xl font-bold mb-2 sm:text-3xl sm:pt-5 sm:text-left">
+                <h3 className="text-white text-2xl font-bold mb-2 sm:text-3xl sm:pt-5 sm:text-left">
                   <CreateIcon className="mr-2 sm:text-3xl" />
                   Create Your Roadmap
-                </h2>
+                </h3>
               </div>
               <div className="flex flex-col items-center sm:flex-row-reverse sm:item sm:gap-3 sm:text-left">
                 <div className="mb-6">
@@ -72,7 +72,7 @@ export default function Home() {
                 <Image
                   src="/roadmap3.jpeg"
                   alt="Create Roadmap"
-                  className="mt-2 pb-3 basis-10/12 rounded-lg"
+                  className="mt-2 pb-3 basis-10/12 rounded-lg sm:mt-0"
                   height={250}
                   width={250}
                 />
@@ -80,10 +80,10 @@ export default function Home() {
             </div>
             <div className="flex flex-col items-center">
               <div className="flex items-center mb-2">
-                <h2 className="text-white text-2xl font-bold mb-2 sm:text-3xl">
+                <h3 className="text-white text-2xl font-bold mb-2 sm:text-3xl">
                   <SaveIcon className="mr-2 sm:text-3xl" />
                   Save &amp; Manage Roadmaps
-                </h2>
+                </h3>
               </div>
               <div className="flex flex-col items-center sm:flex-row sm:gap-3 sm:text-left">
                 <div className="mb-6">
@@ -102,7 +102,7 @@ export default function Home() {
                 <Image
                   src="/roadmap4.jpg"
                   alt="Create Roadmap"
-                  className="mt-2 pb-3 basis-10/12 rounded-lg"
+                  className="mt-2 pb-3 basis-10/12 rounded-lg sm:mt-0"
                   height={250}
                   width={250}
                 />
@@ -110,10 +110,10 @@ export default function Home() {
             </div>
             <div className="flex flex-col items-center">
               <div className="flex items-center mb-2">
-                <h2 className="text-white text-2xl font-bold mb-2 sm:text-3xl">
+                <h3 className="text-white text-2xl font-bold mb-2 sm:text-3xl">
                   <ThumbsUpDownIcon className="mr-2 sm:text-3xl" />
                   Explore Community Roadmaps
-                </h2>
+                </h3>
               </div>
               <div className="flex flex-col items-center sm:flex-row-reverse sm:item sm:gap-3 sm:text-left">
                 <div className="mb-6">
@@ -133,7 +133,7 @@ export default function Home() {
                 <Image
                   src="/roadmap2.jpeg"
                   alt="Create Roadmap"
-                  className="mt-2 pb-3 basis-full rounded-lg"
+                  className="mt-2 pb-3 basis-full rounded-lg sm:mt-0"
                   height={250}
                   width={250}
                 />
