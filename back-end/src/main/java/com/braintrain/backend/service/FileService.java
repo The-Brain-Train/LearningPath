@@ -3,7 +3,10 @@ package com.braintrain.backend.service;
 import com.braintrain.backend.controller.dtos.FileDTO;
 import com.braintrain.backend.exceptionHandler.exception.GCPFileUploadException;
 import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.storage.*;
+import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.Bucket;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -26,13 +29,10 @@ public class FileService {
     public FileDTO uploadFile(MultipartFile multipartFile, String fileName, String contentType) {
         try {
             byte[] fileData = multipartFile.getBytes();
-
             byte[] jsonBytes = gcpConfigFile.getBytes();
 
             ByteArrayInputStream inputStream = new ByteArrayInputStream(jsonBytes);
-
             GoogleCredentials credentials = GoogleCredentials.fromStream(inputStream);
-
             StorageOptions options = StorageOptions.newBuilder()
                     .setProjectId(gcpProjectId)
                     .setCredentials(credentials)
@@ -44,26 +44,38 @@ public class FileService {
             UUID uuid = UUID.randomUUID();
             String id = uuid.toString();
 
-            Blob blob = bucket.create(gcpDirectoryName + "/" + fileName + "-" + id + checkFileExtension(fileName), fileData, contentType);
+            Blob blob = bucket.create(gcpDirectoryName + "/" + fileName + "-" + id, fileData, contentType);
 
             if (blob != null) {
                 return new FileDTO(blob.getName(), blob.getMediaLink());
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new GCPFileUploadException("An error occurred while storing data to GCS");
         }
         throw new GCPFileUploadException("An error occurred while storing data to GCS");
     }
 
-    private String checkFileExtension(String fileName) {
-        if(fileName != null && fileName.contains(".")){
-            String[] extensionList = {".png", ".jpeg", ".pdf", ".doc", ".mp3"};
-            for(String extension: extensionList) {
-                if (fileName.endsWith(extension)) {
-                    return extension;
-                }
-            }
+    public void deleteFile(String existingFileName) {
+        try {
+            byte[] jsonBytes = gcpConfigFile.getBytes();
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(jsonBytes);
+
+            int index1 = existingFileName.indexOf("%2F");
+            int index2 = existingFileName.indexOf("generation=");
+            String encodedFileName  = existingFileName.substring(index1 + 3, index2 - 1);
+
+            GoogleCredentials credentials = GoogleCredentials.fromStream(inputStream);
+            StorageOptions options = StorageOptions.newBuilder()
+                    .setProjectId(gcpProjectId)
+                    .setCredentials(credentials)
+                    .build();
+
+            Storage storage = options.getService();
+            String filePathName = gcpDirectoryName + "/" + encodedFileName;
+            storage.delete(gcpBucketId, filePathName);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new GCPFileUploadException("An error occurred while deleting the file from GCS");
         }
-        return null;
     }
 }
