@@ -93,7 +93,7 @@ const InputForm = ({
     <>
       <div>
         {data === null && (
-          <div>
+          <div className="mt-5">
             <h1 className="flex justify-center p-5 text-white text-xl">
               What would you want to create?
             </h1>
@@ -162,7 +162,7 @@ const InputForm = ({
                   className="mt-10 pb-2 text-sm font-black"
                   id="demo-simple-box-autowidth-label"
                 >
-                  How many hours do you want to spend?
+                  Total hours
                 </InputLabel>
                 <Box sx={{ minWidth: "80%" }}>
                   <Slider
