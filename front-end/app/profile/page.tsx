@@ -158,9 +158,6 @@ const Profile = () => {
           </div>
 
           <div className="flex items-center flex-col mx-2">
-            {/* <div className="flex flex-row justify-center items-center">
-              &nbsp;{progressBooks.map(bookicon => bookicon)}
-            </div> */}
             <p className="text-center text-white font-semibold">
               {roadmapCount} / {maxRoadmaps} roadmaps saved
             </p>
@@ -175,7 +172,7 @@ const Profile = () => {
                 className="p-3 dark:border-opacity-50 text-white"
                 style={{ backgroundColor: "#141832" }}
               >
-                <h2>My Roadmaps</h2>
+                My Roadmaps
               </AccordionHeader>
               <AccordionBody>
                 {userRoadmaps && userRoadmaps.roadmapMetaList.length > 0 ? (
