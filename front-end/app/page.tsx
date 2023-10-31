@@ -22,20 +22,20 @@ export default function Home() {
             width={280}
           />
           <div>
-            <p className="text-center text-xl pb-5 sm:text-left sm:text-2xl sm:leading-8">
+            <p className="text-center text-xl pb-5 sm:text-left sm:text-2xl leading-10 ">
               LearningPath is an exciting and innovative AI-powered learning
               management tool that&apos;s designed to make your learning journey
               both enjoyable and productive.
             </p>
             <div className="flex justify-center gap-4 mt-3 sm:justify-start sm:text-xl">
               <Link
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-xl"
                 href="/explore"
               >
                 Explore
               </Link>
               <Link
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-xl"
                 href="/create"
               >
                 Create
@@ -57,13 +57,13 @@ export default function Home() {
               </div>
               <div className="flex flex-col items-center sm:flex-row-reverse sm:item sm:gap-3 sm:text-left">
                 <div className="mb-6">
-                  <p className="mb-6 text-lg sm:mb-14 sm:text-xl">
+                  <p className="mb-6 text-lg sm:mb-14 sm:text-xl leading-10">
                     Craft personalized learning roadmaps tailored to your goals
                     and aspirations. Whether you want to master a new
                     programming language or learn how to cook.
                   </p>
                   <Link
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded sm:text-xl"
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-xl"
                     href="/create"
                   >
                     Create Roadmap
@@ -87,13 +87,13 @@ export default function Home() {
               </div>
               <div className="flex flex-col items-center sm:flex-row sm:gap-3 sm:text-left">
                 <div className="mb-6">
-                  <p className="mb-6 text-lg sm:mb-14 sm:text-xl">
+                  <p className="mb-6 text-lg sm:mb-14 sm:text-xl leading-10">
                     Organize your learning journey by creating an account and saving your roadmaps.
                     Easily access roadmaps you have created and progress towards your
                     goals.
                   </p>
                   <Link
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded sm:text-xl"
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-xl"
                     href="/signup"
                   >
                     Sign Up
@@ -117,14 +117,14 @@ export default function Home() {
               </div>
               <div className="flex flex-col items-center sm:flex-row-reverse sm:item sm:gap-3 sm:text-left">
                 <div className="mb-6">
-                  <p className="mb-6 text-lg sm:mb-14 sm:text-xl">
+                  <p className="mb-6 text-lg sm:mb-14 sm:text-xl leading-10">
                     Dive into a world of learning possibilities by exploring
                     roadmaps created by fellow learners. Upvote the ones you
                     find most valuable, helping others discover the best
                     learning paths for specific skills.
                   </p>
                   <Link
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded sm:text-xl"
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-xl"
                     href="/explore"
                   >
                     Explore

@@ -94,13 +94,12 @@ const InputForm = ({
       <div>
         {data === null && (
           <div>
-            <h1 className="flex justify-center p-5 text-white">
+            <h1 className="flex justify-center p-5 text-white text-xl">
               What would you want to create?
             </h1>
             <div style={{ display: "flex", justifyContent: "center" }}>
               <button
-                className="bg-transparent hover:bg-emerald-600text-lg text-white font-bold border-2 p-2 border-white rounded "
-                style={{ backgroundColor: "#141832" }}
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-xl"
                 onClick={() => {
                   handleOpen();
                   resetForm();

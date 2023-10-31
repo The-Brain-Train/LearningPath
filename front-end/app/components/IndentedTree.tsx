@@ -176,10 +176,10 @@ const IndentedTree = ({
               {data !== null ? (
                 <>
                   <div className={styles['roadmap-tree-title']}>
-                    <p className="text-slate-300 pt-4 pl-2 font-bold">
+                    <p className="text-xl mb-8 text-center font-bold sm:text-5xl lg:text-2xl">
                       Learning Path
                     </p>
-                    <p className="text-slate-300 pt-4 pr-2 font-bold">Hours</p>
+                    <p className="text-xl mb-8 text-center font-bold sm:text-5xl lg:text-2xl">Hours</p>
                   </div>
                   <svg className={styles['roadmap-tree-structure']} ref={svgRef}></svg>
                   {currentUser ? (
