@@ -51,7 +51,6 @@ export default function Home() {
             <div className="flex flex-col items-center sm:ite">
               <div className="flex mb-2">
                 <h3 className="text-white text-2xl font-bold mb-2 sm:text-3xl sm:pt-5 sm:text-left">
-                  <CreateIcon className="mr-2 sm:text-3xl" />
                   Create Your Roadmap
                 </h3>
               </div>
@@ -81,7 +80,6 @@ export default function Home() {
             <div className="flex flex-col items-center">
               <div className="flex items-center mb-2">
                 <h3 className="text-white text-2xl font-bold mb-2 sm:text-3xl">
-                  <SaveIcon className="mr-2 sm:text-3xl" />
                   Save &amp; Manage Roadmaps
                 </h3>
               </div>
@@ -111,7 +109,6 @@ export default function Home() {
             <div className="flex flex-col items-center">
               <div className="flex items-center mb-2">
                 <h3 className="text-white text-2xl font-bold mb-2 sm:text-3xl">
-                  <ThumbsUpDownIcon className="mr-2 sm:text-3xl" />
                   Explore Community Roadmaps
                 </h3>
               </div>

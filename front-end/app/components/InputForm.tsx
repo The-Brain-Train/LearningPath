@@ -100,9 +100,9 @@ const InputForm = ({
         {data === null && (
           <div className="mt-5">
             <h1 className="flex justify-center p-5 text-white text-xl">
-              What would you want to create?
+              What would you want to learn?
             </h1>
-            <div style={{ display: "flex", justifyContent: "center" }}>
+            <div className="flex justify-center">
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-xl"
                 onClick={() => {
