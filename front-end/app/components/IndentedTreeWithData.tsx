@@ -18,7 +18,6 @@ const IndentedTreeWithData = ({ data }: ExploreIndentedTreeProps) => {
   const svgRef = useRef(null);
 
   const graph = () => {
-    console.log(data);
     if (data == null) return;
 
     d3.select(svgRef.current).selectAll("*").remove();
