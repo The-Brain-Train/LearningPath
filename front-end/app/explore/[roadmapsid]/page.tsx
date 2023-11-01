@@ -1,5 +1,4 @@
 "use client";
-
 import React from "react";
 import IndentedTreeWithData from "@/app/components/IndentedTreeWithData";
 import { getRoadmap, getRoadmaps } from "@/app/functions/httpRequests";
@@ -13,31 +12,34 @@ type Props = {
   };
 };
 
-
 function RoadMapId(props: Props) {
   const router = useRouter();
-
-  const { data: roadmaps, isLoading, isError } = useQuery(
-    ["roadmaps"],
-    getRoadmaps
-  );
-
   const roadmapId = props.params.roadmapsid;
 
-  const { data: roadmapData } = useQuery(
+  const { data: roadmaps, isLoading: roadmapsLoading, isError: roadmapsError } = useQuery(
+    ["roadmaps"],
+    getRoadmaps,
+    {
+      enabled: !!roadmapId, 
+    }
+  );
+
+  const { data: roadmapData, isLoading, isError } = useQuery(
     ["roadmap", roadmapId],
     async () => {
       if (roadmaps) {
         const foundRoadmap = roadmaps.roadmapMetaList.find(
           (roadmap) => roadmap.id === roadmapId
         );
-
         if (foundRoadmap) {
           const roadmapData = await getRoadmap(foundRoadmap.roadmapReferenceId);
           return JSON.parse(roadmapData.obj);
         }
       }
-      return undefined;
+      return null;
+    },
+    {
+      enabled: !!roadmapId && !roadmapsLoading && !roadmapsError, 
     }
   );
 
@@ -46,7 +48,7 @@ function RoadMapId(props: Props) {
       {isError ? (
         <p className="text-red-500 font-bold">Error fetching roadmap.</p>
       ) : isLoading ? (
-        <p>Loading...</p>
+        <p className="mt-20">Loading...</p>
       ) : (
         <>
           <ArrowBack
