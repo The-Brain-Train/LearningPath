@@ -7,7 +7,7 @@ import {
   getUserFavorites,
   getUsersRoadmapMetas,
   removeRoadmapMetaFromUserFavorites,
-  getRoadmapCountOfUser
+  getRoadmapCountOfUser,
 } from "../functions/httpRequests";
 import UserCard from "../components/UserCard";
 import {
@@ -72,22 +72,12 @@ const Profile = () => {
     progressBooks.length = 0;
     for (let i = 0; i < roadmapCount; i++) {
       progressBooks.push(
-        <Image
-          src="/navigation.png"
-          width={35}
-          height={35}
-          alt=""
-        />
+        <Image src="/navigation.png" width={35} height={35} alt="" />
       );
     }
     for (let i = 0; i < maxRoadmaps - roadmapCount; i++) {
       progressBooks.push(
-        <Image
-          src="/route.png"
-          width={35}
-          height={35}
-          alt=""
-        />
+        <Image src="/route.png" width={35} height={35} alt="" />
       );
     }
   }
@@ -210,22 +200,25 @@ const Profile = () => {
           </div>
         </main>
       ) : (
-        <div className="main-background min-h-max gap-5 text-center items-center pt-20 rounded-lg text-xl text-white ">
-          <p className="font-semibold text-lg">
-            Please{" "}
-            <Link href="/signin" className="hover:text-blue-500 underline ">
-              SignIn/SignUp
-            </Link>{" "}
-            to view your profile.
-          </p>
+        <main className="main-background min-h-max gap-5 text-center items-center rounded-lg text-xl text-white pt-40">
+          <p className="mb-4 font-bold text-3xl">You are not logged in</p>
           <Image
             src="/roadmap3.jpeg"
             alt="Create Roadmap"
             className="m-auto rounded-full"
-            height={100}
-            width={100}
+            height={250}
+            width={250}
           />
-        </div>
+          <div className="flex flex-col mt-4 gap-2">
+            <Link href="/signup" className="hover:text-blue-500 underline text-2xl">
+              Create an account
+            </Link>
+            <span className="text-2xl"> or </span>
+            <Link href="/signup" className="hover:text-blue-500 underline text-2xl">
+              Sign in
+            </Link>
+          </div>
+        </main>
       )}
     </>
   );
