@@ -14,14 +14,14 @@ import {
 import { RoadmapMeta, User } from "../util/types";
 import { generateStarsforExperienceLevel } from "../functions/generateStarsForExperience";
 import TuneIcon from "@mui/icons-material/Tune";
-import { Button, CircularProgress } from "@mui/material";
+import { Box, Button, CircularProgress } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import jwtDecode from "jwt-decode";
 import { useCookies } from "react-cookie";
-import styles from "../explore/explore.module.css";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 export default function Explore() {
   const [filteredRoadmaps, setFilteredRoadmaps] = useState<RoadmapMeta[]>([]);
@@ -32,6 +32,7 @@ export default function Explore() {
   const [showFilters, setShowFilters] = useState(false);
   const queryClient = useQueryClient();
   const [cookies] = useCookies(["user"]);
+  const isSmallScreen = useMediaQuery("(max-width: 768px)");
   const [hourValidationMessage, setHourValidationMessage] = useState<
     string | null
   >(null);
@@ -136,28 +137,25 @@ export default function Explore() {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col justify-center items-center mt-32">
-        <div className="flex items-center gap-4">
-          <p>Loading</p>
-          <CircularProgress />
-        </div>
-        <p>May take extra time on first time use due to server sleeping</p>
+      <div
+        className="w-full flex items-center justify-center h-screen"
+      >
+        <Box
+          className="flex justify-center items-center flex-col"
+        >
+          <CircularProgress color="inherit" size={150} />
+        </Box>
       </div>
     );
   }
 
   return (
     <main className="main-background min-h-max flex items-center flex-col">
-      <div
-        className={styles["filter-options-mobile-1"]}
-        style={{ maxWidth: "300px" }}
-      >
+      <div className="flex flex-row my-5 mx-auto lg:gap-4">
         <Paper
           component="div"
+          className="py-2 px-4 flex w-15 max-h-12 justify-center items-center my-auto w-xs"
           sx={{
-            p: "2px 4px",
-            display: "flex",
-            alignItems: "center",
             width: 250,
           }}
         >
@@ -172,99 +170,19 @@ export default function Explore() {
             <SearchIcon />
           </IconButton>
         </Paper>
-        <Button onClick={toggleFilters}>
-          <Tooltip title="Filter">
-            <TuneIcon className="text-white" />
-          </Tooltip>
-        </Button>
-      </div>
 
-      <div className={styles["filter-options-desktop"]}>
-        <div className="flex flex-row mb-5" style={{ maxWidth: "300px" }}>
-          <Paper
-            component="div"
-            sx={{
-              p: "2px 4px",
-              display: "flex",
-              alignItems: "center",
-              width: 600,
-            }}
-          >
-            <InputBase
-              sx={{ ml: 1, flex: 1 }}
-              placeholder="Search"
-              inputProps={{ "aria-label": "search" }}
-              value={search}
-              onChange={handleSearchChange}
-            />
-            <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
-              <SearchIcon />
-            </IconButton>
-          </Paper>
-        </div>
-
-        <select
-          value={experienceFilter || ""}
-          onChange={(e) => setExperienceFilter(e.target.value || null)}
-          className="rounded-md h-11"
-          style={{ width: "200px" }}
-        >
-          <option value="">Experience Level</option>
-          <option value="beginner">Beginner</option>
-          <option value="intermediate">Intermediate</option>
-          <option value="expert">Expert</option>
-        </select>
-
-        <div className={styles["hours-desktop"]}>
-          <div className={styles["hours-div-desktop"]}>
-            <span className="text-white">Hours:</span>
-            <input
-              type="number"
-              min="0"
-              max="500"
-              step="10"
-              value={hoursFromFilter === null ? "" : hoursFromFilter}
-              onChange={(e) => {
-                const newValue =
-                  e.target.value === "" ? null : parseInt(e.target.value);
-                validateHours(newValue, hoursToFilter) &&
-                  setHoursFromFilter(newValue);
-              }}
-              placeholder="From"
-              className={styles["hour-input-desktop"]}
-            />
-            <input
-              type="number"
-              min="0"
-              max="500"
-              step="10"
-              value={hoursToFilter === null ? "" : hoursToFilter}
-              onChange={(e) => {
-                const newValue =
-                  e.target.value === "" ? null : parseInt(e.target.value);
-                validateHours(hoursFromFilter, newValue) &&
-                  setHoursToFilter(newValue);
-              }}
-              placeholder="To"
-              className={styles["hour-input-desktop"]}
-            />
-          </div>
-          <span className={styles["hour-validation"]}>
-            {hourValidationMessage}
-          </span>
-        </div>
-      </div>
-
-      <div style={{ maxWidth: "300px", width: "80%" }}>
-        {showFilters && (
-          <div
-            className={styles["filter-options-mobile-2"]}
-            style={{ maxWidth: "200px", margin: "0 auto" }}
-          >
+        {isSmallScreen ? (
+          <Button onClick={toggleFilters}>
+            <Tooltip title="Filter">
+              <TuneIcon className="text-white" />
+            </Tooltip>
+          </Button>
+        ) : (
+          <div className="max-w-lg my-5 mx-auto flex flex-row gap-4">
             <select
               value={experienceFilter || ""}
               onChange={(e) => setExperienceFilter(e.target.value || null)}
-              className="rounded-md h-7"
+              className="rounded-md h-7 w-full lg:h-12"
             >
               <option value="">Experience Level</option>
               <option value="beginner">Beginner</option>
@@ -272,7 +190,7 @@ export default function Explore() {
               <option value="expert">Expert</option>
             </select>
             <span className="text-white">Hours:</span>
-            <div>
+            <div className="flex flex-row gap-2 justify-between">
               <input
                 type="number"
                 min="0"
@@ -286,8 +204,9 @@ export default function Explore() {
                     setHoursFromFilter(newValue);
                 }}
                 placeholder="From"
-                className={styles["hour-input-mobile"]}
+                className="rounded px-2"
               />
+              -
               <input
                 type="number"
                 min="0"
@@ -301,50 +220,93 @@ export default function Explore() {
                     setHoursToFilter(newValue);
                 }}
                 placeholder="To"
-                className={styles["hour-input-mobile"]}
+                className="rounded px-2"
               />
             </div>
-            <span className={styles["hour-validation"]}>
-              {hourValidationMessage}
-            </span>
+            <span>{hourValidationMessage}</span>
           </div>
         )}
-
-        <ul className={styles["roadmap-list"]}>
-          {filteredRoadmaps.map((roadmap: RoadmapMeta) => (
-            <li
-              key={roadmap.id}
-              className="rounded-lg shadow-md text-white"
-              style={{ backgroundColor: "#141832" }}
-            >
-              <div className="flex items-center">
-                <Link
-                  className="text-left overflow-hidden flex justify-between flex-1"
-                  href={`/explore/${roadmap.id}`}
+      </div>
+      {showFilters && (
+        <div className="max-w-xs my-5 mx-auto sm:hidden">
+          <select
+            value={experienceFilter || ""}
+            onChange={(e) => setExperienceFilter(e.target.value || null)}
+            className="rounded-md h-7 w-full"
+          >
+            <option value="">Experience Level</option>
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="expert">Expert</option>
+          </select>
+          <span className="text-white">Hours:</span>
+          <div className="flex flex-row gap-2 justify-between">
+            <input
+              type="number"
+              min="0"
+              max="500"
+              step="10"
+              value={hoursFromFilter === null ? "" : hoursFromFilter}
+              onChange={(e) => {
+                const newValue =
+                  e.target.value === "" ? null : parseInt(e.target.value);
+                validateHours(newValue, hoursToFilter) &&
+                  setHoursFromFilter(newValue);
+              }}
+              placeholder="From"
+            />
+            -
+            <input
+              type="number"
+              min="0"
+              max="500"
+              step="10"
+              value={hoursToFilter === null ? "" : hoursToFilter}
+              onChange={(e) => {
+                const newValue =
+                  e.target.value === "" ? null : parseInt(e.target.value);
+                validateHours(hoursFromFilter, newValue) &&
+                  setHoursToFilter(newValue);
+              }}
+              placeholder="To"
+            />
+          </div>
+          <span>{hourValidationMessage}</span>
+        </div>
+      )}
+      <ul
+        className="grid lg:grid-cols-3 gap-4 lg:gap-10 font-semibold"
+        style={{ fontFamily: "Poppins" }}
+      >
+        {filteredRoadmaps.map((roadmap: RoadmapMeta) => (
+          <li
+            key={roadmap.id}
+            className="rounded-lg shadow-md text-white w-[320px]"
+            style={{ backgroundColor: "#141832" }}
+          >
+            <div className="flex items-center py-4 lg:py-8 flex-row max-w-xs px-6">
+              <Link
+                className="text-left overflow-hidden flex justify-between flex-1 flex-col gap-4"
+                href={`/explore/${roadmap.id}`}
+              >
+                <p
+                  className="overflow-ellipsis overflow-hidden whitespace-nowrap text-xl"
+                  style={{ textTransform: "capitalize" }}
                 >
-                  <div className="flex items-center px-2 py-1">
-                    <p className="overflow-ellipsis overflow-hidden whitespace-nowrap">
-                      {roadmap.name}
-                    </p>
-                  </div>
-                  <div className="flex items-center flex-col px-2 py-1">
-                    <p className="overflow-ellipsis overflow-hidden whitespace-nowrap">
-                      <Tooltip title={roadmap.experienceLevel} arrow>
-                        <span>
-                          {generateStarsforExperienceLevel(
-                            roadmap.experienceLevel
-                          )}
-                        </span>
-                      </Tooltip>
-                    </p>
-                    <p className="overflow-ellipsis overflow-hidden whitespace-nowrap">
-                      {roadmap.hours} hours
-                    </p>
-                  </div>
-                </Link>
+                  {roadmap.name}
+                </p>
+                <p className="overflow-ellipsis overflow-hidden whitespace-nowrap">
+                  <Tooltip title={roadmap.experienceLevel} arrow>
+                    <span>
+                      {generateStarsforExperienceLevel(roadmap.experienceLevel)}
+                    </span>
+                  </Tooltip>
+                </p>
+              </Link>
+              <div className="flex justify-between flex-1 flex-col gap-4 text-right">
                 {currentUser && favorites ? (
                   <span
-                    className="mx-2"
+                    className=""
                     onClick={() =>
                       favorites.some(
                         (favorite: any) => favorite.id === roadmap.id
@@ -363,63 +325,14 @@ export default function Explore() {
                     )}
                   </span>
                 ) : null}
+                <p className="overflow-ellipsis overflow-hidden whitespace-nowrap">
+                  {roadmap.hours} hours
+                </p>
               </div>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div className={styles["roadmap-grid"]}>
-        {filteredRoadmaps.map((roadmap: RoadmapMeta) => (
-          <div key={roadmap.id} className={styles["roadmap-card"]}>
-            {currentUser && favorites ? (
-              <span
-              className="flex justify-end"
-                onClick={() =>
-                  favorites.some((favorite: any) => favorite.id === roadmap.id)
-                    ? handleRemoveFromFavorites(roadmap)
-                    : handleAddToFavorites(roadmap)
-                }
-                style={{ cursor: "pointer" }}
-              >
-                {favorites.some(
-                  (favorite: any) => favorite.id === roadmap.id
-                ) ? (
-                  <FavoriteIcon />
-                ) : (
-                  <FavoriteBorderIcon />
-                )}
-              </span>
-            ) : null}
-            <Link href={`/explore/${roadmap.id}`}>
-              <div className="flex flex-col justify-between h-full">
-                <div>
-                  <div className={styles["roadmap-card_content"]}>
-                    <h2 className="text-xl font-bold overflow-ellipsis overflow-hidden whitespace-nowrap">
-                      {roadmap.name}
-                    </h2>
-                  </div>
-
-                  <div className={styles["roadmap-card_content"]}>
-                    <p className="overflow-ellipsis overflow-hidden whitespace-nowrap">
-                      <Tooltip title={roadmap.experienceLevel} arrow>
-                        <span>
-                          {generateStarsforExperienceLevel(
-                            roadmap.experienceLevel
-                          )}
-                        </span>
-                      </Tooltip>
-                    </p>
-                    <p className="overflow-ellipsis overflow-hidden whitespace-nowrap">
-                      {roadmap.hours} hours
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </Link>
-          </div>
+            </div>
+          </li>
         ))}
-      </div>
+      </ul>
     </main>
   );
 }
