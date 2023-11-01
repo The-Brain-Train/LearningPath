@@ -137,15 +137,13 @@ export default function Explore() {
 
   if (isLoading) {
     return (
-      <div
-        className="w-full flex items-center justify-center h-screen"
-      >
-        <Box
-          className="flex justify-center items-center flex-col"
-        >
-          <CircularProgress color="inherit" size={150} />
-        </Box>
-      </div>
+      <main className="bg-white">
+        <div className="w-full flex items-center justify-center h-screen">
+          <Box className="flex justify-center items-center flex-col">
+            <CircularProgress color="inherit" size={150} />
+          </Box>
+        </div>
+      </main>
     );
   }
 
@@ -274,7 +272,7 @@ export default function Explore() {
         </div>
       )}
       <ul
-        className="grid lg:grid-cols-3 gap-4 lg:gap-10 font-semibold"
+        className="grid lg:grid-cols-3 gap-4 lg:gap-10 font-semibold font"
         style={{ fontFamily: "Poppins" }}
       >
         {filteredRoadmaps.map((roadmap: RoadmapMeta) => (
@@ -305,7 +303,7 @@ export default function Explore() {
               <div className="flex justify-between flex-1 flex-col gap-4 text-right">
                 {currentUser && favorites ? (
                   <span
-                    className=""
+                    className="cursor-pointer"
                     onClick={() =>
                       favorites.some(
                         (favorite: any) => favorite.id === roadmap.id
@@ -313,7 +311,6 @@ export default function Explore() {
                         ? handleRemoveFromFavorites(roadmap)
                         : handleAddToFavorites(roadmap)
                     }
-                    style={{ cursor: "pointer" }}
                   >
                     {favorites.some(
                       (favorite: any) => favorite.id === roadmap.id

@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import Header from "./components/Header";
 import { Metadata } from "next";
 import { QueryClientProvider, queryClient } from "./util/queryClient";
+import dynamic from "next/dynamic";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,12 +19,13 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
 
+  const DynamicHeader = dynamic(() => import("./components/Header"));
 
   return (
     <html lang="en">
       <body className={inter.className}> 
        <QueryClientProvider client={queryClient}>
-       <Header/>
+       <DynamicHeader />
         {children}
         </QueryClientProvider>
       </body>
