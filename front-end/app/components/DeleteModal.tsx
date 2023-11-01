@@ -5,7 +5,6 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import DeleteIcon from "@mui/icons-material/Delete";
 import { deleteRoadmap } from '../functions/httpRequests';
-import { RoadmapMeta } from '../util/types';
 
 interface DeleteModalProps {
   id: string;
