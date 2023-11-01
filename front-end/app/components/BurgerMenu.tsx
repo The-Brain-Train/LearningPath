@@ -28,7 +28,7 @@ export default function BurgerMenu({ handleSignOut }: BurgerMenuProps) {
     setAnchorEl(null);
   };
   return (
-    <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
+    <Box className="flex items-center text-center">
       <div className="sm:hidden">
         <IconButton
           onClick={isOpen ? handleClose : handleClick}
