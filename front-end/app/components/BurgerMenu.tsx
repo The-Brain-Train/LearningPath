@@ -12,27 +12,15 @@ import CloseIcon from "@mui/icons-material/Close";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LoginIcon from "@mui/icons-material/Login";
 import { useCookies } from "react-cookie";
-import jwtDecode from "jwt-decode";
 import { useState } from "react";
+import { BurgerMenuProps } from "../util/types";
 
-export default function BurgerMenu() {
+export default function BurgerMenu({ handleSignOut }: BurgerMenuProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const router = useRouter();
   const isOpen = Boolean(anchorEl);
-  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
-  if (cookies.user) {
-    var user = jwtDecode(cookies.user);
-  }
-
-  const handleSignOut = () => {
-    setTimeout(() => {
-      removeCookie("user", {
-        path: "/",
-      });
-    }, 50);
-    router.push("/");
-  };
-
+  const [cookies] = useCookies(["user"]);
+  
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -89,8 +77,7 @@ export default function BurgerMenu() {
           )}
         </Menu>
       </div>
-      <div className="hidden sm:flex">
-        
+      <div className="hidden sm:flex">    
         <MenuItem onClick={() => router.push("/create")}>
           <CreateIcon /> <p className="pl-2">Create</p>
         </MenuItem>

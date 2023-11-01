@@ -49,6 +49,7 @@ export type UserProfile =
     }
   | undefined;
 
+
 export type UserCardProps = {
   user: UserProfile;
 };
@@ -81,3 +82,16 @@ export type CreateRoadmapFormData = {
   hours: number | null;
   experienceLevel: string | null;
 };
+
+export type InputFormProps = {
+  setTopic: (topic: string | null) => void;
+  setHours: (hours: number | null) => void;
+  setExperienceLevel: (experienceLevel: string | null) => void;
+  resetForm: () => void;
+  data: TreeNode | null;
+  setData: (data: TreeNode | null) => void;
+};
+
+export type BurgerMenuProps = {
+  handleSignOut: () => void;
+}

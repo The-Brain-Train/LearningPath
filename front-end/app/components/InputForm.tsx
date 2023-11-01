@@ -7,7 +7,7 @@ import { Box, TextField } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import { useState } from "react";
 import Slider from "@mui/material/Slider";
-import { TreeNode } from "../util/types";
+import { InputFormProps } from "../util/types";
 import { ArrowBack } from "@mui/icons-material";
 
 const style = {
@@ -50,15 +50,6 @@ function valuetext(value: number) {
   return `${value}`;
 }
 
-type InputFormProps = {
-  setTopic: (topic: string | null) => void;
-  setHours: (hours: number | null) => void;
-  setExperienceLevel: (experienceLevel: string | null) => void;
-  resetForm: () => void;
-  data: TreeNode | null;
-  setData: (data: TreeNode | null) => void;
-};
-
 const InputForm = ({
   data,
   setTopic,
@@ -71,6 +62,8 @@ const InputForm = ({
   const [experience, setExperience] = useState("");
   const [userMessage, setUserMessage] = useState<string>("");
   const [sliderValue, setSliderValue] = useState<number>(30);
+  const [topicError, setTopicError] = useState<string | null>(null);
+  const [experienceError, setExperienceError] = useState<string | null>(null);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -80,20 +73,32 @@ const InputForm = ({
   };
 
   const handleSubmit = () => {
-    setTopic(userMessage);
-    setExperienceLevel(experience);
-    setHours(sliderValue);
-    setUserMessage("");
-    setExperience("");
-    setSliderValue(30);
-    handleClose();
+    if (!userMessage) {
+      setTopicError("Topic is required");
+      setTimeout(() => setTopicError(null), 3000);
+    } 
+
+    if (!experience) {
+      setExperienceError("Experience level is required");
+      setTimeout(() => setExperienceError(null), 3000);
+    } 
+
+    if (userMessage && experience) {
+      setTopic(userMessage);
+      setExperienceLevel(experience);
+      setHours(sliderValue);
+      setUserMessage("");
+      setExperience("");
+      setSliderValue(30);
+      handleClose();
+    }
   };
 
   return (
     <>
       <div>
         {data === null && (
-          <div>
+          <div className="mt-5">
             <h1 className="flex justify-center p-5 text-white text-xl">
               What would you want to create?
             </h1>
@@ -139,6 +144,7 @@ const InputForm = ({
                 sx={{ m: 1, minWidth: "90%" }}
                 className="pt-0 rounded-l-md focus:outline-none focus:placeholder-gray-400 text-center placeholder-gray-60 py-3 form-control"
               />
+              {topicError && <div className="text-red-500">{topicError}</div>}
               <FormControl sx={{ m: 1, minWidth: "90%" }}>
                 <InputLabel id="demo-simple-select-autowidth-label">
                   Experience Level
@@ -155,14 +161,15 @@ const InputForm = ({
                   <MenuItem value={"beginner"}>Beginner</MenuItem>
                   <MenuItem value={"intermediate"}>Intermediate</MenuItem>
                   <MenuItem value={"expert"}>Expert</MenuItem>
-                </Select>
+                </Select>       
               </FormControl>
+              {experienceError && <div className="text-red-500">{experienceError}</div>}
               <div>
                 <InputLabel
                   className="mt-10 pb-2 text-sm font-black"
                   id="demo-simple-box-autowidth-label"
                 >
-                  How many hours do you want to spend?
+                  Total hours
                 </InputLabel>
                 <Box sx={{ minWidth: "80%" }}>
                   <Slider

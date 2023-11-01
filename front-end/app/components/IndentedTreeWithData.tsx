@@ -18,6 +18,7 @@ const IndentedTreeWithData = ({ data }: ExploreIndentedTreeProps) => {
   const svgRef = useRef(null);
 
   const graph = () => {
+    console.log(data);
     if (data == null) return;
 
     d3.select(svgRef.current).selectAll("*").remove();
@@ -158,7 +159,7 @@ const IndentedTreeWithData = ({ data }: ExploreIndentedTreeProps) => {
             Hours
           </p>
         </div>
-        <svg className="" ref={svgRef}></svg>
+        <svg ref={svgRef}></svg>
       </div>
     </div>
   );

@@ -234,7 +234,7 @@ const IndentedTree = ({
                     height: "70vh",
                   }}
                 >
-                  Your Roadmap will be displayed Here!
+                  Your roadmap will be displayed here!
                 </p>
               )}
             </div>
