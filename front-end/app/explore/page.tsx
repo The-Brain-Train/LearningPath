@@ -137,11 +137,13 @@ export default function Explore() {
 
   if (isLoading) {
     return (
-      <div className="w-full flex items-center justify-center h-screen">
-        <Box className="flex justify-center items-center flex-col" >
-          <CircularProgress color="inherit" size={150} />
-        </Box>
-      </div>
+      <main className="bg-white">
+        <div className="w-full flex items-center justify-center h-screen">
+          <Box className="flex justify-center items-center flex-col">
+            <CircularProgress color="inherit" size={150} />
+          </Box>
+        </div>
+      </main>
     );
   }
 
