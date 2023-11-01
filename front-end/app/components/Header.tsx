@@ -5,20 +5,23 @@ import { useCookies } from "react-cookie";
 import jwtDecode from "jwt-decode";
 import { User } from "../util/types";
 import Image from "next/image";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getUserProfilePicture } from "../functions/httpRequests";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
-  const [cookies] = useCookies(["user"]);
+  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
+  const router = useRouter();
+  const queryClient = useQueryClient();
 
   const { data: currentUser } = useQuery<User | null>(
     ["currentUser"],
     async () => {
-      if (cookies.user) {
-        const user = jwtDecode(cookies.user) as User | null;
-        return user;
-      }
-      return null;
+      const user = jwtDecode(cookies.user) as User | null;
+      return user;
+    },
+    {
+      enabled: !!cookies.user,
     }
   );
 
@@ -30,6 +33,13 @@ export default function Header() {
     }
   );
 
+  const handleSignOut = () => {
+    removeCookie("user");
+    queryClient.removeQueries(["currentUser"]);
+    queryClient.removeQueries(["profilePictureUrl"]);
+    router.push("/");
+  };
+
   return (
     <>
       <header className="bg-white fixed w-full h-16	z-50 top-0 left-0">
@@ -38,7 +48,7 @@ export default function Header() {
             <Image src="/Logo.png" alt="LP Logo" width={140} height={60} />
           </Link>
           <div className="flex flex-row">
-            {cookies.user ? (
+            {currentUser ? (
               <Link href="/profile" className="flex gap-1 mr-3 items-center">
                 <div className="h-8 w-8 relative rounded-full overflow-hidden">
                   {profilePictureUrl ? (
@@ -71,10 +81,14 @@ export default function Header() {
                 )}
               </Link>
             ) : null}
-            <BurgerMenu />
+            <BurgerMenu handleSignOut={handleSignOut} />
           </div>
         </div>
       </header>
     </>
   );
 }
+function removeCookie(arg0: string) {
+  throw new Error("Function not implemented.");
+}
+

@@ -49,6 +49,7 @@ export type UserProfile =
     }
   | undefined;
 
+
 export type UserCardProps = {
   user: UserProfile;
 };
@@ -90,3 +91,7 @@ export type InputFormProps = {
   data: TreeNode | null;
   setData: (data: TreeNode | null) => void;
 };
+
+export type BurgerMenuProps = {
+  handleSignOut: () => void;
+}
