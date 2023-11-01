@@ -5,22 +5,11 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import DeleteIcon from "@mui/icons-material/Delete";
 import { deleteRoadmap } from '../functions/httpRequests';
-
-const style = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: '300px',
-  bgcolor: '#cbd5e1',
-  boxShadow: 24,
-  p: 2,
-  borderRadius: '5px'
-};
+import { RoadmapMeta } from '../util/types';
 
 interface DeleteModalProps {
   id: string;
-  onDelete: (id: string) => void; 
+  onDelete: (id: string) => void;
 }
 
 export default function DeleteModal({ id, onDelete }: DeleteModalProps) {
@@ -41,7 +30,7 @@ export default function DeleteModal({ id, onDelete }: DeleteModalProps) {
         open={open}
         onClose={handleClose}
       >
-        <Box sx={style}>
+        <Box className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-300 bg-white rounded shadow-lg p-4 rounded-5">
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Are you sure you want to delete?
           </Typography>
