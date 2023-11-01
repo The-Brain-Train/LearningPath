@@ -8,6 +8,9 @@ import Image from "next/image";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getUserProfilePicture } from "../functions/httpRequests";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
+
+const DynamicBurgerMenu = dynamic(() => import("./BurgerMenu"));
 
 export default function Header() {
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
@@ -81,7 +84,7 @@ export default function Header() {
                 )}
               </Link>
             ) : null}
-            <BurgerMenu handleSignOut={handleSignOut} />
+            <DynamicBurgerMenu handleSignOut={handleSignOut} />
           </div>
         </div>
       </header>
