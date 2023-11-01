@@ -174,7 +174,7 @@ const Profile = () => {
               >
                 My Roadmaps
               </AccordionHeader>
-              <AccordionBody>
+              <AccordionBody className="py-0">
                 {userRoadmaps && userRoadmaps.roadmapMetaList.length > 0 ? (
                   <ul className="flex flex-col justify-center">
                     {userRoadmaps?.roadmapMetaList.map((roadmapMeta, index) => (
@@ -202,7 +202,7 @@ const Profile = () => {
               >
                 My Favourites
               </AccordionHeader>
-              <AccordionBody>
+              <AccordionBody className="py-0">
                 {favorites && favorites.length > 0 ? (
                   <ul className="flex flex-col justify-center">
                     {favorites.map((roadmapMeta, index) => (

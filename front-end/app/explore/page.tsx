@@ -151,13 +151,10 @@ export default function Explore() {
 
   return (
     <main className="main-background min-h-max flex items-center flex-col">
-      <div className="flex flex-row my-5 mx-auto lg:gap-4">
+      <div className="flex flex-row my-5 mx-auto sm:gap-4">
         <Paper
           component="div"
-          className="py-2 px-4 flex w-15 max-h-12 justify-center items-center my-auto w-xs"
-          sx={{
-            width: 250,
-          }}
+          className="py-2 px-4 flex w-15 max-h-12 justify-center items-center my-auto w-64"
         >
           <InputBase
             sx={{ ml: 1, flex: 1 }}
@@ -166,7 +163,7 @@ export default function Explore() {
             value={search}
             onChange={handleSearchChange}
           />
-          <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
+          <IconButton type="button" className="p-3" aria-label="search">
             <SearchIcon />
           </IconButton>
         </Paper>
@@ -182,15 +179,15 @@ export default function Explore() {
             <select
               value={experienceFilter || ""}
               onChange={(e) => setExperienceFilter(e.target.value || null)}
-              className="rounded-md h-7 w-full lg:h-12"
+              className="rounded-md h-7 w-full sm:h-12"
             >
               <option value="">Experience Level</option>
               <option value="beginner">Beginner</option>
               <option value="intermediate">Intermediate</option>
               <option value="expert">Expert</option>
             </select>
-            <span className="text-white">Hours:</span>
-            <div className="flex flex-row gap-2 justify-between">
+            <span className="text-white flex justify-center items-center">Hours:</span>
+            <div className="flex flex-row gap-2 justify-between ">
               <input
                 type="number"
                 min="0"
@@ -206,7 +203,7 @@ export default function Explore() {
                 placeholder="From"
                 className="rounded px-2"
               />
-              -
+              <p className="text-white font-semibold flex justify-center items-center">-</p>
               <input
                 type="number"
                 min="0"
@@ -254,8 +251,9 @@ export default function Explore() {
                   setHoursFromFilter(newValue);
               }}
               placeholder="From"
+              className="rounded px-1"
             />
-            -
+            <p className="text-white font-semibold flex justify-center items-center">-</p>
             <input
               type="number"
               min="0"
@@ -269,6 +267,7 @@ export default function Explore() {
                   setHoursToFilter(newValue);
               }}
               placeholder="To"
+              className="rounded px-1"
             />
           </div>
           <span>{hourValidationMessage}</span>
@@ -325,7 +324,7 @@ export default function Explore() {
                     )}
                   </span>
                 ) : null}
-                <p className="overflow-ellipsis overflow-hidden whitespace-nowrap">
+                <p className="overflow-ellipsis overflow-hidden whitespace-nowrap flex justify-end">
                   {roadmap.hours} hours
                 </p>
               </div>
