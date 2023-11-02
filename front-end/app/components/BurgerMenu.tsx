@@ -14,13 +14,17 @@ import LoginIcon from "@mui/icons-material/Login";
 import { useCookies } from "react-cookie";
 import { useState } from "react";
 import { BurgerMenuProps } from "../util/types";
+import { Modal, Typography, Button } from "@mui/material";
 
 export default function BurgerMenu({ handleSignOut }: BurgerMenuProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const router = useRouter();
   const isOpen = Boolean(anchorEl);
   const [cookies] = useCookies(["user"]);
-  
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleShut = () => setOpen(false);
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -63,7 +67,7 @@ export default function BurgerMenu({ handleSignOut }: BurgerMenuProps) {
             <AccountCircleIcon /> <p className="pl-2">My Profile</p>
           </MenuItem>
           {cookies.user ? (
-            <MenuItem onClick={handleSignOut}>
+            <MenuItem onClick={handleOpen}>
               <LoginIcon /> <p className="pl-2">Sign Out</p>
             </MenuItem>
           ) : (
@@ -77,7 +81,7 @@ export default function BurgerMenu({ handleSignOut }: BurgerMenuProps) {
           )}
         </Menu>
       </div>
-      <div className="hidden sm:flex">    
+      <div className="hidden sm:flex">
         <MenuItem onClick={() => router.push("/create")}>
           <CreateIcon /> <p className="pl-2">Create</p>
         </MenuItem>
@@ -85,16 +89,35 @@ export default function BurgerMenu({ handleSignOut }: BurgerMenuProps) {
           <ExploreIcon /> <p className="pl-2">Explore</p>
         </MenuItem>
         {cookies.user ? (
-          <MenuItem onClick={handleSignOut}>
+          <MenuItem onClick={handleOpen}>
             <LoginIcon /> <p className="pl-2">Sign Out</p>
           </MenuItem>
         ) : (
           <MenuItem onClick={() => router.push("/signin")}>
-            <LogoutIcon />{" "}
-              <p className="pl-2">Sign In / Sign Up</p>
+            <LogoutIcon /> <p className="pl-2">Sign In / Sign Up</p>
           </MenuItem>
         )}
       </div>
+      <Modal open={open} onClose={handleShut}>
+        <Box className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 bg-white rounded shadow-lg p-4 rounded-5">
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Are you sure you want to SignOut?
+          </Typography>
+          <div className="flex justify-between">
+            <Button onClick={handleShut}>no</Button>
+            <Button
+              className="text-red-600"
+              onClick={() => {
+                handleShut();
+                handleSignOut();
+              }}
+            >
+              {" "}
+              yes
+            </Button>
+          </div>
+        </Box>
+      </Modal>
     </Box>
   );
 }
