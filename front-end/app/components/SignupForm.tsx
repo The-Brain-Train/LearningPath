@@ -22,10 +22,11 @@ const SignupForm = () => {
   });
   const [isFormValid, setIsFormValid] = useState(false);
   const [isEmailValid, setIsEmailValid] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null); // Combined error message
   const router = useRouter();
+  const [passwordConfirmation, setPasswordConfirmation] = useState("");
 
-  const handleInputChange = (e: { target: { name: any; value: any } }) => {
+  const handleInputChange = (e: { target: { name: any; value: any; }; }) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
 
@@ -33,14 +34,39 @@ const SignupForm = () => {
       const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
       setIsEmailValid(emailRegex.test(value));
     }
+
+    if (name === "password" || name === "passwordConfirmation") {
+      const isPasswordValid = value.length >= 5;
+      setIsFormValid(
+        formData.name.trim() !== "" &&
+        isEmailValid &&
+        formData.password.trim() !== "" &&
+        formData.password === passwordConfirmation
+      );
+      if (!isPasswordValid) {
+        setError("Password must be at least 5 characters long.");
+        setTimeout(() => {
+          setError(null);
+        }, 6000);
+      } else {
+        setError(null); 
+      }
+    }
+  };
+
+  const handlePasswordConfirmationChange = (e: { target: { value: any; }; }) => {
+    const { value } = e.target;
+    setPasswordConfirmation(value);
+
     setIsFormValid(
       formData.name.trim() !== "" &&
-        isEmailValid &&
-        formData.password.trim() !== ""
+      isEmailValid &&
+      formData.password.trim() !== "" &&
+      formData.password === value
     );
   };
 
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
+  const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
 
     const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -54,7 +80,7 @@ const SignupForm = () => {
         body: JSON.stringify(formData),
       });
       if (response.status === 200) {
-        toast.success("Successful! Being redirected to login page", {
+        toast.success("Successful! Being redirected to the login page", {
           position: "top-center",
           autoClose: 3000,
           onClose: () => {
@@ -76,96 +102,109 @@ const SignupForm = () => {
   };
 
   return (
-    <Container className="main-background m-0 min-w-full" component="main">
+    <Container className="main-background m-0 min-w-full " component="main">
       <CssBaseline />
-      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+      <Box className="mt-2 flex flex-col items-center">
         <Avatar sx={{ m: 1, bgcolor: "#141832" }}>
           <LockOutlinedIcon />
         </Avatar>
         <Typography className="text-white" component="h2" variant="h5">
           Sign up
         </Typography>
-        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                autoComplete="given-name"
-                name="name"
-                required
-                fullWidth
-                id="name"
-                label="Name"
-                onChange={handleInputChange}
-                autoFocus
-                value={formData.name}
-                InputProps={{
-                  style: { color: "white" },
-                }}
-                InputLabelProps={{
-                  style: { color: "white" },
-                }}
-                sx={{
-                  "& .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "white",
-                  },
-                }}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                onChange={handleInputChange}
-                value={formData.email}
-                error={!isEmailValid}
-                helperText={!isEmailValid ? "Invalid email format" : ""}
-                InputProps={{
-                  style: { color: "white" },
-                }}
-                InputLabelProps={{
-                  style: { color: "white" },
-                }}
-                sx={{
-                  "& .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "white",
-                  },
-                }}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="new-password"
-                onChange={handleInputChange}
-                value={formData.password}
-                InputProps={{
-                  style: { color: "white" },
-                }}
-                InputLabelProps={{
-                  style: { color: "white" },
-                }}
-                sx={{
-                  "& .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "white",
-                  },
-                }}
-              />
-            </Grid>
-          </Grid>
-          {error && (
-            <Typography variant="body2" color="error" sx={{ mt: 1 }}>
-              {error}
-            </Typography>
-          )}
+        <Box component="form" noValidate onSubmit={handleSubmit} className="max-w-2xl mt-2">
+          <TextField
+            margin="normal"
+            autoComplete="given-name"
+            name="name"
+            required
+            fullWidth
+            id="name"
+            label="Name"
+            onChange={handleInputChange}
+            autoFocus
+            value={formData.name}
+            InputProps={{
+              style: { color: "white" },
+            }}
+            InputLabelProps={{
+              style: { color: "white" },
+            }}
+            sx={{
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: "white",
+              },
+            }}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            onChange={handleInputChange}
+            value={formData.email}
+            error={!isEmailValid}
+            helperText={!isEmailValid ? "Invalid email format" : ""}
+            InputProps={{
+              style: { color: "white" },
+            }}
+            InputLabelProps={{
+              style: { color: "white" },
+            }}
+            sx={{
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: "white",
+              },
+            }}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="new-password"
+            onChange={handleInputChange}
+            value={formData.password}
+            InputProps={{
+              style: { color: "white" },
+            }}
+            InputLabelProps={{
+              style: { color: "white" },
+            }}
+            sx={{
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: "white",
+              },
+            }}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="passwordConfirmation"
+            label="Confirm Password"
+            type="password"
+            id="passwordConfirmation"
+            autoComplete="new-password"
+            onChange={handlePasswordConfirmationChange}
+            value={passwordConfirmation}
+            InputProps={{
+              style: { color: "white" },
+            }}
+            InputLabelProps={{
+              style: { color: "white" },
+            }}
+            sx={{
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: "white",
+              },
+            }}
+          />
           <Button
             type="submit"
             fullWidth
@@ -178,7 +217,10 @@ const SignupForm = () => {
           <ToastContainer />
           <Grid container justifyContent="flex-start">
             <Grid item>
-              <Link href="/signin" className="text-lg hover:underline text-white">
+              <Link
+                href="/signin"
+                className="text-lg hover:underline text-white"
+              >
                 Already have an account?{" "}
                 <span className="text-blue-500 font-bold">Sign in</span>
               </Link>
@@ -186,6 +228,11 @@ const SignupForm = () => {
           </Grid>
         </Box>
       </Box>
+      {error && (
+        <Typography className="text-red-500 text-center font-semibold font-xs">
+          {error}
+        </Typography>
+      )}
     </Container>
   );
 };
