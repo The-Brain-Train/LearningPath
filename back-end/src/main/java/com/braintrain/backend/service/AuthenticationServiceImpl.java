@@ -43,7 +43,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if (user == null) {
             throw new UserNotFoundException("User not found for email: " + request.getEmail());
         }
-        
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
         String jwt = jwtService.generateToken(user);
