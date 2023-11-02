@@ -71,7 +71,7 @@ export default function BurgerMenu({ handleSignOut }: BurgerMenuProps) {
               <LoginIcon /> <p className="pl-2">Sign Out</p>
             </MenuItem>
           ) : (
-            <MenuItem onClick={() => router.push("/signin")}>
+            <MenuItem onClick={() => router.push("/signup")}>
               <LogoutIcon />{" "}
               <div className="flex flex-col">
                 <p className="pl-2">Sign In / </p>
@@ -93,7 +93,7 @@ export default function BurgerMenu({ handleSignOut }: BurgerMenuProps) {
             <LoginIcon /> <p className="pl-2">Sign Out</p>
           </MenuItem>
         ) : (
-          <MenuItem onClick={() => router.push("/signin")}>
+          <MenuItem onClick={() => router.push("/signup")}>
             <LogoutIcon /> <p className="pl-2">Sign In / Sign Up</p>
           </MenuItem>
         )}
