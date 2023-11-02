@@ -9,6 +9,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getUserProfilePicture } from "../functions/httpRequests";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
+import { useState } from "react";
 
 const DynamicBurgerMenu = dynamic(() => import("./BurgerMenu"));
 

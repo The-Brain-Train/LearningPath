@@ -161,12 +161,8 @@ const IndentedTree = ({
   return (
     <div className="flex flex-col px-3">
       {isLoading ? (
-        <div
+        <div className="flex flex-col justify-center items-center h-70vh"
           style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
             height: "70vh",
           }}
         >
@@ -202,8 +198,7 @@ const IndentedTree = ({
                           setData(null);
                           d3.select(svgRef.current).selectAll("*").remove();
                         }}
-                        className="bg-red-500 hover-bg-red-600 py-2 px-4 rounded text-white"
-                        style={{ marginTop: "10px", marginBottom: "10px" }}
+                        className="bg-red-500 hover-bg-red-600 py-2 px-4 rounded text-white my-3"
                       >
                         Reset
                       </Button>
@@ -227,10 +222,6 @@ const IndentedTree = ({
                 <p
                   className="text-slate-300 font-bold flex flex-col justify-center items-center h-screen"
                   style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "center",
                     height: "70vh",
                   }}
                 >

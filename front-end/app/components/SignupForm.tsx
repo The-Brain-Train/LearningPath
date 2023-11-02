@@ -78,14 +78,7 @@ const SignupForm = () => {
   return (
     <Container className="main-background m-0 min-w-full" component="main">
       <CssBaseline />
-      <Box
-        sx={{
-          marginTop: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
+      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
         <Avatar sx={{ m: 1, bgcolor: "#141832" }}>
           <LockOutlinedIcon />
         </Avatar>
