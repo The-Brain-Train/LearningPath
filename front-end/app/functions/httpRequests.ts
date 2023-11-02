@@ -172,14 +172,20 @@ export const postUserProfilePicture = async (
       },
     }
   );
+  if (response.status === 422) {
+    throw new Error("Invalid file type. Please upload an image.");
+  }
   if (!response.ok) {
     throw new Error("Profile picture upload failed");
   }
-  const data = await response.text();
+  const data: string = await response.text();
   return data;
 };
 
-export const getRoadmapCountOfUser = async (userEmail: string | null, token: any) => {
+export const getRoadmapCountOfUser = async (
+  userEmail: string | null,
+  token: any
+) => {
   const response = await fetch(
     `${BACKEND_URL}/api/roadmaps/${userEmail}/count`,
     {
@@ -193,4 +199,4 @@ export const getRoadmapCountOfUser = async (userEmail: string | null, token: any
   }
   const data = await response.json();
   return data;
-}
+};

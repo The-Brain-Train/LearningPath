@@ -130,10 +130,9 @@ const Profile = () => {
     <>
       {currentUser ? (
         <main className="main-background min-h-max ">
-          <div className="flex items-center flex-col pb-3">
+          <section className="flex items-center flex-col pb-3">
             {currentUser && <UserCard user={currentUser} />}
-          </div>
-
+          </section>
           <div className="flex items-center flex-col mx-2">
             <p className="text-center text-white font-semibold">
               {roadmapCount} / {maxRoadmaps} roadmaps saved
