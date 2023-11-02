@@ -26,14 +26,13 @@ function SaveButton({saveClick }: saveButtonProps) {
       {!clicked && (
         <div>
         <Button 
-        className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded"
-        style={{ marginTop: '10px', marginBottom: '10px' }}
+        className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded my-3"
         onClick={handleOpen}>Save</Button>
         <Modal
           open={open}
           onClose={handleClose}
                  >
-        <Box className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-300 bg-white rounded shadow-lg p-4 rounded-5">
+        <Box className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 bg-white rounded shadow-lg p-4 rounded-5">
             <Typography id="modal-modal-title" variant="h6" component="h2">
               Are you sure you want to save?
             </Typography>

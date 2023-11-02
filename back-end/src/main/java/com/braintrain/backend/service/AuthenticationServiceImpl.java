@@ -28,7 +28,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         User user = new User(request.getName(), passwordEncoder.encode(request.getPassword()), request.getEmail(), null);
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new EmailAlreadyExistsException("Email address already in use. Please choose a different email.");
+            throw new EmailAlreadyExistsException();
         }
 
         userRepository.save(user);
@@ -38,15 +38,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public JwtAuthenticationResponse signin(SignInRequest request) {
+        User user = userRepository.findByEmail(request.getEmail());
+
+        if (user == null) {
+            throw new UserNotFoundException("User not found for email: " + request.getEmail());
+        }
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        User user = userRepository.findByEmail(request.getEmail());
-        String jwt = null;
-        if(user != null){
-            jwt = jwtService.generateToken(user);
-        }else{
-            throw new UserNotFoundException("User not found");
-        }
+        String jwt = jwtService.generateToken(user);
         return JwtAuthenticationResponse.builder().token(jwt).build();
     }
 }

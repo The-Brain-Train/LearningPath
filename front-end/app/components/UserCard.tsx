@@ -6,13 +6,15 @@ import {
   getUserProfilePicture,
   postUserProfilePicture,
 } from "../functions/httpRequests";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { queryClient } from "../util/queryClient";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 
 export default function Card({ user }: UserCardProps) {
   const [cookies] = useCookies(["user"]);
+  const queryClient = useQueryClient();
+  const [errorMessage, setErrorMessage] = useState<string | null>();
 
-  const uploadProfilePicture = useMutation(
+  const uploadProfilePicture = useMutation<string, Error, FormData>(
     (formData: FormData) => {
       if (user?.email == undefined) {
         throw new Error("User email is undefined.");
@@ -22,6 +24,10 @@ export default function Card({ user }: UserCardProps) {
     {
       onSettled: () => {
         queryClient.invalidateQueries(["profilePictureUrl"]);
+      },
+      onError: (error) => {
+        setErrorMessage(error.message);
+        setTimeout(()=> setErrorMessage(null), 5000)
       },
     }
   );
@@ -50,7 +56,7 @@ export default function Card({ user }: UserCardProps) {
   );
 
   return (
-    <section className="flex flex-col gap-1 justify-center items-center">
+    <div className="flex flex-col gap-1 justify-center items-center">
       <div className="flex flex-col text-center items-center p-6  rounded-lg font-bold text-2xl text-white">
         Hello {user?.name}!
       </div>
@@ -73,7 +79,7 @@ export default function Card({ user }: UserCardProps) {
           />
         )}
       </div>
-      <div>
+      <div className="flex flex-col items-center">
         <label className="text-white underline cursor-pointer text-sm">
           Change Profile Picture
           <input
@@ -83,7 +89,8 @@ export default function Card({ user }: UserCardProps) {
             required
           />
         </label>
+        {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
       </div>
-    </section>
+    </div>
   );
 }

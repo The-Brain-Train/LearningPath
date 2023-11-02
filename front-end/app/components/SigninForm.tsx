@@ -62,7 +62,13 @@ const SigninForm = () => {
         console.error("Error submitting form data:", response.statusText);
       }
       if (response.status === 403) {
-        setError("Invalid email or password. Please try again.");
+        setError("Incorrect password. Please try again.");
+        setTimeout(() => {
+          setError(null);
+        }, 5000);
+      }
+      if (response.status === 401) {
+        setError("Invalid Email. Please try again or sign-up.");
         setTimeout(() => {
           setError(null);
         }, 5000);
@@ -75,14 +81,7 @@ const SigninForm = () => {
   return (
     <Container component="main" className="main-background m-0 min-w-full">
       <CssBaseline />
-      <Box
-        sx={{
-          marginTop: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
+      <Box className="mt-20 flex flex-col items-center">
         <Avatar sx={{ m: 1, bgcolor: "#141832" }}>
           <LockOutlinedIcon />
         </Avatar>
@@ -138,11 +137,6 @@ const SigninForm = () => {
               },
             }}
           />
-          {error && (
-            <Typography variant="body2" color="error" sx={{ mt: 1 }}>
-              {error}
-            </Typography>
-          )}
           <Button
             type="submit"
             fullWidth
@@ -164,6 +158,13 @@ const SigninForm = () => {
           </Grid>
         </Box>
       </Box>
+      {error && (
+        <Typography
+          className=" text-red-500 text-center font-semibold font-xs"
+        >
+          {error}
+        </Typography>
+      )}
     </Container>
   );
 };

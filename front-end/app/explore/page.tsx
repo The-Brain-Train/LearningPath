@@ -272,13 +272,13 @@ export default function Explore() {
         </div>
       )}
       <ul
-        className="grid lg:grid-cols-3 gap-4 lg:gap-10 font-semibold font"
+        className="grid lg:grid-cols-3 gap-4 lg:gap-10 font-semibold"
         style={{ fontFamily: "Poppins" }}
       >
         {filteredRoadmaps.map((roadmap: RoadmapMeta) => (
           <li
             key={roadmap.id}
-            className="rounded-lg shadow-md text-white w-[320px]"
+            className="rounded-lg shadow-md text-white w-[320px] bg-blue-900"
             style={{ backgroundColor: "#141832" }}
           >
             <div className="flex items-center py-4 lg:py-8 flex-row max-w-xs px-6">

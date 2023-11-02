@@ -41,8 +41,7 @@ public class FileService {
             Storage storage = options.getService();
             Bucket bucket = storage.get(gcpBucketId, Storage.BucketGetOption.fields());
 
-            UUID uuid = UUID.randomUUID();
-            String id = uuid.toString();
+            String id = UUID.randomUUID().toString();
 
             Blob blob = bucket.create(gcpDirectoryName + "/" + fileName + "-" + id, fileData, contentType);
 
