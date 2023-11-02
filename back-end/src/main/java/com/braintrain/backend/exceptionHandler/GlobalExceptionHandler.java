@@ -25,7 +25,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorMessageResponse> handleUserNotFoundException(UserNotFoundException ex) {
-        return ResponseEntity.notFound().build();
+        ErrorMessageResponse errorResponse = new ErrorMessageResponse(
+                LocalDateTime.now(),
+                401,
+                "/api/auth/signin",
+                ex.getMessage()
+        );
+        return ResponseEntity.status(401).body(errorResponse);
     }
 
     @ExceptionHandler(EmailAlreadyExistsException.class)
