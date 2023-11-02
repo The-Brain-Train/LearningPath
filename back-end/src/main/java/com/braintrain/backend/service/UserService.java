@@ -1,6 +1,7 @@
 package com.braintrain.backend.service;
 
 import com.braintrain.backend.controller.dtos.FileDTO;
+import com.braintrain.backend.exceptionHandler.exception.InvalidFileContentTypeException;
 import com.braintrain.backend.model.User;
 import com.braintrain.backend.controller.dtos.UserFavoritesDTO;
 import com.braintrain.backend.repository.UserRepository;
@@ -26,14 +27,22 @@ public class UserService {
         return new UserFavoritesDTO(user.getFavorites());
     }
 
-    public String uploadFile(String userEmail, MultipartFile file) {
+    public String saveProfilePicture(String userEmail, MultipartFile file) {
+        if (!file.getContentType().contains("image/")) {
+            throw new InvalidFileContentTypeException("Invalid image upload.");
+        }
+
         User user = userRepository.findByEmail(userEmail);
-        FileDTO fileDTO = fileService.uploadFile(file, file.getOriginalFilename(), file.getContentType());
-        String profilePictureUrl = fileDTO.fileUrl();
+        String profilePictureUrl = uploadFile(file);
 
         user.setProfilePicture(profilePictureUrl);
         userRepository.save(user);
 
         return profilePictureUrl;
+    }
+
+    private String uploadFile(MultipartFile file) {
+        FileDTO fileDTO = fileService.uploadFile(file, file.getOriginalFilename(), file.getContentType());
+        return fileDTO.fileUrl();
     }
 }

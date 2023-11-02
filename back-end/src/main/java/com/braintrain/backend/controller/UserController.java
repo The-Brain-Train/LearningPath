@@ -25,7 +25,7 @@ public class UserController {
         if (userProfilePictureUrl != null){
             fileService.deleteFile(userProfilePictureUrl);
         }
-        return ResponseEntity.ok(userService.uploadFile(userEmail, file));
+        return ResponseEntity.ok(userService.saveProfilePicture(userEmail, file));
     }
 
     @GetMapping("/{userEmail}/profileImage")
