@@ -1,4 +1,3 @@
-"use client";
 import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -22,11 +21,11 @@ const SignupForm = () => {
   });
   const [isFormValid, setIsFormValid] = useState(false);
   const [isEmailValid, setIsEmailValid] = useState(true);
-  const [error, setError] = useState<string | null>(null); // Combined error message
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
 
-  const handleInputChange = (e: { target: { name: any; value: any; }; }) => {
+  const handleInputChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
 
@@ -37,36 +36,39 @@ const SignupForm = () => {
 
     if (name === "password" || name === "passwordConfirmation") {
       const isPasswordValid = value.length >= 5;
+      const isMatchingPasswords = value === passwordConfirmation;
       setIsFormValid(
         formData.name.trim() !== "" &&
-        isEmailValid &&
-        formData.password.trim() !== "" &&
-        formData.password === passwordConfirmation
+          isEmailValid &&
+          formData.password.trim() !== "" &&
+          formData.password === passwordConfirmation &&
+          isPasswordValid &&
+          isMatchingPasswords
       );
+
       if (!isPasswordValid) {
         setError("Password must be at least 5 characters long.");
-        setTimeout(() => {
-          setError(null);
-        }, 6000);
       } else {
-        setError(null); 
+        setError(null);
       }
     }
   };
 
-  const handlePasswordConfirmationChange = (e: { target: { value: any; }; }) => {
+  const handlePasswordConfirmationChange = (e: { target: { value: any } }) => {
     const { value } = e.target;
     setPasswordConfirmation(value);
-
+    const isPasswordValid = value.length >= 5;
+    const isMatchingPasswords = formData.password === value;
     setIsFormValid(
       formData.name.trim() !== "" &&
-      isEmailValid &&
-      formData.password.trim() !== "" &&
-      formData.password === value
+        isEmailValid &&
+        formData.password.trim() !== "" &&
+        isPasswordValid &&
+        isMatchingPasswords
     );
   };
 
-  const handleSubmit = async (e: { preventDefault: () => void; }) => {
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
     const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -104,14 +106,19 @@ const SignupForm = () => {
   return (
     <Container className="main-background m-0 min-w-full " component="main">
       <CssBaseline />
-      <Box className="mt-2 flex flex-col items-center">
+      <Box className="mt-20 flex flex-col items-center">
         <Avatar sx={{ m: 1, bgcolor: "#141832" }}>
           <LockOutlinedIcon />
         </Avatar>
         <Typography className="text-white" component="h2" variant="h5">
-          Sign up
+          Register / Create Account
         </Typography>
-        <Box component="form" noValidate onSubmit={handleSubmit} className="max-w-2xl mt-2">
+        <Box
+          component="form"
+          noValidate
+          onSubmit={handleSubmit}
+          className="max-w-xl "
+        >
           <TextField
             margin="normal"
             autoComplete="given-name"
@@ -182,6 +189,7 @@ const SignupForm = () => {
               },
             }}
           />
+
           <TextField
             margin="normal"
             required
@@ -210,7 +218,6 @@ const SignupForm = () => {
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2, bgcolor: "#1976d2 !important" }}
-            disabled={!isFormValid}
           >
             Sign Up
           </Button>

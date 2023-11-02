@@ -99,9 +99,9 @@ export default function BurgerMenu({ handleSignOut }: BurgerMenuProps) {
         )}
       </div>
       <Modal open={open} onClose={handleShut}>
-        <Box className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 bg-white rounded shadow-lg p-4 rounded-5">
+        <Box className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 lg:w-96 bg-white rounded shadow-lg p-4 rounded-5">
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            Are you sure you want to SignOut?
+            Are you sure you want to Sign out?
           </Typography>
           <div className="flex justify-between">
             <Button onClick={handleShut}>no</Button>
