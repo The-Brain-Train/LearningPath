@@ -110,7 +110,7 @@ export default function Explore() {
     }
     if (to <= from) {
       setHourValidationMessage("To should be greater than From");
-      setTimeout(() => setHourValidationMessage(null), 2500);
+      setTimeout(() => setHourValidationMessage(null), 1500);
       return false;
     }
     setHourValidationMessage(null);
@@ -184,8 +184,6 @@ export default function Explore() {
               <option value="intermediate">Intermediate</option>
               <option value="expert">Expert</option>
             </select>
-
-
             <div className="flex flex-col">
               <div className="flex flex-row gap-x-2.5 items-center">
                 <span className="text-white">Hours:</span>
@@ -227,7 +225,7 @@ export default function Explore() {
         )}
       </div>
       {showFilters && (
-        <div className="max-w-xs my-5 mx-auto sm:hidden">
+        <div className="w-60 max-w-xs my-5 mx-auto sm:hidden">
           <select
             value={experienceFilter || ""}
             onChange={(e) => setExperienceFilter(e.target.value || null)}
@@ -238,8 +236,9 @@ export default function Explore() {
             <option value="intermediate">Intermediate</option>
             <option value="expert">Expert</option>
           </select>
-          <span className="text-white">Hours:</span>
-          <div className="flex flex-row gap-2 justify-between">
+
+          <div className="flex flex-row justify-between mt-4">
+            <span className="text-white">Hours:</span>
             <input
               type="number"
               min="0"
@@ -253,7 +252,7 @@ export default function Explore() {
                   setHoursFromFilter(newValue);
               }}
               placeholder="From"
-              className="rounded px-1"
+              className="rounded-md h-7 w-45 mx-2.5 text-center"
             />
             <p className="text-white font-semibold flex justify-center items-center">-</p>
             <input
@@ -269,10 +268,10 @@ export default function Explore() {
                   setHoursToFilter(newValue);
               }}
               placeholder="To"
-              className="rounded px-1"
+              className="rounded-md h-7 w-45 ml-2.5 text-center"
             />
           </div>
-          <div className="flex w-52 mt-2.5 text-white">{hourValidationMessage}</div>
+          <div className="text-red-500 w-full text-center">{hourValidationMessage}</div>
         </div>
       )}
       <ul
