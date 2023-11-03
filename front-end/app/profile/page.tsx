@@ -137,10 +137,9 @@ const Profile = () => {
             {!roadmapCount && <p className="text-center text-white font-semibold pb-4">
               No roadmaps saved
             </p>}
-            {roadmapCount && <p className="text-center text-white font-semibold pb-4">
+            {roadmapCount != undefined && roadmapCount > 0 && <p className="text-center text-white font-semibold pb-4">
               {roadmapCount} / {maxRoadmaps} roadmaps saved
             </p>}
-
             <Accordion
               className="sm:max-w-2xl"
               open={open === 1}
