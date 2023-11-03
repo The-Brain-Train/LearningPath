@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -54,7 +55,10 @@ const SigninForm = () => {
           setCookie("user", token, {
             path: "/",
           });
-          router.push("/");
+          router.back();
+          if (document.referrer.endsWith("/signup")) {
+            router.push("/");
+          }
         } else {
           console.error("Error submitting form data:", response.statusText);
         }

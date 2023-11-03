@@ -1,5 +1,4 @@
 "use client";
-import BurgerMenu from "./BurgerMenu";
 import Link from "next/link";
 import { useCookies } from "react-cookie";
 import jwtDecode from "jwt-decode";
@@ -7,15 +6,12 @@ import { User } from "../util/types";
 import Image from "next/image";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getUserProfilePicture } from "../functions/httpRequests";
-import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
-import { useState } from "react";
 
 const DynamicBurgerMenu = dynamic(() => import("./BurgerMenu"));
 
 export default function Header() {
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
-  const router = useRouter();
   const queryClient = useQueryClient();
 
   const { data: currentUser } = useQuery<User | null>(
@@ -41,7 +37,6 @@ export default function Header() {
     removeCookie("user");
     queryClient.removeQueries(["currentUser"]);
     queryClient.removeQueries(["profilePictureUrl"]);
-    router.push("/");
   };
 
   return (

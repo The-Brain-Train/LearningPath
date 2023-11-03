@@ -213,7 +213,7 @@ const Profile = () => {
               Create an account
             </Link>
             <span className="text-2xl"> or </span>
-            <Link href="/signup" className="hover:text-blue-500 underline text-2xl">
+            <Link href="/signin" className="hover:text-blue-500 underline text-2xl">
               Sign in
             </Link>
           </div>
