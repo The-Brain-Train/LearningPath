@@ -134,9 +134,12 @@ const Profile = () => {
             {currentUser && <UserCard user={currentUser} />}
           </section>
           <div className="flex items-center flex-col mx-2">
-            <p className="text-center text-white font-semibold">
+            {!roadmapCount && <p className="text-center text-white font-semibold pb-4">
+              No roadmaps saved
+            </p>}
+            {roadmapCount && <p className="text-center text-white font-semibold pb-4">
               {roadmapCount} / {maxRoadmaps} roadmaps saved
-            </p>
+            </p>}
 
             <Accordion
               className="sm:max-w-2xl"
