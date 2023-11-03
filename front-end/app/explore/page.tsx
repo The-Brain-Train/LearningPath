@@ -110,7 +110,7 @@ export default function Explore() {
     }
     if (to <= from) {
       setHourValidationMessage("To should be greater than From");
-      setTimeout(() => setHourValidationMessage(null), 2000);
+      setTimeout(() => setHourValidationMessage(null), 2500);
       return false;
     }
     setHourValidationMessage(null);
@@ -149,10 +149,10 @@ export default function Explore() {
 
   return (
     <main className="main-background min-h-max flex items-center flex-col">
-      <div className="flex flex-row my-5 mx-auto sm:gap-4">
+      <div className="flex flex-row my-5 mx-auto gap-x-10">
         <Paper
           component="div"
-          className="py-2 px-4 flex w-15 max-h-12 justify-center items-center my-auto w-64"
+          className="py-2 px-4 flex w-15 max-h-12 justify-center items-center mt-5 w-64"
         >
           <InputBase
             sx={{ ml: 1, flex: 1 }}
@@ -173,7 +173,7 @@ export default function Explore() {
             </Tooltip>
           </Button>
         ) : (
-          <div className="max-w-lg my-5 mx-auto flex flex-row gap-4">
+          <div className="max-w-lg my-5 mx-auto flex flex-row gap-x-10">
             <select
               value={experienceFilter || ""}
               onChange={(e) => setExperienceFilter(e.target.value || null)}
@@ -184,41 +184,45 @@ export default function Explore() {
               <option value="intermediate">Intermediate</option>
               <option value="expert">Expert</option>
             </select>
-            <span className="text-white flex justify-center items-center">Hours:</span>
-            <div className="flex flex-row gap-2 justify-between ">
-              <input
-                type="number"
-                min="0"
-                max="500"
-                step="10"
-                value={hoursFromFilter === null ? "" : hoursFromFilter}
-                onChange={(e) => {
-                  const newValue =
-                    e.target.value === "" ? null : parseInt(e.target.value);
-                  validateHours(newValue, hoursToFilter) &&
-                    setHoursFromFilter(newValue);
-                }}
-                placeholder="From"
-                className="rounded px-2"
-              />
-              <p className="text-white font-semibold flex justify-center items-center">-</p>
-              <input
-                type="number"
-                min="0"
-                max="500"
-                step="10"
-                value={hoursToFilter === null ? "" : hoursToFilter}
-                onChange={(e) => {
-                  const newValue =
-                    e.target.value === "" ? null : parseInt(e.target.value);
-                  validateHours(hoursFromFilter, newValue) &&
-                    setHoursToFilter(newValue);
-                }}
-                placeholder="To"
-                className="rounded px-2"
-              />
+
+
+            <div className="flex flex-col">
+              <div className="flex flex-row gap-x-2.5 items-center">
+                <span className="text-white">Hours:</span>
+                <input
+                  type="number"
+                  min="0"
+                  max="500"
+                  step="10"
+                  value={hoursFromFilter === null ? "" : hoursFromFilter}
+                  onChange={(e) => {
+                    const newValue =
+                      e.target.value === "" ? null : parseInt(e.target.value);
+                    validateHours(newValue, hoursToFilter) &&
+                      setHoursFromFilter(newValue);
+                  }}
+                  placeholder="From"
+                  className="rounded-md h-11 w-20 text-center"
+                />
+                <p className="text-white font-semibold flex justify-center items-center">-</p>
+                <input
+                  type="number"
+                  min="0"
+                  max="500"
+                  step="10"
+                  value={hoursToFilter === null ? "" : hoursToFilter}
+                  onChange={(e) => {
+                    const newValue =
+                      e.target.value === "" ? null : parseInt(e.target.value);
+                    validateHours(hoursFromFilter, newValue) &&
+                      setHoursToFilter(newValue);
+                  }}
+                  placeholder="To"
+                  className="rounded-md h-11 w-20 text-center"
+                />
+              </div>
+              <span className="text-red-500 w-full text-right">{hourValidationMessage}</span>
             </div>
-            <span>{hourValidationMessage}</span>
           </div>
         )}
       </div>
@@ -268,7 +272,7 @@ export default function Explore() {
               className="rounded px-1"
             />
           </div>
-          <span>{hourValidationMessage}</span>
+          <div className="flex w-52 mt-2.5 text-white">{hourValidationMessage}</div>
         </div>
       )}
       <ul
