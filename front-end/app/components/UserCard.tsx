@@ -27,7 +27,7 @@ export default function Card({ user }: UserCardProps) {
       },
       onError: (error) => {
         setErrorMessage(error.message);
-        setTimeout(()=> setErrorMessage(null), 5000)
+        setTimeout(()=> setErrorMessage(null), 5000);
       },
     }
   );
