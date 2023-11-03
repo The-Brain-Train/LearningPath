@@ -1,5 +1,4 @@
-"use client";
-import * as React from "react";
+import React, { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -12,8 +11,6 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useCookies } from "react-cookie";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import "react-toastify/dist/ReactToastify.css";
 
 const SigninForm = () => {
   const [formData, setFormData] = useState({
@@ -24,7 +21,6 @@ const SigninForm = () => {
   const [cookies, setCookie] = useCookies(["user"]);
   const router = useRouter();
   const [isEmailValid, setIsEmailValid] = useState(true);
-  const [isFormValid, setIsFormValid] = useState(false);
 
   const handleInputChange = (e: {
     target: { name: string; value: string };
@@ -36,45 +32,43 @@ const SigninForm = () => {
       const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
       setIsEmailValid(emailRegex.test(value));
     }
-    setIsFormValid(isEmailValid && formData.password.trim() !== "");
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-    try {
-      const response = await fetch(`${BACKEND_URL}/api/auth/signin`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-      if (response.ok) {
-        const data = await response.json();
-        const token = data.token;
-        setCookie("user", token, {
-          path: "/",
+    if (isEmailValid && formData.password.trim() !== "") {
+      const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+
+      try {
+        const response = await fetch(`${BACKEND_URL}/api/auth/signin`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
         });
-        router.push("/");
-      } else {
-        console.error("Error submitting form data:", response.statusText);
+        if (response.ok) {
+          const data = await response.json();
+          const token = data.token;
+          setCookie("user", token, {
+            path: "/",
+          });
+          router.push("/");
+        } else {
+          console.error("Error submitting form data:", response.statusText);
+        }
+        if (response.status === 403) {
+          setError("Incorrect password. Please try again.");
+        }
+        if (response.status === 401) {
+          setError("Invalid Email. Please try again or sign up.");
+        }
+      } catch (error) {
+        setError("An error occurred while signing in.");
       }
-      if (response.status === 403) {
-        setError("Incorrect password. Please try again.");
-        setTimeout(() => {
-          setError(null);
-        }, 5000);
-      }
-      if (response.status === 401) {
-        setError("Invalid Email. Please try again or sign-up.");
-        setTimeout(() => {
-          setError(null);
-        }, 5000);
-      }
-    } catch (error) {
-      setError("An error occurred while signing in.");
+    } else {
+      setError("Please fill out the form correctly.");
     }
   };
 
@@ -159,9 +153,7 @@ const SigninForm = () => {
         </Box>
       </Box>
       {error && (
-        <Typography
-          className=" text-red-500 text-center font-semibold font-xs"
-        >
+        <Typography className=" text-red-500 text-center font-semibold font-xs">
           {error}
         </Typography>
       )}

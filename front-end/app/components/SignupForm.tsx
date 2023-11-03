@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Avatar from "@mui/material/Avatar";
@@ -20,7 +20,6 @@ const SignupForm = () => {
     password: "",
   });
   const [isFormValid, setIsFormValid] = useState(false);
-  const [isEmailValid, setIsEmailValid] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
@@ -28,48 +27,35 @@ const SignupForm = () => {
   const handleInputChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-
-    if (name === "email") {
-      const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
-      setIsEmailValid(emailRegex.test(value));
-    }
-
-    if (name === "password" || name === "passwordConfirmation") {
-      const isPasswordValid = value.length >= 5;
-      const isMatchingPasswords = value === passwordConfirmation;
-      setIsFormValid(
-        formData.name.trim() !== "" &&
-          isEmailValid &&
-          formData.password.trim() !== "" &&
-          formData.password === passwordConfirmation &&
-          isPasswordValid &&
-          isMatchingPasswords
-      );
-
-      if (!isPasswordValid) {
-        setError("Password must be at least 5 characters long.");
-      } else {
-        setError(null);
-      }
-    }
   };
 
   const handlePasswordConfirmationChange = (e: { target: { value: any } }) => {
     const { value } = e.target;
     setPasswordConfirmation(value);
-    const isPasswordValid = value.length >= 5;
-    const isMatchingPasswords = formData.password === value;
-    setIsFormValid(
-      formData.name.trim() !== "" &&
-        isEmailValid &&
-        formData.password.trim() !== "" &&
-        isPasswordValid &&
-        isMatchingPasswords
-    );
   };
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
+
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+    const isEmailValid = emailRegex.test(formData.email);
+
+    if (!isEmailValid) {
+      setError("Invalid email format.");
+      return;
+    }
+
+    const isPasswordValid = formData.password.length >= 5;
+
+    if (!isPasswordValid) {
+      setError("Password must be at least 5 characters long.");
+      return;
+    }
+
+    if (formData.password !== passwordConfirmation) {
+      setError("Passwords don't match.");
+      return;
+    }
 
     const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -102,6 +88,18 @@ const SignupForm = () => {
       console.error("Error:", error);
     }
   };
+
+  useEffect(() => {
+    const isPasswordValid =
+      formData.password.length >= 5 &&
+      formData.password === passwordConfirmation;
+
+    setIsFormValid(
+      formData.name.trim() !== "" &&
+        formData.email.trim() !== "" &&
+        isPasswordValid
+    );
+  }, [formData, passwordConfirmation]);
 
   return (
     <Container className="main-background m-0 min-w-full " component="main">
@@ -152,8 +150,6 @@ const SignupForm = () => {
             autoComplete="email"
             onChange={handleInputChange}
             value={formData.email}
-            error={!isEmailValid}
-            helperText={!isEmailValid ? "Invalid email format" : ""}
             InputProps={{
               style: { color: "white" },
             }}
@@ -213,6 +209,10 @@ const SignupForm = () => {
               },
             }}
           />
+          <p className="text-white text-xs text-center pt-4">
+            <span className="underline">Note:</span> Password should be atleast
+            5 characters long.
+          </p>
           <Button
             type="submit"
             fullWidth
