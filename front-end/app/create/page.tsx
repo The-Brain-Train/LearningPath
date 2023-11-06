@@ -53,7 +53,12 @@ export default function Create() {
       experienceLevel: experienceLevel,
       hours: totalHours,
     };
-    postRoadmap(requestData, cookies.user);
+
+    try {
+      await postRoadmap(requestData, cookies.user);
+    } catch (e) {
+      throw e;
+    }
   };
 
   const handleSendMessage = async () => {
