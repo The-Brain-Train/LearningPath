@@ -2,6 +2,7 @@ package com.braintrain.backend.controller;
 
 
 import com.braintrain.backend.controller.dtos.RoadmapDTO;
+import com.braintrain.backend.controller.dtos.RoadmapMetaDTO;
 import com.braintrain.backend.controller.dtos.RoadmapMetaListDTO;
 import com.braintrain.backend.controller.dtos.UserFavoritesDTO;
 import com.braintrain.backend.exceptionHandler.exception.UserNotFoundException;
@@ -9,6 +10,9 @@ import com.braintrain.backend.model.*;
 import com.braintrain.backend.service.RoadmapService;
 import com.braintrain.backend.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,8 +28,18 @@ public class RoadmapController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<RoadmapMetaListDTO> getRoadmap() {
+    public ResponseEntity<RoadmapMetaListDTO> getAllRoadmaps() {
         return ResponseEntity.ok(service.getAllRoadmapsMeta());
+    }
+
+    @GetMapping("/paged")
+    public ResponseEntity<Page<RoadmapMetaDTO>> getAllRoadmaps(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "9") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<RoadmapMetaDTO> roadmapPage =
+                service.getAllRoadmapsMeta(pageable);
+        return ResponseEntity.ok(roadmapPage);
     }
 
     @GetMapping("/{id}")
