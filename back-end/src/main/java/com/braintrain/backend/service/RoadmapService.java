@@ -1,6 +1,7 @@
 package com.braintrain.backend.service;
 
 import com.braintrain.backend.controller.dtos.RoadmapDTO;
+import com.braintrain.backend.controller.dtos.RoadmapMetaDTO;
 import com.braintrain.backend.controller.dtos.RoadmapMetaListDTO;
 import com.braintrain.backend.controller.dtos.UserFavoritesDTO;
 import com.braintrain.backend.exceptionHandler.exception.RoadmapCountExceededException;
@@ -8,7 +9,10 @@ import com.braintrain.backend.model.*;
 import com.braintrain.backend.repository.RoadmapMetaRepository;
 import com.braintrain.backend.repository.RoadmapRepository;
 import com.braintrain.backend.repository.UserRepository;
+import com.braintrain.backend.util.RoadmapMetaConverter;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,6 +36,11 @@ public class RoadmapService {
 
     public RoadmapMetaListDTO getAllRoadmapsMeta() {
         return new RoadmapMetaListDTO(metaRepo.findAll());
+    }
+
+    public Page<RoadmapMetaDTO> getAllRoadmapsMeta(Pageable pageable) {
+        Page<RoadmapMeta> pagedRoadmaps = metaRepo.findAll(pageable);
+        return RoadmapMetaConverter.toRoadmapMetaDtoList(pagedRoadmaps);
     }
 
     public List<Roadmap> getAllRoadmaps() {
