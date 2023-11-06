@@ -13,8 +13,13 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler({IllegalArgumentException.class, RoadmapCountExceededException.class})
+    @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorMessageResponse> handleIllegalArgumentException(IllegalArgumentException ex) {
+        return displayErrorMessage(LocalDateTime.now(), 400, "api/roadmaps", ex.getMessage());
+    }
+
+    @ExceptionHandler(RoadmapCountExceededException.class)
+    public ResponseEntity<ErrorMessageResponse> handleRoadmapCountExceededException(RoadmapCountExceededException ex) {
         return displayErrorMessage(LocalDateTime.now(), 400, "api/roadmaps", ex.getMessage());
     }
 
