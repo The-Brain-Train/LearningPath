@@ -36,17 +36,25 @@ export const deleteRoadmap = async (roadMapId: string) => {
 };
 
 export const postRoadmap = async (roadmap: RoadmapDTO, token: any) => {
-  const response = await fetch(`${BACKEND_URL}/api/roadmaps`, {
+
+  return await fetch(`${BACKEND_URL}/api/roadmaps`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + token,
     },
     body: JSON.stringify(roadmap),
-  });
-  if (!response.ok) {
-    throw new Error("Failed to add roadmap");
-  }
+  }).then(response => {
+    if (response.status === 400) {
+      return response.text().then(txt => {
+        throw new Error(txt);
+      });
+    }
+    if (!response.ok) {
+      throw new Error("Failed to add roadmap");
+    }
+    return response.json();
+  })
 };
 
 export const getUsersRoadmapMetas = async (userEmail: string, token: any) => {
