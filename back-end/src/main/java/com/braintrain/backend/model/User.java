@@ -24,6 +24,8 @@ public class User  implements UserDetails {
     private String email;
     private String password;
     private List<RoadmapMeta> favorites;
+    private List<RoadmapMeta> upVotes;
+    private List<RoadmapMeta> downVotes;
     @Enumerated(EnumType.STRING)
     private Role role;
     private String profilePicture;
@@ -35,6 +37,8 @@ public class User  implements UserDetails {
         this.role = Role.USER;
         this.favorites = new ArrayList<>();
         this.profilePicture = profilePicture;
+        this.upVotes = new ArrayList<>();
+        this.downVotes = new ArrayList<>();
     }
 
     @Override
