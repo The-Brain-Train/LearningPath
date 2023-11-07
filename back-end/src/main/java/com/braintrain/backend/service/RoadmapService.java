@@ -15,9 +15,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 
 @Service
 @AllArgsConstructor
@@ -25,6 +25,7 @@ public class RoadmapService {
     private final RoadmapMetaRepository metaRepo;
     private final RoadmapRepository repo;
     private final UserRepository userRepo;
+    private final UserService userService;
 
     public RoadmapMeta createRoadmap(RoadmapDTO roadmapDTO) {
         validateDTONameInput(roadmapDTO.name());
@@ -67,6 +68,42 @@ public class RoadmapService {
 
     public void deleteRoadmapMeta(String id) {
         metaRepo.deleteById(id);
+    }
+
+    public Long upVoteRoadmapMeta(String userEmail, String roadmapMetaId) {
+        User user = userService.getUserByEmail(userEmail);
+        RoadmapMeta roadmapMeta = getRoadmapMetaById(roadmapMetaId);
+        validateUpVoteDownVoteLists(user);
+        if (user.getUpVotes().contains(roadmapMeta)) {
+            return roadmapMeta.getUpVotes();
+        }
+        if (user.getDownVotes().contains(roadmapMeta)) {
+            user.getDownVotes().remove(roadmapMeta);
+            roadmapMeta.setDownVotes(roadmapMeta.getDownVotes() - 1);
+        }
+        user.getUpVotes().add(roadmapMeta);
+        roadmapMeta.setUpVotes(roadmapMeta.getUpVotes() + 1);
+        userRepo.save(user);
+        metaRepo.save(roadmapMeta);
+        return roadmapMeta.getUpVotes();
+    }
+
+    public Long downVoteRoadmapMeta(String userEmail, String roadmapMetaId) {
+        User user = userService.getUserByEmail(userEmail);
+        RoadmapMeta roadmapMeta = getRoadmapMetaById(roadmapMetaId);
+        validateUpVoteDownVoteLists(user);
+        if (user.getDownVotes().contains(roadmapMeta)) {
+            return roadmapMeta.getDownVotes();
+        }
+        if (user.getUpVotes().contains(roadmapMeta)) {
+            user.getUpVotes().remove(roadmapMeta);
+            roadmapMeta.setUpVotes(roadmapMeta.getUpVotes() - 1);
+        }
+        user.getDownVotes().add(roadmapMeta);
+        roadmapMeta.setDownVotes(roadmapMeta.getDownVotes() + 1);
+        userRepo.save(user);
+        metaRepo.save(roadmapMeta);
+        return roadmapMeta.getDownVotes();
     }
 
     public UserFavoritesDTO addRoadmapMetaToFavorites(User user, RoadmapMeta roadmapMeta) {
@@ -116,6 +153,15 @@ public class RoadmapService {
         Long MAX_ROADMAP_COUNT = 10L;
         if (roadmapCount.equals(MAX_ROADMAP_COUNT)) {
             throw new RoadmapCountExceededException();
+        }
+    }
+
+    private void validateUpVoteDownVoteLists(User user) {
+        if (user.getUpVotes() == null) {
+            user.setUpVotes(new ArrayList<>());
+        }
+        if (user.getDownVotes() == null) {
+            user.setDownVotes(new ArrayList<>());
         }
     }
 }
