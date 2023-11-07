@@ -17,6 +17,8 @@ public class RoadmapMeta {
     private String userEmail;
     private String experienceLevel;
     private int hours;
+    private Long upVotes = 0L;
+    private Long downVotes = 0L;
 
     public RoadmapMeta(String name, String roadmapReferenceId, String userEmail, String experienceLevel, int hours) {
         this.name = name;
