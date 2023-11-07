@@ -16,6 +16,15 @@ export const getRoadmaps = async () => {
   return data;
 };
 
+export const getRoadmapsPaged = async (page: number, size: number) => {
+  const response = await fetch(`${BACKEND_URL}/api/roadmaps/paged?page=${page}&size=${size}`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch roadmaps");
+  }
+  const data = await response.json();
+  return data;
+}
+
 export const getRoadmap = async (roadMapId: string) => {
   const response = await fetch(`${BACKEND_URL}/api/roadmaps/${roadMapId}`);
   if (!response.ok) {

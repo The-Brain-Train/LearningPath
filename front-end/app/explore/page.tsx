@@ -8,6 +8,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import {
   addRoadmapMetaToUserFavorites,
   getRoadmaps,
+  getRoadmapsPaged,
   getUserFavorites,
   removeRoadmapMetaFromUserFavorites,
 } from "../functions/httpRequests";
@@ -22,6 +23,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import jwtDecode from "jwt-decode";
 import { useCookies } from "react-cookie";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import ReactPaginate from "react-paginate";
+import styles from '../explore/explore.module.css'
 
 export default function Explore() {
   const [filteredRoadmaps, setFilteredRoadmaps] = useState<RoadmapMeta[]>([]);
@@ -30,6 +33,9 @@ export default function Explore() {
   const [hoursFromFilter, setHoursFromFilter] = useState<number | null>(0);
   const [hoursToFilter, setHoursToFilter] = useState<number | null>(500);
   const [showFilters, setShowFilters] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 9;
+  const pageCount = Math.ceil(filteredRoadmaps.length / itemsPerPage);
   const queryClient = useQueryClient();
   const [cookies] = useCookies(["user"]);
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
@@ -123,6 +129,15 @@ export default function Explore() {
     const searchText = event.currentTarget.value;
     setSearch(searchText);
   };
+
+  const handlePageChange = (selectedPage: any) => {
+    setCurrentPage(selectedPage.selected);
+  };
+
+  const paginatedRoadmaps = filteredRoadmaps.slice(
+    currentPage * itemsPerPage,
+    (currentPage + 1) * itemsPerPage
+  );
 
   useEffect(() => {
     const filtered = roadmaps?.roadmapMetaList.filter(
@@ -274,11 +289,58 @@ export default function Explore() {
           <div className="text-red-500 w-full text-center">{hourValidationMessage}</div>
         </div>
       )}
-      <ul
+
+
+      <ReactPaginate
+        previousLabel={'previous'}
+        nextLabel={'next'}
+        breakLabel={'...'}
+        breakClassName={'break-me'}
+        pageCount={pageCount}
+        marginPagesDisplayed={2}
+        pageRangeDisplayed={5}
+        onPageChange={handlePageChange}
+
+        // containerClassName={"pagination"}
+        // previousLinkClassName={"pagination__link"}
+        // nextLinkClassName={"pagination__link"}
+        // disabledClassName={"pagination__link--disabled"}
+        // activeClassName={"pagination__link--active"}
+
+        containerClassName={styles['pagination']}
+        previousLinkClassName={styles['pagination__link']}
+        nextLinkClassName={styles['pagination__link']}
+        disabledClassName={styles['pagination__link--disabled']}
+        activeClassName={styles['pagination__link--active']}
+
+        // containerClassName={'flex justify-between items-center'}
+        // previousLinkClassName={'bg-fuchsia-50 m-8 px-4 py-2 rounded border border-blue-500 text-blue-500 cursor-pointer'}
+        // nextLinkClassName={'bg-fuchsia-50 m-8 px-4 py-2 rounded border border-blue-500 text-blue-500 cursor-pointer'}
+        // disabledClassName={'bg-fuchsia-50 m-8 text-gray-300 border border-gray-300 cursor-not-allowed'}
+        // activeClassName={'bg-fuchsia-50 m-8 bg-blue-500 text-white px-4 py-2 rounded cursor-pointer'}
+
+        // containerClassName={'mb-8 flex justify-between items-center'}
+        // previousLinkClassName={'m-1 text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 shadow-lg shadow-teal-500/50 dark:shadow-lg dark:shadow-teal-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2'}
+        // nextLinkClassName={'m-1 text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 shadow-lg shadow-teal-500/50 dark:shadow-lg dark:shadow-teal-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2'}
+        // disabledClassName={'m-1 text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 shadow-lg shadow-teal-500/50 dark:shadow-lg dark:shadow-teal-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2'}
+        // activeClassName={'m-1 text-red '}
+      />
+
+      {/* <ul
         className="grid lg:grid-cols-3 gap-4 lg:gap-10 font-semibold"
         style={{ fontFamily: "Poppins" }}
       >
         {filteredRoadmaps.map((roadmap: RoadmapMeta) => (
+          <li
+            key={roadmap.id}
+            className="rounded-lg shadow-md text-white w-[320px] bg-blue-900"
+            style={{ backgroundColor: "#141832" }}
+          > */}
+      <ul
+        className="grid lg:grid-cols-3 gap-4 lg:gap-10 font-semibold mb-5 mx-10"
+        style={{ fontFamily: "Poppins" }}
+      >
+        {paginatedRoadmaps.map((roadmap: RoadmapMeta) => (
           <li
             key={roadmap.id}
             className="rounded-lg shadow-md text-white w-[320px] bg-blue-900"
@@ -332,6 +394,7 @@ export default function Explore() {
           </li>
         ))}
       </ul>
+
     </main>
   );
 }
