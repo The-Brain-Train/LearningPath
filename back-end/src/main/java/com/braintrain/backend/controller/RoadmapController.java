@@ -76,6 +76,18 @@ public class RoadmapController {
         return ResponseEntity.ok(roadmapCount);
     }
 
+    @PostMapping("/{userEmail}/upvote/{roadmapMetaId}")
+    public ResponseEntity<Long> upVoteRoadmapMeta(@PathVariable String userEmail, @PathVariable String roadmapMetaId) {
+        Long voteCount = service.upVoteRoadmapMeta(userEmail, roadmapMetaId);
+        return ResponseEntity.ok(voteCount);
+    }
+
+    @PostMapping("/{userEmail}/downvote/{roadmapMetaId}")
+    public ResponseEntity<Long> downVoteRoadmapMeta(@PathVariable String userEmail, @PathVariable String roadmapMetaId) {
+        Long voteCount = service.downVoteRoadmapMeta(userEmail, roadmapMetaId);
+        return ResponseEntity.ok(voteCount);
+    }
+
     @PostMapping("/{userEmail}/favorites")
     public ResponseEntity<UserFavoritesDTO> addRoadmapMetaToFavorites(@PathVariable String userEmail, @RequestBody RoadmapMeta roadmapMeta) {
         User user = userService.getUserByEmail(userEmail);
