@@ -95,9 +95,9 @@ const InputForm = ({
   };
 
   return (
-    <div>
+    <div className="flex flex-col items-center text-center">
       {data === null && (
-        <div className="mt-5">
+        <div className="mt-5 max-w-xs">
           <h1 className="flex justify-center p-5 text-white text-xl">
             What would you want to learn?
           </h1>
@@ -112,7 +112,7 @@ const InputForm = ({
               Create Roadmap
             </button>
           </div>
-          <p className="text-white text-xs text-center pt-4"><span className="underline">Note:</span> You must have an account and be signed in to save roadmaps</p>
+          <p className="text-white text-xs pt-5 px-4"><span className="underline">Note:</span> You must have an account and be signed in to save roadmaps</p>
         </div>
       )}
       {data !== null && (
