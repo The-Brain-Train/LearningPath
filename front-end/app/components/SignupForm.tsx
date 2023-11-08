@@ -13,7 +13,6 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useRouter } from "next/navigation";
-import { queryClient } from "../util/queryClient";
 
 const SignupForm = () => {
   const [formData, setFormData] = useState({
@@ -187,7 +186,6 @@ const SignupForm = () => {
               },
             }}
           />
-
           <TextField
             margin="normal"
             required

@@ -1,5 +1,5 @@
 "use client";
-import { UserCardProps } from "../util/types";
+import { UserProps } from "../util/types";
 import Image from "next/image";
 import { useCookies } from "react-cookie";
 import {
@@ -9,17 +9,17 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
-export default function Card({ user }: UserCardProps) {
+export default function Card({ currentUser }: UserProps) {
   const [cookies] = useCookies(["user"]);
   const queryClient = useQueryClient();
   const [errorMessage, setErrorMessage] = useState<string | null>();
 
   const uploadProfilePicture = useMutation<string, Error, FormData>(
     (formData: FormData) => {
-      if (user?.email == undefined) {
+      if (currentUser?.email == undefined) {
         throw new Error("User email is undefined.");
       }
-      return postUserProfilePicture(user.email, formData, cookies.user);
+      return postUserProfilePicture(currentUser.email, formData, cookies.user);
     },
     {
       onSettled: () => {
@@ -49,7 +49,7 @@ export default function Card({ user }: UserCardProps) {
 
   const { data: profilePictureUrl } = useQuery<string>(
     ["profilePictureUrl"],
-    () => getUserProfilePicture(user?.email as string, cookies.user),
+    () => getUserProfilePicture(currentUser?.email as string, cookies.user),
     {
       enabled: !!cookies.user,
     }
@@ -58,7 +58,7 @@ export default function Card({ user }: UserCardProps) {
   return (
     <div className="flex flex-col gap-1 justify-center items-center">
       <div className="flex flex-col text-center items-center p-6  rounded-lg font-bold text-2xl text-white">
-        Hello {user?.name}!
+        Hello {currentUser?.name}!
       </div>
       <div className="h-64 w-64 rounded-full overflow-hidden">
         {profilePictureUrl ? (

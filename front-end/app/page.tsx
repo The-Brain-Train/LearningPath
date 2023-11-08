@@ -1,9 +1,6 @@
 "use client";
 import Link from "next/link";
 import TextAnimation from "./components/TextAnimation";
-import CreateIcon from "@mui/icons-material/Create";
-import ThumbsUpDownIcon from "@mui/icons-material/ThumbsUpDown";
-import SaveIcon from "@mui/icons-material/Save";
 import Image from "next/image";
 
 export default function Home() {
