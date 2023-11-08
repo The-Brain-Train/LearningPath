@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -22,7 +22,7 @@ const SigninForm = () => {
   const [cookies, setCookie] = useCookies(["user"]);
   const router = useRouter();
   const [isEmailValid, setIsEmailValid] = useState(true);
-  
+
   const searchParams = useSearchParams();
   const directedFromSignup = searchParams.get("source");
 
