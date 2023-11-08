@@ -142,7 +142,6 @@ export const upVoteRoadmap = async (
         `Failed to upVote roadmap. Status code: ${response.status}`
       );
     }
-   // console.log("response json ..." + response.json());
     return response.json();
   } catch (error) {
     console.error("Error upVoting roadmap:", error);
