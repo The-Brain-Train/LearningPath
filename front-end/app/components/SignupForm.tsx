@@ -13,6 +13,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useRouter } from "next/navigation";
+import { queryClient } from "../util/queryClient";
 
 const SignupForm = () => {
   const [formData, setFormData] = useState({
@@ -73,7 +74,7 @@ const SignupForm = () => {
           position: "top-center",
           autoClose: 3000,
           onClose: () => {
-            router.push("/signin");
+            router.push('/signin?source=signup');
           },
         });
       }
@@ -226,7 +227,7 @@ const SignupForm = () => {
           <Grid container justifyContent="flex-start">
             <Grid item>
               <Link
-                href="/signin"
+                href="/signin?source=signup"
                 className="text-lg hover:underline text-white"
               >
                 Already have an account?{" "}

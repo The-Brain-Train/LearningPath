@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -11,7 +11,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useCookies } from "react-cookie";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const SigninForm = () => {
   const [formData, setFormData] = useState({
@@ -22,6 +22,9 @@ const SigninForm = () => {
   const [cookies, setCookie] = useCookies(["user"]);
   const router = useRouter();
   const [isEmailValid, setIsEmailValid] = useState(true);
+  
+  const searchParams = useSearchParams();
+  const directedFromSignup = searchParams.get("source");
 
   const handleInputChange = (e: {
     target: { name: string; value: string };
@@ -55,9 +58,10 @@ const SigninForm = () => {
           setCookie("user", token, {
             path: "/",
           });
-          router.back();
-          if (document.referrer.endsWith("/signup")) {
+          if (directedFromSignup) {
             router.push("/");
+          } else {
+            router.back();
           }
         } else {
           console.error("Error submitting form data:", response.statusText);
