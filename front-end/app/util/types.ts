@@ -7,6 +7,8 @@ export type RoadmapMeta = {
   userEmail: string;
   experienceLevel: string;
   hours: number;
+  upVotes: number;
+  downVotes: number;
 };
 
 export type PersonalRoadmapCardProps = {

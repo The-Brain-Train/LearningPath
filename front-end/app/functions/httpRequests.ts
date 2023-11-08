@@ -101,6 +101,81 @@ export const getUserFavorites = async (
   return data.favorites;
 };
 
+export const getUserUpVotesDownVotes = async (
+  userEmail: string | null,
+  token: any
+) => {
+  const response = await fetch(
+    `${BACKEND_URL}/api/roadmaps/${userEmail}/votes`,
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch user votes");
+  }
+  const data = await response.json();
+  console.log("data..." + data);
+  return data;
+};
+
+export const upVoteRoadmap = async (
+  userEmail: string | null | undefined,
+  roadmapMetaId: string,
+  token: any
+) => {
+  try {
+    const response = await fetch(
+      `${BACKEND_URL}/api/roadmaps/${userEmail}/upvote/${roadmapMetaId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      }
+    )
+    if (!response.ok) {
+      throw new Error(
+        `Failed to upVote roadmap. Status code: ${response.status}`
+      );
+    }
+   // console.log("response json ..." + response.json());
+    return response.json();
+  } catch (error) {
+    console.error("Error upVoting roadmap:", error);
+    return -1;
+  }
+};
+
+export const downVoteRoadmap = async (
+  userEmail: string | null | undefined,
+  roadmapMetaId: string,
+  token: any
+) => {
+  try {
+    const response = await fetch(
+      `${BACKEND_URL}/api/roadmaps/${userEmail}/downvote/${roadmapMetaId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error(
+        `Failed to downVote roadmap. Status code: ${response.status}`
+      );
+    }
+  } catch (error) {
+    console.error("Error downVoting roadmap:", error);
+  }
+};
+
 export const addRoadmapMetaToUserFavorites = async (
   userEmail: string | null | undefined,
   roadmapMeta: RoadmapMeta,
