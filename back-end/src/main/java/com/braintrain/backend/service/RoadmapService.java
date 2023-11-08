@@ -75,14 +75,16 @@ public class RoadmapService {
         RoadmapMeta roadmapMeta = getRoadmapMetaById(roadmapMetaId);
         validateUpVoteDownVoteLists(user);
         if (user.getUpVotes().contains(roadmapMeta)) {
-            return roadmapMeta.getUpVotes();
+            user.getUpVotes().remove(roadmapMeta);
+            roadmapMeta.setUpVotes(roadmapMeta.getUpVotes() - 1);
+        } else {
+            if (user.getDownVotes().contains(roadmapMeta)) {
+                user.getDownVotes().remove(roadmapMeta);
+                roadmapMeta.setDownVotes(roadmapMeta.getDownVotes() - 1);
+            }
+            user.getUpVotes().add(roadmapMeta);
+            roadmapMeta.setUpVotes(roadmapMeta.getUpVotes() + 1);
         }
-        if (user.getDownVotes().contains(roadmapMeta)) {
-            user.getDownVotes().remove(roadmapMeta);
-            roadmapMeta.setDownVotes(roadmapMeta.getDownVotes() - 1);
-        }
-        user.getUpVotes().add(roadmapMeta);
-        roadmapMeta.setUpVotes(roadmapMeta.getUpVotes() + 1);
         userRepo.save(user);
         metaRepo.save(roadmapMeta);
         return roadmapMeta.getUpVotes();
@@ -93,14 +95,16 @@ public class RoadmapService {
         RoadmapMeta roadmapMeta = getRoadmapMetaById(roadmapMetaId);
         validateUpVoteDownVoteLists(user);
         if (user.getDownVotes().contains(roadmapMeta)) {
-            return roadmapMeta.getDownVotes();
+            user.getDownVotes().remove(roadmapMeta);
+            roadmapMeta.setDownVotes(roadmapMeta.getDownVotes() - 1);
+        } else {
+            if (user.getUpVotes().contains(roadmapMeta)) {
+                user.getUpVotes().remove(roadmapMeta);
+                roadmapMeta.setUpVotes(roadmapMeta.getUpVotes() - 1);
+            }
+            user.getDownVotes().add(roadmapMeta);
+            roadmapMeta.setDownVotes(roadmapMeta.getDownVotes() + 1);
         }
-        if (user.getUpVotes().contains(roadmapMeta)) {
-            user.getUpVotes().remove(roadmapMeta);
-            roadmapMeta.setUpVotes(roadmapMeta.getUpVotes() - 1);
-        }
-        user.getDownVotes().add(roadmapMeta);
-        roadmapMeta.setDownVotes(roadmapMeta.getDownVotes() + 1);
         userRepo.save(user);
         metaRepo.save(roadmapMeta);
         return roadmapMeta.getDownVotes();

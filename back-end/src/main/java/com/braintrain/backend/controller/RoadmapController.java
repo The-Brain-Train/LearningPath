@@ -1,10 +1,7 @@
 package com.braintrain.backend.controller;
 
 
-import com.braintrain.backend.controller.dtos.RoadmapDTO;
-import com.braintrain.backend.controller.dtos.RoadmapMetaDTO;
-import com.braintrain.backend.controller.dtos.RoadmapMetaListDTO;
-import com.braintrain.backend.controller.dtos.UserFavoritesDTO;
+import com.braintrain.backend.controller.dtos.*;
 import com.braintrain.backend.exceptionHandler.exception.UserNotFoundException;
 import com.braintrain.backend.model.*;
 import com.braintrain.backend.service.RoadmapService;
@@ -74,6 +71,11 @@ public class RoadmapController {
     public ResponseEntity<Long> getRoadmapCountOfUser(@PathVariable String userEmail) {
         Long roadmapCount = service.getRoadmapCountOfUser(userEmail);
         return ResponseEntity.ok(roadmapCount);
+    }
+
+    @GetMapping("/{userEmail}/votes")
+    public ResponseEntity<UpVoteDownVoteDTO> getUserUpVoteDownVotes(@PathVariable String userEmail) {
+        return ResponseEntity.ok(userService.getUserUpVoteDownVotes(userEmail));
     }
 
     @PostMapping("/{userEmail}/upvote/{roadmapMetaId}")
