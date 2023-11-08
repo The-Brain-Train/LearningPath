@@ -7,9 +7,12 @@ import Link from "next/link";
 import { ChangeEvent, useEffect, useState } from "react";
 import {
   addRoadmapMetaToUserFavorites,
+  upVoteRoadmap,
+  downVoteRoadmap,
   getRoadmaps,
   getRoadmapsPaged,
   getUserFavorites,
+  getUserUpVotesDownVotes,
   removeRoadmapMetaFromUserFavorites,
 } from "../functions/httpRequests";
 import { RoadmapMeta, User } from "../util/types";
@@ -19,6 +22,10 @@ import { Box, Button, CircularProgress } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
+import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import jwtDecode from "jwt-decode";
 import { useCookies } from "react-cookie";
@@ -61,8 +68,27 @@ export default function Explore() {
     );
   };
 
+  const fetchUserUpVotesDownVotes = async () => {
+    return await getUserUpVotesDownVotes(
+      currentUser ? currentUser?.email : null,
+      cookies.user
+    );
+  };
+
   const { data: roadmaps } = useQuery(["roadmaps"], getRoadmaps);
-  const { data: favorites } = useQuery(["favorites"], fetchUserFavorites, {
+  // const { data: roadmaps } = useQuery(["roadmaps"], getRoadmapsPaged);
+  //const { data: roadmaps } = useQuery(["roadmaps"], () => getRoadmapsPaged(currentPage, 9));
+
+  // console.log("roadmaps" + roadmaps?.roadmapMetaList);
+  // console.log("roadmapsPaged" + roadmapsPaged.);
+
+  const { data: favorites } = useQuery(["favorites"],
+    fetchUserFavorites, {
+    enabled: !!currentUser,
+  });
+
+  const { data: upVotesDownVotes } = useQuery(["upVotesDownVotes"],
+    fetchUserUpVotesDownVotes, {
     enabled: !!currentUser,
   });
 
@@ -89,6 +115,33 @@ export default function Explore() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["favorites"]);
+    },
+  });
+
+
+  const { mutateAsync: handleUpVotes } = useMutation({
+    mutationFn: async (roadmapMetaId: string) => {
+      await upVoteRoadmap(
+        currentUser?.email,
+        roadmapMetaId,
+        cookies.user
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["upVotesDownVotes"]);
+    },
+  });
+
+  const { mutateAsync: handleDownVotes } = useMutation({
+    mutationFn: async (roadmapMetaId: string) => {
+      await downVoteRoadmap(
+        currentUser?.email,
+        roadmapMetaId,
+        cookies.user
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["upVotesDownVotes"]);
     },
   });
 
@@ -132,6 +185,7 @@ export default function Explore() {
 
   const handlePageChange = (selectedPage: any) => {
     setCurrentPage(selectedPage.selected);
+    queryClient.invalidateQueries(["roadmaps"]);
   };
 
   const paginatedRoadmaps = filteredRoadmaps.slice(
@@ -192,7 +246,7 @@ export default function Explore() {
             <select
               value={experienceFilter || ""}
               onChange={(e) => setExperienceFilter(e.target.value || null)}
-              className="rounded-md h-7 w-full sm:h-12"
+              className="rounded-md h-7 w-full sm:h-12 px-4"
             >
               <option value="">Experience Level</option>
               <option value="beginner">Beginner</option>
@@ -240,7 +294,7 @@ export default function Explore() {
         )}
       </div>
       {showFilters && (
-        <div className="w-60 max-w-xs my-5 mx-auto sm:hidden">
+        <div className="w-60 max-w-xs mx-auto sm:hidden mt-5 mb-10">
           <select
             value={experienceFilter || ""}
             onChange={(e) => setExperienceFilter(e.target.value || null)}
@@ -251,7 +305,6 @@ export default function Explore() {
             <option value="intermediate">Intermediate</option>
             <option value="expert">Expert</option>
           </select>
-
           <div className="flex flex-row justify-between mt-4">
             <span className="text-white">Hours:</span>
             <input
@@ -290,7 +343,6 @@ export default function Explore() {
         </div>
       )}
 
-
       <ReactPaginate
         previousLabel={'previous'}
         nextLabel={'next'}
@@ -301,100 +353,102 @@ export default function Explore() {
         pageRangeDisplayed={5}
         onPageChange={handlePageChange}
 
-        // containerClassName={"pagination"}
-        // previousLinkClassName={"pagination__link"}
-        // nextLinkClassName={"pagination__link"}
-        // disabledClassName={"pagination__link--disabled"}
-        // activeClassName={"pagination__link--active"}
-
         containerClassName={styles['pagination']}
         previousLinkClassName={styles['pagination__link']}
         nextLinkClassName={styles['pagination__link']}
         disabledClassName={styles['pagination__link--disabled']}
         activeClassName={styles['pagination__link--active']}
 
-        // containerClassName={'flex justify-between items-center'}
-        // previousLinkClassName={'bg-fuchsia-50 m-8 px-4 py-2 rounded border border-blue-500 text-blue-500 cursor-pointer'}
-        // nextLinkClassName={'bg-fuchsia-50 m-8 px-4 py-2 rounded border border-blue-500 text-blue-500 cursor-pointer'}
-        // disabledClassName={'bg-fuchsia-50 m-8 text-gray-300 border border-gray-300 cursor-not-allowed'}
-        // activeClassName={'bg-fuchsia-50 m-8 bg-blue-500 text-white px-4 py-2 rounded cursor-pointer'}
+      // containerClassName={'flex justify-between items-center'}
+      // previousLinkClassName={'bg-fuchsia-50 m-8 px-4 py-2 rounded border border-blue-500 text-blue-500 cursor-pointer'}
+      // nextLinkClassName={'bg-fuchsia-50 m-8 px-4 py-2 rounded border border-blue-500 text-blue-500 cursor-pointer'}
+      // disabledClassName={'bg-fuchsia-50 m-8 text-gray-300 border border-gray-300 cursor-not-allowed'}
+      // activeClassName={'bg-fuchsia-50 m-8 bg-blue-500 text-white px-4 py-2 rounded cursor-pointer'}
 
-        // containerClassName={'mb-8 flex justify-between items-center'}
-        // previousLinkClassName={'m-1 text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 shadow-lg shadow-teal-500/50 dark:shadow-lg dark:shadow-teal-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2'}
-        // nextLinkClassName={'m-1 text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 shadow-lg shadow-teal-500/50 dark:shadow-lg dark:shadow-teal-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2'}
-        // disabledClassName={'m-1 text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 shadow-lg shadow-teal-500/50 dark:shadow-lg dark:shadow-teal-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2'}
-        // activeClassName={'m-1 text-red '}
+      // containerClassName={'mb-8 flex justify-between items-center'}
+      // previousLinkClassName={'m-1 text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 shadow-lg shadow-teal-500/50 dark:shadow-lg dark:shadow-teal-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2'}
+      // nextLinkClassName={'m-1 text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 shadow-lg shadow-teal-500/50 dark:shadow-lg dark:shadow-teal-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2'}
+      // disabledClassName={'m-1 text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 shadow-lg shadow-teal-500/50 dark:shadow-lg dark:shadow-teal-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2'}
+      // activeClassName={'m-1 text-red '}
       />
 
-      {/* <ul
-        className="grid lg:grid-cols-3 gap-4 lg:gap-10 font-semibold"
-        style={{ fontFamily: "Poppins" }}
-      >
-        {filteredRoadmaps.map((roadmap: RoadmapMeta) => (
-          <li
-            key={roadmap.id}
-            className="rounded-lg shadow-md text-white w-[320px] bg-blue-900"
-            style={{ backgroundColor: "#141832" }}
-          > */}
       <ul
         className="grid lg:grid-cols-3 gap-4 lg:gap-10 font-semibold mb-5 mx-10"
         style={{ fontFamily: "Poppins" }}
       >
         {paginatedRoadmaps.map((roadmap: RoadmapMeta) => (
-          <li
-            key={roadmap.id}
-            className="rounded-lg shadow-md text-white w-[320px] bg-blue-900"
-            style={{ backgroundColor: "#141832" }}
-          >
-            <div className="flex items-center py-4 lg:py-8 flex-row max-w-xs px-6">
-              <Link
-                className="text-left overflow-hidden flex justify-between flex-1 flex-col gap-4"
-                href={`/explore/${roadmap.id}`}
-              >
-                <p
-                  className="overflow-ellipsis overflow-hidden whitespace-nowrap text-xl"
-                  style={{ textTransform: "capitalize" }}
-                >
-                  {roadmap.name}
-                </p>
-                <p className="overflow-ellipsis overflow-hidden whitespace-nowrap">
-                  <Tooltip title={roadmap.experienceLevel} arrow>
-                    <span>
-                      {generateStarsforExperienceLevel(roadmap.experienceLevel)}
+          <li key={roadmap.id}
+            className="rounded-lg shadow-md text-white w-[320px]"
+            style={{ backgroundColor: "#141832" }}>
+            <Link href={`/explore/${roadmap.id}`}>
+              <div className="flex justify-between flex-col my-4 mx-4">
+                <div className="flex justify-between flex-row">
+                  <p className="overflow-ellipsis overflow-hidden whitespace-nowrap text-xl"
+                    style={{ textTransform: "capitalize" }} >
+                    {roadmap.name}
+                  </p>
+                  <p className="overflow-ellipsis overflow-hidden whitespace-nowrap">
+                    <Tooltip title={roadmap.experienceLevel} arrow>
+                      <span> {generateStarsforExperienceLevel(roadmap.experienceLevel)} </span>
+                    </Tooltip>
+                  </p>
+                </div>
+                <div className="mt-2">
+                  <p className="text-right text-sm font-thin"> {roadmap.hours} hours </p>
+                </div>
+              </div>
+            </Link>
+
+            <div className="rounded-b-lg"
+              style={{ backgroundColor: "#42465a" }}>
+              <div className="flex justify-between flex-row items-center" id="icons">
+                <div className="flex justify-between flex-row p-1 w-31">
+                  <div className="flex flex-row items-center">
+                    {currentUser && upVotesDownVotes && upVotesDownVotes.upVotes ? (
+                      <span className="cursor-pointer ml-2"
+                        onClick={() => handleUpVotes(roadmap.id)}
+                      >
+                        {upVotesDownVotes.upVotes.some(
+                          (upVoteRoadmapId: string) => upVoteRoadmapId === roadmap.id
+                        ) ? (<ThumbUpAltIcon />) : (<ThumbUpOffAltIcon />)}
+                      </span>
+                    ) : null}
+                    {roadmap.upVotes < 1000 ?
+                      (<span className="text-xs ml-2 mr-4 w-5 text-left">
+                        {roadmap.upVotes}</span>) :
+                      (<span className="text-xs ml-2 mr-4 w-5 text-left">
+                        {(roadmap.upVotes / 1000).toFixed(1)}K</span>)}
+                  </div>
+                  {currentUser && upVotesDownVotes && upVotesDownVotes.downVotes ? (
+                    <span className="cursor-pointer mr-2"
+                      onClick={() => handleDownVotes(roadmap.id)}
+                    >
+                      {upVotesDownVotes.downVotes.some(
+                        (downVoteRoadmapId: string) => downVoteRoadmapId === roadmap.id
+                      ) ? (<ThumbDownOffAltIcon />) : (<ThumbDownAltIcon />)}
                     </span>
-                  </Tooltip>
-                </p>
-              </Link>
-              <div className="flex justify-between flex-1 flex-col gap-4 text-right">
+                  ) : null}
+                </div>
+
                 {currentUser && favorites ? (
                   <span
-                    className="cursor-pointer"
+                    className="cursor-pointer mr-2"
                     onClick={() =>
                       favorites.some(
                         (favorite: any) => favorite.id === roadmap.id
-                      )
-                        ? handleRemoveFromFavorites(roadmap)
-                        : handleAddToFavorites(roadmap)
+                      ) ? handleRemoveFromFavorites(roadmap) : handleAddToFavorites(roadmap)
                     }
                   >
                     {favorites.some(
                       (favorite: any) => favorite.id === roadmap.id
-                    ) ? (
-                      <FavoriteIcon />
-                    ) : (
-                      <FavoriteBorderIcon />
-                    )}
+                    ) ? (<FavoriteIcon />) : (<FavoriteBorderIcon />)}
                   </span>
                 ) : null}
-                <p className="overflow-ellipsis overflow-hidden whitespace-nowrap flex justify-end">
-                  {roadmap.hours} hours
-                </p>
               </div>
             </div>
           </li>
         ))}
       </ul>
-
-    </main>
+    </main >
   );
 }
