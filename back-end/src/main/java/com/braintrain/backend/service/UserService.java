@@ -1,13 +1,17 @@
 package com.braintrain.backend.service;
 
 import com.braintrain.backend.controller.dtos.FileDTO;
+import com.braintrain.backend.controller.dtos.UpVoteDownVoteDTO;
 import com.braintrain.backend.exceptionHandler.exception.InvalidFileContentTypeException;
+import com.braintrain.backend.model.RoadmapMeta;
 import com.braintrain.backend.model.User;
 import com.braintrain.backend.controller.dtos.UserFavoritesDTO;
 import com.braintrain.backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -25,6 +29,15 @@ public class UserService {
 
     public UserFavoritesDTO getUsersFavorites(User user) {
         return new UserFavoritesDTO(user.getFavorites());
+    }
+
+    public UpVoteDownVoteDTO getUserUpVoteDownVotes(String userEmail) {
+        User user = getUserByEmail(userEmail);
+        List<String> upVoteMetaIdList = user.getUpVotes().stream()
+                .map(RoadmapMeta::getId).toList();
+        List<String> downVoteMetaIdList = user.getDownVotes().stream()
+                .map(RoadmapMeta::getId).toList();
+        return new UpVoteDownVoteDTO(upVoteMetaIdList, downVoteMetaIdList);
     }
 
     public String saveProfilePicture(String userEmail, MultipartFile file) {
