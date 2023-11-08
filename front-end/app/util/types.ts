@@ -39,19 +39,11 @@ export type RoadmapDTO = {
 export type User = {
   email: string | null;
   name: string | null;
+  profilePicture: string | null;
 };
 
-export type UserProfile =
-  | {
-      name?: string | null | undefined;
-      email?: string | null | undefined;
-      profilePicture?: string | null | undefined;
-    }
-  | undefined;
-
-
-export type UserCardProps = {
-  user: UserProfile;
+export type UserProps = {
+  currentUser: User;
 };
 
 export type CreateIndentedTreeProps = {
