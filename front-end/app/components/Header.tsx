@@ -67,17 +67,13 @@ export default function Header() {
                     />
                   )}
                 </div>
-
-                {currentUser && (
-                  <p>
-                    {currentUser.name
-                      ? currentUser.name.split(" ")[0]
-                      : "No name"}
-                    {currentUser.name && currentUser.name.split(" ").length > 1
-                      ? "..."
-                      : ""}
-                  </p>
-                )}
+                <p>
+                  {currentUser && currentUser.name
+                    ? currentUser.name.length > 5
+                      ? currentUser.name.substring(0, 5) + "..."
+                      : currentUser.name
+                    : "No name"}
+                </p>
               </Link>
             ) : null}
             <DynamicBurgerMenu handleSignOut={handleSignOut} />
