@@ -151,7 +151,7 @@ export default function Explore() {
       <div className="flex flex-row my-5 mx-auto gap-x-10">
         <Paper
           component="div"
-          className="py-2 px-4 flex w-15 max-h-12 justify-center items-center mt-5 w-64"
+          className="py-2 px-4 flex w-15 max-h-12 justify-center items-center md:mt-5 w-64"
         >
           <InputBase
             sx={{ ml: 1, flex: 1 }}
@@ -172,11 +172,11 @@ export default function Explore() {
             </Tooltip>
           </Button>
         ) : (
-          <div className="max-w-lg my-5 mx-auto flex flex-row gap-x-10">
+          <div className="max-w-lg my-5 mx-auto flex flex-row gap-x-10 content-center items-center">
             <select
               value={experienceFilter || ""}
               onChange={(e) => setExperienceFilter(e.target.value || null)}
-              className="rounded-md h-7 w-full sm:h-12 px-4"
+              className="rounded-md  w-full sm:h-12 px-4"
             >
               <option value="">Experience Level</option>
               <option value="beginner">Beginner</option>
@@ -228,7 +228,7 @@ export default function Explore() {
         )}
       </div>
       {showFilters && (
-        <div className="w-60 max-w-xs mx-auto sm:hidden mt-5 mb-10">
+        <div className="w-60 max-w-xs mx-auto md:hidden mt-5 mb-10">
           <select
             value={experienceFilter || ""}
             onChange={(e) => setExperienceFilter(e.target.value || null)}
