@@ -17,11 +17,11 @@ export const getLabelFontSize = (d: d3.HierarchyNode<TreeNode>) => {
         return "14px";
     } else {
         if (d.depth === 0) {
-            return "30px";
-        } else if (d.height === 0) {
             return "26px";
+        } else if (d.height === 0) {
+            return "22px";
         } else {
-            return "28px";
+            return "24px";
         }
     }
 }
@@ -31,13 +31,13 @@ export const getHoursFontSize = (d: d3.HierarchyNode<TreeNode>) => {
         return "14px";
     } else {
         if (d.depth === 0) {
-            return "30px";
-        } else if (d.depth === 1) {
-            return "28px";
-        } else if (d.depth === 2) {
             return "26px";
-        } else {
+        } else if (d.depth === 1) {
             return "24px";
+        } else if (d.depth === 2) {
+            return "22px";
+        } else {
+            return "20px";
         }
     }
 }

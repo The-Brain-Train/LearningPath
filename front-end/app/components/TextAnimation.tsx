@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import styles from '../css/animation.module.css';
 
 const TextAnimation: React.FC = () => {
     const words = ['create your own learning path.', 'learn something new.', 'explore other peoples paths.'];
@@ -7,7 +6,6 @@ const TextAnimation: React.FC = () => {
   
     const [text, setText] = useState(""); 
     const [color, setColor] = useState(colors[0]);
-    const [underscoreClass, setUnderscoreClass] = useState(styles['console-underscore']);
   
     useEffect(() => {
       let letterCount = 1; 
@@ -38,24 +36,14 @@ const TextAnimation: React.FC = () => {
           letterCount += x;
         }
       }, 120);
-
-      const underscoreInterval = setInterval(() => {
-        if (underscoreClass === styles['console-underscore']) {
-            setUnderscoreClass(`${styles['console-underscore']} ${styles['hidden']}`);
-        } else {
-            setUnderscoreClass(styles['console-underscore']);
-        }
-    }, 400);
     
-  
       return () => {
         clearInterval(textInterval);
-        clearInterval(underscoreInterval);
       };
     }, []);
   
     return (
-      <div className={styles['console-container']}>
+      <div className="text-center font-roboto font-extrabold text-3xl absolute text-white left-8 right-8 mx-auto max-w-500">
         Start your journey with LearningPath today &&nbsp; 
         <span style={{ color: color }}>{text}</span>
       </div>

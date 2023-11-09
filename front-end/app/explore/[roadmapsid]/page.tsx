@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import IndentedTreeWithData from "@/app/components/IndentedTreeWithData";
+import IndentedTreeWithData from "@/app/explore/[roadmapsid]/IndentedTreeWithData";
 import { getRoadmap, getRoadmapsPaged } from "@/app/functions/httpRequests";
 import { ArrowBack } from "@mui/icons-material";
 import { useRouter } from "next/navigation";

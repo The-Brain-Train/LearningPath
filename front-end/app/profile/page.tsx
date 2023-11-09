@@ -1,7 +1,7 @@
 "use client";
 import { Box, CircularProgress } from "@mui/material";
-import ProfilePageUnauthUser from "../components/ProfilePageUnauthUser";
-import ProfilePageAuthUser from "../components/ProfilePageAuthUser";
+import ProfilePageUnauthUser from "./ProfilePageUnauthUser";
+import ProfilePageAuthUser from "./ProfilePageAuthUser";
 import useCurrentUserQuery from "../functions/useCurrentUserQuery";
 
 const Profile = () => {

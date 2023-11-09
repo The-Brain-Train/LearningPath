@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import IndentedTree from "../components/IndentedTree";
-import InputForm from "../components/InputForm";
+import IndentedTree from "./IndentedTree";
 import { CreateRoadmapFormData, RoadmapDTO, TreeNode, User } from "../util/types";
 import { postRoadmap } from "../functions/httpRequests";
 import { getResponseFromOpenAI } from "../functions/openAIChat";
@@ -12,6 +11,7 @@ import {
 } from "../functions/roadmapHoursCalculator";
 import { useCookies } from 'react-cookie';
 import useCurrentUserQuery from "../functions/useCurrentUserQuery";
+import InputForm from "./InputForm";
 
 export default function Create() {
   const [data, setData] = useState<TreeNode | null>(null);

@@ -133,7 +133,7 @@ export default function HomePage() {
                 />
               </div>
             </div>
-            <div className="mt-8 text-center pb-48">
+            <div className="mt-8 text-center pb-64">
               <TextAnimation />
             </div>
           </div>

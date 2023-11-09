@@ -1,7 +1,10 @@
 "use client";
 import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
-import { CustomNode, ExploreIndentedTreeProps, TreeNode } from "../util/types";
+import SaveButton from "./SaveButton";
+import { Button, CircularProgress } from "@mui/material";
+import { CustomNode, CreateIndentedTreeProps } from "../util/types";
+import Link from "next/link";
 import {
   getHoursFontSize,
   getLabelFontSize,
@@ -13,13 +16,20 @@ import {
   getScreenWidthAdjustValue,
 } from "../util/IndentedTreeUtil";
 import addGoogleFont from "../util/fontFamily";
+import { ArrowBack } from "@mui/icons-material";
 
-const IndentedTreeWithData = ({ data }: ExploreIndentedTreeProps) => {
-  const svgRef = useRef(null);
+const IndentedTree = ({
+  data,
+  isLoading,
+  createError,
+  saveRoadmap,
+  setData,
+  currentUser,
+}: CreateIndentedTreeProps) => {
+  const svgRef = useRef<SVGSVGElement | null>(null);
 
   const graph = () => {
     if (data == null) return;
-
     d3.select(svgRef.current).selectAll("*").remove();
     const format = d3.format(",");
     const nodeSize = getNodeSize();
@@ -49,7 +59,7 @@ const IndentedTreeWithData = ({ data }: ExploreIndentedTreeProps) => {
       .attr("viewBox", [-nodeSize / 2, (-nodeSize * 3) / 2, width, height])
       .attr(
         "style",
-        "max-width: 100%; height: auto; font: 14px sans-serif; overflow: visible;"
+        "max-width: 100%; height: auto; font: 10px sans-serif; overflow: visible;"
       );
 
     const link = svg
@@ -64,7 +74,7 @@ const IndentedTreeWithData = ({ data }: ExploreIndentedTreeProps) => {
         (d) => `
         M${d.source.depth * nodeSize},${(d as any).source.index * nodeSize}
         V${(d as any).target.index * nodeSize}
-        h${nodeSize + getLinkLength()} 
+        h${nodeSize + getLinkLength()}
       `
       );
 
@@ -122,6 +132,7 @@ const IndentedTreeWithData = ({ data }: ExploreIndentedTreeProps) => {
         .attr("x", x)
         .attr("text-anchor", "end")
         .attr("font-weight", "bold");
+
       node
         .append("text")
         .attr("dy", "0.32em")
@@ -136,6 +147,7 @@ const IndentedTreeWithData = ({ data }: ExploreIndentedTreeProps) => {
   };
 
   useEffect(() => {
+    if (data == null) return;
     addGoogleFont();
     graph();
     const createGraph = () => {
@@ -148,20 +160,87 @@ const IndentedTreeWithData = ({ data }: ExploreIndentedTreeProps) => {
   }, [data]);
 
   return (
-    <div className="flex flex-col px-3 justify-center items-center ">
-      <div className="max-w-6xl">
-        <div className="flex justify-between px-4">
-          <p className="text-xl text-center font-bold text-white lg:text-2xl">
-            Learning Path
-          </p>
-          <p className="text-xl text-center font-bold text-white lg:text-2xl">
-            Hours
-          </p>
+    <div className="flex flex-col px-3">
+      {isLoading ? (
+        <div
+          className="flex flex-col justify-center items-center h-70vh"
+          style={{
+            height: "70vh",
+          }}
+        >
+          <div className="text-center font-bold text-xl text-slate-300">
+            Creating Roadmap
+          </div>
+          <div>
+            <CircularProgress />
+          </div>
         </div>
-        <svg ref={svgRef}></svg>
-      </div>
+      ) : (
+        <>
+          {createError ? (
+            <p className="text-red-500 font-bold">{createError}</p>
+          ) : (
+            <div className="flex flex-col justify-center items-center">
+              {data !== null ? (
+                <div className="max-w-6xl ">
+                  <ArrowBack
+                    fontSize="large"
+                    className="text-slate-300 my-3 mt-4"
+                    onClick={() => setData(null)}
+                  />
+                  <div className="flex justify-between px-2 ">
+                    <p className="text-xl text-center font-bold text-white lg:text-2xl">
+                      Learning Path
+                    </p>
+                    <p className="text-xl text-center font-bold text-white lg:text-2xl">
+                      Hours
+                    </p>
+                  </div>
+                  <svg className="mb-20" ref={svgRef}></svg>
+                  {currentUser ? (
+                    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 flex justify-center gap-3">
+                      <SaveButton saveClick={saveRoadmap} />
+                      <Button
+                        onClick={() => {
+                          setData(null);
+                          d3.select(svgRef.current).selectAll("*").remove();
+                        }}
+                        className="bg-red-500 hover-bg-red-600 py-2 px-4 rounded text-white my-3"
+                      >
+                        Reset
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="text-white font-bold text-center mb-2">
+                      <p>
+                        You must{" "}
+                        <Link
+                          href="/signin"
+                          className="underline cursor-pointer"
+                        >
+                          sign in
+                        </Link>{" "}
+                        to save roadmaps
+                      </p>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <p
+                  className="text-slate-300 font-bold flex flex-col justify-center items-center h-screen"
+                  style={{
+                    height: "70vh",
+                  }}
+                >
+                  Your roadmap will be displayed here!
+                </p>
+              )}
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 };
 
-export default IndentedTreeWithData;
+export default IndentedTree;
