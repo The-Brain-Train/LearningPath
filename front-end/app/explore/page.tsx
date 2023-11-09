@@ -61,6 +61,10 @@ export default function Explore() {
     }
   );
 
+  useEffect(() => {
+    console.log(currentUser);
+  })
+
   const fetchUserFavorites = async () => {
     return await getUserFavorites(
       currentUser ? currentUser?.email : null,
@@ -213,7 +217,7 @@ export default function Explore() {
 
   useEffect(() => {
     const filtered = roadmaps?.content.filter(
-      (roadmap) =>
+      (roadmap: RoadmapMeta) =>
         roadmap.name.toLowerCase().includes(search.toLowerCase()) &&
         filterRoadmaps(roadmap)
     );
