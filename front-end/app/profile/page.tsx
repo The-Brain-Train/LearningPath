@@ -1,25 +1,11 @@
 "use client";
-import { User } from "../util/types";
-import { useQuery } from "@tanstack/react-query";
-import jwtDecode from "jwt-decode";
-import { useCookies } from "react-cookie";
 import { Box, CircularProgress } from "@mui/material";
 import ProfilePageUnauthUser from "../components/ProfilePageUnauthUser";
 import ProfilePageAuthUser from "../components/ProfilePageAuthUser";
+import useCurrentUserQuery from "../functions/useCurrentUserQuery";
 
 const Profile = () => {
-  const [cookies] = useCookies(["user"]);
-
-  const { data: currentUser, isLoading } = useQuery<User | null>(
-    ["currentUser"],
-    async () => {
-      if (cookies.user) {
-        const user = jwtDecode(cookies.user) as User | null;
-        return user;
-      }
-      return null;
-    }
-  );
+  const { currentUser, isLoading } = useCurrentUserQuery();
 
   if (isLoading) {
     return (

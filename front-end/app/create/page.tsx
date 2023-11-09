@@ -10,9 +10,8 @@ import {
   calculateTotalValuesRecursive,
   scaleValues,
 } from "../functions/roadmapHoursCalculator";
-import jwtDecode from 'jwt-decode';
 import { useCookies } from 'react-cookie';
-import { useQuery } from "@tanstack/react-query";
+import useCurrentUserQuery from "../functions/useCurrentUserQuery";
 
 export default function Create() {
   const [data, setData] = useState<TreeNode | null>(null);
@@ -21,9 +20,10 @@ export default function Create() {
     hours: null,
     experienceLevel: null,
   });
-  const [isLoading, setLoading] = useState(false);
+  const [apiFetchLoading, setApiFetchLoading] = useState(false);
   const [createError, setCreateError] = useState<string | null>(null);
   const [totalHours, setTotalHours] = useState(0);
+  const { currentUser, isLoading } = useCurrentUserQuery();
   const [cookies] = useCookies(["user"]);
 
   const resetForm = () => {
@@ -34,22 +34,10 @@ export default function Create() {
     });
   };
 
-  const { data: currentUser } = useQuery<User | null>(
-    ["currentUser"],
-    async () => {
-      if (cookies.user) {
-        const user = jwtDecode(cookies.user) as User | null;
-        return user;
-      }
-      return null;
-    }
-  );
-
   const saveRoadMap = async () => {
     if (roadmapInputData.topic == null || currentUser?.email == null) {
       return;
     }
-
     const requestData: RoadmapDTO = {
       name: roadmapInputData.topic,
       roadmap: JSON.stringify(data),
@@ -57,7 +45,6 @@ export default function Create() {
       experienceLevel: roadmapInputData.experienceLevel,
       hours: totalHours,
     };
-
     try {
       await postRoadmap(requestData, cookies.user);
     } catch (e) {
@@ -66,7 +53,7 @@ export default function Create() {
   };
 
   const handleSendMessage = async () => {
-    setLoading(true);
+    setApiFetchLoading(true);
     try {
       const response = await getResponseFromOpenAI(
         chatHistory(roadmapInputData.topic, roadmapInputData.experienceLevel, roadmapInputData.hours)
@@ -85,7 +72,7 @@ export default function Create() {
       );
       console.error(error);
     } finally {
-      setLoading(false);
+      setApiFetchLoading(false);
     }
   };
 
@@ -93,7 +80,7 @@ export default function Create() {
     if (roadmapInputData.topic != null) {
       handleSendMessage();
     }
-  }, [roadmapInputData.topic]);
+  }, [roadmapInputData]);
 
   return (
     <main className="main-background">
@@ -106,7 +93,7 @@ export default function Create() {
       <IndentedTree
         data={data}
         createError={createError}
-        isLoading={isLoading}
+        isLoading={apiFetchLoading}
         saveRoadmap={saveRoadMap}
         setData={setData}
         currentUser={currentUser}

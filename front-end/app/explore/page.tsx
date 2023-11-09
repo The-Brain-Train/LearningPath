@@ -9,18 +9,18 @@ import {
   getUserFavorites,
   getUserUpVotesDownVotes,
 } from "../functions/httpRequests";
-import { RoadmapMeta, User } from "../util/types";
+import { RoadmapMeta } from "../util/types";
 import TuneIcon from "@mui/icons-material/Tune";
 import { Box, Button, CircularProgress } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import jwtDecode from "jwt-decode";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCookies } from "react-cookie";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import ReactPaginate from "react-paginate";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { RoadmapsPage } from "../components/RoadmapsPage";
+import useCurrentUserQuery from "../functions/useCurrentUserQuery";
 
 export default function Explore() {
   const [filteredRoadmaps, setFilteredRoadmaps] = useState<RoadmapMeta[]>([]);
@@ -38,17 +38,7 @@ export default function Explore() {
   const [hourValidationMessage, setHourValidationMessage] = useState<
     string | null
   >(null);
-
-  const { data: currentUser, isLoading } = useQuery<User | null>(
-    ["currentUser"],
-    async () => {
-      if (cookies.user) {
-        const user = jwtDecode(cookies.user) as User | null;
-        return user;
-      }
-      return null;
-    }
-  );
+  const { currentUser, isLoading } = useCurrentUserQuery();
 
   const fetchUserFavorites = async () => {
     return await getUserFavorites(
@@ -324,9 +314,9 @@ export default function Explore() {
       <RoadmapsPage
         paginatedRoadmaps={paginatedRoadmaps}
         currentUser={currentUser}
-        upVotesDownVotes={upVotesDownVotes} 
-        favorites={favorites} />
-
+        upVotesDownVotes={upVotesDownVotes}
+        favorites={favorites}
+      />
     </main>
   );
 }
