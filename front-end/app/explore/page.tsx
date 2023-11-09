@@ -31,7 +31,8 @@ import jwtDecode from "jwt-decode";
 import { useCookies } from "react-cookie";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import ReactPaginate from "react-paginate";
-import styles from "../explore/explore.module.css";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 export default function Explore() {
   const [filteredRoadmaps, setFilteredRoadmaps] = useState<RoadmapMeta[]>([]);
@@ -362,35 +363,21 @@ export default function Explore() {
           </div>
         </div>
       )}
-
       <ReactPaginate
-        previousLabel={"previous"}
-        nextLabel={"next"}
+        previousLabel={<ArrowBackIcon />}
+        nextLabel={<ArrowForwardIcon />}
         breakLabel={"..."}
         breakClassName={"break-me"}
         pageCount={pageCount}
         marginPagesDisplayed={2}
         pageRangeDisplayed={5}
         onPageChange={handlePageChange}
-        containerClassName={styles["pagination"]}
-        previousLinkClassName={styles["pagination__link"]}
-        nextLinkClassName={styles["pagination__link"]}
-        disabledClassName={styles["pagination__link--disabled"]}
-        activeClassName={styles["pagination__link--active"]}
-
-        // containerClassName={'flex justify-between items-center'}
-        // previousLinkClassName={'bg-fuchsia-50 m-8 px-4 py-2 rounded border border-blue-500 text-blue-500 cursor-pointer'}
-        // nextLinkClassName={'bg-fuchsia-50 m-8 px-4 py-2 rounded border border-blue-500 text-blue-500 cursor-pointer'}
-        // disabledClassName={'bg-fuchsia-50 m-8 text-gray-300 border border-gray-300 cursor-not-allowed'}
-        // activeClassName={'bg-fuchsia-50 m-8 bg-blue-500 text-white px-4 py-2 rounded cursor-pointer'}
-
-        // containerClassName={'mb-8 flex justify-between items-center'}
-        // previousLinkClassName={'m-1 text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 shadow-lg shadow-teal-500/50 dark:shadow-lg dark:shadow-teal-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2'}
-        // nextLinkClassName={'m-1 text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 shadow-lg shadow-teal-500/50 dark:shadow-lg dark:shadow-teal-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2'}
-        // disabledClassName={'m-1 text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 shadow-lg shadow-teal-500/50 dark:shadow-lg dark:shadow-teal-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2'}
-        // activeClassName={'m-1 text-red '}
+        containerClassName={"pagination"}
+        previousLinkClassName={"pagination__link"}
+        nextLinkClassName={"pagination__link"}
+        disabledClassName={"pagination__link--disabled"}
+        activeClassName={"pagination__link--active"}
       />
-
       <ul
         className="grid lg:grid-cols-3 gap-4 lg:gap-10 font-semibold mb-5 mx-10"
         style={{ fontFamily: "Poppins" }}
@@ -429,7 +416,6 @@ export default function Explore() {
                 </div>
               </div>
             </Link>
-
             <div
               className="rounded-b-lg"
               style={{ backgroundColor: "#42465a" }}
@@ -485,7 +471,6 @@ export default function Explore() {
                     </span>
                   ) : null}
                 </div>
-
                 {currentUser && favorites ? (
                   <span
                     className="cursor-pointer mr-2"
