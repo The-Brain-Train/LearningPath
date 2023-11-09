@@ -3,29 +3,16 @@ import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
-import Link from "next/link";
 import { ChangeEvent, useEffect, useState } from "react";
 import {
-  addRoadmapMetaToUserFavorites,
-  upVoteRoadmap,
-  downVoteRoadmap,
-  getRoadmaps,
   getRoadmapsPaged,
   getUserFavorites,
   getUserUpVotesDownVotes,
-  removeRoadmapMetaFromUserFavorites,
 } from "../functions/httpRequests";
 import { RoadmapMeta, User } from "../util/types";
-import { generateStarsforExperienceLevel } from "../functions/generateStarsForExperience";
 import TuneIcon from "@mui/icons-material/Tune";
 import { Box, Button, CircularProgress } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
-import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
-import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
-import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import jwtDecode from "jwt-decode";
 import { useCookies } from "react-cookie";
@@ -33,6 +20,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import ReactPaginate from "react-paginate";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { RoadmapsPage } from "../components/RoadmapsPage";
 
 export default function Explore() {
   const [filteredRoadmaps, setFilteredRoadmaps] = useState<RoadmapMeta[]>([]);
@@ -101,52 +89,6 @@ export default function Explore() {
       enabled: !!currentUser,
     }
   );
-
-  const { mutateAsync: handleRemoveFromFavorites } = useMutation({
-    mutationFn: async (roadmapMeta: RoadmapMeta) => {
-      await removeRoadmapMetaFromUserFavorites(
-        currentUser?.email,
-        roadmapMeta,
-        cookies.user
-      );
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries(["favorites"]);
-    },
-  });
-
-  const { mutateAsync: handleAddToFavorites } = useMutation({
-    mutationFn: async (roadmapMeta: RoadmapMeta) => {
-      await addRoadmapMetaToUserFavorites(
-        currentUser?.email,
-        roadmapMeta,
-        cookies.user
-      );
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries(["favorites"]);
-    },
-  });
-
-  const { mutateAsync: handleUpVotes } = useMutation({
-    mutationFn: async (roadmapMetaId: string) => {
-      await upVoteRoadmap(currentUser?.email, roadmapMetaId, cookies.user);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries(["upVotesDownVotes"]);
-      queryClient.invalidateQueries(["roadmaps"]);
-    },
-  });
-
-  const { mutateAsync: handleDownVotes } = useMutation({
-    mutationFn: async (roadmapMetaId: string) => {
-      await downVoteRoadmap(currentUser?.email, roadmapMetaId, cookies.user);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries(["upVotesDownVotes"]);
-      queryClient.invalidateQueries(["roadmaps"]);
-    },
-  });
 
   const toggleFilters = () => {
     setShowFilters(!showFilters);
@@ -378,124 +320,13 @@ export default function Explore() {
         disabledClassName={"pagination__link--disabled"}
         activeClassName={"pagination__link--active"}
       />
-      <ul
-        className="grid lg:grid-cols-3 gap-4 lg:gap-10 font-semibold mb-5 mx-10"
-        style={{ fontFamily: "Poppins" }}
-      >
-        {paginatedRoadmaps.map((roadmap: RoadmapMeta) => (
-          <li
-            key={roadmap.id}
-            className="rounded-lg shadow-md text-white w-[320px]"
-            style={{ backgroundColor: "#141832" }}
-          >
-            <Link href={`/explore/${roadmap.id}`}>
-              <div className="flex justify-between flex-col my-4 mx-4">
-                <div className="flex justify-between flex-row">
-                  <p
-                    className="overflow-ellipsis overflow-hidden whitespace-nowrap text-xl"
-                    style={{ textTransform: "capitalize" }}
-                  >
-                    {roadmap.name}
-                  </p>
-                  <p className="overflow-ellipsis overflow-hidden whitespace-nowrap">
-                    <Tooltip title={roadmap.experienceLevel} arrow>
-                      <span>
-                        {" "}
-                        {generateStarsforExperienceLevel(
-                          roadmap.experienceLevel
-                        )}{" "}
-                      </span>
-                    </Tooltip>
-                  </p>
-                </div>
-                <div className="mt-2">
-                  <p className="text-right text-sm font-thin">
-                    {" "}
-                    {roadmap.hours} hours{" "}
-                  </p>
-                </div>
-              </div>
-            </Link>
-            <div
-              className="rounded-b-lg"
-              style={{ backgroundColor: "#42465a" }}
-            >
-              <div
-                className="flex justify-between flex-row items-center"
-                id="icons"
-              >
-                <div className="flex justify-between flex-row p-1 w-31">
-                  <div className="flex flex-row items-center">
-                    {currentUser &&
-                    upVotesDownVotes &&
-                    upVotesDownVotes.upVotes ? (
-                      <span
-                        className="cursor-pointer ml-2"
-                        onClick={() => handleUpVotes(roadmap.id)}
-                      >
-                        {upVotesDownVotes.upVotes.some(
-                          (upVoteRoadmapId: string) =>
-                            upVoteRoadmapId === roadmap.id
-                        ) ? (
-                          <ThumbUpAltIcon />
-                        ) : (
-                          <ThumbUpOffAltIcon />
-                        )}
-                      </span>
-                    ) : null}
-                    {roadmap.upVotes < 1000 ? (
-                      <span className="text-xs ml-2 mr-4 w-5 text-left">
-                        {roadmap.upVotes}
-                      </span>
-                    ) : (
-                      <span className="text-xs ml-2 mr-4 w-5 text-left">
-                        {(roadmap.upVotes / 1000).toFixed(1)}K
-                      </span>
-                    )}
-                  </div>
-                  {currentUser &&
-                  upVotesDownVotes &&
-                  upVotesDownVotes.downVotes ? (
-                    <span
-                      className="cursor-pointer mr-2"
-                      onClick={() => handleDownVotes(roadmap.id)}
-                    >
-                      {upVotesDownVotes.downVotes.some(
-                        (downVoteRoadmapId: string) =>
-                          downVoteRoadmapId === roadmap.id
-                      ) ? (
-                        <ThumbDownAltIcon />
-                      ) : (
-                        <ThumbDownOffAltIcon />
-                      )}
-                    </span>
-                  ) : null}
-                </div>
-                {currentUser && favorites ? (
-                  <span
-                    className="cursor-pointer mr-2"
-                    onClick={() =>
-                      favorites.some(
-                        (favorite: any) => favorite.id === roadmap.id
-                      )
-                        ? handleRemoveFromFavorites(roadmap)
-                        : handleAddToFavorites(roadmap)
-                    }
-                  >
-                    {favorites.some(
-                      (favorite: any) => favorite.id === roadmap.id
-                    ) ? (
-                      <FavoriteIcon />
-                    ) : (
-                      <FavoriteBorderIcon />
-                    )}
-                  </span>
-                ) : null}
-              </div>
-            </div>
-          </li>
-        ))}
-      </ul>
+
+      <RoadmapsPage
+        paginatedRoadmaps={paginatedRoadmaps}
+        currentUser={currentUser}
+        upVotesDownVotes={upVotesDownVotes} 
+        favorites={favorites} />
+
     </main>
   );
 }
