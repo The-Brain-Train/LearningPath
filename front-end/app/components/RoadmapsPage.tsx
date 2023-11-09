@@ -140,7 +140,10 @@ export const RoadmapsPage = (props: RoadmapsPageProps) => {
                                                 <ThumbUpOffAltIcon />
                                             )}
                                         </span>
-                                    ) : null}
+                                    ) : (
+                                        <span className="ml-2"><ThumbUpAltIcon /></span>
+                                    )
+                                    }
                                     {roadmap.upVotes < 1000 ? (
                                         <span className="text-xs ml-2 mr-4 w-5 text-left">
                                             {roadmap.upVotes}

@@ -29,7 +29,6 @@ export default function Explore() {
   const [hoursFromFilter, setHoursFromFilter] = useState<number | null>(0);
   const [hoursToFilter, setHoursToFilter] = useState<number | null>(500);
   const [showFilters, setShowFilters] = useState(false);
-  //const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 9;
   const [pageCount, setPageCount] = useState(0);
   const queryClient = useQueryClient();
@@ -58,7 +57,6 @@ export default function Explore() {
     const page: number = queryClient.getQueryData(["thisPage"])
       ? queryClient.getQueryData<number>(["thisPage"]) || 0
       : 0;
-    console.log("this page::" + page);
     return getRoadmapsPaged(page, itemsPerPage);
   });
 
@@ -119,22 +117,9 @@ export default function Explore() {
   };
 
   const handlePageChange = (selectedPage: any) => {
-    console.log("selected > " + selectedPage.selected);
-    //setCurrentPage(selectedPage.selected);
-
     queryClient.setQueryData(["thisPage"], selectedPage.selected);
     queryClient.invalidateQueries(["roadmaps"]);
   };
-
-  // useEffect(() => {
-  //   console.log("ineffect > "+currentPage)
-  //  // queryClient.invalidateQueries(["roadmaps"]);
-  // },[currentPage])
-
-  // const paginatedRoadmaps = filteredRoadmaps.slice(
-  //   currentPage * itemsPerPage,
-  //   (currentPage + 1) * itemsPerPage
-  // );
 
   const paginatedRoadmaps = filteredRoadmaps.slice(0, itemsPerPage);
 
