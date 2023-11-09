@@ -17,6 +17,7 @@ export const getRoadmaps = async () => {
 };
 
 export const getRoadmapsPaged = async (page: number, size: number) => {
+  console.log("getRoadmapsPaged > "+page)
   const response = await fetch(`${BACKEND_URL}/api/roadmaps/paged?page=${page}&size=${size}`);
   if (!response.ok) {
     throw new Error("Failed to fetch roadmaps");
@@ -142,7 +143,8 @@ export const upVoteRoadmap = async (
         `Failed to upVote roadmap. Status code: ${response.status}`
       );
     }
-    return response.json();
+   
+    return response.text();
   } catch (error) {
     console.error("Error upVoting roadmap:", error);
     return -1;
