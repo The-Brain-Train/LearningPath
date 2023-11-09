@@ -140,7 +140,8 @@ export const RoadmapsPage = (props: RoadmapsPageProps) => {
                                                 <ThumbUpOffAltIcon />
                                             )}
                                         </span>
-                                    ) : (
+                                    ) : 
+                                    (
                                         <span className="ml-2"><ThumbUpAltIcon /></span>
                                     )
                                     }
@@ -148,7 +149,8 @@ export const RoadmapsPage = (props: RoadmapsPageProps) => {
                                         <span className="text-xs ml-2 mr-4 w-5 text-left">
                                             {roadmap.upVotes}
                                         </span>
-                                    ) : (
+                                    ) : 
+                                    (
                                         <span className="text-xs ml-2 mr-4 w-5 text-left">
                                             {(roadmap.upVotes / 1000).toFixed(1)}K
                                         </span>
@@ -171,7 +173,21 @@ export const RoadmapsPage = (props: RoadmapsPageProps) => {
                                             <ThumbDownOffAltIcon />
                                         )}
                                     </span>
-                                ) : null}
+                                ) : 
+                                (
+                                    <ThumbDownAltIcon />
+                                )
+                                }
+                                   {roadmap.downVotes < 1000 ? (
+                                        <span className="text-xs ml-2 mr-4 w-5 text-left mt-1">
+                                            {roadmap.downVotes}
+                                        </span>
+                                    ) : 
+                                    (
+                                        <span className="text-xs ml-2 mr-4 w-5 text-left mt-1">
+                                            {(roadmap.downVotes / 1000).toFixed(1)}K
+                                        </span>
+                                    )}
                             </div>
                             {props.currentUser && props.favorites ? (
                                 <span

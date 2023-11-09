@@ -19,8 +19,8 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import ReactPaginate from "react-paginate";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { RoadmapsPage } from "../components/RoadmapsPage";
 import useCurrentUserQuery from "../functions/useCurrentUserQuery";
+import { RoadmapsPage } from "./RoadmapsPage";
 
 export default function Explore() {
   const [filteredRoadmaps, setFilteredRoadmaps] = useState<RoadmapMeta[]>([]);
