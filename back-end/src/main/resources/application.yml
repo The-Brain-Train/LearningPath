@@ -3,9 +3,9 @@ debug: true
 spring:
   data:
     mongodb:
-#      uri: mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@learningpathcluster.xszn5ys.mongodb.net/${DB_NAME}
-      uri: mongodb://root:example@localhost:27017/learningPathTest?authSource=admin
-      database: learningPathTest
+      uri: mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@learningpathcluster.xszn5ys.mongodb.net/${DB_NAME}
+#      uri: mongodb://root:example@localhost:27017/learningPathTest?authSource=admin
+#      database: learningPathTest
   servlet:
     multipart:
       max-request-size: 10MB
@@ -27,6 +27,6 @@ logging:
           autoconfigure: ERROR
 token:
   signing:
-#    key: ${TOKEN_SIGNING_KEY}
-    key: 5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437
+    key: ${TOKEN_SIGNING_KEY}
+#    key: 5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437
 
