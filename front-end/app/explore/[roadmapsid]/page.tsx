@@ -1,10 +1,10 @@
 "use client";
 import React from "react";
 import IndentedTreeWithData from "@/app/components/IndentedTreeWithData";
-import { getRoadmap, getRoadmaps } from "@/app/functions/httpRequests";
+import { getRoadmap, getRoadmapsPaged } from "@/app/functions/httpRequests";
 import { ArrowBack } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Box, CircularProgress } from "@mui/material";
 
 type Props = {
@@ -16,13 +16,19 @@ type Props = {
 function RoadMapId(props: Props) {
   const router = useRouter();
   const roadmapId = props.params.roadmapsid;
+  const queryClient = useQueryClient();
+  const itemsPerPage = 9;
 
-  const {
+  const { 
     data: roadmaps,
     isLoading: roadmapsLoading,
-    isError: roadmapsError,
-  } = useQuery(["roadmaps"], getRoadmaps, {
-    enabled: !!roadmapId,
+    isError: roadmapsError, 
+  } = useQuery(["roadmaps"], () => {
+    const page: number = queryClient.getQueryData(["thisPage"])
+      ? queryClient.getQueryData<number>(["thisPage"]) || 0
+      : 0;
+    console.log("this page::" + page);
+    return getRoadmapsPaged(page, itemsPerPage);
   });
 
   const {
@@ -33,8 +39,8 @@ function RoadMapId(props: Props) {
     ["roadmap", roadmapId],
     async () => {
       if (roadmaps) {
-        const foundRoadmap = roadmaps.roadmapMetaList.find(
-          (roadmap) => roadmap.id === roadmapId
+        const foundRoadmap = roadmaps.content.find(
+          (roadmap: any) => roadmap.id === roadmapId
         );
         if (foundRoadmap) {
           const roadmapData = await getRoadmap(foundRoadmap.roadmapReferenceId);
