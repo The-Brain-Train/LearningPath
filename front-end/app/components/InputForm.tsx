@@ -52,15 +52,13 @@ function valuetext(value: number) {
 
 const InputForm = ({
   data,
-  setTopic,
-  setHours,
-  setExperienceLevel,
+  setRoadmapInputData,
   resetForm,
   setData,
 }: InputFormProps) => {
   const [open, setOpen] = useState(false);
   const [experience, setExperience] = useState("");
-  const [userMessage, setUserMessage] = useState<string>("");
+  const [userTopic, setUserTopic] = useState<string>("");
   const [sliderValue, setSliderValue] = useState<number>(30);
   const [topicError, setTopicError] = useState<string | null>(null);
   const [experienceError, setExperienceError] = useState<string | null>(null);
@@ -73,7 +71,7 @@ const InputForm = ({
   };
 
   const handleSubmit = () => {
-    if (!userMessage) {
+    if (!userTopic) {
       setTopicError("Topic is required");
       setTimeout(() => setTopicError(null), 3000);
     }
@@ -83,11 +81,13 @@ const InputForm = ({
       setTimeout(() => setExperienceError(null), 3000);
     }
 
-    if (userMessage && experience) {
-      setTopic(userMessage);
-      setExperienceLevel(experience);
-      setHours(sliderValue);
-      setUserMessage("");
+    if (userTopic && experience) {
+      setRoadmapInputData({
+        topic: userTopic,
+        hours: sliderValue,
+        experienceLevel: experience,
+      });
+      setUserTopic("");
       setExperience("");
       setSliderValue(30);
       handleClose();
@@ -138,8 +138,8 @@ const InputForm = ({
             </InputLabel>
             <TextField
               type="text"
-              value={userMessage}
-              onChange={(e) => setUserMessage(e.target.value)}
+              value={userTopic}
+              onChange={(e) => setUserTopic(e.target.value)}
               placeholder="Enter Topic!"
               sx={{ m: 1, minWidth: "90%" }}
               className="pt-0 rounded-l-md focus:outline-none focus:placeholder-gray-400 text-center placeholder-gray-60 py-3 form-control"

@@ -78,9 +78,11 @@ export type CreateRoadmapFormData = {
 };
 
 export type InputFormProps = {
-  setTopic: (topic: string | null) => void;
-  setHours: (hours: number | null) => void;
-  setExperienceLevel: (experienceLevel: string | null) => void;
+  setRoadmapInputData: Dispatch<SetStateAction<{
+    topic: string | null;
+    hours: number | null;
+    experienceLevel: string | null;
+  }>>;
   resetForm: () => void;
   data: TreeNode | null;
   setData: (data: TreeNode | null) => void;
