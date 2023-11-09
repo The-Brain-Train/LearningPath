@@ -40,9 +40,9 @@ export default function Explore() {
   const [hoursFromFilter, setHoursFromFilter] = useState<number | null>(0);
   const [hoursToFilter, setHoursToFilter] = useState<number | null>(500);
   const [showFilters, setShowFilters] = useState(false);
-  const [currentPage, setCurrentPage] = useState(0);
+  //const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 9;
-  const pageCount = Math.ceil(filteredRoadmaps.length / itemsPerPage);
+  const [pageCount, setPageCount] = useState(0);
   const queryClient = useQueryClient();
   const [cookies] = useCookies(["user"]);
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
@@ -75,12 +75,18 @@ export default function Explore() {
     );
   };
 
-  const { data: roadmaps } = useQuery(["roadmaps"], getRoadmaps);
-  // const { data: roadmaps } = useQuery(["roadmaps"], getRoadmapsPaged);
-  //const { data: roadmaps } = useQuery(["roadmaps"], () => getRoadmapsPaged(currentPage, 9));
+  const { data: roadmaps } = useQuery(["roadmaps"], () => {
+        const page: number = queryClient.getQueryData(["thisPage"]) ? 
+                        queryClient.getQueryData<number>(["thisPage"]) || 0 : 0;
+         console.log("this page::" + page);
+          return getRoadmapsPaged(page, itemsPerPage);
+        });
 
-  // console.log("roadmaps" + roadmaps?.roadmapMetaList);
-  // console.log("roadmapsPaged" + roadmapsPaged.);
+  useEffect(() => {
+    if(roadmaps) {
+      setPageCount(roadmaps.totalPages);
+    }
+  }, [ roadmaps]);
 
   const { data: favorites } = useQuery(["favorites"],
     fetchUserFavorites, {
@@ -129,6 +135,7 @@ export default function Explore() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["upVotesDownVotes"]);
+      queryClient.invalidateQueries(["roadmaps"]);
     },
   });
 
@@ -142,6 +149,7 @@ export default function Explore() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["upVotesDownVotes"]);
+      queryClient.invalidateQueries(["roadmaps"]);
     },
   });
 
@@ -184,17 +192,27 @@ export default function Explore() {
   };
 
   const handlePageChange = (selectedPage: any) => {
-    setCurrentPage(selectedPage.selected);
+    console.log("selected > "+selectedPage.selected)
+    //setCurrentPage(selectedPage.selected);
+    
+    queryClient.setQueryData(["thisPage"], selectedPage.selected);
     queryClient.invalidateQueries(["roadmaps"]);
   };
 
-  const paginatedRoadmaps = filteredRoadmaps.slice(
-    currentPage * itemsPerPage,
-    (currentPage + 1) * itemsPerPage
-  );
+  // useEffect(() => {
+  //   console.log("ineffect > "+currentPage)
+  //  // queryClient.invalidateQueries(["roadmaps"]);
+  // },[currentPage])
+
+  // const paginatedRoadmaps = filteredRoadmaps.slice(
+  //   currentPage * itemsPerPage,
+  //   (currentPage + 1) * itemsPerPage
+  // );
+
+  const paginatedRoadmaps = filteredRoadmaps.slice(0, itemsPerPage);
 
   useEffect(() => {
-    const filtered = roadmaps?.roadmapMetaList.filter(
+    const filtered = roadmaps?.content.filter(
       (roadmap) =>
         roadmap.name.toLowerCase().includes(search.toLowerCase()) &&
         filterRoadmaps(roadmap)
@@ -425,7 +443,7 @@ export default function Explore() {
                     >
                       {upVotesDownVotes.downVotes.some(
                         (downVoteRoadmapId: string) => downVoteRoadmapId === roadmap.id
-                      ) ? (<ThumbDownOffAltIcon />) : (<ThumbDownAltIcon />)}
+                      ) ? (<ThumbDownAltIcon />) : (<ThumbDownOffAltIcon />)}
                     </span>
                   ) : null}
                 </div>
