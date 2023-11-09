@@ -20,11 +20,14 @@ public class RoadmapMetaConverter {
     }
     public static RoadmapMetaDTO toRoadmapMetaDto(RoadmapMeta roadmapMeta) {
         return new RoadmapMetaDTO(
+                roadmapMeta.getId(),
                 roadmapMeta.getName(),
                 roadmapMeta.getRoadmapReferenceId(),
                 roadmapMeta.getUserEmail(),
                 roadmapMeta.getExperienceLevel(),
-                roadmapMeta.getHours()
+                roadmapMeta.getHours(),
+                roadmapMeta.getUpVotes(),
+                roadmapMeta.getDownVotes()
         );
     }
 }
