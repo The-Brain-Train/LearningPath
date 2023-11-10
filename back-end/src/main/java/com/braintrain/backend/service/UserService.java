@@ -11,7 +11,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -45,13 +44,10 @@ public class UserService {
         if (!file.getContentType().contains("image/")) {
             throw new InvalidFileContentTypeException("Invalid image upload.");
         }
-
         User user = userRepository.findByEmail(userEmail);
         String profilePictureUrl = uploadFile(file);
-
         user.setProfilePicture(profilePictureUrl);
         userRepository.save(user);
-
         return profilePictureUrl;
     }
 
