@@ -1,6 +1,5 @@
 package com.braintrain.backend.controller;
 
-
 import com.braintrain.backend.controller.dtos.*;
 import com.braintrain.backend.exceptionHandler.exception.UserNotFoundException;
 import com.braintrain.backend.model.*;
@@ -27,6 +26,21 @@ public class RoadmapController {
     @GetMapping
     public ResponseEntity<RoadmapMetaListDTO> getAllRoadmaps() {
         return ResponseEntity.ok(service.getAllRoadmapsMeta());
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<Page<RoadmapMetaDTO>> getFilteredRoadmaps(
+            @RequestParam(defaultValue = "") String name,
+            @RequestParam(defaultValue = "") String experienceLevel,
+            @RequestParam(defaultValue = "0") int fromHour,
+            @RequestParam(defaultValue = "500") int toHour,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "9") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<RoadmapMetaDTO> filteredRoadmapPage =
+                service.getFilteredRoadmapsMetas(
+                        name, experienceLevel, fromHour, toHour, pageable);
+        return ResponseEntity.ok(filteredRoadmapPage);
     }
 
     @GetMapping("/paged")
