@@ -6,6 +6,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { ChangeEvent, useEffect, useState } from "react";
 import {
   getRoadmapsPaged,
+  getRoadmapsFilteredPaged,
   getUserFavorites,
   getUserUpVotesDownVotes,
 } from "../functions/httpRequests";
@@ -53,12 +54,26 @@ export default function Explore() {
     );
   };
 
+  // const { data: roadmaps } = useQuery(["roadmaps"], () => {
+  //   const page: number = queryClient.getQueryData(["thisPage"])
+  //     ? queryClient.getQueryData<number>(["thisPage"]) || 0
+  //     : 0;
+  //   return getRoadmapsPaged(page, itemsPerPage);
+  // });
+
   const { data: roadmaps } = useQuery(["roadmaps"], () => {
     const page: number = queryClient.getQueryData(["thisPage"])
       ? queryClient.getQueryData<number>(["thisPage"]) || 0
       : 0;
-    return getRoadmapsPaged(page, itemsPerPage);
+      const experienceLevel = queryClient.getQueryData<string>(["experienceLevel"]) || "";
+      
+    return getRoadmapsFilteredPaged(
+      search, experienceLevel,
+      hoursFromFilter, hoursToFilter,
+      page, itemsPerPage
+    );
   });
+
 
   useEffect(() => {
     if (roadmaps) {
@@ -175,7 +190,11 @@ export default function Explore() {
           <div className="max-w-lg my-5 mx-auto flex flex-row gap-x-10 content-center items-center">
             <select
               value={experienceFilter || ""}
-              onChange={(e) => setExperienceFilter(e.target.value || null)}
+              onChange={(e) => {
+                setExperienceFilter(e.target.value || null);
+                queryClient.setQueryData(["experienceLevel"], e.target.value);
+                queryClient.invalidateQueries(["roadmaps"]);
+              }}
               className="rounded-md  w-full sm:h-12 px-4"
             >
               <option value="">Experience Level</option>
