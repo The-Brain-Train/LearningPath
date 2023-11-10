@@ -148,19 +148,17 @@ const IndentedTreeWithData = ({ data }: ExploreIndentedTreeProps) => {
   }, [data]);
 
   return (
-    <div className="flex flex-col px-3 justify-center items-center ">
-      <div className="max-w-6xl">
+      <div>
         <div className="flex justify-between px-4">
-          <p className="text-xl text-center font-bold text-white lg:text-2xl">
+          <p className="text-xl text-center font-bold text-white md:text-2xl">
             Learning Path
           </p>
-          <p className="text-xl text-center font-bold text-white lg:text-2xl">
+          <p className="text-xl text-center font-bold text-white md:text-2xl">
             Hours
           </p>
         </div>
         <svg ref={svgRef}></svg>
       </div>
-    </div>
   );
 };
 

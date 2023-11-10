@@ -15,9 +15,8 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Box, CircularProgress, IconButton } from "@mui/material";
 import useCurrentUserQuery from "@/app/functions/useCurrentUserQuery";
 import { useCookies } from "react-cookie";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Roadmap, RoadmapMeta, RoadmapMetaList } from "@/app/util/types";
+import { FavoriteButton } from "./FavoriteButton";
 
 type Props = {
   params: {
@@ -143,17 +142,28 @@ function RoadMapId(props: Props) {
 
   return (
     <main className="main-background">
-      <ArrowBack
-        fontSize="medium"
-        className="text-slate-300 m-3 mt-4"
-        onClick={() => router.back()}
-      />
-      {currentUser && (
-        <IconButton onClick={toggleFavorite}>
-          {isRoadmapInFavorites ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-        </IconButton>
-      )}
-      <IndentedTreeWithData data={roadmapData} />
+      <div className="flex flex-col px-3 justify-center items-center">
+        <div className="max-w-screen-xl">
+          <div className="flex items-center justify-between my-5">
+            <div>
+              <ArrowBack
+                fontSize="large"
+                className="text-slate-300 m-3 cursor-pointer"
+                onClick={() => router.back()}
+              />
+            </div>
+            <div className="flex-grow text-center">
+              {currentUser && (
+                <FavoriteButton
+                  onClick={toggleFavorite}
+                  isFavorite={isRoadmapInFavorites}
+                />
+              )}
+            </div>
+          </div>
+          <IndentedTreeWithData data={roadmapData} />
+        </div>
+      </div>
     </main>
   );
 }
