@@ -1,11 +1,23 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import IndentedTreeWithData from "@/app/explore/[roadmapsid]/IndentedTreeWithData";
-import { getRoadmap, getRoadmapsPaged } from "@/app/functions/httpRequests";
+import {
+  addRoadmapMetaToUserFavorites,
+  getRoadmap,
+  getRoadmaps,
+  getRoadmapsPaged,
+  getUserFavorites,
+  removeRoadmapMetaFromUserFavorites,
+} from "@/app/functions/httpRequests";
 import { ArrowBack } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Box, CircularProgress } from "@mui/material";
+import { Box, CircularProgress, IconButton } from "@mui/material";
+import useCurrentUserQuery from "@/app/functions/useCurrentUserQuery";
+import { useCookies } from "react-cookie";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import { Roadmap, RoadmapMeta, RoadmapMetaList } from "@/app/util/types";
 
 type Props = {
   params: {
@@ -18,16 +30,36 @@ function RoadMapId(props: Props) {
   const roadmapId = props.params.roadmapsid;
   const queryClient = useQueryClient();
   const itemsPerPage = 9;
+  const [cookies] = useCookies(["user"]);
+  const { data: roadmapMetas } = useQuery<RoadmapMetaList>(
+    ["roadmapMetas"],
+    getRoadmaps
+  );
+  const { currentUser } = useCurrentUserQuery();
 
-  const { 
+  const fetchUserFavorites = async () => {
+    return await getUserFavorites(
+      currentUser ? currentUser?.email : null,
+      cookies.user
+    );
+  };
+
+  const { data: favorites, refetch: refetchFavorites } = useQuery(
+    ["favorites"],
+    fetchUserFavorites,
+    {
+      enabled: !!currentUser,
+    }
+  );
+
+  const {
     data: roadmaps,
     isLoading: roadmapsLoading,
-    isError: roadmapsError, 
+    isError: roadmapsError,
   } = useQuery(["roadmaps"], () => {
     const page: number = queryClient.getQueryData(["thisPage"])
       ? queryClient.getQueryData<number>(["thisPage"]) || 0
       : 0;
-    console.log("this page::" + page);
     return getRoadmapsPaged(page, itemsPerPage);
   });
 
@@ -40,7 +72,7 @@ function RoadMapId(props: Props) {
     async () => {
       if (roadmaps) {
         const foundRoadmap = roadmaps.content.find(
-          (roadmap: any) => roadmap.id === roadmapId
+          (roadmap: Roadmap) => roadmap.id === roadmapId
         );
         if (foundRoadmap) {
           const roadmapData = await getRoadmap(foundRoadmap.roadmapReferenceId);
@@ -53,6 +85,39 @@ function RoadMapId(props: Props) {
       enabled: !!roadmapId && !roadmapsLoading && !roadmapsError,
     }
   );
+
+  const isRoadmapInFavorites = favorites?.some(
+    (favorite: RoadmapMeta) => favorite.id === roadmapId
+  );
+
+  const toggleFavorite = async () => {
+    const matchingRoadmapMeta = findRoadmapMeta(roadmapId);
+    if (!matchingRoadmapMeta) {
+      console.error(`RoadmapMeta not found for roadmapId: ${roadmapId}`);
+      return;
+    }
+    if (isRoadmapInFavorites) {
+      await removeRoadmapMetaFromUserFavorites(
+        currentUser?.email,
+        matchingRoadmapMeta,
+        cookies.user
+      );
+    } else {
+      await addRoadmapMetaToUserFavorites(
+        currentUser?.email,
+        matchingRoadmapMeta,
+        cookies.user
+      );
+    }
+    refetchFavorites();
+  };
+
+  const findRoadmapMeta = (roadmapId: string): RoadmapMeta | undefined => {
+    if (roadmapMetas == undefined) return;
+    return roadmapMetas.roadmapMetaList.find(
+      (roadmapMeta: RoadmapMeta) => roadmapMeta.id === roadmapId
+    );
+  };
 
   if (isError) {
     return (
@@ -83,6 +148,11 @@ function RoadMapId(props: Props) {
         className="text-slate-300 m-3 mt-4"
         onClick={() => router.back()}
       />
+      {currentUser && (
+        <IconButton onClick={toggleFavorite}>
+          {isRoadmapInFavorites ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+        </IconButton>
+      )}
       <IndentedTreeWithData data={roadmapData} />
     </main>
   );
