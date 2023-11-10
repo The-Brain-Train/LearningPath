@@ -23,7 +23,7 @@ export default function Create() {
   const [apiFetchLoading, setApiFetchLoading] = useState(false);
   const [createError, setCreateError] = useState<string | null>(null);
   const [totalHours, setTotalHours] = useState(0);
-  const { currentUser, isLoading } = useCurrentUserQuery();
+  const { currentUser } = useCurrentUserQuery();
   const [cookies] = useCookies(["user"]);
 
   const resetForm = () => {
@@ -88,7 +88,6 @@ export default function Create() {
         data={data}
         setRoadmapInputData={setRoadmapInputData}
         resetForm={resetForm}
-        setData={setData}
       />
       <IndentedTree
         data={data}

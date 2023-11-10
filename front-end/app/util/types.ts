@@ -85,7 +85,6 @@ export type InputFormProps = {
   }>>;
   resetForm: () => void;
   data: TreeNode | null;
-  setData: (data: TreeNode | null) => void;
 };
 
 export type BurgerMenuProps = {

@@ -8,43 +8,7 @@ import Modal from "@mui/material/Modal";
 import { useState } from "react";
 import Slider from "@mui/material/Slider";
 import { InputFormProps } from "../util/types";
-import { ArrowBack } from "@mui/icons-material";
-
-const style = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  height: 430,
-  width: 350,
-  bgcolor: "#141832",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-  color: "white",
-  "& .MuiInputLabel-root": {
-    color: "white",
-  },
-  "& .MuiInputBase-input": {
-    color: "white",
-  },
-  "& .MuiSelect-icon": {
-    color: "white",
-  },
-  "& .MuiSlider-root": {
-    color: "white",
-  },
-  "& .MuiOutlinedInput-root": {
-    "& fieldset": {
-      borderColor: "white",
-    },
-  },
-  "& .MuiSelect-root": {
-    "& fieldset": {
-      borderColor: "white",
-    },
-  },
-};
+import { modalStyle } from "./createModalStyle";
 
 function valuetext(value: number) {
   return `${value}`;
@@ -54,7 +18,6 @@ const InputForm = ({
   data,
   setRoadmapInputData,
   resetForm,
-  setData,
 }: InputFormProps) => {
   const [open, setOpen] = useState(false);
   const [experience, setExperience] = useState("");
@@ -125,7 +88,7 @@ const InputForm = ({
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <Box sx={style}>
+          <Box sx={modalStyle}>
             <div>
               <InputLabel
                 className="ml-3 form-control"
