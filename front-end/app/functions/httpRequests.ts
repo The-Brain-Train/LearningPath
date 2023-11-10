@@ -17,8 +17,24 @@ export const getRoadmaps = async () => {
 };
 
 export const getRoadmapsPaged = async (page: number, size: number) => {
-  console.log("getRoadmapsPaged > "+page)
   const response = await fetch(`${BACKEND_URL}/api/roadmaps/paged?page=${page}&size=${size}`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch roadmaps");
+  }
+  const data = await response.json();
+  return data;
+}
+
+export const getRoadmapsFilteredPaged = async (
+  name: string, experienceLevel: string | null | undefined, 
+  fromHour: number | null | undefined, toHour: number | null | undefined,
+  page: number, size: number) => {
+  const response = await fetch(
+    `${BACKEND_URL}/api/roadmaps/filter?` +
+    `name=${name}&experienceLevel=${experienceLevel}&` +
+    `fromHour=${fromHour}&toHour=${toHour}&` +
+    `page=${page}&size=${size}`
+  );
   if (!response.ok) {
     throw new Error("Failed to fetch roadmaps");
   }
@@ -143,7 +159,7 @@ export const upVoteRoadmap = async (
         `Failed to upVote roadmap. Status code: ${response.status}`
       );
     }
-   
+
     return response.text();
   } catch (error) {
     console.error("Error upVoting roadmap:", error);
