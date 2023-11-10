@@ -1,14 +1,14 @@
 import { TreeNode } from "./types";
 
 export const isMobileView = () => {
-    return window.innerWidth < 1000;
+    return window.innerWidth < 768;
 }
 
 export const getIconFontSize = () => {
     if (isMobileView()) {
         return "16px";
     } else {
-        return "24px"
+        return "22px"
     }
 }
 
@@ -16,13 +16,7 @@ export const getLabelFontSize = (d: d3.HierarchyNode<TreeNode>) => {
     if (isMobileView()) {
         return "14px";
     } else {
-        if (d.depth === 0) {
-            return "26px";
-        } else if (d.height === 0) {
-            return "22px";
-        } else {
-            return "24px";
-        }
+        return "22px"
     }
 }
 
@@ -30,15 +24,7 @@ export const getHoursFontSize = (d: d3.HierarchyNode<TreeNode>) => {
     if (isMobileView()) {
         return "14px";
     } else {
-        if (d.depth === 0) {
-            return "26px";
-        } else if (d.depth === 1) {
-            return "24px";
-        } else if (d.depth === 2) {
-            return "22px";
-        } else {
-            return "20px";
-        }
+        return "22px"
     }
 }
 

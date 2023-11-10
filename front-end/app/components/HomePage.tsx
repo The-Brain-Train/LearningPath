@@ -44,16 +44,14 @@ export default function HomePage() {
           <h2 className="text-4xl mb-8 text-center font-bold sm:text-5xl lg:text-6xl">
             Features of LearningPath
           </h2>
-          <div className="space-y-2 flex flex-col gap-6 sm:gap-8">
-            <div className="flex flex-col items-center sm:ite">
-              <div className="flex mb-2">
-                <h3 className="text-white text-2xl font-bold mb-2 sm:text-3xl sm:pt-5 sm:text-left">
-                  Create Your Roadmap
-                </h3>
-              </div>
-              <div className="flex flex-col items-center sm:flex-row-reverse sm:item sm:gap-3 sm:text-left">
+          <div className="space-y-2 flex flex-col gap-6 md:gap-8">
+            <div className="flex flex-col items-center">
+              <div className="flex flex-col items-center md:flex-row-reverse md:item md:gap-3 md:text-left">
                 <div className="mb-6">
-                  <p className="mb-6 text-lg sm:mb-14 sm:text-xl leading-10">
+                  <h3 className="text-white text-2xl font-bold mb-2 md:text-3xl md:pt-5 md:text-left lg:mb-5">
+                    Create Your Roadmap
+                  </h3>
+                  <p className="mb-6 text-lg md:mb-14 md:text-xl leading-10">
                     Craft personalized learning roadmaps tailored to your goals
                     and aspirations. Whether you want to master a new
                     programming language or learn how to cook.
@@ -75,17 +73,15 @@ export default function HomePage() {
               </div>
             </div>
             <div className="flex flex-col items-center">
-              <div className="flex items-center mb-2">
-                <h3 className="text-white text-2xl font-bold mb-2 sm:text-3xl">
-                  Save &amp; Manage Roadmaps
-                </h3>
-              </div>
-              <div className="flex flex-col items-center sm:flex-row sm:gap-3 sm:text-left">
+              <div className="flex flex-col items-center md:flex-row md:gap-3 md:text-left">
                 <div className="mb-6">
-                  <p className="mb-6 text-lg sm:mb-14 sm:text-xl leading-10">
-                    Organize your learning journey by creating an account and saving your roadmaps.
-                    Easily access roadmaps you have created and progress towards your
-                    goals.
+                  <h3 className="text-white text-2xl font-bold mb-2 md:text-3xl lg:mb-5">
+                    Save &amp; Manage Roadmaps
+                  </h3>
+                  <p className="mb-6 text-lg md:mb-14 md:text-xl leading-10">
+                    Organize your learning journey by creating an account and
+                    saving your roadmaps. Easily access roadmaps you have
+                    created and progress towards your goals.
                   </p>
                   <Link
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-xl"
@@ -104,14 +100,12 @@ export default function HomePage() {
               </div>
             </div>
             <div className="flex flex-col items-center">
-              <div className="flex items-center mb-2">
-                <h3 className="text-white text-2xl font-bold mb-2 sm:text-3xl">
-                  Explore Community Roadmaps
-                </h3>
-              </div>
-              <div className="flex flex-col items-center sm:flex-row-reverse sm:item sm:gap-3 sm:text-left">
+              <div className="flex flex-col items-center md:flex-row-reverse md:item md:gap-3 md:text-left">
                 <div className="mb-6">
-                  <p className="mb-6 text-lg sm:mb-14 sm:text-xl leading-10">
+                  <h3 className="text-white text-2xl font-bold mb-2 md:text-3xl lg:mb-5">
+                    Explore Community Roadmaps
+                  </h3>
+                  <p className="mb-6 text-lg md:mb-14 md:text-xl leading-10">
                     Dive into a world of learning possibilities by exploring
                     roadmaps created by fellow learners. Upvote the ones you
                     find most valuable, helping others discover the best
@@ -133,7 +127,7 @@ export default function HomePage() {
                 />
               </div>
             </div>
-            <div className="mt-8 text-center pb-64">
+            <div className="mt-8 text-center pb-52">
               <TextAnimation />
             </div>
           </div>
