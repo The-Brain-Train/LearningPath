@@ -1,9 +1,6 @@
 package com.braintrain.backend.service;
 
-import com.braintrain.backend.controller.dtos.RoadmapDTO;
-import com.braintrain.backend.controller.dtos.RoadmapMetaDTO;
-import com.braintrain.backend.controller.dtos.RoadmapMetaListDTO;
-import com.braintrain.backend.controller.dtos.UserFavoritesDTO;
+import com.braintrain.backend.controller.dtos.*;
 import com.braintrain.backend.exceptionHandler.exception.RoadmapCountExceededException;
 import com.braintrain.backend.model.*;
 import com.braintrain.backend.repository.RoadmapMetaRepository;
@@ -42,6 +39,13 @@ public class RoadmapService {
     public Page<RoadmapMetaDTO> getAllRoadmapsMeta(Pageable pageable) {
         Page<RoadmapMeta> pagedRoadmaps = metaRepo.findAll(pageable);
         return RoadmapMetaConverter.toRoadmapMetaDtoList(pagedRoadmaps);
+    }
+
+    public Page<RoadmapMetaDTO> getFilteredRoadmapsMetas(
+            String name, String experienceLevel, int fromHour, int toHour, Pageable pageable) {
+        Page<RoadmapMeta> filteredPagedRoadmaps =
+                metaRepo.findAllFilteredPaged(name, experienceLevel, fromHour, toHour, pageable);
+        return RoadmapMetaConverter.toRoadmapMetaDtoList(filteredPagedRoadmaps);
     }
 
     public List<Roadmap> getAllRoadmaps() {
