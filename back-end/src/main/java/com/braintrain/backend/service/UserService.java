@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -33,6 +34,12 @@ public class UserService {
 
     public UpVoteDownVoteDTO getUserUpVoteDownVotes(String userEmail) {
         User user = getUserByEmail(userEmail);
+        if(user.getUpVotes() != null) {
+            user.setUpVotes(new ArrayList<>());
+        }
+        if(user.getDownVotes() != null) {
+            user.setDownVotes(new ArrayList<>());
+        }
         List<String> upVoteMetaIdList = user.getUpVotes().stream()
                 .map(RoadmapMeta::getId).toList();
         List<String> downVoteMetaIdList = user.getDownVotes().stream()

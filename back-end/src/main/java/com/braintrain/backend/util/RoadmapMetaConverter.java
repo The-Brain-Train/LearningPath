@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -26,8 +27,8 @@ public class RoadmapMetaConverter {
                 roadmapMeta.getUserEmail(),
                 roadmapMeta.getExperienceLevel(),
                 roadmapMeta.getHours(),
-                roadmapMeta.getUpVotes(),
-                roadmapMeta.getDownVotes()
+                roadmapMeta.getUpVotes() != null ? roadmapMeta.getUpVotes() : 0,
+                roadmapMeta.getDownVotes() != null ? roadmapMeta.getDownVotes() : 0
         );
     }
 }
