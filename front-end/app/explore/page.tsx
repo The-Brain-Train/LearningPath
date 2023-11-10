@@ -5,7 +5,6 @@ import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import { ChangeEvent, useEffect, useState } from "react";
 import {
-  getRoadmapsPaged,
   getRoadmapsFilteredPaged,
   getUserFavorites,
   getUserUpVotesDownVotes,
