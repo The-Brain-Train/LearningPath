@@ -43,7 +43,7 @@ const TextAnimation: React.FC = () => {
     }, []);
   
     return (
-      <div className="text-center font-roboto font-extrabold text-3xl absolute text-white left-8 right-8 mx-auto max-w-500">
+      <div className="text-center font-roboto font-extrabold text-3xl absolute text-white left-8 right-8 mx-auto max-w-lg lg:text-5xl">
         Start your journey with LearningPath today &&nbsp; 
         <span style={{ color: color }}>{text}</span>
       </div>

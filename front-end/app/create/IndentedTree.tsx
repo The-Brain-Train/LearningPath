@@ -182,10 +182,10 @@ const IndentedTree = ({
           ) : (
             <div className="flex flex-col justify-center items-center">
               {data !== null ? (
-                <div className="max-w-6xl ">
+                <div className="max-w-screen-xl">
                   <ArrowBack
                     fontSize="large"
-                    className="text-slate-300 my-3 mt-4"
+                    className="text-slate-300 my-3 mt-4 cursor-pointer"
                     onClick={() => setData(null)}
                   />
                   <div className="flex justify-between px-2 ">
