@@ -5,7 +5,7 @@ import {
   addRoadmapMetaToUserFavorites,
   getRoadmap,
   getRoadmaps,
-  getRoadmapsPaged,
+  getRoadmapsFilteredPaged,
   getUserFavorites,
   removeRoadmapMetaFromUserFavorites,
 } from "@/app/functions/httpRequests";
@@ -31,8 +31,7 @@ function RoadMapId(props: Props) {
   const itemsPerPage = 9;
   const [cookies] = useCookies(["user"]);
   const { data: roadmapMetas } = useQuery<RoadmapMetaList>(
-    ["roadmapMetas"],
-    getRoadmaps
+    ["roadmapMetas"], getRoadmaps
   );
   const { currentUser } = useCurrentUserQuery();
 
@@ -59,7 +58,7 @@ function RoadMapId(props: Props) {
     const page: number = queryClient.getQueryData(["thisPage"])
       ? queryClient.getQueryData<number>(["thisPage"]) || 0
       : 0;
-    return getRoadmapsPaged(page, itemsPerPage);
+    return getRoadmapsFilteredPaged("", "", 0, 500, page, itemsPerPage);
   });
 
   const {
@@ -149,7 +148,10 @@ function RoadMapId(props: Props) {
               <ArrowBack
                 fontSize="large"
                 className="text-slate-300 m-3 cursor-pointer"
-                onClick={() => router.back()}
+                onClick={() => {
+                  queryClient.invalidateQueries(["roadmaps"]);
+                  router.back();
+                }}
               />
             </div>
             <div className="flex-grow text-center">
