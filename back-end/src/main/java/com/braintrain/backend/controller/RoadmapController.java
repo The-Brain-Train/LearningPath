@@ -43,16 +43,6 @@ public class RoadmapController {
         return ResponseEntity.ok(filteredRoadmapPage);
     }
 
-    @GetMapping("/paged")
-    public ResponseEntity<Page<RoadmapMetaDTO>> getAllRoadmaps(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "9") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<RoadmapMetaDTO> roadmapPage =
-                service.getAllRoadmapsMeta(pageable);
-        return ResponseEntity.ok(roadmapPage);
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<Roadmap> getRoadmap(@PathVariable String id) {
         return ResponseEntity.of(service.getRoadmapById(id));

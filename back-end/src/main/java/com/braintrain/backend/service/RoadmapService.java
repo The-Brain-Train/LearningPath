@@ -36,15 +36,12 @@ public class RoadmapService {
         return new RoadmapMetaListDTO(metaRepo.findAll());
     }
 
-    public Page<RoadmapMetaDTO> getAllRoadmapsMeta(Pageable pageable) {
-        Page<RoadmapMeta> pagedRoadmaps = metaRepo.findAll(pageable);
-        return RoadmapMetaConverter.toRoadmapMetaDtoList(pagedRoadmaps);
-    }
-
     public Page<RoadmapMetaDTO> getFilteredRoadmapsMetas(
-            String name, String experienceLevel, int fromHour, int toHour, Pageable pageable) {
+            String name, String experienceLevel,
+            int fromHour, int toHour, Pageable pageable) {
         Page<RoadmapMeta> filteredPagedRoadmaps =
-                metaRepo.findAllFilteredPaged(name, experienceLevel, fromHour, toHour, pageable);
+                metaRepo.findAllFilteredPaged(name, experienceLevel,
+                        fromHour, toHour, pageable);
         return RoadmapMetaConverter.toRoadmapMetaDtoList(filteredPagedRoadmaps);
     }
 
