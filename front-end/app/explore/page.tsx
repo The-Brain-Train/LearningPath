@@ -23,8 +23,6 @@ import useCurrentUserQuery from "../functions/useCurrentUserQuery";
 import { RoadmapsPage } from "./RoadmapsPage";
 
 export default function Explore() {
-  const [filteredRoadmaps, setFilteredRoadmaps] = useState<RoadmapMeta[]>([]);
-  const [search, setSearch] = useState("");
   const [experienceFilter, setExperienceFilter] = useState<string | null>(null);
   const [hoursFromFilter, setHoursFromFilter] = useState<number | null>(0);
   const [hoursToFilter, setHoursToFilter] = useState<number | null>(500);
@@ -53,21 +51,20 @@ export default function Explore() {
     );
   };
 
-  // const { data: roadmaps } = useQuery(["roadmaps"], () => {
-  //   const page: number = queryClient.getQueryData(["thisPage"])
-  //     ? queryClient.getQueryData<number>(["thisPage"]) || 0
-  //     : 0;
-  //   return getRoadmapsPaged(page, itemsPerPage);
-  // });
-
   const { data: roadmaps } = useQuery(["roadmaps"], () => {
-    const page: number = queryClient.getQueryData(["thisPage"])
+    let page: number = queryClient.getQueryData(["thisPage"])
       ? queryClient.getQueryData<number>(["thisPage"]) || 0
       : 0;
       const experienceLevel = queryClient.getQueryData<string>(["experienceLevel"]) || "";
+      const searchText = queryClient.getQueryData<string>(["searchText"]) || "";
+      const hoursFromFilter = queryClient.getQueryData<number>(["hoursFromFilter"]) || 0;
+      const hoursToFilter = queryClient.getQueryData<number>(["hoursToFilter"]) || 500;
       
+      if (experienceLevel.length > 0 || searchText.length > 0 || hoursFromFilter !== 0 || hoursToFilter !== 500) {
+        page = 0;
+      }
     return getRoadmapsFilteredPaged(
-      search, experienceLevel,
+      searchText, experienceLevel,
       hoursFromFilter, hoursToFilter,
       page, itemsPerPage
     );
@@ -96,19 +93,6 @@ export default function Explore() {
     setShowFilters(!showFilters);
   };
 
-  const filterRoadmaps = (roadmap: RoadmapMeta) => {
-    if (experienceFilter && roadmap.experienceLevel !== experienceFilter) {
-      return false;
-    }
-    if (hoursFromFilter !== null && roadmap.hours <= hoursFromFilter) {
-      return false;
-    }
-    if (hoursToFilter !== null && roadmap.hours >= hoursToFilter) {
-      return false;
-    }
-    return true;
-  };
-
   const validateHours = (from: number | null, to: number | null): boolean => {
     if (from === null || to === null) {
       setHourValidationMessage(null);
@@ -127,7 +111,8 @@ export default function Explore() {
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const searchText = event.currentTarget.value;
-    setSearch(searchText);
+    queryClient.setQueryData(["searchText"], searchText);
+    queryClient.invalidateQueries(["roadmaps"]);
   };
 
   const handlePageChange = (selectedPage: any) => {
@@ -135,18 +120,7 @@ export default function Explore() {
     queryClient.invalidateQueries(["roadmaps"]);
   };
 
-  const paginatedRoadmaps = filteredRoadmaps.slice(0, itemsPerPage);
-
-  useEffect(() => {
-    const filtered = roadmaps?.content.filter(
-      (roadmap: RoadmapMeta) =>
-        roadmap.name.toLowerCase().includes(search.toLowerCase()) &&
-        filterRoadmaps(roadmap)
-    );
-    if (filtered) {
-      setFilteredRoadmaps(filtered);
-    }
-  }, [search, roadmaps, experienceFilter, hoursFromFilter, hoursToFilter]);
+  const paginatedRoadmaps =  roadmaps !== undefined ? roadmaps.content : [].slice(0, itemsPerPage);
 
   if (isLoading) {
     return (
@@ -171,7 +145,6 @@ export default function Explore() {
             sx={{ ml: 1, flex: 1 }}
             placeholder="Search"
             inputProps={{ "aria-label": "search" }}
-            value={search}
             onChange={handleSearchChange}
           />
           <IconButton type="button" className="p-3" aria-label="search">
@@ -190,8 +163,8 @@ export default function Explore() {
             <select
               value={experienceFilter || ""}
               onChange={(e) => {
-                setExperienceFilter(e.target.value || null);
-                queryClient.setQueryData(["experienceLevel"], e.target.value);
+                setExperienceFilter(e.target.value || null); 
+                queryClient.setQueryData(["experienceLevel"], e.target.value); 
                 queryClient.invalidateQueries(["roadmaps"]);
               }}
               className="rounded-md  w-full sm:h-12 px-4"
@@ -215,6 +188,8 @@ export default function Explore() {
                       e.target.value === "" ? null : parseInt(e.target.value);
                     validateHours(newValue, hoursToFilter) &&
                       setHoursFromFilter(newValue);
+                      queryClient.setQueryData(["hoursFromFilter"], newValue); 
+                      queryClient.invalidateQueries(["roadmaps"]);
                   }}
                   placeholder="From"
                   className="rounded-md h-11 w-20 text-center"
@@ -233,6 +208,8 @@ export default function Explore() {
                       e.target.value === "" ? null : parseInt(e.target.value);
                     validateHours(hoursFromFilter, newValue) &&
                       setHoursToFilter(newValue);
+                      queryClient.setQueryData(["hoursToFilter"], newValue);
+                      queryClient.invalidateQueries(["roadmaps"]);
                   }}
                   placeholder="To"
                   className="rounded-md h-11 w-20 text-center"
