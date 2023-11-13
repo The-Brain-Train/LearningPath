@@ -28,10 +28,10 @@ function RoadMapId(props: Props) {
   const router = useRouter();
   const roadmapId = props.params.roadmapsid;
   const queryClient = useQueryClient();
-  const itemsPerPage = 9;
   const [cookies] = useCookies(["user"]);
   const { data: roadmapMetas } = useQuery<RoadmapMetaList>(
-    ["roadmapMetas"], getRoadmaps
+    ["roadmapMetas"],
+    getRoadmaps
   );
   const { currentUser } = useCurrentUserQuery();
 
@@ -55,10 +55,7 @@ function RoadMapId(props: Props) {
     isLoading: roadmapsLoading,
     isError: roadmapsError,
   } = useQuery(["roadmaps"], () => {
-    const page: number = queryClient.getQueryData(["thisPage"])
-      ? queryClient.getQueryData<number>(["thisPage"]) || 0
-      : 0;
-    return getRoadmapsFilteredPaged("", "", 0, 500, page, itemsPerPage);
+    return getRoadmaps();
   });
 
   const {
@@ -69,11 +66,14 @@ function RoadMapId(props: Props) {
     ["roadmap", roadmapId],
     async () => {
       if (roadmaps) {
-        const foundRoadmap = roadmaps.content.find(
-          (roadmap: Roadmap) => roadmap.id === roadmapId
-        );
-        if (foundRoadmap) {
-          const roadmapData = await getRoadmap(foundRoadmap.roadmapReferenceId);
+        const foundRoadmapMeta: RoadmapMeta | undefined =
+          roadmaps.roadmapMetaList.find(
+            (roadmapMeta: RoadmapMeta) => roadmapMeta.id === roadmapId
+          );
+        if (foundRoadmapMeta) {
+          const roadmapData: Roadmap = await getRoadmap(
+            foundRoadmapMeta.roadmapReferenceId
+          );
           return JSON.parse(roadmapData.obj);
         }
       }
