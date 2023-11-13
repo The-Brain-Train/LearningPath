@@ -29,10 +29,11 @@ function RoadMapId(props: Props) {
   const roadmapId = props.params.roadmapsid;
   const queryClient = useQueryClient();
   const [cookies] = useCookies(["user"]);
-  const { data: roadmapMetas } = useQuery<RoadmapMetaList>(
-    ["roadmapMetas"],
-    getRoadmaps
-  );
+  const {
+    data: roadmapMetas,
+    isLoading: roadmapsLoading,
+    isError: roadmapsError,
+  } = useQuery<RoadmapMetaList>(["roadmapMetas"], getRoadmaps);
   const { currentUser } = useCurrentUserQuery();
 
   const fetchUserFavorites = async () => {
@@ -51,23 +52,15 @@ function RoadMapId(props: Props) {
   );
 
   const {
-    data: roadmaps,
-    isLoading: roadmapsLoading,
-    isError: roadmapsError,
-  } = useQuery(["roadmaps"], () => {
-    return getRoadmaps();
-  });
-
-  const {
     data: roadmapData,
     isLoading,
     isError,
   } = useQuery(
     ["roadmap", roadmapId],
     async () => {
-      if (roadmaps) {
+      if (roadmapMetas) {
         const foundRoadmapMeta: RoadmapMeta | undefined =
-          roadmaps.roadmapMetaList.find(
+          roadmapMetas.roadmapMetaList.find(
             (roadmapMeta: RoadmapMeta) => roadmapMeta.id === roadmapId
           );
         if (foundRoadmapMeta) {

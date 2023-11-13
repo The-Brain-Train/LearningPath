@@ -70,7 +70,6 @@ export default function Explore() {
     );
   });
 
-
   useEffect(() => {
     if (roadmaps) {
       setPageCount(roadmaps.totalPages);
