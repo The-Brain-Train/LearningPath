@@ -2,6 +2,7 @@ package com.braintrain.backend.security.config;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+
 import com.braintrain.backend.security.filter.JwtAuthenticationFilter;
 import com.braintrain.backend.service.UserServiceSpringSecurity;
 import lombok.AllArgsConstructor;
@@ -30,7 +31,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(request -> request.requestMatchers("/status","/api/auth/**", "/api/roadmaps", "/api/roadmaps/{id}")
+                .authorizeHttpRequests(request -> request.requestMatchers(
+                                "/status",
+                                "/api/auth/**",
+                                "/api/roadmaps",
+                                "/api/roadmaps/{id}",
+                                "/api/roadmaps/findByMeta/{metaId}"
+                        )
                         .permitAll().anyRequest().authenticated())
                 .cors(withDefaults())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
@@ -45,17 +52,17 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider(){
-        DaoAuthenticationProvider authenticationProvider=new DaoAuthenticationProvider();
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userServiceSpringSecurity.userDetailsService());
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
     }
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
-
 
 
 }
