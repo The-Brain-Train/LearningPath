@@ -7,6 +7,28 @@ spring:
     mongodb:
       uri: mongodb://root:example@localhost:27017/learningPathTest?authSource=admin
       database: learningPathTest
+  servlet:
+    multipart:
+      max-request-size: 10MB
+      max-file-size: 10MB
+field:
+  updater:
+    enabled: false
+gcp:
+  config:
+    file: ${GCP_SERVICE}
+  project:
+    id: ${GCP_PROJECT_ID}
+  bucket:
+    id: ${GCP_BUCKET_ID}
+  dir:
+    name: profile-pictures
+logging:
+  level:
+    org:
+      springframework:
+        boot:
+          autoconfigure: ERROR
 token:
   signing:
     key: 5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437
