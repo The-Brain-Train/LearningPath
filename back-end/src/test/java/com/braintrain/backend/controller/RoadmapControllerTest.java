@@ -229,6 +229,73 @@ class RoadmapControllerTest {
             assertThat(exchange.getBody()).isNotNull();
         }
     }
+
+    @Test
+    void shouldIncreaseUpvoteCountWhenUpvoted() {
+        String userEmail = "edwardsemail@gmail.com";
+        String roadmapMetaId = createdRoadmapMeta.getId();
+
+        if (authToken != null) {
+            String uri = "http://localhost:%s/api/roadmaps/%s/upvote/%s".formatted(port, userEmail, roadmapMetaId);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", "Bearer " + authToken);
+            HttpEntity<String> entity = new HttpEntity<>(headers);
+
+            ResponseEntity<Long> exchange = restTemplate.exchange(uri, HttpMethod.POST, entity, Long.class);
+
+            assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
+            assertThat(exchange.getBody()).isEqualTo(1L);
+        }
+    }
+
+    @Test
+    void shouldRemoveUpvoteWhenUpvotingIfAlreadyUpvoted() {
+        String userEmail = "edwardsemail@gmail.com";
+        String roadmapMetaId = createdRoadmapMeta.getId();
+
+        if (authToken != null) {
+            String uri = "http://localhost:%s/api/roadmaps/%s/upvote/%s".formatted(port, userEmail, roadmapMetaId);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", "Bearer " + authToken);
+            HttpEntity<String> entity = new HttpEntity<>(headers);
+
+            ResponseEntity<Long> exchange1 = restTemplate.exchange(uri, HttpMethod.POST, entity, Long.class);
+            ResponseEntity<Long> exchange2 = restTemplate.exchange(uri, HttpMethod.POST, entity, Long.class);
+
+            assertThat(exchange1.getStatusCode()).isEqualTo(HttpStatus.OK);
+            assertThat(exchange1.getBody()).isEqualTo(1L);
+            assertThat(exchange2.getStatusCode()).isEqualTo(HttpStatus.OK);
+            assertThat(exchange2.getBody()).isEqualTo(0L);
+        }
+    }
+
+    @Test
+    void shouldRemoveDownvoteWhenUpvoting() {
+        String userEmail = "edwardsemail@gmail.com";
+        String roadmapMetaId = createdRoadmapMeta.getId();
+
+        if (authToken != null) {
+            String uriUpvote = "http://localhost:%s/api/roadmaps/%s/upvote/%s".formatted(port, userEmail, roadmapMetaId);
+            String uriDownvote = "http://localhost:%s/api/roadmaps/%s/downvote/%s".formatted(port, userEmail, roadmapMetaId);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", "Bearer " + authToken);
+            HttpEntity<String> entity = new HttpEntity<>(headers);
+
+            ResponseEntity<Long> exchange1 = restTemplate.exchange(uriUpvote, HttpMethod.POST, entity, Long.class);
+            ResponseEntity<Long> exchange2 = restTemplate.exchange(uriDownvote, HttpMethod.POST, entity, Long.class);
+            ResponseEntity<Long> exchange3 = restTemplate.exchange(uriUpvote, HttpMethod.POST, entity, Long.class);
+
+            assertThat(exchange1.getStatusCode()).isEqualTo(HttpStatus.OK);
+            assertThat(exchange1.getBody()).isEqualTo(1L);
+            assertThat(exchange2.getStatusCode()).isEqualTo(HttpStatus.OK);
+            assertThat(exchange2.getBody()).isEqualTo(1L);
+            assertThat(exchange3.getStatusCode()).isEqualTo(HttpStatus.OK);
+            assertThat(exchange3.getBody()).isEqualTo(1L);
+        }
+    }
     
     private String signUpAndSignInUser() {
         String signUpURI = "http://localhost:%s/api/auth/signup".formatted(port);
