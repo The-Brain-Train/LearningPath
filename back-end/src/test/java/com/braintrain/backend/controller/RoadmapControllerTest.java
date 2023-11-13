@@ -90,6 +90,24 @@ class RoadmapControllerTest {
     }
 
     @Test
+    void shouldReturnRoadmapWhenRoadmapMetaIdIsGiven() {
+        String roadmapMetaId = createdRoadmapMeta.getId();
+        if (authToken != null) {
+            String uri = "http://localhost:%s/api/roadmaps/findByMeta/%s".formatted(port, roadmapMetaId);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", "Bearer " + authToken);
+            HttpEntity<String> entity = new HttpEntity<>(headers);
+
+            ResponseEntity<Roadmap> exchange = restTemplate.exchange(uri, HttpMethod.GET, entity, Roadmap.class);
+
+            assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
+            assertThat(exchange.getBody()).isNotNull();
+            assertThat(exchange.getBody().getId()).isEqualTo(createdRoadmapMeta.getRoadmapReferenceId());
+        }
+    }
+
+    @Test
     void shouldGetRoadmapMetasForUser() {
         String userEmail = "edwardsemail@gmail.com";
 
@@ -211,7 +229,7 @@ class RoadmapControllerTest {
             assertThat(exchange.getBody()).isNotNull();
         }
     }
-
+    
     private String signUpAndSignInUser() {
         String signUpURI = "http://localhost:%s/api/auth/signup".formatted(port);
         String signInURI = "http://localhost:%s/api/auth/signin".formatted(port);
