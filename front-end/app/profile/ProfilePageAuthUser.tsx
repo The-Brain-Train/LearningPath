@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { RoadmapMeta, User, UserProps } from "../util/types";
+import { RoadmapMeta, UserProps } from "../util/types";
 import { RoadmapMetaList } from "../util/types";
 import {
   deleteRoadmap,
@@ -19,7 +19,6 @@ import PersonalRoadmapCard from "../components/PersonalRoadmapCard";
 import FavoriteRoadmapCard from "../components/FavoriteRoadmapCard";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCookies } from "react-cookie";
-import Image from "next/image";
 import { Icon } from "../components/AccordionIcon";
 
 const ProfilePageAuthUser = ({ currentUser }: UserProps) => {
@@ -50,23 +49,6 @@ const ProfilePageAuthUser = ({ currentUser }: UserProps) => {
       enabled: !!currentUser,
     }
   );
-
-  const maxRoadmaps = 10;
-  const progressBooks = [];
-
-  if (roadmapCount) {
-    progressBooks.length = 0;
-    for (let i = 0; i < roadmapCount; i++) {
-      progressBooks.push(
-        <Image src="/navigation.png" width={35} height={35} alt="" />
-      );
-    }
-    for (let i = 0; i < maxRoadmaps - roadmapCount; i++) {
-      progressBooks.push(
-        <Image src="/route.png" width={35} height={35} alt="" />
-      );
-    }
-  }
 
   const deleteRoadmapMutation = useMutation((roadmapMeta: RoadmapMeta) =>
     deleteRoadmap(roadmapMeta.id)
@@ -113,7 +95,7 @@ const ProfilePageAuthUser = ({ currentUser }: UserProps) => {
         )}
         {roadmapCount != undefined && roadmapCount > 0 && (
           <p className="text-center text-white font-semibold pb-4">
-            {roadmapCount} / {maxRoadmaps} roadmaps saved
+            {roadmapCount} / 10 roadmaps saved
           </p>
         )}
         <Accordion
