@@ -85,7 +85,7 @@ class AuthenticationControllerTest {
     }
 
     @Test
-    void signingInWithIncorrectCredentialsShouldThrow403() {
+    void signingInWithIncorrectCredentialsShouldThrow401() {
         String signUpURI = "http://localhost:%s/api/auth/signup".formatted(port);
         String signInURI = "http://localhost:%s/api/auth/signin".formatted(port);
 
@@ -98,7 +98,7 @@ class AuthenticationControllerTest {
             restTemplate.exchange(signInURI, HttpMethod.POST, new HttpEntity<>(signInRequest), JwtAuthenticationResponse.class);
             fail("Expected EmailAlreadyExistsException with status code 409");
         } catch (HttpClientErrorException e) {
-            assertEquals(HttpStatus.FORBIDDEN, e.getStatusCode());
+            assertEquals(HttpStatus.UNAUTHORIZED, e.getStatusCode());
         }
     }
 
