@@ -197,7 +197,6 @@ class RoadmapControllerTest {
 
             HttpHeaders headers = new HttpHeaders();
             headers.set("Authorization", "Bearer " + authToken);
-            headers.set("Content-Type", "application/json");
             HttpEntity<RoadmapMeta> entity = new HttpEntity<>(createdRoadmapMeta, headers);
 
             ResponseEntity<UserFavoritesDTO> exchange = restTemplate.exchange(uri, HttpMethod.POST, entity, UserFavoritesDTO.class);
