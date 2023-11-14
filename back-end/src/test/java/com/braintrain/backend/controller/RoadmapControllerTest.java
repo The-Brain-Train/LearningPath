@@ -87,19 +87,13 @@ class RoadmapControllerTest {
     @Test
     void shouldReturnRoadmapWhenRoadmapMetaIdIsGiven() {
         String roadmapMetaId = createdRoadmapMeta.getId();
-        if (authToken != null) {
-            String uri = "http://localhost:%s/api/roadmaps/findByMeta/%s".formatted(port, roadmapMetaId);
+        String uri = "http://localhost:%s/api/roadmaps/findByMeta/%s".formatted(port, roadmapMetaId);
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("Authorization", "Bearer " + authToken);
-            HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<Roadmap> exchange = restTemplate.exchange(uri, HttpMethod.GET, HttpEntity.EMPTY, Roadmap.class);
 
-            ResponseEntity<Roadmap> exchange = restTemplate.exchange(uri, HttpMethod.GET, entity, Roadmap.class);
-
-            assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
-            assertThat(exchange.getBody()).isNotNull();
-            assertThat(exchange.getBody().getId()).isEqualTo(createdRoadmapMeta.getRoadmapReferenceId());
-        }
+        assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(exchange.getBody()).isNotNull();
+        assertThat(exchange.getBody().getId()).isEqualTo(createdRoadmapMeta.getRoadmapReferenceId());
     }
 
     @Test
