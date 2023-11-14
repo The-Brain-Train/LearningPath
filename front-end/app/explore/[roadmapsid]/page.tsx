@@ -99,6 +99,8 @@ function RoadMapId(props: Props) {
     return roadmap as unknown as TreeNode;
   }
 
+  const treeNode = roadmapToTreeNode(roadmap);
+
   if (isError) {
     return (
       <main className="bg-white">
@@ -146,6 +148,41 @@ function RoadMapId(props: Props) {
             </div>
           </div>
           <IndentedTreeWithData data={roadmapToTreeNode(roadmap)} />
+
+          <div className="mt-10 flex flex-left">
+            <p className="text-xl text-center font-bold text-white md:text-2xl">
+              Resources to follow
+            </p> </div>
+          <div>
+            {treeNode && treeNode.resources && treeNode.resources.map(r =>
+              // <p> {r.name}</p>
+              <table className="table-fixed">
+                {/* <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Link</th>
+                  </tr>
+                </thead> */}
+                <tbody>
+                  <tr>
+                    <td>{r.type}</td>
+                    <td>{r.name}</td>
+                    <td>{r.link}</td>
+                  </tr>
+                </tbody>
+              </table>
+
+            )
+            }
+
+
+
+          </div>
+
+
+
+
         </div>
       </div>
     </main>
