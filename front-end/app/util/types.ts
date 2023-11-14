@@ -65,6 +65,13 @@ export type TreeNode = {
   name: string;
   children: TreeNode[];
   value: number;
+  resources: ResourceType[];
+}
+
+export type ResourceType = {
+  name: string;
+  type: string;
+  link: string;
 }
 
 export interface CustomNode extends d3.HierarchyPointNode<any> {
