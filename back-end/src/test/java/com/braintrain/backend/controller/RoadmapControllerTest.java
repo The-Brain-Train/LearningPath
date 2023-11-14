@@ -20,6 +20,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,19 +30,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class RoadmapControllerTest {
     @Value("${server.port}")
     private int port;
-
     @Autowired
     RestTemplate restTemplate;
-
     @Autowired
     UserService userService;
-
     private static final String BASE_URL = "http://localhost:%s/api/roadmaps";
-
     ResponseEntity<RoadmapMeta> exchange;
-
     private RoadmapMeta createdRoadmapMeta;
-
     private static String authToken;
 
     @BeforeEach
@@ -187,10 +182,10 @@ class RoadmapControllerTest {
             headers.set("Content-Type", "application/json");
             HttpEntity<RoadmapMeta> entity = new HttpEntity<>(createdRoadmapMeta, headers);
 
-            ResponseEntity<UserFavoritesDTO> response = restTemplate.exchange(uri, HttpMethod.POST, entity, UserFavoritesDTO.class);
+            ResponseEntity<UserFavoritesDTO> exchange = restTemplate.exchange(uri, HttpMethod.POST, entity, UserFavoritesDTO.class);
 
-            assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-            assertThat(response.getHeaders().getLocation()).isNotNull();
+            assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+            assertThat(exchange.getHeaders().getLocation()).isNotNull();
         }
     }
 
@@ -209,6 +204,25 @@ class RoadmapControllerTest {
 
             assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
             assertThat(exchange.getBody()).isNotNull();
+        }
+    }
+
+    @Test
+    void shouldRemoveRoadmapMetaFromFavoritesForExistingUser() {
+        String userEmail = "edwardsemail@gmail.com";
+
+        if (authToken != null) {
+            String uri = "http://localhost:%s/api/roadmaps/%s/favorites".formatted(port, userEmail);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", "Bearer " + authToken);
+            HttpEntity<RoadmapMeta> entity = new HttpEntity<>(createdRoadmapMeta, headers);
+
+            restTemplate.exchange(uri, HttpMethod.POST, entity, UserFavoritesDTO.class);
+            ResponseEntity<UserFavoritesDTO> exchange = restTemplate.exchange(uri, HttpMethod.DELETE, entity, UserFavoritesDTO.class);
+
+            assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
+            assertThat(Objects.requireNonNull(exchange.getBody()).favorites()).isEmpty();
         }
     }
 
