@@ -1,4 +1,4 @@
-package com.braintrain.backend.security.dao.service;
+package com.braintrain.backend.service;
 
 import com.braintrain.backend.controller.dtos.FileDTO;
 import com.braintrain.backend.controller.dtos.UpVoteDownVoteDTO;
