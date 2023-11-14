@@ -4,7 +4,7 @@ import IndentedTree from "./IndentedTree";
 import { CreateRoadmapFormData, RoadmapDTO, TreeNode, User } from "../util/types";
 import { postRoadmap } from "../functions/httpRequests";
 import { getResponseFromOpenAI } from "../functions/openAIChat";
-import { chatHistory } from "../functions/chatPreHistory";
+import { chatHistory, requestPromptWithResources, requestPromptOnlyResources } from "../functions/chatPreHistory";
 import {
   calculateTotalValuesRecursive,
   scaleValues,
@@ -19,6 +19,7 @@ export default function Create() {
     topic: null,
     hours: null,
     experienceLevel: null,
+    resources: false,
   });
   const [apiFetchLoading, setApiFetchLoading] = useState(false);
   const [createError, setCreateError] = useState<string | null>(null);
@@ -31,6 +32,7 @@ export default function Create() {
       topic: null,
       hours: null,
       experienceLevel: null,
+      resources: false,
     });
   };
 
@@ -55,9 +57,23 @@ export default function Create() {
   const handleSendMessage = async () => {
     setApiFetchLoading(true);
     try {
-      const response = await getResponseFromOpenAI(
-        chatHistory(roadmapInputData.topic, roadmapInputData.experienceLevel, roadmapInputData.hours)
-      );
+      let response = null;
+      if (roadmapInputData.resources) {
+        response = await getResponseFromOpenAI(
+          requestPromptWithResources(
+            roadmapInputData.topic,
+            roadmapInputData.experienceLevel,
+            roadmapInputData.hours,
+            roadmapInputData.resources)
+        );
+        console.log("with resources...");
+      } else {
+        response = await getResponseFromOpenAI(
+          chatHistory(roadmapInputData.topic, roadmapInputData.experienceLevel, roadmapInputData.hours)
+        );
+        console.log("without resources...");
+      }
+
       const jsonData = await JSON.parse(response.choices[0].message.content);
 
       calculateTotalValuesRecursive(jsonData);
