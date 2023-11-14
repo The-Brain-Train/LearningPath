@@ -1,21 +1,20 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import IndentedTreeWithData from "@/app/explore/[roadmapsid]/IndentedTreeWithData";
 import {
   addRoadmapMetaToUserFavorites,
-  getRoadmap,
   getRoadmaps,
-  getRoadmapsFilteredPaged,
+  getRoadmapByMetaId,
   getUserFavorites,
   removeRoadmapMetaFromUserFavorites,
 } from "@/app/functions/httpRequests";
 import { ArrowBack } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Box, CircularProgress, IconButton } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import useCurrentUserQuery from "@/app/functions/useCurrentUserQuery";
 import { useCookies } from "react-cookie";
-import { Roadmap, RoadmapMeta, RoadmapMetaList } from "@/app/util/types";
+import { Roadmap, RoadmapMeta, RoadmapMetaList, TreeNode } from "@/app/util/types";
 import { FavoriteButton } from "./FavoriteButton";
 
 type Props = {
@@ -25,15 +24,18 @@ type Props = {
 };
 
 function RoadMapId(props: Props) {
+
   const router = useRouter();
   const roadmapId = props.params.roadmapsid;
   const queryClient = useQueryClient();
   const [cookies] = useCookies(["user"]);
+
   const {
     data: roadmapMetas,
     isLoading: roadmapsLoading,
     isError: roadmapsError,
   } = useQuery<RoadmapMetaList>(["roadmapMetas"], getRoadmaps);
+
   const { currentUser } = useCurrentUserQuery();
 
   const fetchUserFavorites = async () => {
@@ -52,30 +54,13 @@ function RoadMapId(props: Props) {
   );
 
   const {
-    data: roadmapData,
+    data: roadmap,
     isLoading,
     isError,
-  } = useQuery(
-    ["roadmap", roadmapId],
-    async () => {
-      if (roadmapMetas) {
-        const foundRoadmapMeta: RoadmapMeta | undefined =
-          roadmapMetas.roadmapMetaList.find(
-            (roadmapMeta: RoadmapMeta) => roadmapMeta.id === roadmapId
-          );
-        if (foundRoadmapMeta) {
-          const roadmapData: Roadmap = await getRoadmap(
-            foundRoadmapMeta.roadmapReferenceId
-          );
-          return JSON.parse(roadmapData.obj);
-        }
-      }
-      return null;
-    },
-    {
-      enabled: !!roadmapId && !roadmapsLoading && !roadmapsError,
-    }
-  );
+  } = useQuery<Roadmap>(["roadmap", roadmapId], async () => {
+    const roadmap = await getRoadmapByMetaId(roadmapId);
+    return JSON.parse(roadmap.obj);
+  });
 
   const isRoadmapInFavorites = favorites?.some(
     (favorite: RoadmapMeta) => favorite.id === roadmapId
@@ -109,6 +94,10 @@ function RoadMapId(props: Props) {
       (roadmapMeta: RoadmapMeta) => roadmapMeta.id === roadmapId
     );
   };
+
+  const roadmapToTreeNode = (roadmap: Roadmap) => {
+    return roadmap as unknown as TreeNode;
+  }
 
   if (isError) {
     return (
@@ -156,7 +145,7 @@ function RoadMapId(props: Props) {
               )}
             </div>
           </div>
-          <IndentedTreeWithData data={roadmapData} />
+          <IndentedTreeWithData data={roadmapToTreeNode(roadmap)} />
         </div>
       </div>
     </main>

@@ -42,6 +42,15 @@ export const getRoadmap = async (roadMapId: string) => {
   return data;
 };
 
+export const getRoadmapByMetaId = async (roadmapMetaId: string) => {
+  const response = await fetch(`${BACKEND_URL}/api/roadmaps/findByMeta/${roadmapMetaId}`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch roadmap");
+  }
+  const data: Roadmap = await response.json();
+  return data;
+};
+
 export const deleteRoadmap = async (roadMapId: string) => {
   const response = await fetch(`${BACKEND_URL}/api/roadmaps/${roadMapId}`, {
     method: "DELETE",

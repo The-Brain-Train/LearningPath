@@ -1,4 +1,4 @@
-package com.braintrain.backend.service;
+package com.braintrain.backend.security.dao.service;
 
 import com.braintrain.backend.model.User;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,4 +1,4 @@
-package com.braintrain.backend.service;
+package com.braintrain.backend.security.dao.service;
 
 import java.io.Serial;
 import java.util.Collection;
