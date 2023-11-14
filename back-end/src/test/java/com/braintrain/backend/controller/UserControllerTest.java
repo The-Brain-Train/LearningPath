@@ -10,18 +10,23 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.*;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -30,6 +35,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")
+@AutoConfigureMockMvc
 class UserControllerTest {
     @Value("${server.port}")
     private int port;
@@ -37,6 +43,8 @@ class UserControllerTest {
     RestTemplate restTemplate;
     private static final String PROFILE_IMAGE_BASE_URL = "http://localhost:%s/api/users/%s/profileImage";
     private static String authToken;
+    @Autowired
+    private MockMvc mockMvc;
     @Autowired
     UserService userService;
 
@@ -70,21 +78,33 @@ class UserControllerTest {
             }
         });
 
-        if (authToken != null) {
-            String uri = PROFILE_IMAGE_BASE_URL.formatted(port, userEmail);
+        String uri = PROFILE_IMAGE_BASE_URL.formatted(port, userEmail);
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("Authorization", "Bearer " + authToken);
-            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + authToken);
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
-            HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(parts, headers);
+        HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(parts, headers);
 
-            ResponseEntity<String> exchange = restTemplate.exchange(uri, HttpMethod.POST, entity, String.class);
+        ResponseEntity<String> exchange = restTemplate.exchange(uri, HttpMethod.POST, entity, String.class);
 
-            assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
-            assertThat(exchange.getBody()).isNotEmpty();
-        }
+        assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(exchange.getBody()).isNotEmpty();
     }
+
+//    @Test
+//    void shouldUpdateProfilePicture() throws Exception {
+//        String userEmail = "edwardsemail@gmail.com";
+//        String profilePictureName = "cool-profile-pictures-63a5e8ee8cdcfab2f952bcd46a73e5c4.jpg";
+//
+//        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(profilePictureName);
+//        MockMultipartFile file = new MockMultipartFile("file", profilePictureName, MediaType.IMAGE_JPEG_VALUE, inputStream);
+//
+//        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/users/{userEmail}/profileImage", userEmail)
+//                        .file(file)
+//                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + authToken))
+//                .andExpect(MockMvcResultMatchers.status().isOk());
+//    }
 
     @Test
     void uploadingInvalidImageContentTypeShouldThrow422() {
@@ -95,8 +115,16 @@ class UserControllerTest {
     @Test
     void shouldGetProfilePicture() {
         String userEmail = "edwardsemail@gmail.com";
+
         String uri = PROFILE_IMAGE_BASE_URL.formatted(port, userEmail);
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + authToken);
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        ResponseEntity<String> exchange = restTemplate.exchange(uri, HttpMethod.GET, entity, String.class);
+
+        assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     private String signUpAndSignInUser() {
