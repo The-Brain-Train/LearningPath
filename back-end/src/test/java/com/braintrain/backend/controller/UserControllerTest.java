@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,6 +33,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")
@@ -64,25 +66,13 @@ class UserControllerTest {
     @Test
     void shouldUpdateProfilePicture() throws IOException {
         String userEmail = "edwardsemail@gmail.com";
+        String uri = PROFILE_IMAGE_BASE_URL.formatted(port, userEmail);
         String profilePictureName = "cool-profile-pictures-63a5e8ee8cdcfab2f952bcd46a73e5c4.jpg";
 
-        ClassPathResource classPathResource = new ClassPathResource(profilePictureName);
-        Path path = Paths.get(classPathResource.getURI());
-        byte[] content = Files.readAllBytes(path);
-
-        MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>();
-        parts.add("file", new ByteArrayResource(content) {
-            @Override
-            public String getFilename() {
-                return profilePictureName;
-            }
-        });
-
-        String uri = PROFILE_IMAGE_BASE_URL.formatted(port, userEmail);
+        MultiValueMap<String, Object> parts = createMultipartRequest(profilePictureName);
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + authToken);
-        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
         HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(parts, headers);
 
@@ -92,30 +82,30 @@ class UserControllerTest {
         assertThat(exchange.getBody()).isNotEmpty();
     }
 
-//    @Test
-//    void shouldUpdateProfilePicture() throws Exception {
-//        String userEmail = "edwardsemail@gmail.com";
-//        String profilePictureName = "cool-profile-pictures-63a5e8ee8cdcfab2f952bcd46a73e5c4.jpg";
-//
-//        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(profilePictureName);
-//        MockMultipartFile file = new MockMultipartFile("file", profilePictureName, MediaType.IMAGE_JPEG_VALUE, inputStream);
-//
-//        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/users/{userEmail}/profileImage", userEmail)
-//                        .file(file)
-//                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + authToken))
-//                .andExpect(MockMvcResultMatchers.status().isOk());
-//    }
-
     @Test
-    void uploadingInvalidImageContentTypeShouldThrow422() {
+    void uploadingInvalidImageContentTypeShouldThrow422() throws IOException {
         String userEmail = "edwardsemail@gmail.com";
+        String profilePictureName = "test-pdf-file.pdf";
         String uri = PROFILE_IMAGE_BASE_URL.formatted(port, userEmail);
+
+        MultiValueMap<String, Object> parts = createMultipartRequest(profilePictureName);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + authToken);
+
+        HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(parts, headers);
+
+        try {
+            restTemplate.exchange(uri, HttpMethod.POST, entity, Void.class);
+            fail("should throw exception");
+        } catch (HttpClientErrorException err) {
+            assertThat(err.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
+        }
     }
 
     @Test
     void shouldGetProfilePicture() {
         String userEmail = "edwardsemail@gmail.com";
-
         String uri = PROFILE_IMAGE_BASE_URL.formatted(port, userEmail);
 
         HttpHeaders headers = new HttpHeaders();
@@ -142,5 +132,20 @@ class UserControllerTest {
             return jwtAuthenticationResponse.getToken();
         }
         return null;
+    }
+
+    private MultiValueMap<String, Object> createMultipartRequest(String fileName) throws IOException {
+        ClassPathResource classPathResource = new ClassPathResource(fileName);
+        Path path = Paths.get(classPathResource.getURI());
+        byte[] content = Files.readAllBytes(path);
+
+        MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>();
+        parts.add("file", new ByteArrayResource(content) {
+            @Override
+            public String getFilename() {
+                return fileName;
+            }
+        });
+        return parts;
     }
 }
