@@ -16,6 +16,7 @@ import useCurrentUserQuery from "@/app/functions/useCurrentUserQuery";
 import { useCookies } from "react-cookie";
 import { Roadmap, RoadmapMeta, RoadmapMetaList, TreeNode } from "@/app/util/types";
 import { FavoriteButton } from "./FavoriteButton";
+import Link from "next/link";
 
 type Props = {
   params: {
@@ -153,10 +154,10 @@ function RoadMapId(props: Props) {
             <p className="text-xl text-center font-bold text-white md:text-2xl">
               Resources to follow
             </p> </div>
-          <div>
+          <div className="mt-5 mx-10">
             {treeNode && treeNode.resources && treeNode.resources.map(r =>
               // <p> {r.name}</p>
-              <table className="table-fixed">
+              <table className="table-fixed w-full">
                 {/* <thead>
                   <tr>
                     <th>Type</th>
@@ -165,10 +166,18 @@ function RoadMapId(props: Props) {
                   </tr>
                 </thead> */}
                 <tbody>
-                  <tr>
-                    <td>{r.type}</td>
+                  <tr className="py-10">
+                    <td>
+                      {r.type}
+                    </td>
                     <td>{r.name}</td>
-                    <td>{r.link}</td>
+                    <td>
+                      <Link href={r.link} target="_blank" rel="noopener noreferrer">
+                      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">
+                        Visit Site
+                      </button>
+                      </Link>
+                    </td>
                   </tr>
                 </tbody>
               </table>
