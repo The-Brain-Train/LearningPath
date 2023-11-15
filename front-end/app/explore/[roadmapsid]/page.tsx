@@ -7,16 +7,18 @@ import {
   getRoadmapByMetaId,
   getUserFavorites,
   removeRoadmapMetaFromUserFavorites,
+  addResourcesToRoadmap,
 } from "@/app/functions/httpRequests";
 import { ArrowBack } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { Box, CircularProgress } from "@mui/material";
 import useCurrentUserQuery from "@/app/functions/useCurrentUserQuery";
 import { useCookies } from "react-cookie";
 import { Roadmap, RoadmapMeta, RoadmapMetaList, TreeNode } from "@/app/util/types";
 import { FavoriteButton } from "./FavoriteButton";
 import Link from "next/link";
+import { ResourcesSection } from "../ResourcesSection";
 
 type Props = {
   params: {
@@ -96,11 +98,37 @@ function RoadMapId(props: Props) {
     );
   };
 
-  const roadmapToTreeNode = (roadmap: Roadmap) => {
+  const userOwnsRoadmap = () => {
+    const roadmapMeta = findRoadmapMeta(roadmapId);
+    if (currentUser && roadmapMeta && currentUser?.email === roadmapMeta?.userEmail) {
+      return true;
+    }
+    return false;
+  };
+
+  const roadmapToTreeNode = (roadmap: Roadmap | undefined) => {
     return roadmap as unknown as TreeNode;
   }
 
   const treeNode = roadmapToTreeNode(roadmap);
+
+  // const { mutateAsync: handleAddResources, isLoading: generatingResources } = useMutation({
+  //   mutationFn: async () => {
+  //     const response = await getResponseFromOpenAI(
+  //       requestPromptOnlyResources(treeNode.name)
+  //     );
+  //     const resourcesJsonData = await JSON.parse(response.choices[0].message.content);
+  //     const roadmap = await addResourcesToRoadmap(
+  //       currentUser?.email,
+  //       roadmapId,
+  //       resourcesJsonData,
+  //       cookies.user
+  //     );
+  //   },
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries(["roadmap"]);
+  //   },
+  // });
 
   if (isError) {
     return (
@@ -150,21 +178,25 @@ function RoadMapId(props: Props) {
           </div>
           <IndentedTreeWithData data={roadmapToTreeNode(roadmap)} />
 
-          <div className="mt-10 flex flex-left">
-            <p className="text-xl text-center font-bold text-white md:text-2xl">
-              Resources to follow
-            </p> </div>
+          <ResourcesSection 
+            treeNode={treeNode}
+            userOwnsRoadmap={userOwnsRoadmap()}
+            queriesToInvalidate={["roadmap"]}
+            roadmapId={roadmapId}
+            userEmail={currentUser?.email}
+            cookiesUser={cookies.user} 
+          />
+
+          {/* {(userOwnsRoadmap() || treeNode && treeNode.resources) &&
+            <div className="mt-10 flex flex-left">
+              <p className="text-xl text-center font-bold text-white md:text-2xl">
+                Resources to follow
+              </p>
+            </div>
+          }
           <div className="mt-5 mx-10">
             {treeNode && treeNode.resources && treeNode.resources.map(r =>
-              // <p> {r.name}</p>
               <table className="table-fixed w-full">
-                {/* <thead>
-                  <tr>
-                    <th>Type</th>
-                    <th>Name</th>
-                    <th>Link</th>
-                  </tr>
-                </thead> */}
                 <tbody>
                   <tr className="py-10">
                     <td>
@@ -173,24 +205,30 @@ function RoadMapId(props: Props) {
                     <td>{r.name}</td>
                     <td>
                       <Link href={r.link} target="_blank" rel="noopener noreferrer">
-                      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">
-                        Visit Site
-                      </button>
+                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">
+                          Visit Site
+                        </button>
                       </Link>
                     </td>
                   </tr>
                 </tbody>
               </table>
-
             )
             }
-
-
-
-          </div>
-
-
-
+            {
+              (!treeNode || !treeNode.resources) && !generatingResources && userOwnsRoadmap() && (
+                <button
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded"
+                  onClick={() => handleAddResources()}
+                >
+                  Add Resources
+                </button>
+              )
+            }
+            {
+              generatingResources && <CircularProgress />
+            }
+          </div> */}
 
         </div>
       </div>
