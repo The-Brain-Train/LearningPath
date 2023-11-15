@@ -42,7 +42,7 @@ export const ResourcesSection = (props: ResourcesSectionProps) => {
 
         <>
 
-            {(props.userOwnsRoadmap || props.treeNode && props.treeNode.resources) &&
+            {((props.userOwnsRoadmap && props.roadmapId) || props.treeNode && props.treeNode.resources)  &&
                 <div className="mt-10 flex flex-left">
                     <p className="text-xl text-center font-bold text-white md:text-2xl">
                         Resources to follow
