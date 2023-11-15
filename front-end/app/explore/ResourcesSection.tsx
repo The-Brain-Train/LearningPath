@@ -7,7 +7,7 @@ import { requestPromptOnlyResources } from "../functions/chatPreHistory";
 import { getResponseFromOpenAI } from "../functions/openAIChat";
 
 type ResourcesSectionProps = {
-    treeNode: TreeNode | null,
+    treeNode: TreeNode | null | undefined,
     userOwnsRoadmap: boolean,
     queriesToInvalidate: string[],
     roadmapId: string | undefined,
@@ -22,7 +22,7 @@ export const ResourcesSection = (props: ResourcesSectionProps) => {
     const { mutateAsync: handleAddResources, isLoading: generatingResources } = useMutation({
         mutationFn: async () => {
             const response = await getResponseFromOpenAI(
-                requestPromptOnlyResources(props.treeNode.name)
+                requestPromptOnlyResources(props.treeNode?.name || null) //
             );
             const resourcesJsonData = await JSON.parse(response.choices[0].message.content);
             const roadmap = await addResourcesToRoadmap(
@@ -71,7 +71,8 @@ export const ResourcesSection = (props: ResourcesSectionProps) => {
                 )
                 }
                 {
-                    (!props.treeNode || !props.treeNode.resources) && !generatingResources && props.userOwnsRoadmap && (
+                    (!props.treeNode || !props.treeNode.resources) &&
+                    !generatingResources && props.userOwnsRoadmap && props.roadmapId && (
                         <button
                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded"
                             onClick={() => handleAddResources()}
@@ -81,7 +82,7 @@ export const ResourcesSection = (props: ResourcesSectionProps) => {
                     )
                 }
                 {
-                    generatingResources &&
+                    generatingResources && props.roadmapId &&
                     <>
                         <div className="text-center font-bold text-xl text-slate-300">
                             Generating Resources

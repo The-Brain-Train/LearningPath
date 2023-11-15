@@ -12,6 +12,7 @@ import {
 import { useCookies } from 'react-cookie';
 import useCurrentUserQuery from "../functions/useCurrentUserQuery";
 import InputForm from "./InputForm";
+import { ResourcesSection } from "../explore/ResourcesSection";
 
 export default function Create() {
   const [data, setData] = useState<TreeNode | null>(null);
@@ -113,6 +114,16 @@ export default function Create() {
         setData={setData}
         currentUser={currentUser}
       />
+      {!apiFetchLoading && (
+        <ResourcesSection
+          treeNode={data}
+          userOwnsRoadmap={true}
+          queriesToInvalidate={[""]}
+          roadmapId={undefined}
+          userEmail={currentUser?.email}
+          cookiesUser={cookies.user}
+        />)
+      }
     </main>
   );
 }
