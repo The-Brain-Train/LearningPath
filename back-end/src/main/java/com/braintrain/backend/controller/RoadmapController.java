@@ -113,6 +113,15 @@ public class RoadmapController {
         return ResponseEntity.created(uri).body(userFavorites);
     }
 
+    @PutMapping("/resource")
+    public ResponseEntity<Roadmap> addResourcesToRoadmap(
+            @PathVariable String roadmapMetaId,
+            @RequestBody ResourcesDTO resourcesDto) {
+        Roadmap updatedRoadmap =
+                service.addResourcesToRoadmap(roadmapMetaId, resourcesDto.resources());
+        return ResponseEntity.ok(updatedRoadmap);
+    }
+
     @DeleteMapping("/{userEmail}/favorites")
     public ResponseEntity<UserFavoritesDTO> removeRoadmapMetaFromFavorites(@PathVariable String userEmail, @RequestBody RoadmapMeta roadmapMeta) {
         User user = userService.getUserByEmail(userEmail);

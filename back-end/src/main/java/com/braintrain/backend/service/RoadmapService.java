@@ -146,6 +146,21 @@ public class RoadmapService {
         return new UserFavoritesDTO(user.getFavorites());
     }
 
+    public Roadmap addResourcesToRoadmap(String roadmapMetaId, List<Resource> resources) {
+        Roadmap roadmap = findRoadmapByMetaId(roadmapMetaId);
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            RoadmapContent roadmapContent = objectMapper.readValue(roadmap.getObj(), RoadmapContent.class);
+            roadmapContent.resources = resources;
+            String content = objectMapper.writeValueAsString(roadmapContent);
+            roadmap.setObj(content);
+            repo.save(roadmap);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return roadmap;
+    }
+
     private static void validateDTONameInput(String roadmapDTOName) {
         if (roadmapDTOName == null || roadmapDTOName.isEmpty()) {
             throw new IllegalArgumentException("Invalid name");
