@@ -7,17 +7,15 @@ import {
   getRoadmapByMetaId,
   getUserFavorites,
   removeRoadmapMetaFromUserFavorites,
-  addResourcesToRoadmap,
 } from "@/app/functions/httpRequests";
 import { ArrowBack } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
-import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Box, CircularProgress } from "@mui/material";
 import useCurrentUserQuery from "@/app/functions/useCurrentUserQuery";
 import { useCookies } from "react-cookie";
 import { Roadmap, RoadmapMeta, RoadmapMetaList, TreeNode } from "@/app/util/types";
 import { FavoriteButton } from "./FavoriteButton";
-import Link from "next/link";
 import { ResourcesSection } from "../ResourcesSection";
 
 type Props = {
@@ -112,24 +110,6 @@ function RoadMapId(props: Props) {
 
   const treeNode = roadmapToTreeNode(roadmap);
 
-  // const { mutateAsync: handleAddResources, isLoading: generatingResources } = useMutation({
-  //   mutationFn: async () => {
-  //     const response = await getResponseFromOpenAI(
-  //       requestPromptOnlyResources(treeNode.name)
-  //     );
-  //     const resourcesJsonData = await JSON.parse(response.choices[0].message.content);
-  //     const roadmap = await addResourcesToRoadmap(
-  //       currentUser?.email,
-  //       roadmapId,
-  //       resourcesJsonData,
-  //       cookies.user
-  //     );
-  //   },
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries(["roadmap"]);
-  //   },
-  // });
-
   if (isError) {
     return (
       <main className="bg-white">
@@ -186,49 +166,6 @@ function RoadMapId(props: Props) {
             userEmail={currentUser?.email}
             cookiesUser={cookies.user} 
           />
-
-          {/* {(userOwnsRoadmap() || treeNode && treeNode.resources) &&
-            <div className="mt-10 flex flex-left">
-              <p className="text-xl text-center font-bold text-white md:text-2xl">
-                Resources to follow
-              </p>
-            </div>
-          }
-          <div className="mt-5 mx-10">
-            {treeNode && treeNode.resources && treeNode.resources.map(r =>
-              <table className="table-fixed w-full">
-                <tbody>
-                  <tr className="py-10">
-                    <td>
-                      {r.type}
-                    </td>
-                    <td>{r.name}</td>
-                    <td>
-                      <Link href={r.link} target="_blank" rel="noopener noreferrer">
-                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">
-                          Visit Site
-                        </button>
-                      </Link>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            )
-            }
-            {
-              (!treeNode || !treeNode.resources) && !generatingResources && userOwnsRoadmap() && (
-                <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded"
-                  onClick={() => handleAddResources()}
-                >
-                  Add Resources
-                </button>
-              )
-            }
-            {
-              generatingResources && <CircularProgress />
-            }
-          </div> */}
 
         </div>
       </div>
