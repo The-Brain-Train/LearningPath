@@ -192,6 +192,36 @@ export const downVoteRoadmap = async (
   }
 };
 
+export const addResourcesToRoadmap = async (
+  userEmail: string | null | undefined,
+  roadmapMetaId: string,
+  chatGptResourceResponse: string,
+  token: any
+) => {
+  try {
+    console.log("chatGptResourceResponse :: " + chatGptResourceResponse);
+    console.log("chatGptResourceResponse @@ " + JSON.stringify(chatGptResourceResponse));
+    const response = await fetch(
+      `${BACKEND_URL}/api/roadmaps/${userEmail}/resource/${roadmapMetaId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+        body: JSON.stringify(chatGptResourceResponse),
+      }
+    );
+    if (!response.ok) {
+      throw new Error(
+        `Failed to add resources to roadmap. Status code: ${response.status}`
+      );
+    }
+  } catch (error) {
+    console.error("Error adding resources to roadmap:", error);
+  }
+};
+
 export const addRoadmapMetaToUserFavorites = async (
   userEmail: string | null | undefined,
   roadmapMeta: RoadmapMeta,
