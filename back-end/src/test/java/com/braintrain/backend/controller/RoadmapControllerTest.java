@@ -127,25 +127,10 @@ class RoadmapControllerTest {
     void shouldFilterRoadmaps(
             String name, String experienceLevel, int fromHour, int toHour, int page, int size, int expectedCount) {
 
-        StringBuilder queryString = new StringBuilder();
-        if (name != null) {
-            queryString.append("name=").append(name);
-        }
-        if (experienceLevel != null) {
-            if (!queryString.isEmpty()) {
-                queryString.append("&");
-            }
-            queryString.append("experienceLevel=").append(experienceLevel);
-        }
-        if (!queryString.isEmpty()) {
-            queryString.append("&");
-        }
-        queryString.append("fromHour=").append(fromHour)
-                .append("&toHour=").append(toHour)
-                .append("&page=").append(page)
-                .append("&size=").append(size);
+        String queryString =
+                TestHelper.buildQueryStringForFilterRoadmapsTest(name, experienceLevel, fromHour, toHour, page, size);
 
-        String uri = "http://localhost:%s/api/roadmaps/filter?%s".formatted(port, queryString.toString());
+        String uri = "http://localhost:%s/api/roadmaps/filter?%s".formatted(port, queryString);
 
         ResponseEntity<CustomPageImpl<RoadmapMetaDTO>> response =
                 restTemplate.exchange(uri, HttpMethod.GET, HttpEntity.EMPTY, new ParameterizedTypeReference<>() {

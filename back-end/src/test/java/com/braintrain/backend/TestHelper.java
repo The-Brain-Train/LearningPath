@@ -28,4 +28,27 @@ public class TestHelper {
                 m.get("userEmail"), m.get("experienceLevel"), Integer.parseInt(m.get("hours")))).toList();
     }
 
+    public static String buildQueryStringForFilterRoadmapsTest(
+            String name, String experienceLevel, int fromHour, int toHour, int page, int size) {
+
+        StringBuilder queryString = new StringBuilder();
+        if (name != null) {
+            queryString.append("name=").append(name);
+        }
+        if (experienceLevel != null) {
+            if (!queryString.isEmpty()) {
+                queryString.append("&");
+            }
+            queryString.append("experienceLevel=").append(experienceLevel);
+        }
+        if (!queryString.isEmpty()) {
+            queryString.append("&");
+        }
+        queryString.append("fromHour=").append(fromHour)
+                .append("&toHour=").append(toHour)
+                .append("&page=").append(page)
+                .append("&size=").append(size);
+
+        return queryString.toString();
+    }
 }
