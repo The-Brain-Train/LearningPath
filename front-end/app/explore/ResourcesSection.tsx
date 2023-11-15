@@ -84,7 +84,7 @@ export const ResourcesSection = (props: ResourcesSectionProps) => {
                 {
                     generatingResources && props.roadmapId &&
                     <>
-                        <div className="text-center font-bold text-xl text-slate-300">
+                        <div className="font-bold text-xl text-slate-300">
                             Generating Resources
                         </div>
                         <CircularProgress />
