@@ -1,10 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
 import IndentedTree from "./IndentedTree";
-import { CreateRoadmapFormData, RoadmapDTO, TreeNode, User } from "../util/types";
+import { CreateRoadmapFormData, RoadmapDTO, TreeNode } from "../util/types";
 import { postRoadmap } from "../functions/httpRequests";
 import { getResponseFromOpenAI } from "../functions/openAIChat";
-import { chatHistory, requestPromptWithResources, requestPromptOnlyResources } from "../functions/chatPreHistory";
+import { chatHistory, requestPromptWithResources } from "../functions/chatPreHistory";
 import {
   calculateTotalValuesRecursive,
   scaleValues,
