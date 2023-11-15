@@ -194,7 +194,7 @@ export const downVoteRoadmap = async (
 
 export const addResourcesToRoadmap = async (
   userEmail: string | null | undefined,
-  roadmapMetaId: string,
+  roadmapMetaId: string | undefined,
   chatGptResourceResponse: string,
   token: any
 ) => {
