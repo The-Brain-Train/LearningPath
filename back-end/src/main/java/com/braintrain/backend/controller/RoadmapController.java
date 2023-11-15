@@ -113,7 +113,7 @@ public class RoadmapController {
         return ResponseEntity.created(uri).body(userFavorites);
     }
 
-    @PutMapping("/resource")
+    @PutMapping("/{userEmail}/resource/{roadmapMetaId}")
     public ResponseEntity<Roadmap> addResourcesToRoadmap(
             @PathVariable String roadmapMetaId,
             @RequestBody ResourcesDTO resourcesDto) {
