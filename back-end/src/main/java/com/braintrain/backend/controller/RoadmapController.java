@@ -50,8 +50,7 @@ public class RoadmapController {
 
     @GetMapping("/findByMeta/{metaId}")
     public ResponseEntity<Roadmap> findRoadmapByMetaId(@PathVariable String metaId) {
-        RoadmapMeta roadmapMeta = service.getRoadmapMetaById(metaId);
-        return getRoadmap(roadmapMeta.getRoadmapReferenceId());
+        return ResponseEntity.ok(service.findRoadmapByMetaId(metaId));
     }
 
     @GetMapping("/{userEmail}/roadmapMetas")
