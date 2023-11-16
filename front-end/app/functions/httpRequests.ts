@@ -61,7 +61,7 @@ export const deleteRoadmap = async (roadMapId: string) => {
   return roadMapId;
 };
 
-export const postRoadmap = async (roadmap: RoadmapDTO, token: any) => {
+export const postRoadmap = async (roadmap: RoadmapDTO, token: string) => {
 
   return await fetch(`${BACKEND_URL}/api/roadmaps`, {
     method: "POST",
@@ -83,7 +83,7 @@ export const postRoadmap = async (roadmap: RoadmapDTO, token: any) => {
   })
 };
 
-export const getUsersRoadmapMetas = async (userEmail: string, token: any) => {
+export const getUsersRoadmapMetas = async (userEmail: string, token: string) => {
   const response = await fetch(
     `${BACKEND_URL}/api/roadmaps/${userEmail}/roadmapMetas`,
     {
@@ -101,7 +101,7 @@ export const getUsersRoadmapMetas = async (userEmail: string, token: any) => {
 
 export const getUserFavorites = async (
   userEmail: string | null,
-  token: any
+  token: string
 ) => {
   const response = await fetch(
     `${BACKEND_URL}/api/roadmaps/${userEmail}/favorites`,
@@ -120,7 +120,7 @@ export const getUserFavorites = async (
 
 export const getUserUpVotesDownVotes = async (
   userEmail: string | null,
-  token: any
+  token: string
 ) => {
   const response = await fetch(
     `${BACKEND_URL}/api/roadmaps/${userEmail}/votes`,
@@ -140,7 +140,7 @@ export const getUserUpVotesDownVotes = async (
 export const upVoteRoadmap = async (
   userEmail: string | null | undefined,
   roadmapMetaId: string,
-  token: any
+  token: string
 ) => {
   try {
     const response = await fetch(
@@ -169,7 +169,7 @@ export const upVoteRoadmap = async (
 export const downVoteRoadmap = async (
   userEmail: string | null | undefined,
   roadmapMetaId: string,
-  token: any
+  token: string
 ) => {
   try {
     const response = await fetch(
@@ -196,7 +196,7 @@ export const addResourcesToRoadmap = async (
   userEmail: string | null | undefined,
   roadmapMetaId: string | undefined,
   chatGptResourceResponse: string,
-  token: any
+  token: string
 ) => {
   try {
     const response = await fetch(
@@ -221,12 +221,13 @@ export const addResourcesToRoadmap = async (
 };
 
 export const updateUserCompletedTopic = async (
+  userEmail: string | null | undefined,
   roadmapMetaId: string,
-  completedTask: boolean,
+  completedTask: string,
   token: string
 ) => {
   const response = await fetch(
-    `${BACKEND_URL}/api/roadmaps/completedTopic/${roadmapMetaId}`,
+    `${BACKEND_URL}/api/roadmaps/${userEmail}/completedTopic/${roadmapMetaId}`,
     {
       method: "PUT",
       body: JSON.stringify(completedTask),
@@ -245,7 +246,7 @@ export const updateUserCompletedTopic = async (
 export const addRoadmapMetaToUserFavorites = async (
   userEmail: string | null | undefined,
   roadmapMeta: RoadmapMeta,
-  token: any
+  token: string
 ) => {
   try {
     const res = await fetch(
@@ -272,7 +273,7 @@ export const addRoadmapMetaToUserFavorites = async (
 export const removeRoadmapMetaFromUserFavorites = async (
   userEmail: string | null | undefined,
   roadmapMeta: RoadmapMeta,
-  token: any
+  token: string
 ) => {
   try {
     const res = await fetch(
@@ -298,7 +299,7 @@ export const removeRoadmapMetaFromUserFavorites = async (
 
 export const getUserProfilePicture = async (
   userEmail: string | null,
-  token: any
+  token: string
 ) => {
   const response = await fetch(
     `${BACKEND_URL}/api/users/${userEmail}/profileImage`,
@@ -318,7 +319,7 @@ export const getUserProfilePicture = async (
 export const postUserProfilePicture = async (
   userEmail: string | null,
   formData: FormData,
-  token: any
+  token: string
 ) => {
   const response = await fetch(
     `${BACKEND_URL}/api/users/${userEmail}/profileImage`,
@@ -342,7 +343,7 @@ export const postUserProfilePicture = async (
 
 export const getRoadmapCountOfUser = async (
   userEmail: string | null,
-  token: any
+  token: string
 ) => {
   const response = await fetch(
     `${BACKEND_URL}/api/roadmaps/${userEmail}/count`,
