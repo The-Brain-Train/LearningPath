@@ -220,6 +220,28 @@ export const addResourcesToRoadmap = async (
   }
 };
 
+export const updateUserCompletedTopic = async (
+  roadmapMetaId: string,
+  completedTask: boolean,
+  token: string
+) => {
+  const response = await fetch(
+    `${BACKEND_URL}/api/roadmaps/completedTopic/${roadmapMetaId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(completedTask),
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Topic failed to add to completed list");
+  }
+  const data = await response.json();
+  return data;
+};
+
 export const addRoadmapMetaToUserFavorites = async (
   userEmail: string | null | undefined,
   roadmapMeta: RoadmapMeta,
