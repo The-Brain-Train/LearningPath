@@ -8,6 +8,7 @@ import com.braintrain.backend.repository.RoadmapMetaRepository;
 import com.braintrain.backend.repository.RoadmapRepository;
 import com.braintrain.backend.repository.UserRepository;
 import com.braintrain.backend.util.RoadmapMetaConverter;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,6 +26,7 @@ public class RoadmapService {
     private final RoadmapRepository repo;
     private final UserRepository userRepo;
     private final UserService userService;
+    private ObjectMapper objectMapper;
 
     public RoadmapMeta createRoadmap(RoadmapDTO roadmapDTO) {
         validateDTONameInput(roadmapDTO.name());
@@ -149,9 +151,8 @@ public class RoadmapService {
     public Roadmap addResourcesToRoadmap(String roadmapMetaId, List<Resource> resources) {
         Roadmap roadmap = findRoadmapByMetaId(roadmapMetaId);
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
             RoadmapContent roadmapContent = objectMapper.readValue(roadmap.getObj(), RoadmapContent.class);
-            roadmapContent.resources = resources;
+            roadmapContent.setResources(resources);
             String content = objectMapper.writeValueAsString(roadmapContent);
             roadmap.setObj(content);
             repo.save(roadmap);
@@ -159,6 +160,36 @@ public class RoadmapService {
             e.printStackTrace();
         }
         return roadmap;
+    }
+
+    public void markChildElementAsComplete(String roadmapId, String childElementName) {
+        Roadmap roadmap = findRoadmapByMetaId(roadmapId);
+        RoadmapContent roadmapContent = null;
+        try {
+            roadmapContent = objectMapper.readValue(roadmap.getObj(), RoadmapContent.class);
+            updateChildCompletionStatus(roadmapContent, childElementName, true);
+            String content = objectMapper.writeValueAsString(roadmapContent);
+            roadmap.setObj(content);
+            repo.save(roadmap);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void updateChildCompletionStatus(RoadmapContent roadmapContent, String childElementName, boolean completionStatus) {
+        for (RoadmapContentChild child : roadmapContent.getChildren()) {
+            if (child.getName().equals(childElementName)) {
+                child.setCompletedTopic(completionStatus);
+                updateParentCompletionStatus(roadmapContent, child);
+                return;
+            }
+        }
+    }
+
+    private void updateParentCompletionStatus(RoadmapContent roadmapContent, RoadmapContentChild child) {
+        boolean allChildrenCompleted = roadmapContent.getChildren().stream()
+                .allMatch(RoadmapContentChild::isCompletedTopic);
+        roadmapContent.setCompletedTopic(allChildrenCompleted);
     }
 
     private static void validateDTONameInput(String roadmapDTOName) {
