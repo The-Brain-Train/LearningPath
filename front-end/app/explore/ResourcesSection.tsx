@@ -50,8 +50,8 @@ export const ResourcesSection = (props: ResourcesSectionProps) => {
                 </div>
             }
             <div className="mt-5 mx-10">
-                {props.treeNode && props.treeNode.resources && props.treeNode.resources.map(r =>
-                    <table className="table-fixed w-full">
+                {props.treeNode && props.treeNode.resources && props.treeNode.resources.map((r, index) =>
+                    <table className="table-fixed w-full" key={index}>
                         <tbody>
                             <tr className="py-10">
                                 <td>
