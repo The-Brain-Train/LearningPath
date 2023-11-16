@@ -87,6 +87,13 @@ public class RoadmapController {
         return ResponseEntity.ok(userService.getUserUpVoteDownVotes(userEmail));
     }
 
+    @PostMapping
+    public ResponseEntity<RoadmapMeta> createRoadmap(@RequestBody RoadmapDTO roadmapDTO){
+        RoadmapMeta roadmapMeta = service.createRoadmap(roadmapDTO);
+        URI uri = URI.create("/api/roadmaps" + roadmapMeta.getRoadmapReferenceId());
+        return ResponseEntity.created(uri).body(roadmapMeta);
+    }
+
     @PostMapping("/{userEmail}/upvote/{roadmapMetaId}")
     public ResponseEntity<Long> upVoteRoadmapMeta(@PathVariable String userEmail, @PathVariable String roadmapMetaId) {
         Long voteCount = service.upVoteRoadmapMeta(userEmail, roadmapMetaId);
@@ -133,13 +140,6 @@ public class RoadmapController {
         UserFavoritesDTO userFavorites = service.removeRoadmapMetaFromFavorites(user, roadmapMeta);
 
         return ResponseEntity.ok(userFavorites);
-    }
-
-    @PostMapping
-    public ResponseEntity<RoadmapMeta> createRoadmap(@RequestBody RoadmapDTO roadmapDTO){
-        RoadmapMeta roadmapMeta = service.createRoadmap(roadmapDTO);
-        URI uri = URI.create("/api/roadmaps" + roadmapMeta.getRoadmapReferenceId());
-        return ResponseEntity.created(uri).body(roadmapMeta);
     }
 
     @DeleteMapping("/{id}")

@@ -1,0 +1,30 @@
+[
+  {
+    "name": "Java",
+    "obj": "{\"name\":\"Java\",\"children\":[{\"name\":\"Basics\",\"children\":[{\"name\":\"Syntax\",\"children\":[{\"name\":\"Keywords\",\"value\":3},{\"name\":\"Data Types\",\"value\":3},{\"name\":\"Variables\",\"value\":7},{\"name\":\"Operators\",\"value\":7},{\"name\":\"Control Structures\",\"value\":10}],\"value\":30},{\"name\":\"Object-Oriented Programming\",\"children\":[{\"name\":\"Classes\",\"value\":10},{\"name\":\"Objects\",\"value\":10},{\"name\":\"Inheritance\",\"value\":14},{\"name\":\"Polymorphism\",\"value\":14}],\"value\":48},{\"name\":\"Exception Handling\",\"value\":10}],\"value\":88},{\"name\":\"Advanced Topics\",\"children\":[{\"name\":\"Collections\",\"value\":20},{\"name\":\"Generics\",\"value\":7},{\"name\":\"Multithreading\",\"value\":17},{\"name\":\"Concurrency\",\"value\":17},{\"name\":\"File I/O\",\"value\":10},{\"name\":\"Networking\",\"value\":20},{\"name\":\"Database Connectivity (JDBC)\",\"value\":17}],\"value\":108},{\"name\":\"Frameworks\",\"children\":[{\"name\":\"Spring\",\"value\":30},{\"name\":\"Hibernate\",\"value\":27},{\"name\":\"JavaFX\",\"value\":17}],\"value\":74}],\"value\":270}",
+    "userEmail": "vijani@123.com",
+    "experienceLevel": "beginner",
+    "hours": 60
+  },
+  {
+    "name": "Java",
+    "obj": "{\"name\":\"Java\",\"children\":[{\"name\":\"Introduction to Java\",\"children\":[{\"name\":\"Variables and Data Types\",\"value\":8},{\"name\":\"Operators and Expressions\",\"value\":6},{\"name\":\"Control Flow\",\"value\":9}],\"value\":23},{\"name\":\"Object-Oriented Programming\",\"children\":[{\"name\":\"Classes and Objects\",\"value\":12},{\"name\":\"Inheritance and Polymorphism\",\"value\":16},{\"name\":\"Abstraction and Encapsulation\",\"value\":9}],\"value\":37},{\"name\":\"Exception Handling\",\"value\":6},{\"name\":\"Collections\",\"children\":[{\"name\":\"ArrayList\",\"value\":6},{\"name\":\"LinkedList\",\"value\":6},{\"name\":\"HashMap\",\"value\":6}],\"value\":18},{\"name\":\"File Handling\",\"value\":9},{\"name\":\"Multithreading\",\"value\":16},{\"name\":\"Networking\",\"value\":12},{\"name\":\"Graphical User Interface\",\"value\":19},{\"name\":\"Database Connectivity\",\"value\":16},{\"name\":\"Testing and Debugging\",\"value\":12}],\"value\":168}",
+    "userEmail": "vijani@abc.com",
+    "experienceLevel": "intermediate",
+    "hours": 120
+  },
+  {
+    "name": "Python",
+    "obj": "{\"name\":\"Python\",\"children\":[{\"name\":\"Basics\",\"children\":[{\"name\":\"Understanding Syntax\",\"value\":7},{\"name\":\"Variables and Data Types\",\"value\":7},{\"name\":\"Operators\",\"value\":7},{\"name\":\"Control Flow\",\"value\":7},{\"name\":\"Functions\",\"value\":7},{\"name\":\"Modules and Packages\",\"value\":7}],\"value\":42},{\"name\":\"Intermediate\",\"children\":[{\"name\":\"File I/O\",\"value\":7},{\"name\":\"Exception Handling\",\"value\":7},{\"name\":\"Object-Oriented Programming\",\"value\":13},{\"name\":\"Regular Expressions\",\"value\":7}],\"value\":34},{\"name\":\"Web Development\",\"children\":[{\"name\":\"HTML/CSS Basics\",\"value\":7},{\"name\":\"Web Frameworks (e.g., Django, Flask)\",\"value\":20},{\"name\":\"Database Integration (e.g., SQLite, MySQL)\",\"value\":7}],\"value\":34},{\"name\":\"Data Science\",\"children\":[{\"name\":\"NumPy and Pandas\",\"value\":7},{\"name\":\"Data Visualization with Matplotlib\",\"value\":7},{\"name\":\"Machine Learning (e.g., scikit-learn)\",\"value\":13}],\"value\":27}],\"resources\":[{\"name\":\"Python for Everybody\",\"type\":\"Online Course\",\"link\":\"https://www.py4e.com/\"},{\"name\":\"Automate the Boring Stuff with Python\",\"type\":\"Book\",\"link\":\"https://automatetheboringstuff.com/\"},{\"name\":\"Python Crash Course\",\"type\":\"Book\",\"link\":\"https://nostarch.com/pythoncrashcourse2e\"},{\"name\":\"Real Python\",\"type\":\"Website\",\"link\":\"https://realpython.com/\"},{\"name\":\"Codecademy\",\"type\":\"Online Course\",\"link\":\"https://www.codecademy.com/learn/learn-python\"}],\"value\":137}",
+    "userEmail": "vijani@abc.com",
+    "experienceLevel": "beginner",
+    "hours": 237
+  },
+  {
+    "name": "Python",
+    "obj": "{\"name\":\"Python\",\"children\":[{\"name\":\"Introduction to Python\",\"children\":[{\"name\":\"Python Basics\",\"children\":null,\"value\":11},{\"name\":\"Data Types and Variables\",\"children\":null,\"value\":7},{\"name\":\"Control Flow\",\"children\":null,\"value\":7}],\"value\":25},{\"name\":\"Intermediate Python\",\"children\":[{\"name\":\"Functions\",\"children\":null,\"value\":11},{\"name\":\"Lists and Tuples\",\"children\":null,\"value\":7},{\"name\":\"Dictionaries\",\"children\":null,\"value\":7},{\"name\":\"File Handling\",\"children\":null,\"value\":7}],\"value\":32},{\"name\":\"Object-Oriented Programming in Python\",\"children\":[{\"name\":\"Classes and Objects\",\"children\":null,\"value\":11},{\"name\":\"Inheritance and Polymorphism\",\"children\":null,\"value\":7},{\"name\":\"Exception Handling\",\"children\":null,\"value\":7}],\"value\":25},{\"name\":\"Python Libraries\",\"children\":[{\"name\":\"NumPy\",\"children\":null,\"value\":7},{\"name\":\"Pandas\",\"children\":null,\"value\":7},{\"name\":\"Matplotlib\",\"children\":null,\"value\":7},{\"name\":\"Requests\",\"children\":null,\"value\":7},{\"name\":\"BeautifulSoup\",\"children\":null,\"value\":7}],\"value\":35}],\"resources\":[{\"name\":\"Python for Data Analysis\",\"type\":\"Book\",\"link\":\"https://www.amazon.com/Python-Data-Analysis-Wrangling-IPython/dp/1491957662\"},{\"name\":\"Python Crash Course\",\"type\":\"Book\",\"link\":\"https://www.amazon.com/Python-Crash-Course-Hands-Project-Based/dp/1593276036\"},{\"name\":\"Python.org\",\"type\":\"Website\",\"link\":\"https://www.python.org/\"},{\"name\":\"Python Programming: A Concise Introduction\",\"type\":\"Course\",\"link\":\"https://www.coursera.org/learn/python-programming-introduction\"},{\"name\":\"Automate the Boring Stuff with Python\",\"type\":\"Book\",\"link\":\"https://automatetheboringstuff.com/\"}],\"value\":117}",
+    "userEmail": "vijani@123.com",
+    "experienceLevel": "intermediate",
+    "hours": 175
+  }
+]

@@ -2,6 +2,7 @@ package com.braintrain.backend.controller;
 
 import com.braintrain.backend.TestHelper;
 import com.braintrain.backend.controller.dtos.RoadmapDTO;
+import com.braintrain.backend.controller.dtos.RoadmapMetaDTO;
 import com.braintrain.backend.controller.dtos.RoadmapMetaListDTO;
 import com.braintrain.backend.controller.dtos.UserFavoritesDTO;
 import com.braintrain.backend.model.*;
@@ -9,10 +10,17 @@ import com.braintrain.backend.security.dao.JwtAuthenticationResponse;
 import com.braintrain.backend.security.dao.SignInRequest;
 import com.braintrain.backend.security.dao.SignUpRequest;
 import com.braintrain.backend.service.UserService;
+import com.braintrain.backend.util.CustomPageImpl;
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.HttpClientErrorException;
@@ -20,7 +28,13 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.Objects;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -39,21 +53,25 @@ class RoadmapControllerTest {
     private RoadmapMeta createdRoadmapMeta;
     private static String authToken;
 
+    private List<String> filterRoadmapMetaIds;
+
     @BeforeEach
     public void setUp() throws IOException {
         String uri = BASE_URL.formatted(port);
         RoadmapDTO dto = TestHelper.createRoadmapDTO("Java", Paths.get("src/test/resources/java.json"));
         exchange = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(dto), RoadmapMeta.class);
         createdRoadmapMeta = exchange.getBody();
+        createRoadmaps();
         authToken = signUpAndSignInUser();
     }
 
     @AfterEach
     public void afterEach() {
-        if(exchange != null) {
+        if (exchange != null) {
             String uri = "http://localhost:%s/api/roadmaps/%s".formatted(port, exchange.getBody().getId());
             ResponseEntity<Void> exchange = restTemplate.exchange(uri, HttpMethod.DELETE, HttpEntity.EMPTY, Void.class);
             assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+            deleteRoadmaps();
         }
 
         User user = userService.getUserByEmail("edwardsemail@gmail.com");
@@ -65,7 +83,8 @@ class RoadmapControllerTest {
     @Test
     void shouldGetRoadmaps() {
         String uri = BASE_URL.formatted(port);
-        ResponseEntity<RoadmapMetaListDTO> exchange = restTemplate.exchange(uri, HttpMethod.GET, HttpEntity.EMPTY, RoadmapMetaListDTO.class);
+        ResponseEntity<RoadmapMetaListDTO> exchange =
+                restTemplate.exchange(uri, HttpMethod.GET, HttpEntity.EMPTY, RoadmapMetaListDTO.class);
         assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(exchange.hasBody()).isTrue();
     }
@@ -87,19 +106,39 @@ class RoadmapControllerTest {
     @Test
     void shouldReturnRoadmapWhenRoadmapMetaIdIsGiven() {
         String roadmapMetaId = createdRoadmapMeta.getId();
-        if (authToken != null) {
-            String uri = "http://localhost:%s/api/roadmaps/findByMeta/%s".formatted(port, roadmapMetaId);
+        String uri = "http://localhost:%s/api/roadmaps/findByMeta/%s".formatted(port, roadmapMetaId);
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("Authorization", "Bearer " + authToken);
-            HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<Roadmap> exchange = restTemplate.exchange(uri, HttpMethod.GET, HttpEntity.EMPTY, Roadmap.class);
 
-            ResponseEntity<Roadmap> exchange = restTemplate.exchange(uri, HttpMethod.GET, entity, Roadmap.class);
+        assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(exchange.getBody()).isNotNull();
+        assertThat(exchange.getBody().getId()).isEqualTo(createdRoadmapMeta.getRoadmapReferenceId());
+    }
 
-            assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
-            assertThat(exchange.getBody()).isNotNull();
-            assertThat(exchange.getBody().getId()).isEqualTo(createdRoadmapMeta.getRoadmapReferenceId());
-        }
+    @ParameterizedTest
+    @CsvSource({
+            "Java,,0,500,0,9,3",
+            ",beginner,0,500,0,9,3",
+            ",,50,150,0,9,2",
+            "Java,intermediate,100,200,0,9,1",
+            "Python,,150,250,0,9,2",
+            ",beginner,150,175,0,9,0"
+    })
+    void shouldFilterRoadmaps(
+            String name, String experienceLevel, int fromHour, int toHour, int page, int size, int expectedCount) {
+
+        String queryString =
+                TestHelper.buildQueryStringForFilterRoadmapsTest(name, experienceLevel, fromHour, toHour, page, size);
+
+        String uri = "http://localhost:%s/api/roadmaps/filter?%s".formatted(port, queryString);
+
+        ResponseEntity<CustomPageImpl<RoadmapMetaDTO>> response =
+                restTemplate.exchange(uri, HttpMethod.GET, HttpEntity.EMPTY, new ParameterizedTypeReference<>() {
+                });
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.hasBody()).isTrue();
+        assertThat(response.getBody().getContent().size()).isEqualTo(expectedCount);
     }
 
     @Test
@@ -197,7 +236,6 @@ class RoadmapControllerTest {
 
             HttpHeaders headers = new HttpHeaders();
             headers.set("Authorization", "Bearer " + authToken);
-            headers.set("Content-Type", "application/json");
             HttpEntity<RoadmapMeta> entity = new HttpEntity<>(createdRoadmapMeta, headers);
 
             ResponseEntity<UserFavoritesDTO> exchange = restTemplate.exchange(uri, HttpMethod.POST, entity, UserFavoritesDTO.class);
@@ -393,5 +431,30 @@ class RoadmapControllerTest {
             return jwtAuthenticationResponse.getToken();
         }
         return null;
+    }
+
+    private void createRoadmaps() throws IOException {
+        try {
+            final String uri = BASE_URL.formatted(port);
+            List<RoadmapDTO> testRoadmaps =
+                    TestHelper.createRoadmapDTOs(Paths.get("src/test/resources/testJsons/roadmaps.json"));
+            filterRoadmapMetaIds = testRoadmaps.stream().map(
+                    testRoadmap -> {
+                        ResponseEntity<RoadmapMeta> response =
+                                restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(testRoadmap), RoadmapMeta.class);
+                        return response.getBody().getId();
+                    }
+            ).toList();
+        } catch (IOException e) {
+            System.err.println("Failed to create test roadmaps");
+        }
+    }
+
+    private void deleteRoadmaps() {
+        filterRoadmapMetaIds.forEach(id -> {
+            String uri = "http://localhost:%s/api/roadmaps/%s".formatted(port, id);
+            ResponseEntity<Void> exchange = restTemplate.exchange(uri, HttpMethod.DELETE, HttpEntity.EMPTY, Void.class);
+            assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        });
     }
 }
