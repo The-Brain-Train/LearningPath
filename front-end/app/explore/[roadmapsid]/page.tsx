@@ -158,13 +158,13 @@ function RoadMapId(props: Props) {
           </div>
           <IndentedTreeWithData data={roadmapToTreeNode(roadmap)} />
 
-          <ResourcesSection 
+          <ResourcesSection
             treeNode={treeNode}
             userOwnsRoadmap={userOwnsRoadmap()}
             queriesToInvalidate={["roadmap"]}
             roadmapId={roadmapId}
             userEmail={currentUser?.email}
-            cookiesUser={cookies.user} 
+            cookiesUser={cookies.user}
           />
 
         </div>

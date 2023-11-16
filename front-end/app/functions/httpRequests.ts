@@ -17,7 +17,7 @@ export const getRoadmaps = async () => {
 };
 
 export const getRoadmapsFilteredPaged = async (
-  name: string, experienceLevel: string | null | undefined, 
+  name: string, experienceLevel: string | null | undefined,
   fromHour: number | null | undefined, toHour: number | null | undefined,
   page: number, size: number) => {
   const response = await fetch(
@@ -199,8 +199,6 @@ export const addResourcesToRoadmap = async (
   token: any
 ) => {
   try {
-    console.log("chatGptResourceResponse :: " + chatGptResourceResponse);
-    console.log("chatGptResourceResponse @@ " + JSON.stringify(chatGptResourceResponse));
     const response = await fetch(
       `${BACKEND_URL}/api/roadmaps/${userEmail}/resource/${roadmapMetaId}`,
       {

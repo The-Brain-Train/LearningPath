@@ -67,12 +67,10 @@ export default function Create() {
             roadmapInputData.hours,
             roadmapInputData.resources)
         );
-        console.log("with resources...");
       } else {
         response = await getResponseFromOpenAI(
           chatHistory(roadmapInputData.topic, roadmapInputData.experienceLevel, roadmapInputData.hours)
         );
-        console.log("without resources...");
       }
 
       const jsonData = await JSON.parse(response.choices[0].message.content);
