@@ -162,7 +162,7 @@ public class RoadmapService {
         return roadmap;
     }
 
-    public void markChildElementAsComplete(String roadmapId, String childElementName) {
+    public Roadmap markTopicOfChildAsComplete(String roadmapId, String childElementName) {
         Roadmap roadmap = findRoadmapByMetaId(roadmapId);
         RoadmapContent roadmapContent = null;
         try {
@@ -174,6 +174,7 @@ public class RoadmapService {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+        return roadmap;
     }
 
     private void updateChildCompletionStatus(RoadmapContent roadmapContent, String childElementName, boolean completionStatus) {

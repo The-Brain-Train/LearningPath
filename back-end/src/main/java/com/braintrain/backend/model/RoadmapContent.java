@@ -10,4 +10,8 @@ public class RoadmapContent {
     private List<Resource> resources;
     private int value;
     private boolean completedTopic;
+
+    public RoadmapContent() {
+        this.completedTopic = false;
+    }
 }
