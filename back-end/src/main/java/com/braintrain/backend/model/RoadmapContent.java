@@ -1,13 +1,13 @@
 package com.braintrain.backend.model;
 
+import lombok.Data;
+
 import java.util.List;
-
+@Data
 public class RoadmapContent {
-    public String name;
-    public List<RoadmapContentChild> children;
-    public List<Resource> resources;
-    public int value;
-
+    private String name;
+    private List<RoadmapContentChild> children;
+    private List<Resource> resources;
+    private int value;
+    private boolean completedTopic;
 }
-
-
