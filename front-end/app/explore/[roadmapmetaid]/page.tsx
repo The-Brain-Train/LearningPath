@@ -7,6 +7,7 @@ import {
   getRoadmapByMetaId,
   getUserFavorites,
   removeRoadmapMetaFromUserFavorites,
+  updateUsersCompletedTopic,
 } from "@/app/functions/httpRequests";
 import { ArrowBack } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
@@ -98,6 +99,22 @@ function RoadMapId(props: Props) {
     );
   };
 
+  const handleUpdateUsersCompletedTopic = async (completedTask: string) => {
+    try {
+      if (currentUser?.email && roadmapMetaId) {
+        const updatedRoadmap: Roadmap | undefined = await updateUsersCompletedTopic(
+          currentUser.email,
+          roadmapMetaId,
+          completedTask,
+          cookies.user
+        );
+        return updatedRoadmap; 
+      }
+    } catch (error) {
+      console.error("Error updating completed topic:", error);
+    }
+  };
+
   const userOwnsRoadmap = () => {
     const roadmapMeta = findRoadmapMeta(roadmapMetaId);
     if (
@@ -162,7 +179,7 @@ function RoadMapId(props: Props) {
               )}
             </div>
           </div>
-          <IndentedTreeWithData data={roadmapToTreeNode(roadmap)} />
+          <IndentedTreeWithData data={roadmapToTreeNode(roadmap)} updateCompletedTopic={handleUpdateUsersCompletedTopic} />
           <ResourcesSection
             treeNode={treeNode}
             userOwnsRoadmap={userOwnsRoadmap()}
