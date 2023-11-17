@@ -1,6 +1,7 @@
 package com.braintrain.backend.service;
 
 import com.braintrain.backend.controller.dtos.*;
+import com.braintrain.backend.exceptionHandler.exception.ChildElementNotFoundException;
 import com.braintrain.backend.exceptionHandler.exception.RoadmapCountExceededException;
 import com.braintrain.backend.exceptionHandler.exception.RoadmapNotFoundException;
 import com.braintrain.backend.model.*;
@@ -167,7 +168,9 @@ public class RoadmapService {
         RoadmapContent roadmapContent = null;
         try {
             roadmapContent = objectMapper.readValue(roadmap.getObj(), RoadmapContent.class);
-            updateChildCompletionStatus(roadmapContent, childElementName);
+            if (!updateChildCompletionStatus(roadmapContent, childElementName)) {
+                throw new ChildElementNotFoundException("Child element not found: " + childElementName);
+            }
             String content = objectMapper.writeValueAsString(roadmapContent);
             roadmap.setObj(content);
             repo.save(roadmap);
@@ -177,12 +180,14 @@ public class RoadmapService {
         return roadmap;
     }
 
-    private void updateChildCompletionStatus(RoadmapContent roadmapContent, String childElementName) {
+    private boolean updateChildCompletionStatus(RoadmapContent roadmapContent, String childElementName) {
         boolean anyChildUpdated = false;
+        boolean childFound = false;
         for (RoadmapContentChild child : roadmapContent.getChildren()) {
             boolean childUpdated = updateCompletionRecursively(child, childElementName);
             if (childUpdated) {
                 anyChildUpdated = true;
+                childFound = true;
             }
         }
         if (anyChildUpdated) {
@@ -191,6 +196,7 @@ public class RoadmapService {
                 child.setCompletedTopic(allChildCompleted);
             }
         }
+        return childFound;
     }
 
     private boolean updateCompletionRecursively(RoadmapContentChild child, String childElementName) {
