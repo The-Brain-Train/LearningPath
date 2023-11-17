@@ -178,10 +178,17 @@ public class RoadmapService {
     }
 
     private void updateChildCompletionStatus(RoadmapContent roadmapContent, String childElementName) {
+        boolean anyChildUpdated = false;
         for (RoadmapContentChild child : roadmapContent.getChildren()) {
             boolean childUpdated = updateCompletionRecursively(child, childElementName);
             if (childUpdated) {
-                updateParentCompletionStatus(roadmapContent);
+                anyChildUpdated = true;
+            }
+        }
+        if (anyChildUpdated) {
+            for (RoadmapContentChild child : roadmapContent.getChildren()) {
+                boolean allChildCompleted = checkAllChildrenCompleted(child);
+                child.setCompletedTopic(allChildCompleted);
             }
         }
     }
@@ -203,11 +210,20 @@ public class RoadmapService {
         return childUpdated;
     }
 
-
-    private void updateParentCompletionStatus(RoadmapContent roadmapContent) {
-        boolean allChildrenCompleted = roadmapContent.getChildren().stream()
-                .allMatch(RoadmapContentChild::isCompletedTopic);
-        roadmapContent.setCompletedTopic(allChildrenCompleted);
+    private boolean checkAllChildrenCompleted(RoadmapContentChild child) {
+        if (child.getChildren() == null || child.getChildren().isEmpty()) {
+            return child.isCompletedTopic();
+        } else {
+            boolean allChildrenCompleted = true;
+            for (RoadmapContentChild nestedChild : child.getChildren()) {
+                boolean nestedCompleted = checkAllChildrenCompleted(nestedChild);
+                if (!nestedCompleted) {
+                    allChildrenCompleted = false;
+                    break;
+                }
+            }
+            return allChildrenCompleted;
+        }
     }
 
     private static void validateDTONameInput(String roadmapDTOName) {
