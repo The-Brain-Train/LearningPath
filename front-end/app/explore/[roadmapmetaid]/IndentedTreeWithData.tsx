@@ -14,11 +14,25 @@ import {
 } from "../../util/IndentedTreeUtil";
 import addGoogleFont from "../../util/fontFamily";
 
-const IndentedTreeWithData = ({ data }: ExploreIndentedTreeProps) => {
+const IndentedTreeWithData = ({ data, updateCompletedTopic }: ExploreIndentedTreeProps) => {
   const svgRef = useRef(null);
+
+  const handleTitleClick = (d: any) => {
+    if (!d.children) {
+      const clickedElementName = d.target.innerHTML; 
+      console.log(clickedElementName);
+      if (clickedElementName) {
+        updateCompletedTopic(clickedElementName); 
+        console.log("here");
+      } else {
+        console.error("Name or identifier not found for the clicked element");
+      }
+    }
+  };
 
   const graph = () => {
     if (data == null) return;
+    console.log(data);
 
     d3.select(svgRef.current).selectAll("*").remove();
     const format = d3.format(",");
@@ -77,7 +91,8 @@ const IndentedTreeWithData = ({ data }: ExploreIndentedTreeProps) => {
         "transform",
         (d) => `translate(0,${(d as CustomNode).index * nodeSize})`
       )
-      .attr("fill", "#cbd5e1");
+      .attr("fill", "#cbd5e1")
+      
 
     node
       .append("text")
@@ -104,7 +119,8 @@ const IndentedTreeWithData = ({ data }: ExploreIndentedTreeProps) => {
       .style("font-size", (d) => getLabelFontSize(d))
       .style("font-family", "'Poppins', sans-serif")
       .text((d) => d.data.name)
-      .attr("fill", "#cbd5e1");
+      .attr("fill", "#cbd5e1")
+      .on("click", handleTitleClick);
 
     node.append("title").text((d) =>
       d
@@ -134,6 +150,8 @@ const IndentedTreeWithData = ({ data }: ExploreIndentedTreeProps) => {
         .text((d) => format(d.data.value));
     }
   };
+
+  
 
   useEffect(() => {
     addGoogleFont();
