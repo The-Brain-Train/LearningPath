@@ -162,12 +162,12 @@ public class RoadmapService {
         return roadmap;
     }
 
-    public Roadmap markTopicOfChildAsComplete(String roadmapId, String childElementName) {
-        Roadmap roadmap = findRoadmapByMetaId(roadmapId);
+    public Roadmap markTopicOfChildAsComplete(String roadmapMetaId, String childElementName) {
+        Roadmap roadmap = findRoadmapByMetaId(roadmapMetaId);
         RoadmapContent roadmapContent = null;
         try {
             roadmapContent = objectMapper.readValue(roadmap.getObj(), RoadmapContent.class);
-            updateChildCompletionStatus(roadmapContent, childElementName, true);
+            updateChildCompletionStatus(roadmapContent, childElementName);
             String content = objectMapper.writeValueAsString(roadmapContent);
             roadmap.setObj(content);
             repo.save(roadmap);
@@ -177,17 +177,34 @@ public class RoadmapService {
         return roadmap;
     }
 
-    private void updateChildCompletionStatus(RoadmapContent roadmapContent, String childElementName, boolean completionStatus) {
+    private void updateChildCompletionStatus(RoadmapContent roadmapContent, String childElementName) {
         for (RoadmapContentChild child : roadmapContent.getChildren()) {
-            if (child.getName().equals(childElementName)) {
-                child.setCompletedTopic(completionStatus);
-                updateParentCompletionStatus(roadmapContent, child);
-                return;
+            boolean childUpdated = updateCompletionRecursively(child, childElementName);
+            if (childUpdated) {
+                updateParentCompletionStatus(roadmapContent);
             }
         }
     }
 
-    private void updateParentCompletionStatus(RoadmapContent roadmapContent, RoadmapContentChild child) {
+    private boolean updateCompletionRecursively(RoadmapContentChild child, String childElementName) {
+        if (child.getName().equals(childElementName)) {
+            child.setCompletedTopic(!child.isCompletedTopic());
+            return true;
+        }
+        boolean childUpdated = false;
+        if (child.getChildren() != null) {
+            for (RoadmapContentChild nestedChild : child.getChildren()) {
+                boolean nestedUpdated = updateCompletionRecursively(nestedChild, childElementName);
+                if (nestedUpdated) {
+                    childUpdated = true;
+                }
+            }
+        }
+        return childUpdated;
+    }
+
+
+    private void updateParentCompletionStatus(RoadmapContent roadmapContent) {
         boolean allChildrenCompleted = roadmapContent.getChildren().stream()
                 .allMatch(RoadmapContentChild::isCompletedTopic);
         roadmapContent.setCompletedTopic(allChildrenCompleted);
