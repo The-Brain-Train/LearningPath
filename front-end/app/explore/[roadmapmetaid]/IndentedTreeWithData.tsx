@@ -13,9 +13,11 @@ import {
   getScreenWidthAdjustValue,
 } from "../../util/IndentedTreeUtil";
 import addGoogleFont from "../../util/fontFamily";
+import _ from "lodash";
 
 const IndentedTreeWithData = ({ data, updateCompletedTopic }: ExploreIndentedTreeProps) => {
   const svgRef = useRef(null);
+  const debouncedGraph = useRef(_.debounce(() => graph(), 300));
 
   const handleTitleClick = (d: any) => {
     if (!d.children) {
@@ -32,7 +34,6 @@ const IndentedTreeWithData = ({ data, updateCompletedTopic }: ExploreIndentedTre
 
   const graph = () => {
     if (data == null) return;
-    console.log(data);
 
     d3.select(svgRef.current).selectAll("*").remove();
     const format = d3.format(",");
@@ -91,8 +92,7 @@ const IndentedTreeWithData = ({ data, updateCompletedTopic }: ExploreIndentedTre
         "transform",
         (d) => `translate(0,${(d as CustomNode).index * nodeSize})`
       )
-      .attr("fill", "#cbd5e1")
-      
+      .attr("fill", "#cbd5e1");
 
     node
       .append("text")
@@ -149,21 +149,34 @@ const IndentedTreeWithData = ({ data, updateCompletedTopic }: ExploreIndentedTre
         .data(root.copy().descendants())
         .text((d) => format(d.data.value));
     }
+    applyStrikethrough(); 
   };
 
-  
-
   useEffect(() => {
+    console.log(data);
     addGoogleFont();
     graph();
     const createGraph = () => {
-      window.addEventListener("resize", graph);
+      window.addEventListener("resize", debouncedGraph.current); 
     };
     createGraph();
     return () => {
-      window.removeEventListener("resize", graph);
+      window.removeEventListener("resize", debouncedGraph.current);
     };
   }, [data]);
+
+  const applyStrikethrough = () => {
+    d3.select(svgRef.current)
+      .selectAll("text") 
+      .each(function (d: any) {
+        const datum = d?.data;
+        if (datum && datum.completedTopic) {
+          d3.select(this).style("text-decoration", "line-through");
+        } else {
+          d3.select(this).style("text-decoration", "none");
+        }
+      });
+  };
 
   return (
       <div>

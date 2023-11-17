@@ -70,6 +70,7 @@ export type TreeNode = {
   children: TreeNode[];
   value: number;
   resources: ResourceType[];
+  completedTopic: boolean
 }
 
 export type ResourceType = {
