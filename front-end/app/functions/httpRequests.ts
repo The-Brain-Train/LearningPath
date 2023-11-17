@@ -220,7 +220,7 @@ export const addResourcesToRoadmap = async (
   }
 };
 
-export const updateUserCompletedTopic = async (
+export const updateUsersCompletedTopic = async (
   userEmail: string | null | undefined,
   roadmapMetaId: string,
   completedTask: string,
@@ -230,7 +230,7 @@ export const updateUserCompletedTopic = async (
     `${BACKEND_URL}/api/roadmaps/${userEmail}/completedTopic/${roadmapMetaId}`,
     {
       method: "PUT",
-      body: JSON.stringify(completedTask),
+      body: completedTask,
       headers: {
         Authorization: "Bearer " + token,
       },
@@ -239,7 +239,7 @@ export const updateUserCompletedTopic = async (
   if (!response.ok) {
     throw new Error("Topic failed to add to completed list");
   }
-  const data = await response.json();
+  const data: Roadmap = await response.json();
   return data;
 };
 
