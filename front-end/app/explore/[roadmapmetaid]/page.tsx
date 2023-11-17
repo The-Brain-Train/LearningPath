@@ -108,6 +108,7 @@ function RoadMapId(props: Props) {
           completedTask,
           cookies.user
         );
+        queryClient.invalidateQueries(["roadmap", roadmapMetaId]);
         return updatedRoadmap; 
       }
     } catch (error) {
