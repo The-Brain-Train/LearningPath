@@ -92,6 +92,18 @@ function RoadMapId(props: Props) {
     refetchFavorites();
   };
 
+  const userOwnsRoadmap = () => {
+    const roadmapMeta = findRoadmapMeta(roadmapMetaId);
+    if (
+      currentUser &&
+      roadmapMeta &&
+      currentUser?.email === roadmapMeta?.userEmail
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   const findRoadmapMeta = (roadmapId: string): RoadmapMeta | undefined => {
     if (roadmapMetas == undefined) return;
     return roadmapMetas.roadmapMetaList.find(
@@ -121,17 +133,7 @@ function RoadMapId(props: Props) {
     }
   };
 
-  const userOwnsRoadmap = () => {
-    const roadmapMeta = findRoadmapMeta(roadmapMetaId);
-    if (
-      currentUser &&
-      roadmapMeta &&
-      currentUser?.email === roadmapMeta?.userEmail
-    ) {
-      return true;
-    }
-    return false;
-  };
+  
 
   const roadmapToTreeNode = (roadmap: Roadmap | undefined) => {
     return roadmap as unknown as TreeNode;
@@ -185,7 +187,7 @@ function RoadMapId(props: Props) {
               )}
             </div>
           </div>
-          <IndentedTreeWithData data={roadmapToTreeNode(roadmap)} updateCompletedTopic={handleUpdateUsersCompletedTopic} />
+          <IndentedTreeWithData data={roadmapToTreeNode(roadmap)} updateCompletedTopic={handleUpdateUsersCompletedTopic} isCreator={userOwnsRoadmap()} />
           <ResourcesSection
             treeNode={treeNode}
             userOwnsRoadmap={userOwnsRoadmap()}

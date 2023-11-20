@@ -22,6 +22,7 @@ import _ from "lodash";
 const IndentedTreeWithData = ({
   data,
   updateCompletedTopic,
+  isCreator
 }: ExploreIndentedTreeProps) => {
   const svgRef = useRef(null);
   const debouncedGraph = useRef(_.debounce(() => graph(), 300));
@@ -29,10 +30,8 @@ const IndentedTreeWithData = ({
   const handleTitleClick = (d: any) => {
     if (!d.children) {
       const clickedElementName = d.target.innerHTML;
-      console.log(clickedElementName);
       if (clickedElementName) {
         updateCompletedTopic(clickedElementName);
-        console.log("here");
       } else {
         console.error("Name or identifier not found for the clicked element");
       }
@@ -156,11 +155,12 @@ const IndentedTreeWithData = ({
         .data(root.copy().descendants())
         .text((d) => format(d.data.value));
     }
-    applyStrikethrough();
+    if (isCreator) {
+      applyStrikethrough();
+    }
   };
 
   useEffect(() => {
-    console.log(data);
     addGoogleFont();
     graph();
     const createGraph = () => {

@@ -63,6 +63,7 @@ export type CreateIndentedTreeProps = {
 export type ExploreIndentedTreeProps = {
   data: TreeNode | undefined;
   updateCompletedTopic: (completedTask: string) => Promise<Roadmap | undefined>;
+  isCreator: boolean;
 };
 
 export type TreeNode = {
