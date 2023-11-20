@@ -71,9 +71,13 @@ export default function BurgerMenu({ handleSignOut }: BurgerMenuProps) {
               <LoginIcon /> <p className="pl-2">Sign Out</p>
             </MenuItem>
           ) : (
-              <MenuItem onClick={() => router.push("/signup")}>
-                <LogoutIcon /> <p className="pl-2 flex flex-col"><span>Sign Up / </span><span>Sign In</span></p>
-              </MenuItem>
+            <MenuItem onClick={() => router.push("/signup")}>
+              <LogoutIcon />{" "}
+              <p className="pl-2 flex flex-col">
+                <span>Sign Up / </span>
+                <span>Sign In</span>
+              </p>
+            </MenuItem>
           )}
         </Menu>
       </div>
@@ -89,19 +93,18 @@ export default function BurgerMenu({ handleSignOut }: BurgerMenuProps) {
             <LoginIcon /> <p className="pl-2">Sign Out</p>
           </MenuItem>
         ) : (
-            <MenuItem onClick={() => router.push("/signup")}>
-              <LogoutIcon /> <p className="pl-2">Sign Up / Sign In</p>
-            </MenuItem>
+          <MenuItem onClick={() => router.push("/signup")}>
+            <LogoutIcon /> <p className="pl-2">Sign Up / Sign In</p>
+          </MenuItem>
         )}
       </div>
       <Modal open={open} onClose={handleShut}>
-        <Box className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 lg:w-96 bg-white rounded shadow-lg p-4 rounded-5">
+        <Box className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 lg:w-96 bg-white rounded shadow-lg rounded-5 text-center p-6">
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            Are you sure you want to Sign out?
+            Sign out?
           </Typography>
-          <div className="flex justify-between">
-            <Button onClick={handleShut}>no</Button>
-            <Button
+          <div className="flex justify-evenly mt-7">
+            <button
               className="text-red-600"
               onClick={() => {
                 handleShut();
@@ -109,8 +112,9 @@ export default function BurgerMenu({ handleSignOut }: BurgerMenuProps) {
               }}
             >
               {" "}
-              yes
-            </Button>
+              YES
+            </button>
+            <button onClick={handleShut}>NO</button>
           </div>
         </Box>
       </Modal>

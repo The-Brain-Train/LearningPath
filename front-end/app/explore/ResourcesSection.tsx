@@ -40,8 +40,8 @@ export const ResourcesSection = (props: ResourcesSectionProps) => {
     });
 
   return (
-    <div className="pb-12 text-white flex flex-col items-center ml-3">
-      <div className="max-w-7xl">
+    <div className="pb-12 text-white flex flex-col items-center">
+      <div className="max-w-7xl mx-2">
         {((props.userOwnsRoadmap && props.roadmapId) ||
           (props.treeNode && props.treeNode.resources)) && (
           <div className="mb-3">

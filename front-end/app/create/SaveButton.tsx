@@ -34,22 +34,22 @@ function SaveButton({ saveClick }: saveButtonProps) {
     <>
       {!clicked && (
         <div>
-          <Button
-            className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded my-3"
+          <button
+            className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded my-2"
             onClick={handleOpen}
           >
             Save
-          </Button>
+          </button>
           <Modal open={open} onClose={handleClose}>
-            <Box className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 bg-white rounded shadow-lg p-4 rounded-5">
+            <Box className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 bg-white rounded shadow-lg p-6 rounded-5 text-center">
               <Typography id="modal-modal-title" variant="h6" component="h2">
-                Are you sure you want to save?
+                Save this roadmap?
               </Typography>
-              <div className="flex justify-between">
-              <Button className="text-green-500	" onClick={handleClick}>
-                  Yes
-                </Button>
-                <Button onClick={handleClose}>No</Button>
+              <div className="flex justify-evenly mt-7">
+                <button className="text-green-500	" onClick={handleClick}>
+                  YES
+                </button>
+                <button className="text-blue-500" onClick={handleClose}>NO</button>
               </div>
             </Box>
           </Modal>
