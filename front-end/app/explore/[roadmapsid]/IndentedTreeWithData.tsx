@@ -148,7 +148,7 @@ const IndentedTreeWithData = ({ data }: ExploreIndentedTreeProps) => {
   }, [data]);
 
   return (
-      <div>
+      <div className="mb-10">
         <div className="flex justify-between px-4">
           <p className="text-xl text-center font-bold text-white md:text-2xl">
             Learning Path

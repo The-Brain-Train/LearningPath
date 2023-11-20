@@ -40,11 +40,11 @@ export const ResourcesSection = (props: ResourcesSectionProps) => {
     });
 
   return (
-    <div className="pb-12 text-white flex flex-col">
+    <div className="pb-12 text-white flex flex-col items-center ml-3">
       <div className="max-w-7xl">
         {((props.userOwnsRoadmap && props.roadmapId) ||
           (props.treeNode && props.treeNode.resources)) && (
-          <div className="mt-10 mb-3">
+          <div className="mb-3">
             <p className="font-bold text-2xl md:text-4xl">Resources</p>
           </div>
         )}
@@ -55,9 +55,9 @@ export const ResourcesSection = (props: ResourcesSectionProps) => {
               <table className="table-fixed w-full" key={index}>
                 <tbody>
                   <tr className="py-10 w-full">
-                    <td className="md:text-xl w-1/4">{r.type}</td>
-                    <td className="text-sm md:text-lg w-2/4">{r.name}</td>
-                    <td className="md:text-xl w-1/4">
+                    <td className="md:text-xl w-2/5">{r.type}</td>
+                    <td className="text-sm md:text-lg w-2/5">{r.name}</td>
+                    <td className="md:text-xl w-1/5">
                       <Link
                         href={r.link}
                         target="_blank"

@@ -196,7 +196,7 @@ const IndentedTree = ({
                       Hours
                     </p>
                   </div>
-                  <svg className="mb-20" ref={svgRef}></svg>
+                  <svg className="mb-10" ref={svgRef}></svg>
                   {currentUser ? (
                     <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 flex justify-center gap-3">
                       <SaveButton saveClick={saveRoadmap} />
