@@ -102,6 +102,11 @@ function RoadMapId(props: Props) {
   const handleUpdateUsersCompletedTopic = async (completedTask: string) => {
     try {
       if (currentUser?.email && roadmapMetaId) {
+        const isCreator = userOwnsRoadmap();
+        if (!isCreator) {
+          console.error("Permission denied: User is not the creator");
+          return;
+        }
         const updatedRoadmap: Roadmap | undefined = await updateUsersCompletedTopic(
           currentUser.email,
           roadmapMetaId,

@@ -1,7 +1,11 @@
 "use client";
 import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
-import { CustomNode, ExploreIndentedTreeProps, TreeNode } from "../../util/types";
+import {
+  CustomNode,
+  ExploreIndentedTreeProps,
+  TreeNode,
+} from "../../util/types";
 import {
   getHoursFontSize,
   getLabelFontSize,
@@ -15,16 +19,19 @@ import {
 import addGoogleFont from "../../util/fontFamily";
 import _ from "lodash";
 
-const IndentedTreeWithData = ({ data, updateCompletedTopic }: ExploreIndentedTreeProps) => {
+const IndentedTreeWithData = ({
+  data,
+  updateCompletedTopic,
+}: ExploreIndentedTreeProps) => {
   const svgRef = useRef(null);
   const debouncedGraph = useRef(_.debounce(() => graph(), 300));
 
   const handleTitleClick = (d: any) => {
     if (!d.children) {
-      const clickedElementName = d.target.innerHTML; 
+      const clickedElementName = d.target.innerHTML;
       console.log(clickedElementName);
       if (clickedElementName) {
-        updateCompletedTopic(clickedElementName); 
+        updateCompletedTopic(clickedElementName);
         console.log("here");
       } else {
         console.error("Name or identifier not found for the clicked element");
@@ -149,7 +156,7 @@ const IndentedTreeWithData = ({ data, updateCompletedTopic }: ExploreIndentedTre
         .data(root.copy().descendants())
         .text((d) => format(d.data.value));
     }
-    applyStrikethrough(); 
+    applyStrikethrough();
   };
 
   useEffect(() => {
@@ -157,7 +164,7 @@ const IndentedTreeWithData = ({ data, updateCompletedTopic }: ExploreIndentedTre
     addGoogleFont();
     graph();
     const createGraph = () => {
-      window.addEventListener("resize", debouncedGraph.current); 
+      window.addEventListener("resize", debouncedGraph.current);
     };
     createGraph();
     return () => {
@@ -167,7 +174,7 @@ const IndentedTreeWithData = ({ data, updateCompletedTopic }: ExploreIndentedTre
 
   const applyStrikethrough = () => {
     d3.select(svgRef.current)
-      .selectAll("text") 
+      .selectAll("text")
       .each(function (d: any) {
         const datum = d?.data;
         if (datum && datum.completedTopic) {
@@ -179,17 +186,17 @@ const IndentedTreeWithData = ({ data, updateCompletedTopic }: ExploreIndentedTre
   };
 
   return (
-      <div>
-        <div className="flex justify-between px-4">
-          <p className="text-xl text-center font-bold text-white md:text-2xl">
-            Learning Path
-          </p>
-          <p className="text-xl text-center font-bold text-white md:text-2xl">
-            Hours
-          </p>
-        </div>
-        <svg ref={svgRef}></svg>
+    <div>
+      <div className="flex justify-between px-4">
+        <p className="text-xl text-center font-bold text-white md:text-2xl">
+          Learning Path
+        </p>
+        <p className="text-xl text-center font-bold text-white md:text-2xl">
+          Hours
+        </p>
       </div>
+      <svg ref={svgRef}></svg>
+    </div>
   );
 };
 
