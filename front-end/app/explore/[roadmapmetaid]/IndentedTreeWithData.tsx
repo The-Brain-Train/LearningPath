@@ -22,7 +22,7 @@ import _ from "lodash";
 const IndentedTreeWithData = ({
   data,
   updateCompletedTopic,
-  isCreator
+  isCreator,
 }: ExploreIndentedTreeProps) => {
   const svgRef = useRef(null);
   const debouncedGraph = useRef(_.debounce(() => graph(), 300));
@@ -126,7 +126,16 @@ const IndentedTreeWithData = ({
       .style("font-family", "'Poppins', sans-serif")
       .text((d) => d.data.name)
       .attr("fill", "#cbd5e1")
-      .on("click", handleTitleClick);
+      .on("click", function(d) {
+        if (!d.children && isCreator) {
+          handleTitleClick(d);
+        }
+      })
+      .each(function(d) {
+        if (!d.children) {
+          d3.select(this).style("cursor", "pointer");
+        }
+      });
 
     node.append("title").text((d) =>
       d
