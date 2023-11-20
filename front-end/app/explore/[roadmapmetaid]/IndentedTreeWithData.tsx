@@ -126,12 +126,12 @@ const IndentedTreeWithData = ({
       .style("font-family", "'Poppins', sans-serif")
       .text((d) => d.data.name)
       .attr("fill", "#cbd5e1")
-      .on("click", function(d) {
+      .on("click", function (d) {
         if (!d.children && isCreator) {
           handleTitleClick(d);
         }
       })
-      .each(function(d) {
+      .each(function (d) {
         if (!d.children) {
           d3.select(this).style("cursor", "pointer");
         }
@@ -195,7 +195,7 @@ const IndentedTreeWithData = ({
   };
 
   return (
-    <div>
+    <div className="mb-10">
       <div className="flex justify-between px-4">
         <p className="text-xl text-center font-bold text-white md:text-2xl">
           Learning Path
