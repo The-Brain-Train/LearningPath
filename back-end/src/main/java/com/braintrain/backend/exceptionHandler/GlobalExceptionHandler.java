@@ -1,9 +1,6 @@
 package com.braintrain.backend.exceptionHandler;
 
-import com.braintrain.backend.exceptionHandler.exception.EmailAlreadyExistsException;
-import com.braintrain.backend.exceptionHandler.exception.InvalidFileContentTypeException;
-import com.braintrain.backend.exceptionHandler.exception.RoadmapCountExceededException;
-import com.braintrain.backend.exceptionHandler.exception.UserNotFoundException;
+import com.braintrain.backend.exceptionHandler.exception.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -21,6 +18,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RoadmapCountExceededException.class)
     public ResponseEntity<ErrorMessageResponse> handleRoadmapCountExceededException(RoadmapCountExceededException ex) {
         return displayErrorMessage(LocalDateTime.now(), 400, "api/roadmaps", ex.getMessage());
+    }
+
+    @ExceptionHandler(RoadmapNotFoundException.class)
+    public ResponseEntity<ErrorMessageResponse> handleRoadmapNotFoundException(RoadmapNotFoundException ex) {
+        return displayErrorMessage(LocalDateTime.now(), 404, "api/roadmaps", ex.getMessage());
     }
 
     @ExceptionHandler(UserNotFoundException.class)

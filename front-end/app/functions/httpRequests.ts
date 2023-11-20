@@ -17,7 +17,7 @@ export const getRoadmaps = async () => {
 };
 
 export const getRoadmapsFilteredPaged = async (
-  name: string, experienceLevel: string | null | undefined, 
+  name: string, experienceLevel: string | null | undefined,
   fromHour: number | null | undefined, toHour: number | null | undefined,
   page: number, size: number) => {
   const response = await fetch(
@@ -189,6 +189,34 @@ export const downVoteRoadmap = async (
     }
   } catch (error) {
     console.error("Error downVoting roadmap:", error);
+  }
+};
+
+export const addResourcesToRoadmap = async (
+  userEmail: string | null | undefined,
+  roadmapMetaId: string | undefined,
+  chatGptResourceResponse: string,
+  token: any
+) => {
+  try {
+    const response = await fetch(
+      `${BACKEND_URL}/api/roadmaps/${userEmail}/resource/${roadmapMetaId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+        body: JSON.stringify(chatGptResourceResponse),
+      }
+    );
+    if (!response.ok) {
+      throw new Error(
+        `Failed to add resources to roadmap. Status code: ${response.status}`
+      );
+    }
+  } catch (error) {
+    console.error("Error adding resources to roadmap:", error);
   }
 };
 

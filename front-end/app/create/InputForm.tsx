@@ -3,7 +3,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { Box, TextField } from "@mui/material";
+import { Box, Switch, TextField } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import { useState } from "react";
 import Slider from "@mui/material/Slider";
@@ -25,6 +25,7 @@ const InputForm = ({
   const [sliderValue, setSliderValue] = useState<number>(30);
   const [topicError, setTopicError] = useState<string | null>(null);
   const [experienceError, setExperienceError] = useState<string | null>(null);
+  const [toggleValue, setToggleValue] = useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -49,10 +50,12 @@ const InputForm = ({
         topic: userTopic,
         hours: sliderValue,
         experienceLevel: experience,
+        resources: toggleValue,
       });
       setUserTopic("");
       setExperience("");
       setSliderValue(30);
+      setToggleValue(false);
       handleClose();
     }
   };
@@ -128,7 +131,7 @@ const InputForm = ({
               )}
               <div>
                 <InputLabel
-                  className="mt-10 pb-2 text-sm font-black"
+                  className="mt-5 pb-2 text-sm font-black"
                   id="demo-simple-box-autowidth-label"
                 >
                   Total hours
@@ -150,6 +153,18 @@ const InputForm = ({
                   />
                 </Box>
               </div>
+
+              <div className="mt-2 flex justify-start flex-row">
+                <InputLabel className="mt-2 pb-2 text-sm font-black">
+                  Add resources
+                </InputLabel>
+                <Switch
+                  checked={toggleValue}
+                  onChange={() => setToggleValue(!toggleValue)}
+                  inputProps={{ 'aria-label': 'Toggle' }}
+                />
+              </div>
+
               <div className="flex justify-center">
                 <button
                   onClick={handleSubmit}

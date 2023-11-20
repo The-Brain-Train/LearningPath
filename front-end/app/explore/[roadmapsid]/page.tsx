@@ -16,6 +16,7 @@ import useCurrentUserQuery from "@/app/functions/useCurrentUserQuery";
 import { useCookies } from "react-cookie";
 import { Roadmap, RoadmapMeta, RoadmapMetaList, TreeNode } from "@/app/util/types";
 import { FavoriteButton } from "./FavoriteButton";
+import { ResourcesSection } from "../ResourcesSection";
 
 type Props = {
   params: {
@@ -95,9 +96,19 @@ function RoadMapId(props: Props) {
     );
   };
 
-  const roadmapToTreeNode = (roadmap: Roadmap) => {
+  const userOwnsRoadmap = () => {
+    const roadmapMeta = findRoadmapMeta(roadmapId);
+    if (currentUser && roadmapMeta && currentUser?.email === roadmapMeta?.userEmail) {
+      return true;
+    }
+    return false;
+  };
+
+  const roadmapToTreeNode = (roadmap: Roadmap | undefined) => {
     return roadmap as unknown as TreeNode;
   }
+
+  const treeNode = roadmapToTreeNode(roadmap);
 
   if (isError) {
     return (
@@ -146,6 +157,16 @@ function RoadMapId(props: Props) {
             </div>
           </div>
           <IndentedTreeWithData data={roadmapToTreeNode(roadmap)} />
+
+          <ResourcesSection
+            treeNode={treeNode}
+            userOwnsRoadmap={userOwnsRoadmap()}
+            queriesToInvalidate={["roadmap"]}
+            roadmapId={roadmapId}
+            userEmail={currentUser?.email}
+            cookiesUser={cookies.user}
+          />
+
         </div>
       </div>
     </main>

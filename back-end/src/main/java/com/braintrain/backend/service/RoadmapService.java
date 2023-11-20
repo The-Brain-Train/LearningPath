@@ -2,11 +2,13 @@ package com.braintrain.backend.service;
 
 import com.braintrain.backend.controller.dtos.*;
 import com.braintrain.backend.exceptionHandler.exception.RoadmapCountExceededException;
+import com.braintrain.backend.exceptionHandler.exception.RoadmapNotFoundException;
 import com.braintrain.backend.model.*;
 import com.braintrain.backend.repository.RoadmapMetaRepository;
 import com.braintrain.backend.repository.RoadmapRepository;
 import com.braintrain.backend.repository.UserRepository;
 import com.braintrain.backend.util.RoadmapMetaConverter;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -55,6 +57,15 @@ public class RoadmapService {
 
     public RoadmapMeta getRoadmapMetaById(String id) {
         return metaRepo.findById(id).orElse(null);
+    }
+
+    public Roadmap findRoadmapByMetaId(String metaId) {
+        RoadmapMeta roadmapMeta = getRoadmapMetaById(metaId);
+        Optional<Roadmap> roadmap = getRoadmapById(roadmapMeta.getRoadmapReferenceId());
+        if (roadmap.isEmpty()) {
+            throw new RoadmapNotFoundException(metaId);
+        }
+        return  roadmap.get();
     }
 
     public Long getRoadmapCountOfUser(String userEmail) {
@@ -133,6 +144,21 @@ public class RoadmapService {
         }
 
         return new UserFavoritesDTO(user.getFavorites());
+    }
+
+    public Roadmap addResourcesToRoadmap(String roadmapMetaId, List<Resource> resources) {
+        Roadmap roadmap = findRoadmapByMetaId(roadmapMetaId);
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            RoadmapContent roadmapContent = objectMapper.readValue(roadmap.getObj(), RoadmapContent.class);
+            roadmapContent.resources = resources;
+            String content = objectMapper.writeValueAsString(roadmapContent);
+            roadmap.setObj(content);
+            repo.save(roadmap);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return roadmap;
     }
 
     private static void validateDTONameInput(String roadmapDTOName) {

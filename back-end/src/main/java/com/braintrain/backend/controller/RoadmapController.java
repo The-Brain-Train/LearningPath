@@ -50,8 +50,7 @@ public class RoadmapController {
 
     @GetMapping("/findByMeta/{metaId}")
     public ResponseEntity<Roadmap> findRoadmapByMetaId(@PathVariable String metaId) {
-        RoadmapMeta roadmapMeta = service.getRoadmapMetaById(metaId);
-        return getRoadmap(roadmapMeta.getRoadmapReferenceId());
+        return ResponseEntity.ok(service.findRoadmapByMetaId(metaId));
     }
 
     @GetMapping("/{userEmail}/roadmapMetas")
@@ -119,6 +118,15 @@ public class RoadmapController {
 
         URI uri = URI.create("/api/roadmaps/" + user.getEmail() + "/favorites/" + roadmapMeta.getRoadmapReferenceId());
         return ResponseEntity.created(uri).body(userFavorites);
+    }
+
+    @PutMapping("/{userEmail}/resource/{roadmapMetaId}")
+    public ResponseEntity<Roadmap> addResourcesToRoadmap(
+            @PathVariable String roadmapMetaId,
+            @RequestBody ResourcesDTO resourcesDto) {
+        Roadmap updatedRoadmap =
+                service.addResourcesToRoadmap(roadmapMetaId, resourcesDto.resources());
+        return ResponseEntity.ok(updatedRoadmap);
     }
 
     @DeleteMapping("/{userEmail}/favorites")

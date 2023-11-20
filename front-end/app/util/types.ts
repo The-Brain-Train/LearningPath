@@ -65,6 +65,13 @@ export type TreeNode = {
   name: string;
   children: TreeNode[];
   value: number;
+  resources: ResourceType[];
+}
+
+export type ResourceType = {
+  name: string;
+  type: string;
+  link: string;
 }
 
 export interface CustomNode extends d3.HierarchyPointNode<any> {
@@ -75,6 +82,7 @@ export type CreateRoadmapFormData = {
   topic: string | null;
   hours: number | null;
   experienceLevel: string | null;
+  resources: boolean;
 };
 
 export type InputFormProps = {
@@ -82,6 +90,7 @@ export type InputFormProps = {
     topic: string | null;
     hours: number | null;
     experienceLevel: string | null;
+    resources: boolean;
   }>>;
   resetForm: () => void;
   data: TreeNode | null;
