@@ -74,8 +74,7 @@ const IndentedTree = ({
         (d) => `
         M${d.source.depth * nodeSize},${(d as any).source.index * nodeSize}
         V${(d as any).target.index * nodeSize}
-        h${nodeSize + getLinkLength()}
-      `
+        h${nodeSize + getLinkLength()}`
       );
 
     const node = svg
@@ -200,15 +199,15 @@ const IndentedTree = ({
                   {currentUser ? (
                     <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 flex justify-center gap-3">
                       <SaveButton saveClick={saveRoadmap} />
-                      <Button
+                      <button
                         onClick={() => {
                           setData(null);
                           d3.select(svgRef.current).selectAll("*").remove();
                         }}
-                        className="bg-red-500 hover-bg-red-600 py-2 px-4 rounded text-white my-3"
+                        className="bg-red-500 hover:bg-red-600 py-2 px-4 rounded text-white my-2"
                       >
                         Reset
-                      </Button>
+                      </button>
                     </div>
                   ) : (
                     <div className="text-white font-bold text-center mb-2">
