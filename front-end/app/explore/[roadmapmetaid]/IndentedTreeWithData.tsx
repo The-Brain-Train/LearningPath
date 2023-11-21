@@ -127,7 +127,9 @@ const IndentedTreeWithData = ({
       .text((d) => d.data.name)
       .attr("fill", "#cbd5e1")
       .on("click", function (d) {
-        if (!d.children && isCreator) {
+        const data = d.target.__data__;
+        console.log(data.height);
+        if (!d.children && data.height === 0 && isCreator) {
           handleTitleClick(d);
         }
       })
