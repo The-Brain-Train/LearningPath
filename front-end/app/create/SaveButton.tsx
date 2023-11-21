@@ -21,7 +21,7 @@ function SaveButton({ saveClick }: saveButtonProps) {
 
   const handleClick = async () => {
     try {
-      saveClick();
+      await saveClick();
     } catch (e: any) {
       const errMessage = JSON.parse(e.message);
       setSaveErrorMessage(errMessage.message);
