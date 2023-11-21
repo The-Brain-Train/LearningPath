@@ -13,13 +13,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Roadmap {
     @Id
     private String id;
-
     private String obj;
-
     private String userEmail;
-
     private String experienceLevel;
-
     private int hours;
 
     public Roadmap(String obj, String userEmail, String experienceLevel, int hours) {

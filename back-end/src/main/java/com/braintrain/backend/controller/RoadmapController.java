@@ -120,6 +120,12 @@ public class RoadmapController {
         return ResponseEntity.created(uri).body(userFavorites);
     }
 
+    @PutMapping("/{userEmail}/completedTopic/{roadmapMetaId}")
+    public ResponseEntity<Roadmap> updateCompletedTopicStatus(@RequestBody String completedTopic, @PathVariable String roadmapMetaId) {
+        Roadmap updatedRoadmap = service.markTopicOfChildAsComplete(roadmapMetaId, completedTopic);
+        return ResponseEntity.ok(updatedRoadmap);
+    }
+
     @PutMapping("/{userEmail}/resource/{roadmapMetaId}")
     public ResponseEntity<Roadmap> addResourcesToRoadmap(
             @PathVariable String roadmapMetaId,

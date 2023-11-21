@@ -171,7 +171,6 @@ export default function Explore() {
           disabledClassName={"pagination__link--disabled"}
           activeClassName={"pagination__link--active"}
         />
-
         <RoadmapsPage
           paginatedRoadmaps={paginatedRoadmaps}
           currentUser={currentUser}

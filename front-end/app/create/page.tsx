@@ -4,24 +4,28 @@ import IndentedTree from "./IndentedTree";
 import { CreateRoadmapFormData, RoadmapDTO, TreeNode } from "../util/types";
 import { postRoadmap } from "../functions/httpRequests";
 import { getResponseFromOpenAI } from "../functions/openAIChat";
-import { chatHistory, requestPromptWithResources } from "../functions/chatPreHistory";
+import {
+  chatHistory,
+  requestPromptWithResources,
+} from "../functions/chatPreHistory";
 import {
   calculateTotalValuesRecursive,
   scaleValues,
 } from "../functions/roadmapHoursCalculator";
-import { useCookies } from 'react-cookie';
+import { useCookies } from "react-cookie";
 import useCurrentUserQuery from "../functions/useCurrentUserQuery";
 import InputForm from "./InputForm";
-import { ResourcesSection } from "../explore/ResourcesSection";
+import { ResourcesSection } from "../components/ResourcesSection";
 
 export default function Create() {
   const [data, setData] = useState<TreeNode | null>(null);
-  const [roadmapInputData, setRoadmapInputData] = useState<CreateRoadmapFormData>({
-    topic: null,
-    hours: null,
-    experienceLevel: null,
-    resources: false,
-  });
+  const [roadmapInputData, setRoadmapInputData] =
+    useState<CreateRoadmapFormData>({
+      topic: null,
+      hours: null,
+      experienceLevel: null,
+      resources: false,
+    });
   const [apiFetchLoading, setApiFetchLoading] = useState(false);
   const [createError, setCreateError] = useState<string | null>(null);
   const [totalHours, setTotalHours] = useState(0);
@@ -65,11 +69,16 @@ export default function Create() {
             roadmapInputData.topic,
             roadmapInputData.experienceLevel,
             roadmapInputData.hours,
-            roadmapInputData.resources)
+            roadmapInputData.resources
+          )
         );
       } else {
         response = await getResponseFromOpenAI(
-          chatHistory(roadmapInputData.topic, roadmapInputData.experienceLevel, roadmapInputData.hours)
+          chatHistory(
+            roadmapInputData.topic,
+            roadmapInputData.experienceLevel,
+            roadmapInputData.hours
+          )
         );
       }
 
@@ -120,8 +129,8 @@ export default function Create() {
           roadmapId={undefined}
           userEmail={currentUser?.email}
           cookiesUser={cookies.user}
-        />)
-      }
+        />
+      )}
     </main>
   );
 }

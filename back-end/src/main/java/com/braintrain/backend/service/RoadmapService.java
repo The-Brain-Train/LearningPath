@@ -1,6 +1,7 @@
 package com.braintrain.backend.service;
 
 import com.braintrain.backend.controller.dtos.*;
+import com.braintrain.backend.exceptionHandler.exception.ChildElementNotFoundException;
 import com.braintrain.backend.exceptionHandler.exception.RoadmapCountExceededException;
 import com.braintrain.backend.exceptionHandler.exception.RoadmapNotFoundException;
 import com.braintrain.backend.model.*;
@@ -8,6 +9,7 @@ import com.braintrain.backend.repository.RoadmapMetaRepository;
 import com.braintrain.backend.repository.RoadmapRepository;
 import com.braintrain.backend.repository.UserRepository;
 import com.braintrain.backend.util.RoadmapMetaConverter;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,6 +27,7 @@ public class RoadmapService {
     private final RoadmapRepository repo;
     private final UserRepository userRepo;
     private final UserService userService;
+    private ObjectMapper objectMapper;
 
     public RoadmapMeta createRoadmap(RoadmapDTO roadmapDTO) {
         validateDTONameInput(roadmapDTO.name());
@@ -149,9 +152,8 @@ public class RoadmapService {
     public Roadmap addResourcesToRoadmap(String roadmapMetaId, List<Resource> resources) {
         Roadmap roadmap = findRoadmapByMetaId(roadmapMetaId);
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
             RoadmapContent roadmapContent = objectMapper.readValue(roadmap.getObj(), RoadmapContent.class);
-            roadmapContent.resources = resources;
+            roadmapContent.setResources(resources);
             String content = objectMapper.writeValueAsString(roadmapContent);
             roadmap.setObj(content);
             repo.save(roadmap);
@@ -159,6 +161,84 @@ public class RoadmapService {
             e.printStackTrace();
         }
         return roadmap;
+    }
+
+    public Roadmap markTopicOfChildAsComplete(String roadmapMetaId, String childElementName) {
+        Roadmap roadmap = findRoadmapByMetaId(roadmapMetaId);
+        RoadmapContent roadmapContent = null;
+        try {
+            roadmapContent = objectMapper.readValue(roadmap.getObj(), RoadmapContent.class);
+            if (!updateChildCompletionStatus(roadmapContent, childElementName)) {
+                throw new ChildElementNotFoundException("Child element not found: " + childElementName);
+            }
+            String content = objectMapper.writeValueAsString(roadmapContent);
+            roadmap.setObj(content);
+            repo.save(roadmap);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        return roadmap;
+    }
+
+    private boolean updateChildCompletionStatus(RoadmapContent roadmapContent, String childElementName) {
+        boolean anyChildUpdated = false;
+        boolean childFound = false;
+        for (RoadmapContentChild child : roadmapContent.getChildren()) {
+            boolean childUpdated = updateCompletionRecursively(child, childElementName);
+            if (childUpdated) {
+                anyChildUpdated = true;
+                childFound = true;
+            }
+        }
+        if (anyChildUpdated) {
+            for (RoadmapContentChild child : roadmapContent.getChildren()) {
+                boolean allChildCompleted = checkAllChildrenCompleted(child);
+                child.setCompletedTopic(allChildCompleted);
+            }
+        }
+        return childFound;
+    }
+
+    private boolean updateCompletionRecursively(RoadmapContentChild child, String childElementName) {
+        if (child.getName().equals(childElementName)) {
+            boolean statusBeforeUpdate = child.isCompletedTopic();
+            child.setCompletedTopic(!statusBeforeUpdate);
+            return child.isCompletedTopic() != statusBeforeUpdate;
+        }
+
+        if (child.getChildren() != null) {
+            boolean childUpdated = false;
+            for (RoadmapContentChild nestedChild : child.getChildren()) {
+                boolean nestedUpdated = updateCompletionRecursively(nestedChild, childElementName);
+                if (nestedUpdated) {
+                    childUpdated = true;
+                }
+            }
+
+            if (childUpdated) {
+                boolean allChildrenCompleted = checkAllChildrenCompleted(child);
+                child.setCompletedTopic(allChildrenCompleted);
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    private boolean checkAllChildrenCompleted(RoadmapContentChild child) {
+        if (child.getChildren() == null || child.getChildren().isEmpty()) {
+            return child.isCompletedTopic();
+        } else {
+            boolean allChildrenCompleted = true;
+            for (RoadmapContentChild nestedChild : child.getChildren()) {
+                System.out.println(nestedChild);
+                boolean nestedCompleted = checkAllChildrenCompleted(nestedChild);
+                if (!nestedCompleted) {
+                    allChildrenCompleted = false;
+                }
+            }
+            return allChildrenCompleted;
+        }
     }
 
     private static void validateDTONameInput(String roadmapDTOName) {

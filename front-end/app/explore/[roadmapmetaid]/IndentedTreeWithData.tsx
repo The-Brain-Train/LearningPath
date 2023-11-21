@@ -1,7 +1,11 @@
 "use client";
 import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
-import { CustomNode, ExploreIndentedTreeProps, TreeNode } from "../../util/types";
+import {
+  CustomNode,
+  ExploreIndentedTreeProps,
+  TreeNode,
+} from "../../util/types";
 import {
   getHoursFontSize,
   getLabelFontSize,
@@ -13,9 +17,26 @@ import {
   getScreenWidthAdjustValue,
 } from "../../util/IndentedTreeUtil";
 import addGoogleFont from "../../util/fontFamily";
+import _ from "lodash";
 
-const IndentedTreeWithData = ({ data }: ExploreIndentedTreeProps) => {
+const IndentedTreeWithData = ({
+  data,
+  updateCompletedTopic,
+  isCreator,
+}: ExploreIndentedTreeProps) => {
   const svgRef = useRef(null);
+  const debouncedGraph = useRef(_.debounce(() => graph(), 300));
+
+  const handleTitleClick = (d: any) => {
+    if (!d.children) {
+      const clickedElementName = d.target.innerHTML;
+      if (clickedElementName) {
+        updateCompletedTopic(clickedElementName);
+      } else {
+        console.error("Name or identifier not found for the clicked element");
+      }
+    }
+  };
 
   const graph = () => {
     if (data == null) return;
@@ -104,7 +125,19 @@ const IndentedTreeWithData = ({ data }: ExploreIndentedTreeProps) => {
       .style("font-size", (d) => getLabelFontSize(d))
       .style("font-family", "'Poppins', sans-serif")
       .text((d) => d.data.name)
-      .attr("fill", "#cbd5e1");
+      .attr("fill", "#cbd5e1")
+      .on("click", function (d) {
+        const data = d.target.__data__;
+        console.log(data.height);
+        if (!d.children && data.height === 0 && isCreator) {
+          handleTitleClick(d);
+        }
+      })
+      .each(function (d) {
+        if (!d.children) {
+          d3.select(this).style("cursor", "pointer");
+        }
+      });
 
     node.append("title").text((d) =>
       d
@@ -133,32 +166,48 @@ const IndentedTreeWithData = ({ data }: ExploreIndentedTreeProps) => {
         .data(root.copy().descendants())
         .text((d) => format(d.data.value));
     }
+    if (isCreator) {
+      applyStrikethrough();
+    }
   };
 
   useEffect(() => {
     addGoogleFont();
     graph();
     const createGraph = () => {
-      window.addEventListener("resize", graph);
+      window.addEventListener("resize", debouncedGraph.current);
     };
     createGraph();
     return () => {
-      window.removeEventListener("resize", graph);
+      window.removeEventListener("resize", debouncedGraph.current);
     };
   }, [data]);
 
+  const applyStrikethrough = () => {
+    d3.select(svgRef.current)
+      .selectAll("text")
+      .each(function (d: any) {
+        const datum = d?.data;
+        if (datum && datum.completedTopic) {
+          d3.select(this).style("text-decoration", "line-through");
+        } else {
+          d3.select(this).style("text-decoration", "none");
+        }
+      });
+  };
+
   return (
-      <div className="mb-10">
-        <div className="flex justify-between px-4">
-          <p className="text-xl text-center font-bold text-white md:text-2xl">
-            Learning Path
-          </p>
-          <p className="text-xl text-center font-bold text-white md:text-2xl">
-            Hours
-          </p>
-        </div>
-        <svg ref={svgRef}></svg>
+    <div className="mb-10">
+      <div className="flex justify-between px-4">
+        <p className="text-xl text-center font-bold text-white md:text-2xl">
+          Learning Path
+        </p>
+        <p className="text-xl text-center font-bold text-white md:text-2xl">
+          Hours
+        </p>
       </div>
+      <svg ref={svgRef}></svg>
+    </div>
   );
 };
 

@@ -40,6 +40,11 @@ public class GlobalExceptionHandler {
         return displayErrorMessage(LocalDateTime.now(), 422, "/api/users", ex.getMessage());
     }
 
+    @ExceptionHandler(ChildElementNotFoundException.class)
+    public ResponseEntity<ErrorMessageResponse> handleChildElementNotFoundException(ChildElementNotFoundException ex) {
+        return displayErrorMessage(LocalDateTime.now(), 404, "/api/roadmaps", ex.getMessage());
+    }
+
     private ResponseEntity<ErrorMessageResponse> displayErrorMessage(LocalDateTime time, int status, String path, String errorMessage) {
         ErrorMessageResponse errorResponse = new ErrorMessageResponse(
                 time,

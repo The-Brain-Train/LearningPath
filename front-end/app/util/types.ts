@@ -28,6 +28,9 @@ export type RoadmapMetaList = {
 export type Roadmap = {
   id: string;
   obj: string;
+  userEmail: string;
+  experienceLevel: string;
+  hours: number
 };
 
 export type RoadmapDTO = {
@@ -59,6 +62,8 @@ export type CreateIndentedTreeProps = {
 
 export type ExploreIndentedTreeProps = {
   data: TreeNode | undefined;
+  updateCompletedTopic: (completedTask: string) => Promise<Roadmap | undefined>;
+  isCreator: boolean;
 };
 
 export type TreeNode = {
@@ -66,6 +71,7 @@ export type TreeNode = {
   children: TreeNode[];
   value: number;
   resources: ResourceType[];
+  completedTopic: boolean
 }
 
 export type ResourceType = {
