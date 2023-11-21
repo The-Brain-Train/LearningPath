@@ -134,7 +134,7 @@ const IndentedTreeWithData = ({
         }
       })
       .each(function (d) {
-        if (!d.children) {
+        if (!d.children && isCreator) {
           d3.select(this).style("cursor", "pointer");
         }
       });
