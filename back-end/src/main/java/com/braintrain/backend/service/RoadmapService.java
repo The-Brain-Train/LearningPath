@@ -201,20 +201,29 @@ public class RoadmapService {
 
     private boolean updateCompletionRecursively(RoadmapContentChild child, String childElementName) {
         if (child.getName().equals(childElementName)) {
-            child.setCompletedTopic(!child.isCompletedTopic());
-            return true;
+            boolean statusBeforeUpdate = child.isCompletedTopic();
+            child.setCompletedTopic(!statusBeforeUpdate);
+            return child.isCompletedTopic() != statusBeforeUpdate;
         }
-        boolean childUpdated = false;
+
         if (child.getChildren() != null) {
+            boolean childUpdated = false;
             for (RoadmapContentChild nestedChild : child.getChildren()) {
                 boolean nestedUpdated = updateCompletionRecursively(nestedChild, childElementName);
                 if (nestedUpdated) {
                     childUpdated = true;
                 }
             }
+
+            if (childUpdated) {
+                boolean allChildrenCompleted = checkAllChildrenCompleted(child);
+                child.setCompletedTopic(allChildrenCompleted);
+                return true;
+            }
         }
-        return childUpdated;
+        return false;
     }
+
 
     private boolean checkAllChildrenCompleted(RoadmapContentChild child) {
         if (child.getChildren() == null || child.getChildren().isEmpty()) {
@@ -222,10 +231,10 @@ public class RoadmapService {
         } else {
             boolean allChildrenCompleted = true;
             for (RoadmapContentChild nestedChild : child.getChildren()) {
+                System.out.println(nestedChild);
                 boolean nestedCompleted = checkAllChildrenCompleted(nestedChild);
                 if (!nestedCompleted) {
                     allChildrenCompleted = false;
-                    break;
                 }
             }
             return allChildrenCompleted;
