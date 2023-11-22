@@ -4,6 +4,7 @@ import * as d3 from "d3";
 import {
   CustomNode,
   ExploreIndentedTreeProps,
+  RoadmapObjectData,
   TreeNode,
 } from "../../util/types";
 import {
@@ -27,9 +28,9 @@ const IndentedTreeWithData = ({
   const svgRef = useRef(null);
   const debouncedGraph = useRef(_.debounce(() => graph(), 100));
 
-  const handleTitleClick = (d: any) => {
-    if (!d.children) {
-      const clickedElementName = d.data.name;
+  const handleCheckBoxClick = (data: RoadmapObjectData) => {
+    if (!data.children) {
+      const clickedElementName = data.name;
       if (clickedElementName) {
         updateCompletedTopic(clickedElementName);
       } else {
@@ -153,13 +154,13 @@ const IndentedTreeWithData = ({
           d3.select(this).style("font-family", "'Poppins', sans-serif");
         })
         .on("click", function (d) {
-          const data = d.target.__data__;
-          if (!d.children && data.height === 0 && isCreator) {
-            handleTitleClick(data);
+          const treeLabelData = d.target.__data__;
+          if (!d.children && treeLabelData.height === 0 && isCreator) {
+            handleCheckBoxClick(treeLabelData.data);
           }
         });
     }
-    
+
     if (!isCreator) {
       node
         .append("text")

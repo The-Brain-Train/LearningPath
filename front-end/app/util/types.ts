@@ -114,3 +114,10 @@ export type ResourcesSectionProps = {
   userEmail: string | null | undefined;
   cookiesUser: string;
 };
+
+export type RoadmapObjectData = {
+  name: string;
+  children: RoadmapObjectData[] | null;
+  completedTopic: boolean;
+  value: number;
+};
