@@ -66,6 +66,7 @@ const ProfilePageAuthUser = ({ currentUser }: UserProps) => {
     try {
       await deleteRoadmapMutation.mutateAsync(roadmapMeta);
       queryClient.invalidateQueries(["userRoadmaps"]);
+      queryClient.invalidateQueries(["roadmapCount"]);
     } catch (error) {
       console.error("Error deleting roadmap:", error);
     }
