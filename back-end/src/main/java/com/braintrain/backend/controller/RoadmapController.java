@@ -126,6 +126,19 @@ public class RoadmapController {
         return ResponseEntity.ok(updatedRoadmap);
     }
 
+    @GetMapping("/{userEmail}/progress/{roadmapMetaId}")
+    public ResponseEntity<Double> getRoadmapProgressOfUser(
+            @PathVariable String userEmail,
+            @PathVariable String roadmapMetaId) {
+
+        if (userEmail == null) {
+            throw new UserNotFoundException("User not found for email: " + userEmail);
+        }
+
+        Double progressPercentage = service.calculateRoadmapProgress(roadmapMetaId);
+        return ResponseEntity.ok(progressPercentage);
+    }
+
     @PutMapping("/{userEmail}/resource/{roadmapMetaId}")
     public ResponseEntity<Roadmap> addResourcesToRoadmap(
             @PathVariable String userEmail,
