@@ -133,8 +133,6 @@ function RoadMapId(props: Props) {
     }
   };
 
-  
-
   const roadmapToTreeNode = (roadmap: Roadmap | undefined) => {
     return roadmap as unknown as TreeNode;
   };
