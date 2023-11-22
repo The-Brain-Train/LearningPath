@@ -44,7 +44,7 @@ export default function Header() {
       <header className="bg-white fixed w-full h-16	z-50 top-0 left-0">
         <div className="flex h-16 items-center justify-between mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
           <Link href="/">
-            <Image className="h-14 w-auto" src="/Logo.png" alt="LP Logo" width={140} height={60} />
+            <Image className="h-14 w-auto" src="/Logo.png" alt="LP Logo" width={140} height={60} priority={false} />
           </Link>
           <div className="flex flex-row">
             {currentUser ? (

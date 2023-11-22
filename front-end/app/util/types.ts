@@ -30,7 +30,7 @@ export type Roadmap = {
   obj: string;
   userEmail: string;
   experienceLevel: string;
-  hours: number
+  hours: number;
 };
 
 export type RoadmapDTO = {
@@ -71,7 +71,7 @@ export type TreeNode = {
   children: TreeNode[];
   value: number;
   resources: ResourceType[];
-  completedTopic: boolean
+  completedTopic: boolean;
 }
 
 export type ResourceType = {

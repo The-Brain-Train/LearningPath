@@ -128,8 +128,14 @@ public class RoadmapController {
 
     @PutMapping("/{userEmail}/resource/{roadmapMetaId}")
     public ResponseEntity<Roadmap> addResourcesToRoadmap(
+            @PathVariable String userEmail,
             @PathVariable String roadmapMetaId,
             @RequestBody ResourcesDTO resourcesDto) {
+
+        if (userEmail == null) {
+            throw new UserNotFoundException("User not found for email: " + userEmail);
+        }
+
         Roadmap updatedRoadmap =
                 service.addResourcesToRoadmap(roadmapMetaId, resourcesDto.resources());
         return ResponseEntity.ok(updatedRoadmap);

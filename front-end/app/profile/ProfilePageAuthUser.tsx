@@ -9,13 +9,13 @@ import {
   removeRoadmapMetaFromUserFavorites,
   getRoadmapCountOfUser,
 } from "../functions/httpRequests";
-import UserCard from "../components/UserCard";
+import UserCard from "./UserCard";
 import {
   Accordion,
   AccordionHeader,
   AccordionBody,
 } from "@material-tailwind/react";
-import PersonalRoadmapCard from "../components/PersonalRoadmapCard";
+import PersonalRoadmapCard from "./PersonalRoadmapCard";
 import FavoriteRoadmapCard from "../components/FavoriteRoadmapCard";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCookies } from "react-cookie";
@@ -66,6 +66,7 @@ const ProfilePageAuthUser = ({ currentUser }: UserProps) => {
     try {
       await deleteRoadmapMutation.mutateAsync(roadmapMeta);
       queryClient.invalidateQueries(["userRoadmaps"]);
+      queryClient.invalidateQueries(["roadmapCount"]);
     } catch (error) {
       console.error("Error deleting roadmap:", error);
     }

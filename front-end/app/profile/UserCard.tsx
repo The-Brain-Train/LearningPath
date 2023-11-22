@@ -69,6 +69,7 @@ export default function Card({ currentUser }: UserProps) {
             layout="responsive"
             alt="User profile picture"
             className="rounded-full"
+            priority={false}
           />
         ) : (
           <Image
