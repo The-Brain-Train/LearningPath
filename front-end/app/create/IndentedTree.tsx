@@ -100,7 +100,7 @@ const IndentedTree = ({
         } else if (d.height === 0) {
           return "📖";
         } else {
-          return "📕";
+          return "📘";
         }
       });
 
