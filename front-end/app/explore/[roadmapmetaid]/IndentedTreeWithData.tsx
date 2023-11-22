@@ -25,11 +25,11 @@ const IndentedTreeWithData = ({
   isCreator,
 }: ExploreIndentedTreeProps) => {
   const svgRef = useRef(null);
-  const debouncedGraph = useRef(_.debounce(() => graph(), 300));
+  const debouncedGraph = useRef(_.debounce(() => graph(), 100));
 
   const handleTitleClick = (d: any) => {
     if (!d.children) {
-      const clickedElementName = d.target.innerHTML;
+      const clickedElementName = d.data.name;
       if (clickedElementName) {
         updateCompletedTopic(clickedElementName);
       } else {
@@ -110,17 +110,19 @@ const IndentedTreeWithData = ({
         if (d.depth === 0) {
           return "📚";
         } else if (d.height === 0) {
-          return "📖";
+          return "";
         } else {
           return "📕";
         }
       });
 
     node
+      .filter((d) => d.height !== 0)
       .append("text")
       .attr("dy", "0.32em")
-      .attr("x", (d) => d.depth * nodeSize + getTextXOffset(d, 10, 80))
+      .attr("x", (d) => d.depth * nodeSize + getTextXOffset(d, 15, 80))
       .attr("y", 0)
+      .attr("width", 300)
       .attr("font-weight", (d) => (d.depth === 0 ? 900 : 100))
       .style("font-size", (d) => getLabelFontSize(d))
       .style("font-family", "'Poppins', sans-serif")
@@ -128,37 +130,33 @@ const IndentedTreeWithData = ({
         const nodeName = d.data.name;
         return nodeName;
       })
-      .attr("fill", "#cbd5e1")
+      .attr("fill", "#cbd5e1");
+
+    node
+      .filter((d) => d.height === 0)
+      .append("foreignObject")
+      .attr("x", (d) => d.depth * nodeSize + getTextXOffset(d, 10, 60))
+      .attr("y", -10)
+      .attr("width", 600)
+      .attr("height", 50)
+      .html(function (d) {
+        const completedCheckbox = d.data.completedTopic ? "checked" : "";
+        return `
+      <div class="flex items-center">
+        <input ${completedCheckbox} type="checkbox" value=${d.data.name} class="w-4 h-4">
+        <label class="text-gray-300 text:xs md:text-lg ml-2">${d.data.name}</label>
+      </div>
+    `;
+      })
+      .each(function (d) {
+        d3.select(this).style("font-family", "'Poppins', sans-serif");
+      })
       .on("click", function (d) {
         const data = d.target.__data__;
         if (!d.children && data.height === 0 && isCreator) {
-          handleTitleClick(d);
-        }
-      })
-      .each(function (d) {
-        if (!d.children && isCreator) {
-          d3.select(this).style("cursor", "pointer");
+          handleTitleClick(data);
         }
       });
-
-    // node
-    //   .filter((d) => d.height === 0) 
-    //   .append("foreignObject") 
-    //   .attr("x", (d) => d.depth * nodeSize + getTextXOffset(d, 10, 80))
-    //   .attr("y", -20)
-    //   .attr("width", 350)
-    //   .attr("height", 30)
-    //   .html(function (d) {
-    //     return `
-    //   <div class="flex items-center">
-    //     <input checked  type="checkbox" value="" class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-    //     <label  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">${d.data.name}</label>
-    //   </div>
-    // `;
-    //   })
-    //   .each(function (d) {
-    //     d3.select(this).style("font-family", "'Poppins', sans-serif");
-    //   });
 
     node.append("title").text((d) =>
       d
@@ -188,7 +186,7 @@ const IndentedTreeWithData = ({
         .text((d) => format(d.data.value));
     }
     if (isCreator) {
-      applyStrikethrough();
+      toggleCheckBox();
     }
   };
 
@@ -204,15 +202,16 @@ const IndentedTreeWithData = ({
     };
   }, [data]);
 
-  const applyStrikethrough = () => {
+  const toggleCheckBox = () => {
     d3.select(svgRef.current)
-      .selectAll("text")
+      .selectAll("foreignObject")
       .each(function (d: any) {
         const datum = d?.data;
+        const checkbox = d3.select(this).select("input");
         if (datum && datum.completedTopic) {
-          d3.select(this).style("text-decoration", "line-through");
+          checkbox.property("checked", true);
         } else {
-          d3.select(this).style("text-decoration", "none");
+          checkbox.property("checked", false);
         }
       });
   };
