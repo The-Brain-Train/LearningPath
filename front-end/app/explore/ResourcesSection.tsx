@@ -22,7 +22,7 @@ export const ResourcesSection = (props: ResourcesSectionProps) => {
     useMutation({
       mutationFn: async () => {
         const response = await getResponseFromOpenAI(
-          requestPromptOnlyResources(props.treeNode?.name || null) //
+          requestPromptOnlyResources(props.treeNode?.name || null)
         );
         const resourcesJsonData = await JSON.parse(
           response.choices[0].message.content
