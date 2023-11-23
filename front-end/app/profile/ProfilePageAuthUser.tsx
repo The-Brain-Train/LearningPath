@@ -116,6 +116,7 @@ const ProfilePageAuthUser = ({ currentUser }: UserProps) => {
               <ul className="flex flex-col justify-center">
                 {userRoadmaps?.roadmapMetaList.map((roadmapMeta, index) => (
                   <PersonalRoadmapCard
+                    currentUser={currentUser}
                     roadmapMeta={roadmapMeta}
                     key={index}
                     handleDelete={handleDelete}
