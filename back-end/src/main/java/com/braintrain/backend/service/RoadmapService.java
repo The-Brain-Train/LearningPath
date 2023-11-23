@@ -261,7 +261,6 @@ public class RoadmapService {
         } else {
             boolean allChildrenCompleted = true;
             for (RoadmapContentChild nestedChild : child.getChildren()) {
-                System.out.println(nestedChild);
                 boolean nestedCompleted = checkAllChildrenCompleted(nestedChild);
                 if (!nestedCompleted) {
                     allChildrenCompleted = false;

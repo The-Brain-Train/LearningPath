@@ -4,6 +4,7 @@ import * as d3 from "d3";
 import {
   CustomNode,
   ExploreIndentedTreeProps,
+  RoadmapObjectData,
   TreeNode,
 } from "../../util/types";
 import {
@@ -27,9 +28,9 @@ const IndentedTreeWithData = ({
   const svgRef = useRef(null);
   const debouncedGraph = useRef(_.debounce(() => graph(), 100));
 
-  const handleTitleClick = (d: any) => {
-    if (!d.children) {
-      const clickedElementName = d.data.name;
+  const handleCheckBoxClick = (data: RoadmapObjectData) => {
+    if (!data.children) {
+      const clickedElementName = data.name;
       if (clickedElementName) {
         updateCompletedTopic(clickedElementName);
       } else {
@@ -132,31 +133,67 @@ const IndentedTreeWithData = ({
       })
       .attr("fill", "#cbd5e1");
 
-    node
-      .filter((d) => d.height === 0)
-      .append("foreignObject")
-      .attr("x", (d) => d.depth * nodeSize + getTextXOffset(d, 10, 60))
-      .attr("y", -10)
-      .attr("width", 600)
-      .attr("height", 50)
-      .html(function (d) {
-        const completedCheckbox = d.data.completedTopic ? "checked" : "";
-        return `
+    if (isCreator) {
+      node
+        .filter((d) => d.height === 0)
+        .append("foreignObject")
+        .attr("x", (d) => d.depth * nodeSize + getTextXOffset(d, 10, 60))
+        .attr("y", -10)
+        .attr("width", 600)
+        .attr("height", 50)
+        .html(function (d) {
+          const completedCheckbox = d.data.completedTopic ? "checked" : "";
+          return `
       <div class="flex items-center">
         <input ${completedCheckbox} type="checkbox" value=${d.data.name} class="w-4 h-4">
         <label class="text-gray-300 text:xs md:text-lg ml-2">${d.data.name}</label>
       </div>
     `;
-      })
-      .each(function (d) {
-        d3.select(this).style("font-family", "'Poppins', sans-serif");
-      })
-      .on("click", function (d) {
-        const data = d.target.__data__;
-        if (!d.children && data.height === 0 && isCreator) {
-          handleTitleClick(data);
-        }
-      });
+        })
+        .each(function (d) {
+          d3.select(this).style("font-family", "'Poppins', sans-serif");
+        })
+        .on("click", function (d) {
+          const treeLabelData = d.target.__data__;
+          if (!d.children && treeLabelData.height === 0 && isCreator) {
+            handleCheckBoxClick(treeLabelData.data);
+          }
+        });
+    }
+
+    if (!isCreator) {
+      node
+        .append("text")
+        .attr("x", (d) => d.depth * nodeSize + getLabelXOffset(d, -10, 40))
+        .attr("y", 5)
+        .style("font-size", getIconFontSize())
+        .style("fill", (d) => (d.children ? "black" : "#cbd5e1"))
+        .text((d) => {
+          if (d.depth === 0) {
+            return "📚";
+          } else if (d.height === 0) {
+            return "📖";
+          } else {
+            return "📘";
+          }
+        });
+
+      node
+        .filter((d) => d.height === 0)
+        .append("text")
+        .attr("dy", "0.32em")
+        .attr("x", (d) => d.depth * nodeSize + getTextXOffset(d, 15, 80))
+        .attr("y", 0)
+        .attr("width", 300)
+        .attr("font-weight", (d) => (d.depth === 0 ? 900 : 100))
+        .style("font-size", (d) => getLabelFontSize(d))
+        .style("font-family", "'Poppins', sans-serif")
+        .text((d) => {
+          const nodeName = d.data.name;
+          return nodeName;
+        })
+        .attr("fill", "#cbd5e1");
+    }
 
     node.append("title").text((d) =>
       d
