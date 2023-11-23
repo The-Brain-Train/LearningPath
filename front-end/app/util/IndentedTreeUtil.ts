@@ -40,6 +40,14 @@ export const getHoursFontSize = (d: d3.HierarchyNode<TreeNode>) => {
   }
 };
 
+export const getLabelWidth = (d: d3.HierarchyNode<TreeNode>) => {
+  if (window.innerWidth < 550) {
+    return 300
+  } else {
+    return 600;
+  }
+};
+
 export const getTextXOffset = (
   d: d3.HierarchyNode<TreeNode>,
   mobile: number,

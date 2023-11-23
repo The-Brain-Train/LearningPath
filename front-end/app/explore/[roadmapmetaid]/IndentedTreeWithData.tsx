@@ -15,6 +15,7 @@ import {
   getNodeSize,
   getIconFontSize,
   getScreenWidthAdjustValue,
+  getLabelWidth,
 } from "../../util/IndentedTreeUtil";
 import addGoogleFont from "../../util/fontFamily";
 import _ from "lodash";
@@ -136,7 +137,7 @@ const IndentedTreeWithData = ({
         .append("foreignObject")
         .attr("x", (d) => d.depth * nodeSize + getTextXOffset(d, 10, 60))
         .attr("y", -10)
-        .attr("width", 600)
+        .attr("width",(d) => getLabelWidth(d))
         .attr("height", 50)
         .html(function (d) {
           const completedCheckbox = d.data.completedTopic ? "checked" : "";
