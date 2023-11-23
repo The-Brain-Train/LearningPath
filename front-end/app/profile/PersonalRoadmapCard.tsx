@@ -3,11 +3,12 @@ import { PersonalRoadmapCardProps } from "../util/types";
 import { generateStarsforExperienceLevel } from "../functions/generateStarsForExperience";
 import Delete from "@mui/icons-material/Delete";
 import { useState } from "react";
-import { Box, Button, Modal, Typography, LinearProgress } from "@mui/material";
+import { Box, Button, Modal, Typography, LinearProgress, CircularProgress } from "@mui/material";
 import { useCookies } from "react-cookie";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getRoadmapProgressOfUser } from "../functions/httpRequests";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import CircularProgressWithLabel from "./CircularProgressWithLabel";
 
 export default function PersonalRoadmapCard({
   currentUser,
@@ -34,7 +35,7 @@ export default function PersonalRoadmapCard({
 
   return (
     <li className="shadow-md w-full border-t-2 border-opacity-100 dark:border-opacity-50 bg-slate-300">
-      <div className="flex items-center p-2">
+      <div className="flex items-center p-2 h-16">
         <Link
           className="text-left overflow-hidden flex flex-1 justify-center items-center"
           href={`/explore/${roadmapMeta.id}`}
@@ -43,22 +44,24 @@ export default function PersonalRoadmapCard({
             {roadmapMeta.name}
           </p>
 
-            {!isSmallScreen ? (
-              <div className="w-1/2 items-center justify-center mx-4">
-                <p>Progress: {progressPercentage}%</p>
-                <LinearProgress variant="determinate" value={progressPercentage} className="w-full" />
-              </div>) : (
-                <></>
-              )}
-
-            <div className="flex flex-col items-center justify-center lg:w-1/6 xl:w-1/6 2xl:w-1/6">
-              <p className="overflow-ellipsis overflow-hidden whitespace-nowrap pl-1">
-                {generateStarsforExperienceLevel(roadmapMeta.experienceLevel)}
-              </p>
-              <p className="overflow-ellipsis overflow-hidden whitespace-nowrap pl-1">
-                {roadmapMeta.hours} hours
-              </p>
+          {!isSmallScreen ? (
+            <div className="w-1/2 items-center justify-center mx-4">
+              <p>Progress: {progressPercentage}%</p>
+              <LinearProgress variant="determinate" value={progressPercentage} className="w-full" />
+            </div>) : (
+            <div className="items-center justify-center mx-6">
+              <CircularProgressWithLabel value={progressPercentage} size={50} />
             </div>
+          )}
+
+          <div className="flex flex-col items-center justify-center lg:w-1/6 xl:w-1/6 2xl:w-1/6">
+            <p className="overflow-ellipsis overflow-hidden whitespace-nowrap pl-1">
+              {generateStarsforExperienceLevel(roadmapMeta.experienceLevel)}
+            </p>
+            <p className="overflow-ellipsis overflow-hidden whitespace-nowrap pl-1">
+              {roadmapMeta.hours} hours
+            </p>
+          </div>
 
         </Link>
         <div className="flex-shrink-0 min-w-max flex mx-2 cursor-pointer">
