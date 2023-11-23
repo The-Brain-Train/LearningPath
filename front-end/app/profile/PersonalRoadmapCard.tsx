@@ -7,6 +7,7 @@ import { Box, Button, Modal, Typography, LinearProgress } from "@mui/material";
 import { useCookies } from "react-cookie";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getRoadmapProgressOfUser } from "../functions/httpRequests";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 export default function PersonalRoadmapCard({
   currentUser,
@@ -23,6 +24,7 @@ export default function PersonalRoadmapCard({
   const handleClose = () => setOpen(false);
   const queryClient = useQueryClient();
   const [cookies] = useCookies(["user"]);
+  const isSmallScreen = useMediaQuery("(max-width: 768px)");
 
   const { data: progressPercentage } = useQuery<number>(
     [`progressPercentage-${roadmapMeta.id}`],
@@ -41,15 +43,15 @@ export default function PersonalRoadmapCard({
             {roadmapMeta.name}
           </p>
 
-          <div className="flex flex-row justify-between w-80 border-solid border-2 border-indigo-600">
-            <div>
-              <p>Progress: {progressPercentage}</p>
+            {!isSmallScreen ? (
+              <div className="w-1/2 items-center justify-center mx-4">
+                <p>Progress: {progressPercentage}%</p>
+                <LinearProgress variant="determinate" value={progressPercentage} className="w-full" />
+              </div>) : (
+                <></>
+              )}
 
-
-              <LinearProgress variant="determinate" value={progressPercentage} />
-            </div>
-
-            <div className="flex flex-col items-center justify-center">
+            <div className="flex flex-col items-center justify-center lg:w-1/6 xl:w-1/6 2xl:w-1/6">
               <p className="overflow-ellipsis overflow-hidden whitespace-nowrap pl-1">
                 {generateStarsforExperienceLevel(roadmapMeta.experienceLevel)}
               </p>
@@ -57,7 +59,7 @@ export default function PersonalRoadmapCard({
                 {roadmapMeta.hours} hours
               </p>
             </div>
-          </div>
+
         </Link>
         <div className="flex-shrink-0 min-w-max flex mx-2 cursor-pointer">
           <Delete id={roadmapMeta.id} onClick={handleOpen} />
