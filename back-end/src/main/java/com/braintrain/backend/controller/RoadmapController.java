@@ -135,7 +135,7 @@ public class RoadmapController {
             throw new UserNotFoundException("User not found for email: " + userEmail);
         }
 
-        Double progressPercentage = service.calculateRoadmapProgress(roadmapMetaId);
+        Double progressPercentage = service.getRoadmapProgress(roadmapMetaId);
         return ResponseEntity.ok(progressPercentage);
     }
 

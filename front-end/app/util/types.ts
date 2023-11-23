@@ -9,9 +9,11 @@ export type RoadmapMeta = {
   hours: number;
   upVotes: number;
   downVotes: number;
+  progressPercentage: number;
 };
 
 export type PersonalRoadmapCardProps = {
+  currentUser: User;
   roadmapMeta: RoadmapMeta;
   handleDelete: (roadmapMeta: RoadmapMeta) => void;
 };
