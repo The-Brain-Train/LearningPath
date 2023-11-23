@@ -14,7 +14,7 @@ export default function HomePage() {
           <Image
             src="/roadmap1.jpeg"
             alt="Create Roadmap"
-            className="mt-0 pb-5 lg:w-80 basis-full rounded-lg"
+            className="mt-0 py-5 lg:w-80 basis-full rounded-lg"
             height={280}
             width={280}
             priority

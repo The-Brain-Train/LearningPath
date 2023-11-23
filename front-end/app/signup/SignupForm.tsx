@@ -224,9 +224,14 @@ const SignupForm = () => {
           <ToastContainer />
           <Grid container justifyContent="flex-start">
             <Grid item>
-              <Link
+            <Link
                 href="/signin?source=signup"
                 className="text-lg hover:underline text-white"
+                sx={{
+                  color: "white !important",
+                  fontSize: "1.125rem !important",
+                  lineHeight: "1.75rem !important",
+                }}
               >
                 Already have an account?{" "}
                 <span className="text-blue-500 font-bold">Sign in</span>
