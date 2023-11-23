@@ -1,6 +1,5 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
-import Header from "./components/Header";
 import { Metadata } from "next";
 import { QueryClientProvider, queryClient } from "./util/queryClient";
 import dynamic from "next/dynamic";
