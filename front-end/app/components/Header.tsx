@@ -1,22 +1,23 @@
 "use client";
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { useCookies } from 'react-cookie';
-import jwtDecode from 'jwt-decode';
-import Image from 'next/image';
-import dynamic from 'next/dynamic';
-import { User } from '../util/types';
-import { getUserProfilePicture } from '../functions/httpRequests';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { useCookies } from "react-cookie";
+import jwtDecode from "jwt-decode";
+import Image from "next/legacy/image";
+import dynamic from "next/dynamic";
+import { User } from "../util/types";
+import { getUserProfilePicture } from "../functions/httpRequests";
+import { useRouter } from "next/navigation";
 
-const DynamicBurgerMenu = dynamic(() => import('./BurgerMenu'));
+const DynamicBurgerMenu = dynamic(() => import("./BurgerMenu"));
 
 export default function Header() {
-  const [cookies, setCookie, removeCookie] = useCookies(['user']);
+  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [profilePictureUrl, setProfilePictureUrl] = useState<string | undefined>(undefined);
+  const [profilePictureUrl, setProfilePictureUrl] = useState<
+    string | undefined
+  >(undefined);
   const router = useRouter();
-
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -25,11 +26,14 @@ export default function Header() {
         setCurrentUser(user);
 
         if (user) {
-          const pictureUrl = await getUserProfilePicture(user.email, cookies.user);
+          const pictureUrl = await getUserProfilePicture(
+            user.email,
+            cookies.user
+          );
           setProfilePictureUrl(pictureUrl);
         }
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error("Error fetching user data:", error);
       }
     };
 
@@ -42,11 +46,14 @@ export default function Header() {
     const updateProfilePicture = async () => {
       try {
         if (currentUser) {
-          const newPictureUrl = await getUserProfilePicture(currentUser.email, cookies.user);
+          const newPictureUrl = await getUserProfilePicture(
+            currentUser.email,
+            cookies.user
+          );
           setProfilePictureUrl(newPictureUrl);
         }
       } catch (error) {
-        console.error('Error updating profile picture:', error);
+        console.error("Error updating profile picture:", error);
       }
     };
 
@@ -71,7 +78,7 @@ export default function Header() {
               alt="LP Logo"
               width={140}
               height={60}
-              priority={false}
+              priority
             />
           </Link>
           <div className="flex flex-row">
@@ -84,7 +91,8 @@ export default function Header() {
                       width={35}
                       height={35}
                       alt="User profile picture"
-                      className="rounded-full"
+                      className="rounded-full w-auto"
+                      layout="fixed" // or "intrinsic" depending on your use case
                     />
                   ) : (
                     <Image
@@ -98,9 +106,9 @@ export default function Header() {
                 <p>
                   {currentUser && currentUser.name
                     ? currentUser.name.length > 5
-                      ? currentUser.name.substring(0, 5) + '...'
+                      ? currentUser.name.substring(0, 5) + "..."
                       : currentUser.name
-                    : 'No name'}
+                    : "No name"}
                 </p>
               </Link>
             ) : null}
@@ -111,4 +119,3 @@ export default function Header() {
     </>
   );
 }
-

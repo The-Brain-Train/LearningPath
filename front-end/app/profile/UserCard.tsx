@@ -1,6 +1,6 @@
 "use client";
 import { UserProps } from "../util/types";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import { useCookies } from "react-cookie";
 import {
   getUserProfilePicture,
@@ -69,7 +69,7 @@ export default function Card({ currentUser }: UserProps) {
             layout="responsive"
             alt="User profile picture"
             className="rounded-full"
-            priority={false}
+            priority
           />
         ) : (
           <Image
