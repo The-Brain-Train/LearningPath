@@ -163,6 +163,36 @@ public class RoadmapService {
         return roadmap;
     }
 
+    public Double getRoadmapProgress(String roadmapMetaId) {
+        Roadmap roadmap = findRoadmapByMetaId(roadmapMetaId);
+        double progressPercentage = 0.0;
+        try {
+            RoadmapContent roadmapContent = objectMapper.readValue(roadmap.getObj(), RoadmapContent.class);
+            int hours = roadmapContent.getValue();
+            Progress progress = new Progress();
+            Integer completedHours = calculateCompletedHours(roadmapContent.getChildren(), progress);
+            progressPercentage = ((double) completedHours / (double) hours) * 100;
+            String roundedValueString = String.format("%.1f", progressPercentage);
+            progressPercentage = Double.parseDouble(roundedValueString);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        return progressPercentage;
+    }
+
+    private Integer calculateCompletedHours(List<RoadmapContentChild> children, Progress progress) {
+        for (RoadmapContentChild child : children) {
+            if (child.getChildren() == null) {
+                if (child.isCompletedTopic()) {
+                    progress.setTotal(progress.getTotal() + child.getValue());
+                }
+            } else {
+                calculateCompletedHours(child.getChildren(), progress);
+            }
+        }
+        return progress.getTotal();
+    }
+
     public Roadmap markTopicOfChildAsComplete(String roadmapMetaId, String childElementName) {
         Roadmap roadmap = findRoadmapByMetaId(roadmapMetaId);
         RoadmapContent roadmapContent = null;
