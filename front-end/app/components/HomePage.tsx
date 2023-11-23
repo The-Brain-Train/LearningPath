@@ -17,6 +17,7 @@ export default function HomePage() {
             className="mt-0 pb-5 lg:w-80 basis-full rounded-lg"
             height={280}
             width={280}
+            priority
           />
           <div>
             <p className="text-center text-xl pb-5 sm:text-left sm:text-2xl leading-10 ">
