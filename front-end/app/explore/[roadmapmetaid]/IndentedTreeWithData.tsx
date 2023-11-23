@@ -27,14 +27,12 @@ const IndentedTreeWithData = ({
   const svgRef = useRef(null);
   const [debouncedGraph, setDebouncedGraph] = useState<any>(null);
 
-  const handleCheckBoxClick = (data: RoadmapObjectData) => {
-    if (!data.children) {
-      const clickedElementName = data.name;
-      if (clickedElementName) {
-        updateCompletedTopic(clickedElementName);
-      } else {
-        console.error("Name or identifier not found for the clicked element");
-      }
+  const handleCheckBoxClick = (treeLabelName: string) => {
+    console.log(treeLabelName);
+    if (treeLabelName) {
+      updateCompletedTopic(treeLabelName);
+    } else {
+      console.error("Name or identifier not found for the clicked element");
     }
   };
 
@@ -153,9 +151,16 @@ const IndentedTreeWithData = ({
           d3.select(this).style("font-family", "'Poppins', sans-serif");
         })
         .on("click", function (d) {
-          const treeLabelData = d.target.__data__;
-          if (!d.children && treeLabelData.height === 0 && isCreator) {
-            handleCheckBoxClick(treeLabelData.data);
+          if (d.target.__data__ && isCreator) {
+            const treeLabelObject = d.target.__data__;
+            if (!d.children && treeLabelObject.height === 0) {
+              const treeLabelName = treeLabelObject.data.name
+              handleCheckBoxClick(treeLabelName);
+            }
+          }
+          if (d.target.innerText && isCreator) {
+            const treeLabelName = d.target.innerText;
+            handleCheckBoxClick(treeLabelName);
           }
         });
     }
