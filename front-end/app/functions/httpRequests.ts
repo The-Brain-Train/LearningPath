@@ -192,6 +192,33 @@ export const downVoteRoadmap = async (
   }
 };
 
+export const getRoadmapProgressOfUser = async (
+  userEmail: string | null | undefined,
+  roadmapMetaId: string | undefined,
+  token: string
+) => {
+  try {
+    const response = await fetch(
+      `${BACKEND_URL}/api/roadmaps/${userEmail}/progress/${roadmapMetaId}`,
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch progress of user's roadmap. Status code: ${response.status}`
+      );
+    }
+    const data = await response.json();
+    console.log("progress: " + data + " of roadmap id: " + roadmapMetaId);
+    return data;
+  } catch (error) {
+    console.error("Error fetching progress of user's roadmap:", error);
+  }
+};
+
 export const addResourcesToRoadmap = async (
   userEmail: string | null | undefined,
   roadmapMetaId: string | undefined,
