@@ -1,11 +1,10 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import {
   CustomNode,
   ExploreIndentedTreeProps,
   RoadmapObjectData,
-  TreeNode,
 } from "../../util/types";
 import {
   getHoursFontSize,
@@ -26,7 +25,7 @@ const IndentedTreeWithData = ({
   isCreator,
 }: ExploreIndentedTreeProps) => {
   const svgRef = useRef(null);
-  const debouncedGraph = useRef(_.debounce(() => graph(), 100));
+  const [debouncedGraph, setDebouncedGraph] = useState<any>(null);
 
   const handleCheckBoxClick = (data: RoadmapObjectData) => {
     if (!data.children) {
@@ -39,7 +38,7 @@ const IndentedTreeWithData = ({
     }
   };
 
-  const graph = () => {
+  const createGraph = useCallback(() => {
     if (data == null) return;
 
     d3.select(svgRef.current).selectAll("*").remove();
@@ -225,19 +224,25 @@ const IndentedTreeWithData = ({
     if (isCreator) {
       toggleCheckBox();
     }
-  };
+  }, [data, isCreator]);
 
   useEffect(() => {
     addGoogleFont();
-    graph();
-    const createGraph = () => {
-      window.addEventListener("resize", debouncedGraph.current);
-    };
     createGraph();
+
+    const handleResizeDebounced = _.debounce(() => {
+      createGraph();
+    }, 100);
+
+    setDebouncedGraph(() => handleResizeDebounced);
+
+    window.addEventListener("resize", handleResizeDebounced);
+
     return () => {
-      window.removeEventListener("resize", debouncedGraph.current);
+      window.removeEventListener("resize", handleResizeDebounced);
+      handleResizeDebounced.cancel();
     };
-  }, [data]);
+  }, [createGraph]);
 
   const toggleCheckBox = () => {
     d3.select(svgRef.current)
