@@ -5,24 +5,14 @@ import com.braintrain.backend.exceptionHandler.exception.RoadmapCountExceededExc
 import com.braintrain.backend.model.Roadmap;
 import com.braintrain.backend.controller.dtos.RoadmapDTO;
 import com.braintrain.backend.model.RoadmapMeta;
-import com.braintrain.backend.repository.RoadmapMetaRepository;
-import com.braintrain.backend.repository.RoadmapRepository;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
