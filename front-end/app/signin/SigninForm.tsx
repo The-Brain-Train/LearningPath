@@ -152,6 +152,11 @@ const SigninForm = () => {
               <Link
                 href="/signup"
                 className="text-lg hover:underline text-white"
+                sx={{
+                  color: "white !important",
+                  fontSize: "1.125rem !important",
+                  lineHeight: "1.75rem !important",
+                }}
               >
                 Don&apos;t have an account?{" "}
                 <span className="text-blue-500 font-bold">Sign up</span>
