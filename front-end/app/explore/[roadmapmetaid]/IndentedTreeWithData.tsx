@@ -116,21 +116,34 @@ const IndentedTreeWithData = ({
         }
       });
 
-    node
+      node
       .filter((d) => d.height !== 0)
-      .append("text")
-      .attr("dy", "0.32em")
-      .attr("x", (d) => d.depth * nodeSize + getTextXOffset(d, 15, 80))
-      .attr("y", 0)
-      .attr("width", 300)
-      .attr("font-weight", (d) => (d.depth === 0 ? 900 : 100))
-      .style("font-size", (d) => getLabelFontSize(d))
-      .style("font-family", "'Poppins', sans-serif")
-      .text((d) => {
-        const nodeName = d.data.name;
-        return nodeName;
+      .append("foreignObject")
+      .attr("x", (d) => d.depth * nodeSize + getTextXOffset(d, 10, 60))
+      .attr("y", -15)
+      .attr("width", 550)
+      .attr("height", 25)
+      .html(function (d) {
+        return `<p class="text-white text-lg md:text-xl ml-2 mt-1 md:mt-0 md:ml-4">${d.data.name}</p>`;
       })
-      .attr("fill", "#fff");
+      .each(function (d) {
+        const screenWidth = window.innerWidth;
+        if (screenWidth <= 550) {
+          d3.select(this)
+            .select("p")
+            .style("max-width", "300px")
+            .style("max-height", "22px")
+            .style("overflow-x", "auto")
+            .style("white-space", "nowrap")
+            .style("font-family", "'Poppins', sans-serif");
+        }
+        if (screenWidth <= 450) {
+          d3.select(this).select("p").style("max-width", "250px");
+        }
+        if (screenWidth <= 350) {
+          d3.select(this).select("label").style("max-width", "150px");
+        }
+      });
       
     if (isCreator) {
       node
@@ -143,11 +156,11 @@ const IndentedTreeWithData = ({
         .html(function (d) {
           const completedCheckbox = d.data.completedTopic ? "checked" : "";
           return `
-    <div class="flex items-center content-div">
-      <input ${completedCheckbox} type="checkbox" value=${d.data.name} class="w-4 h-4 md:w-5 md:h-5">
-      <label class="text-gray-300 text:xs md:text-lg ml-2">${d.data.name}</label>
-    </div>
-  `;
+            <div class="flex items-center content-div">
+              <input ${completedCheckbox} type="checkbox" value=${d.data.name} class="w-4 h-4 md:w-5 md:h-5">
+              <label class="text-white text:xs md:text-lg ml-2">${d.data.name}</label>
+            </div>
+          `;
         })
         .each(function (d) {
           const screenWidth = window.innerWidth;
@@ -204,21 +217,34 @@ const IndentedTreeWithData = ({
           }
         });
 
-      node
+        node
         .filter((d) => d.height === 0)
-        .append("text")
-        .attr("dy", "0.32em")
-        .attr("x", (d) => d.depth * nodeSize + getTextXOffset(d, 15, 80))
-        .attr("y", 0)
-        .attr("width", 300)
-        .attr("font-weight", (d) => (d.depth === 0 ? 900 : 100))
-        .style("font-size", (d) => getLabelFontSize(d))
-        .style("font-family", "'Poppins', sans-serif")
-        .text((d) => {
-          const nodeName = d.data.name;
-          return nodeName;
+        .append("foreignObject")
+        .attr("x", (d) => d.depth * nodeSize + getTextXOffset(d, 10, 60))
+        .attr("y", -15)
+        .attr("width", 550)
+        .attr("height", 25)
+        .html(function (d) {
+          return `<p class="text-white text-sm md:text-lg ml-2 mt-1 md:mt-0 md:ml-4">${d.data.name}</p>`;
         })
-        .attr("fill", "#fff");
+        .each(function (d) {
+          const screenWidth = window.innerWidth;
+          if (screenWidth <= 550) {
+            d3.select(this)
+              .select("p")
+              .style("max-width", "300px")
+              .style("max-height", "22px")
+              .style("overflow-x", "auto")
+              .style("white-space", "nowrap")
+              .style("font-family", "'Poppins', sans-serif");
+          }
+          if (screenWidth <= 450) {
+            d3.select(this).select("p").style("max-width", "200px");
+          }
+          if (screenWidth <= 350) {
+            d3.select(this).select("label").style("max-width", "150px");
+          }
+        });
     }
 
     node.append("title").text((d) =>
