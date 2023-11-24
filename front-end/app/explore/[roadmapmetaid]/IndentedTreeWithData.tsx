@@ -24,7 +24,6 @@ const IndentedTreeWithData = ({
   const [debouncedGraph, setDebouncedGraph] = useState<any>(null);
 
   const handleCheckBoxClick = (treeLabelName: string) => {
-    console.log(treeLabelName);
     if (treeLabelName) {
       updateCompletedTopic(treeLabelName);
     } else {
@@ -177,7 +176,6 @@ const IndentedTreeWithData = ({
           }
         })
         .on("click", function (d) {
-          console.log(d);
           if (d.target.__data__ && isCreator) {
             const treeLabelObject = d.target.__data__;
             if (!d.children && treeLabelObject.height === 0) {
