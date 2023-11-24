@@ -130,7 +130,7 @@ function RoadMapId(props: Props) {
           cookies.user
         );
         queryClient.invalidateQueries(["roadmap", roadmapMetaId]);
-        queryClient.invalidateQueries([`progressPercentage-${roadmapMetaId}`, progressPercentage]);
+        queryClient.invalidateQueries([`progressPercentage-${roadmapMetaId}`]);
         return updatedRoadmap;
       }
     } catch (error) {
