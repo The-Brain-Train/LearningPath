@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ResourcesSectionProps, TreeNode } from "@/app/util/types";
 import { CircularProgress } from "@mui/material";
-import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { addResourcesToRoadmap } from "@/app/functions/httpRequests";
 import { requestPromptOnlyResources } from "../functions/chatPreHistory";
 import { getResponseFromOpenAI } from "../functions/openAIChat";
@@ -13,7 +13,7 @@ export const ResourcesSection = (props: ResourcesSectionProps) => {
     useMutation({
       mutationFn: async () => {
         const response = await getResponseFromOpenAI(
-          requestPromptOnlyResources(props.treeNode?.name || null) //
+          requestPromptOnlyResources(props.treeNode?.name || null)
         );
         const resourcesJsonData = await JSON.parse(
           response.choices[0].message.content

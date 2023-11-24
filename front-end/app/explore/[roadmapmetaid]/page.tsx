@@ -204,11 +204,7 @@ function RoadMapId(props: Props) {
                 <CircularProgressWithLabel value={progressPercentage} size={50} />
               </div>
             )}
-
           </div>
-
-
-
           <IndentedTreeWithData data={roadmapToTreeNode(roadmap)} updateCompletedTopic={handleUpdateUsersCompletedTopic} isCreator={userOwnsRoadmap()} />
           <ResourcesSection
             treeNode={treeNode}

@@ -32,7 +32,6 @@ export default function PersonalRoadmapCard({
     () => getRoadmapProgressOfUser(currentUser?.email, roadmapMeta.id, cookies.user),
   );
 
-
   return (
     <li className="shadow-md w-full border-t-2 border-opacity-100 dark:border-opacity-50 
     bg-[#42465a] text-white border-[#141832]">
@@ -44,7 +43,6 @@ export default function PersonalRoadmapCard({
           <p className="overflow-ellipsis overflow-hidden whitespace-nowrap pl-1 flex-1">
             {roadmapMeta.name}
           </p>
-
           {!isSmallScreen ? (
             <div className="w-1/2 items-center justify-center mx-4">
               <p>Progress: {progressPercentage}%</p>
@@ -54,7 +52,6 @@ export default function PersonalRoadmapCard({
               <CircularProgressWithLabel value={progressPercentage} size={50} />
             </div>
           )}
-
           <div className="flex flex-col items-center justify-center lg:w-1/6 xl:w-1/6 2xl:w-1/6">
             <p className="overflow-ellipsis overflow-hidden whitespace-nowrap pl-1">
               {generateStarsforExperienceLevel(roadmapMeta.experienceLevel)}
