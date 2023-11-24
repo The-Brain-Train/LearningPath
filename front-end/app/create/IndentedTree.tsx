@@ -116,7 +116,7 @@ const IndentedTree = ({
       .attr("x", (d) => d.depth * nodeSize + getTextXOffset(d, 10, 60))
       .attr("y", -15)
       .attr("width", 550)
-      .attr("height", 25)
+      .attr("height", 32)
       .html(function (d) {
         return `<p class="text-white text-lg md:text-xl ml-2 mt-1 md:mt-0 md:ml-4">${d.data.name}</p>`;
       })
@@ -126,7 +126,6 @@ const IndentedTree = ({
           d3.select(this)
             .select("p")
             .style("max-width", "300px")
-            .style("max-height", "22px")
             .style("overflow-x", "auto")
             .style("white-space", "nowrap")
             .style("font-family", "'Poppins', sans-serif");

@@ -97,21 +97,21 @@ export const getScreenWidthAdjustValue = () => {
   }
 };
 
-export const foreignObjectStylingForSmallerScreens = (element: SVGForeignObjectElement) => {
-  const screenWidth = window.innerWidth;
-  if (screenWidth <= 550) {
-    d3.select(element).style("font-family", "'Poppins', sans-serif");
-    d3.select(element)
-      .select("label")
-      .style("max-width", "300px")
-      .style("max-height", "22px")
-      .style("overflow-x", "auto")
-      .style("white-space", "nowrap");
-  }
-  if (screenWidth <= 450) {
-    d3.select(element).select("label").style("max-width", "200px");
-  }
-  if (screenWidth <= 350) {
-    d3.select(element).select("label").style("max-width", "150px");
-  }
-};
+// export const foreignObjectStylingForSmallerScreens = (element: SVGForeignObjectElement) => {
+//   const screenWidth = window.innerWidth;
+//   if (screenWidth <= 550) {
+//     d3.select(element).style("font-family", "'Poppins', sans-serif");
+//     d3.select(element)
+//       .select("label")
+//       .style("max-width", "300px")
+//       .style("max-height", "22px")
+//       .style("overflow-x", "auto")
+//       .style("white-space", "nowrap");
+//   }
+//   if (screenWidth <= 450) {
+//     d3.select(element).select("label").style("max-width", "200px");
+//   }
+//   if (screenWidth <= 350) {
+//     d3.select(element).select("label").style("max-width", "150px");
+//   }
+// };

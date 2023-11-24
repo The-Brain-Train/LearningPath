@@ -1,10 +1,7 @@
 "use client";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
-import {
-  CustomNode,
-  ExploreIndentedTreeProps,
-} from "../../util/types";
+import { CustomNode, ExploreIndentedTreeProps } from "../../util/types";
 import {
   getHoursFontSize,
   getLabelFontSize,
@@ -14,7 +11,6 @@ import {
   getNodeSize,
   getIconFontSize,
   getScreenWidthAdjustValue,
-  foreignObjectStylingForSmallerScreens,
 } from "../../util/IndentedTreeUtil";
 import addGoogleFont from "../../util/fontFamily";
 import _ from "lodash";
@@ -117,13 +113,13 @@ const IndentedTreeWithData = ({
         }
       });
 
-      node
+    node
       .filter((d) => d.height !== 0)
       .append("foreignObject")
       .attr("x", (d) => d.depth * nodeSize + getTextXOffset(d, 10, 60))
       .attr("y", -15)
       .attr("width", 550)
-      .attr("height", 25)
+      .attr("height", 32)
       .html(function (d) {
         return `<p class="text-white text-lg md:text-xl ml-2 mt-1 md:mt-0 md:ml-4">${d.data.name}</p>`;
       })
@@ -133,7 +129,6 @@ const IndentedTreeWithData = ({
           d3.select(this)
             .select("p")
             .style("max-width", "300px")
-            .style("max-height", "22px")
             .style("overflow-x", "auto")
             .style("white-space", "nowrap")
             .style("font-family", "'Poppins', sans-serif");
@@ -145,14 +140,14 @@ const IndentedTreeWithData = ({
           d3.select(this).select("label").style("max-width", "150px");
         }
       });
-      
+
     if (isCreator) {
       node
         .filter((d) => d.height === 0)
         .append("foreignObject")
         .attr("x", (d) => d.depth * nodeSize + getTextXOffset(d, 10, 60))
         .attr("y", -10)
-        .attr("width", 550) 
+        .attr("width", 550)
         .attr("height", 50)
         .html(function (d) {
           const completedCheckbox = d.data.completedTopic ? "checked" : "";
@@ -164,7 +159,22 @@ const IndentedTreeWithData = ({
           `;
         })
         .each(function (d) {
-          foreignObjectStylingForSmallerScreens(this);
+          const screenWidth = window.innerWidth;
+          if (screenWidth <= 550) {
+            d3.select(this).style("font-family", "'Poppins', sans-serif");
+            d3.select(this)
+              .select("label")
+              .style("max-width", "300px")
+              .style("max-height", "22px")
+              .style("overflow-x", "auto")
+              .style("white-space", "nowrap");
+          }
+          if (screenWidth <= 450) {
+            d3.select(this).select("label").style("max-width", "200px");
+          }
+          if (screenWidth <= 350) {
+            d3.select(this).select("label").style("max-width", "150px");
+          }
         })
         .on("click", function (d) {
           console.log(d);
@@ -199,7 +209,7 @@ const IndentedTreeWithData = ({
           }
         });
 
-        node
+      node
         .filter((d) => d.height === 0)
         .append("foreignObject")
         .attr("x", (d) => d.depth * nodeSize + getTextXOffset(d, 10, 60))
