@@ -76,7 +76,7 @@ const IndentedTreeWithData = ({
     const link = svg
       .append("g")
       .attr("fill", "none")
-      .attr("stroke", "#cbd5e1")
+      .attr("stroke", "#fff")
       .selectAll()
       .data(root.links())
       .join("path")
@@ -98,14 +98,14 @@ const IndentedTreeWithData = ({
         "transform",
         (d) => `translate(0,${(d as CustomNode).index * nodeSize})`
       )
-      .attr("fill", "#cbd5e1");
+      .attr("fill", "#fff");
 
     node
       .append("text")
       .attr("x", (d) => d.depth * nodeSize + getLabelXOffset(d, -10, 40))
       .attr("y", 5)
       .style("font-size", getIconFontSize())
-      .style("fill", (d) => (d.children ? "black" : "#cbd5e1"))
+      .style("fill", (d) => (d.children ? "black" : "#fff"))
       .text((d) => {
         if (d.depth === 0) {
           return "📚";
@@ -130,7 +130,7 @@ const IndentedTreeWithData = ({
         const nodeName = d.data.name;
         return nodeName;
       })
-      .attr("fill", "#cbd5e1");
+      .attr("fill", "#fff");
       
     if (isCreator) {
       node
@@ -193,7 +193,7 @@ const IndentedTreeWithData = ({
         .attr("x", (d) => d.depth * nodeSize + getLabelXOffset(d, -10, 40))
         .attr("y", 5)
         .style("font-size", getIconFontSize())
-        .style("fill", (d) => (d.children ? "black" : "#cbd5e1"))
+        .style("fill", (d) => (d.children ? "black" : "#fff"))
         .text((d) => {
           if (d.depth === 0) {
             return "📚";
@@ -218,7 +218,7 @@ const IndentedTreeWithData = ({
           const nodeName = d.data.name;
           return nodeName;
         })
-        .attr("fill", "#cbd5e1");
+        .attr("fill", "#fff");
     }
 
     node.append("title").text((d) =>
@@ -242,7 +242,7 @@ const IndentedTreeWithData = ({
         .attr("dy", "0.32em")
         .attr("x", x)
         .attr("text-anchor", "end")
-        .attr("fill", (d) => (d.children ? null : "#cbd5e1"))
+        .attr("fill", (d) => (d.children ? null : "#fff"))
         .attr("font-weight", (d) => (d.height == 0 ? 100 : 900))
         .style("font-size", (d) => getHoursFontSize(d))
         .data(root.copy().descendants())

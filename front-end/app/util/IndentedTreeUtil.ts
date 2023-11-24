@@ -16,24 +16,24 @@ export const getLabelFontSize = (d: d3.HierarchyNode<TreeNode>) => {
   if (isMobileView()) {
     if (d.depth === 0) {
       return "18px";
-    } else {
+    } else if (d.depth === 1) {
       return "16px";
+    } else {
+      return "14px";
     }
   } else {
-    if (d.depth === 0) {
-      return "26px";
-    } else {
-      return "20px";
-    }
+    return "22px";
   }
 };
 
 export const getHoursFontSize = (d: d3.HierarchyNode<TreeNode>) => {
   if (isMobileView()) {
-    if (d.height === 2) {
+    if (d.depth === 0) {
       return "18px";
-    } else {
+    } else if (d.depth === 1) {
       return "16px";
+    } else {
+      return "14px";
     }
   } else {
     return "22px";
