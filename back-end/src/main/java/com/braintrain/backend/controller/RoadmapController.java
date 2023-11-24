@@ -87,6 +87,19 @@ public class RoadmapController {
         return ResponseEntity.ok(userService.getUserUpVoteDownVotes(userEmail));
     }
 
+    @GetMapping("/{userEmail}/progress/{roadmapMetaId}")
+    public ResponseEntity<Double> getRoadmapProgressOfUser(
+            @PathVariable String userEmail,
+            @PathVariable String roadmapMetaId) {
+
+        if (userEmail == null) {
+            throw new UserNotFoundException("User not found for email: " + userEmail);
+        }
+
+        Double progressPercentage = service.getRoadmapProgress(roadmapMetaId);
+        return ResponseEntity.ok(progressPercentage);
+    }
+
     @PostMapping
     public ResponseEntity<RoadmapMeta> createRoadmap(@RequestBody RoadmapDTO roadmapDTO){
         RoadmapMeta roadmapMeta = service.createRoadmap(roadmapDTO);
@@ -124,19 +137,6 @@ public class RoadmapController {
     public ResponseEntity<Roadmap> updateCompletedTopicStatus(@RequestBody String completedTopic, @PathVariable String roadmapMetaId) {
         Roadmap updatedRoadmap = service.markTopicOfChildAsComplete(roadmapMetaId, completedTopic);
         return ResponseEntity.ok(updatedRoadmap);
-    }
-
-    @GetMapping("/{userEmail}/progress/{roadmapMetaId}")
-    public ResponseEntity<Double> getRoadmapProgressOfUser(
-            @PathVariable String userEmail,
-            @PathVariable String roadmapMetaId) {
-
-        if (userEmail == null) {
-            throw new UserNotFoundException("User not found for email: " + userEmail);
-        }
-
-        Double progressPercentage = service.getRoadmapProgress(roadmapMetaId);
-        return ResponseEntity.ok(progressPercentage);
     }
 
     @PutMapping("/{userEmail}/resource/{roadmapMetaId}")
