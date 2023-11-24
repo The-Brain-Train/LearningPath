@@ -129,8 +129,19 @@ const IndentedTreeWithData = ({
         const nodeName = d.data.name;
         return nodeName;
       })
+      .each(function (d: any) {
+        const screenWidth = window.innerWidth;
+        if (screenWidth <= 550) {
+          d3.select(this).style("font-family", "'Poppins', sans-serif");
+          d3.select(this)
+            .select("label")
+            .style("max-width", "300px")
+            .style("max-height", "22px")
+            .style("overflow-x", "auto")
+            .style("white-space", "nowrap");
+        }
+      })
       .attr("fill", "#cbd5e1");
-      
       
 
     if (isCreator) {
