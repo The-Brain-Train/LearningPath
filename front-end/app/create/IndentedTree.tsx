@@ -17,7 +17,7 @@ import {
 } from "../util/IndentedTreeUtil";
 import addGoogleFont from "../util/fontFamily";
 import { ArrowBack } from "@mui/icons-material";
-import _debounce from "lodash/debounce"; 
+import _debounce from "lodash/debounce";
 
 const IndentedTree = ({
   data,
@@ -111,6 +111,7 @@ const IndentedTree = ({
       });
 
     node
+      .filter((d) => d.height !== 0)
       .append("text")
       .attr("dy", "0.32em")
       .attr("x", (d) => d.depth * nodeSize + getTextXOffset(d, 10, 80))
@@ -121,13 +122,34 @@ const IndentedTree = ({
       .text((d) => d.data.name)
       .attr("fill", "#cbd5e1");
 
-    node.append("title").text((d) =>
-      d
-        .ancestors()
-        .reverse()
-        .map((d) => d.data.name)
-        .join("/")
-    );
+    node
+      .filter((d) => d.height === 0)
+      .append("foreignObject")
+      .attr("x", (d) => d.depth * nodeSize + getTextXOffset(d, 10, 60))
+      .attr("y", -15)
+      .attr("width", 550)
+      .attr("height", 25)
+      .html(function (d) {
+        return `<p class="text-gray-300 text-sm md:text-lg ml-2 mt-1 md:mt-0 md:ml-4">${d.data.name}</p>`;
+      })
+      .each(function (d) {
+        const screenWidth = window.innerWidth;
+        if (screenWidth <= 550) {
+          d3.select(this)
+            .select("p")
+            .style("max-width", "300px")
+            .style("max-height", "22px")
+            .style("overflow-x", "auto")
+            .style("white-space", "nowrap")
+            .style("font-family", "'Poppins', sans-serif");
+        }
+        if (screenWidth <= 450) {
+          d3.select(this).select("p").style("max-width", "200px");
+        }
+        if (screenWidth <= 350) {
+          d3.select(this).select("label").style("max-width", "150px");
+        }
+      });
 
     for (const { value, format, x } of columns) {
       svg
