@@ -8,6 +8,7 @@ import {
   getUserFavorites,
   removeRoadmapMetaFromUserFavorites,
   updateUsersCompletedTopic,
+  getRoadmapProgressOfUser,
 } from "@/app/functions/httpRequests";
 import { ArrowBack } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
@@ -133,6 +134,11 @@ function RoadMapId(props: Props) {
     }
   };
 
+  const { data: progressPercentage } = useQuery<number>(
+    [`progressPercentage-${roadmapMetaId}`],
+    () => getRoadmapProgressOfUser(currentUser?.email, roadmapMetaId, cookies.user),
+  );
+
   const roadmapToTreeNode = (roadmap: Roadmap | undefined) => {
     return roadmap as unknown as TreeNode;
   };
@@ -185,6 +191,7 @@ function RoadMapId(props: Props) {
               )}
             </div>
           </div>
+
           <IndentedTreeWithData data={roadmapToTreeNode(roadmap)} updateCompletedTopic={handleUpdateUsersCompletedTopic} isCreator={userOwnsRoadmap()} />
           <ResourcesSection
             treeNode={treeNode}
