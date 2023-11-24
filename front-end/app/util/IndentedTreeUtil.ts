@@ -82,7 +82,7 @@ export const getLinkLength = () => {
 
 export const getNodeSize = () => {
   if (isMobileView()) {
-    return 25;
+    return 30;
   } else {
     return 40;
   }

@@ -130,6 +130,8 @@ const IndentedTreeWithData = ({
         return nodeName;
       })
       .attr("fill", "#cbd5e1");
+      
+      
 
     if (isCreator) {
       node
@@ -137,25 +139,45 @@ const IndentedTreeWithData = ({
         .append("foreignObject")
         .attr("x", (d) => d.depth * nodeSize + getTextXOffset(d, 10, 60))
         .attr("y", -10)
-        .attr("width",(d) => getLabelWidth(d))
+        .attr("width", 550) 
         .attr("height", 50)
         .html(function (d) {
           const completedCheckbox = d.data.completedTopic ? "checked" : "";
           return `
-      <div class="flex items-center">
-        <input ${completedCheckbox} type="checkbox" value=${d.data.name} class="w-4 h-4">
-        <label class="text-gray-300 text:xs md:text-lg ml-2">${d.data.name}</label>
-      </div>
-    `;
+    <div class="flex items-center content-div">
+      <input ${completedCheckbox} type="checkbox" value=${d.data.name} class="w-4 h-4">
+      <label class="text-gray-300 text:xs md:text-lg ml-2">${d.data.name}</label>
+    </div>
+  `;
         })
         .each(function (d) {
-          d3.select(this).style("font-family", "'Poppins', sans-serif");
+          const screenWidth = window.innerWidth;
+          if (screenWidth <= 550) {
+            d3.select(this).style("font-family", "'Poppins', sans-serif");
+            d3.select(this)
+            .select("label")
+            .style("max-width", "300px")
+            .style("max-height", "22px")
+            .style("overflow-x", "auto")
+            .style("white-space", "nowrap");
+          }
+          if (screenWidth <= 450) {
+            d3.select(this)
+            .select("label")
+            .style("max-width", "200px");
+          }
+          if (screenWidth <= 350) {
+            d3.select(this)
+            .select("label")
+            .style("max-width", "150px");
+          }
         })
         .on("click", function (d) {
+          console.log(d);
           if (d.target.__data__ && isCreator) {
             const treeLabelObject = d.target.__data__;
             if (!d.children && treeLabelObject.height === 0) {
-              const treeLabelName = treeLabelObject.data.name
+              const treeLabelName = treeLabelObject.data.name;
               handleCheckBoxClick(treeLabelName);
             }
           }
