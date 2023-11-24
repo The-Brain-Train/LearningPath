@@ -14,6 +14,7 @@ import {
   getNodeSize,
   getIconFontSize,
   getScreenWidthAdjustValue,
+  foreignObjectStylingForSmallerScreens,
 } from "../../util/IndentedTreeUtil";
 import addGoogleFont from "../../util/fontFamily";
 import _ from "lodash";
@@ -163,26 +164,7 @@ const IndentedTreeWithData = ({
           `;
         })
         .each(function (d) {
-          const screenWidth = window.innerWidth;
-          if (screenWidth <= 550) {
-            d3.select(this).style("font-family", "'Poppins', sans-serif");
-            d3.select(this)
-            .select("label")
-            .style("max-width", "300px")
-            .style("max-height", "22px")
-            .style("overflow-x", "auto")
-            .style("white-space", "nowrap");
-          }
-          if (screenWidth <= 450) {
-            d3.select(this)
-            .select("label")
-            .style("max-width", "200px");
-          }
-          if (screenWidth <= 350) {
-            d3.select(this)
-            .select("label")
-            .style("max-width", "150px");
-          }
+          foreignObjectStylingForSmallerScreens(this);
         })
         .on("click", function (d) {
           console.log(d);
