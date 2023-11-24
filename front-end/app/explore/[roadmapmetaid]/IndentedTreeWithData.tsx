@@ -130,6 +130,8 @@ const IndentedTreeWithData = ({
         return nodeName;
       })
       .attr("fill", "#cbd5e1");
+      
+      
 
     if (isCreator) {
       node
@@ -137,7 +139,7 @@ const IndentedTreeWithData = ({
         .append("foreignObject")
         .attr("x", (d) => d.depth * nodeSize + getTextXOffset(d, 10, 60))
         .attr("y", -10)
-        .attr("width", (d) => 550) // Set the initial width
+        .attr("width", 550) 
         .attr("height", 50)
         .html(function (d) {
           const completedCheckbox = d.data.completedTopic ? "checked" : "";
@@ -156,15 +158,22 @@ const IndentedTreeWithData = ({
             .select("label")
             .style("max-width", "300px")
             .style("max-height", "22px")
-            .style("overflow-x", "auto");
+            .style("overflow-x", "auto")
+            .style("white-space", "nowrap");
           }
           if (screenWidth <= 450) {
             d3.select(this)
             .select("label")
-            .style("max-width", "200px")
+            .style("max-width", "200px");
+          }
+          if (screenWidth <= 350) {
+            d3.select(this)
+            .select("label")
+            .style("max-width", "150px");
           }
         })
         .on("click", function (d) {
+          console.log(d);
           if (d.target.__data__ && isCreator) {
             const treeLabelObject = d.target.__data__;
             if (!d.children && treeLabelObject.height === 0) {
