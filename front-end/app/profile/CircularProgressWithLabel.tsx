@@ -22,8 +22,8 @@ const CircularProgressWithLabel = (prop: CircularProgressWithLabelProps) => {
         alignItems="center"
         justifyContent="center"
       >
-        <Typography variant="caption" component="div" color="textSecondary">
-          `{prop.value}%`
+        <Typography variant="caption" component="div" color="white">
+          {prop.value}%
         </Typography>
       </Box>
     </Box>

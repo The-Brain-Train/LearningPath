@@ -34,7 +34,8 @@ export default function PersonalRoadmapCard({
 
 
   return (
-    <li className="shadow-md w-full border-t-2 border-opacity-100 dark:border-opacity-50 bg-slate-300">
+    <li className="shadow-md w-full border-t-2 border-opacity-100 dark:border-opacity-50 
+    bg-[#42465a] text-white border-[#141832]">
       <div className="flex items-center p-2 h-16">
         <Link
           className="text-left overflow-hidden flex flex-1 justify-center items-center"
