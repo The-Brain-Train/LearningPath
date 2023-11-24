@@ -16,7 +16,7 @@ import {
   AccordionBody,
 } from "@material-tailwind/react";
 import PersonalRoadmapCard from "./PersonalRoadmapCard";
-import FavoriteRoadmapCard from "../components/FavoriteRoadmapCard";
+import FavoriteRoadmapCard from "./FavoriteRoadmapCard";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCookies } from "react-cookie";
 import { Icon } from "../components/AccordionIcon";
@@ -116,6 +116,7 @@ const ProfilePageAuthUser = ({ currentUser }: UserProps) => {
               <ul className="flex flex-col justify-center">
                 {userRoadmaps?.roadmapMetaList.map((roadmapMeta, index) => (
                   <PersonalRoadmapCard
+                    currentUser={currentUser}
                     roadmapMeta={roadmapMeta}
                     key={index}
                     handleDelete={handleDelete}

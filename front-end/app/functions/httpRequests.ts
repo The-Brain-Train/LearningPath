@@ -212,7 +212,6 @@ export const getRoadmapProgressOfUser = async (
       );
     }
     const data = await response.json();
-    console.log("progress: " + data + " of roadmap id: " + roadmapMetaId);
     return data;
   } catch (error) {
     console.error("Error fetching progress of user's roadmap:", error);
