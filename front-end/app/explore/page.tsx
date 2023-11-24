@@ -130,7 +130,7 @@ export default function Explore() {
   return (
     <FilterProvider>
       <main className="main-background min-h-max flex items-center flex-col">
-        <div className="flex flex-row my-5 mx-auto gap-x-10">
+        <div className="flex flex-row my-5 mx-auto md:gap-x-10">
           <Paper
             component="div"
             className="py-2 px-4 flex w-15 max-h-12 justify-center items-center md:mt-5 w-64"
