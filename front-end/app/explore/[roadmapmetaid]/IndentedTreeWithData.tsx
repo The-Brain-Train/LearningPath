@@ -4,7 +4,6 @@ import * as d3 from "d3";
 import {
   CustomNode,
   ExploreIndentedTreeProps,
-  RoadmapObjectData,
 } from "../../util/types";
 import {
   getHoursFontSize,
@@ -15,7 +14,6 @@ import {
   getNodeSize,
   getIconFontSize,
   getScreenWidthAdjustValue,
-  getLabelWidth,
 } from "../../util/IndentedTreeUtil";
 import addGoogleFont from "../../util/fontFamily";
 import _ from "lodash";
@@ -51,14 +49,19 @@ const IndentedTreeWithData = ({
     const nodes = root.descendants();
 
     const screenWidth = window.innerWidth;
-    const width = screenWidth;
+    let width: any = screenWidth;
     const height = (nodes.length + 1) * nodeSize;
+    const parentContainerWidth = document.querySelector(".parent-roadmap-container")?.clientWidth;
+
+    if (screenWidth >= 1280) {
+      width = parentContainerWidth;
+    }
 
     const columns = [
       {
         value: (d: any) => d.value,
         format,
-        x: screenWidth - getScreenWidthAdjustValue(),
+        x: width - getScreenWidthAdjustValue(),
       },
     ];
 
@@ -129,18 +132,6 @@ const IndentedTreeWithData = ({
         const nodeName = d.data.name;
         return nodeName;
       })
-      .each(function (d: any) {
-        const screenWidth = window.innerWidth;
-        if (screenWidth <= 550) {
-          d3.select(this).style("font-family", "'Poppins', sans-serif");
-          d3.select(this)
-            .select("label")
-            .style("max-width", "300px")
-            .style("max-height", "22px")
-            .style("overflow-x", "auto")
-            .style("white-space", "nowrap");
-        }
-      })
       .attr("fill", "#cbd5e1");
       
 
@@ -156,7 +147,7 @@ const IndentedTreeWithData = ({
           const completedCheckbox = d.data.completedTopic ? "checked" : "";
           return `
     <div class="flex items-center content-div">
-      <input ${completedCheckbox} type="checkbox" value=${d.data.name} class="w-4 h-4">
+      <input ${completedCheckbox} type="checkbox" value=${d.data.name} class="w-4 h-4 md:w-5 md:h-5">
       <label class="text-gray-300 text:xs md:text-lg ml-2">${d.data.name}</label>
     </div>
   `;
@@ -188,12 +179,12 @@ const IndentedTreeWithData = ({
           if (d.target.__data__ && isCreator) {
             const treeLabelObject = d.target.__data__;
             if (!d.children && treeLabelObject.height === 0) {
-              const treeLabelName = treeLabelObject.data.name;
+              const treeLabelName: string = treeLabelObject.data.name;
               handleCheckBoxClick(treeLabelName);
             }
           }
           if (d.target.innerText && isCreator) {
-            const treeLabelName = d.target.innerText;
+            const treeLabelName: string = d.target.innerText;
             handleCheckBoxClick(treeLabelName);
           }
         });
