@@ -47,14 +47,12 @@ const IndentedTreeWithData = ({
       })(0)
     );
     const nodes = root.descendants();
-
     const screenWidth = window.innerWidth;
     let width: any = screenWidth;
     const height = (nodes.length + 1) * nodeSize;
-    const parentContainerWidth = document.querySelector(".parent-roadmap-container")?.clientWidth;
 
     if (screenWidth >= 1280) {
-      width = parentContainerWidth;
+      width = 1280;
     }
 
     const columns = [
@@ -134,7 +132,6 @@ const IndentedTreeWithData = ({
       })
       .attr("fill", "#cbd5e1");
       
-
     if (isCreator) {
       node
         .filter((d) => d.height === 0)

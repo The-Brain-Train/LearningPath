@@ -1,8 +1,8 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import SaveButton from "./SaveButton";
-import { Button, CircularProgress } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import { CustomNode, CreateIndentedTreeProps } from "../util/types";
 import Link from "next/link";
 import {
@@ -17,6 +17,7 @@ import {
 } from "../util/IndentedTreeUtil";
 import addGoogleFont from "../util/fontFamily";
 import { ArrowBack } from "@mui/icons-material";
+import _debounce from "lodash/debounce"; 
 
 const IndentedTree = ({
   data,
@@ -30,6 +31,7 @@ const IndentedTree = ({
 
   const graph = () => {
     if (data == null) return;
+
     d3.select(svgRef.current).selectAll("*").remove();
     const format = d3.format(",");
     const nodeSize = getNodeSize();
@@ -41,14 +43,18 @@ const IndentedTree = ({
     const nodes = root.descendants();
 
     const screenWidth = window.innerWidth;
-    const width = screenWidth;
+    let width: number = screenWidth;
     const height = (nodes.length + 1) * nodeSize;
+
+    if (screenWidth >= 1280) {
+      width = 1280;
+    }
 
     const columns = [
       {
         value: (d: any) => d.value,
         format,
-        x: screenWidth - getScreenWidthAdjustValue(),
+        x: width - getScreenWidthAdjustValue(),
       },
     ];
 
@@ -145,16 +151,20 @@ const IndentedTree = ({
     }
   };
 
+  const debouncedGraph = _debounce(graph, 100);
+
   useEffect(() => {
     if (data == null) return;
     addGoogleFont();
-    graph();
+    debouncedGraph();
+
     const createGraph = () => {
-      window.addEventListener("resize", graph);
+      window.addEventListener("resize", debouncedGraph);
     };
     createGraph();
+
     return () => {
-      window.removeEventListener("resize", graph);
+      window.removeEventListener("resize", debouncedGraph);
     };
   }, [data]);
 
@@ -181,7 +191,7 @@ const IndentedTree = ({
           ) : (
             <div className="flex flex-col justify-center items-center">
               {data !== null ? (
-                <div className="max-w-screen-xl">
+                <div className="max-w-screen-xl parent-roadmap-container">
                   <ArrowBack
                     fontSize="large"
                     className="text-slate-300 my-3 mt-4 cursor-pointer"
