@@ -13,7 +13,7 @@ import {
 import { ArrowBack } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Box, CircularProgress } from "@mui/material";
+import { Box, CircularProgress, LinearProgress } from "@mui/material";
 import useCurrentUserQuery from "@/app/functions/useCurrentUserQuery";
 import { useCookies } from "react-cookie";
 import {
@@ -24,6 +24,8 @@ import {
 } from "@/app/util/types";
 import { FavoriteButton } from "./FavoriteButton";
 import { ResourcesSection } from "../../components/ResourcesSection";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import CircularProgressWithLabel from "../../components/CircularProgressWithLabel";
 
 type Props = {
   params: {
@@ -36,6 +38,7 @@ function RoadMapId(props: Props) {
   const roadmapMetaId = props.params.roadmapmetaid;
   const queryClient = useQueryClient();
   const [cookies] = useCookies(["user"]);
+  const isSmallScreen = useMediaQuery("(max-width: 768px)");
 
   const {
     data: roadmapMetas,
@@ -127,7 +130,7 @@ function RoadMapId(props: Props) {
           cookies.user
         );
         queryClient.invalidateQueries(["roadmap", roadmapMetaId]);
-        return updatedRoadmap; 
+        return updatedRoadmap;
       }
     } catch (error) {
       console.error("Error updating completed topic:", error);
@@ -190,7 +193,20 @@ function RoadMapId(props: Props) {
                 />
               )}
             </div>
+
+            {!isSmallScreen ? (
+              <div className="w-1/2 items-center justify-center mx-4">
+                <p className="text-white pb-2">Progress: {progressPercentage}%</p>
+                <LinearProgress variant="determinate" value={progressPercentage} className="w-full" />
+              </div>) : (
+              <div className="items-center justify-center mx-6">
+                <CircularProgressWithLabel value={progressPercentage} size={50} />
+              </div>
+            )}
+
           </div>
+
+
 
           <IndentedTreeWithData data={roadmapToTreeNode(roadmap)} updateCompletedTopic={handleUpdateUsersCompletedTopic} isCreator={userOwnsRoadmap()} />
           <ResourcesSection

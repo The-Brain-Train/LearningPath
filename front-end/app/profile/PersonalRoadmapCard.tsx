@@ -3,12 +3,12 @@ import { PersonalRoadmapCardProps } from "../util/types";
 import { generateStarsforExperienceLevel } from "../functions/generateStarsForExperience";
 import Delete from "@mui/icons-material/Delete";
 import { useState } from "react";
-import { Box, Button, Modal, Typography, LinearProgress, CircularProgress } from "@mui/material";
+import { Box, Button, Modal, Typography, LinearProgress } from "@mui/material";
 import { useCookies } from "react-cookie";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getRoadmapProgressOfUser } from "../functions/httpRequests";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import CircularProgressWithLabel from "./CircularProgressWithLabel";
+import CircularProgressWithLabel from "../components/CircularProgressWithLabel";
 
 export default function PersonalRoadmapCard({
   currentUser,
