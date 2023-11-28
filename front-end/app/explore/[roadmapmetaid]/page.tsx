@@ -23,7 +23,7 @@ import {
   TreeNode,
 } from "@/app/util/types";
 import { FavoriteButton } from "./FavoriteButton";
-import { ResourcesSection } from "../../components/ResourcesSection";
+import { RoadmapResourcesSection } from "../../components/RoadmapResourcesSection";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import CircularProgressWithLabel from "../../components/CircularProgressWithLabel";
 
@@ -206,7 +206,7 @@ function RoadMapId(props: Props) {
             )}
           </div>
           <IndentedTreeWithData data={roadmapToTreeNode(roadmap)} updateCompletedTopic={handleUpdateUsersCompletedTopic} isCreator={userOwnsRoadmap()} />
-          <ResourcesSection
+          <RoadmapResourcesSection
             treeNode={treeNode}
             userOwnsRoadmap={userOwnsRoadmap()}
             queriesToInvalidate={["roadmap"]}

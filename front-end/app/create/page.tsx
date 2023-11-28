@@ -15,7 +15,7 @@ import {
 import { useCookies } from "react-cookie";
 import useCurrentUserQuery from "../functions/useCurrentUserQuery";
 import InputForm from "./InputForm";
-import { ResourcesSection } from "../components/ResourcesSection";
+import { RoadmapResourcesSection } from "../components/RoadmapResourcesSection";
 
 export default function Create() {
   const [data, setData] = useState<TreeNode | null>(null);
@@ -113,24 +113,28 @@ export default function Create() {
         setRoadmapInputData={setRoadmapInputData}
         resetForm={resetForm}
       />
-      <IndentedTree
-        data={data}
-        createError={createError}
-        isLoading={apiFetchLoading}
-        saveRoadmap={saveRoadMap}
-        setData={setData}
-        currentUser={currentUser}
-      />
-      {!apiFetchLoading && (
-        <ResourcesSection
-          treeNode={data}
-          userOwnsRoadmap={true}
-          queriesToInvalidate={[""]}
-          roadmapId={undefined}
-          userEmail={currentUser?.email}
-          cookiesUser={cookies.user}
-        />
-      )}
+      <div className="flex flex-col px-3 justify-center items-center">
+        <div className="max-w-screen-xl parent-roadmap-container">
+          <IndentedTree
+            data={data}
+            createError={createError}
+            isLoading={apiFetchLoading}
+            saveRoadmap={saveRoadMap}
+            setData={setData}
+            currentUser={currentUser}
+          />
+          {!apiFetchLoading && (
+            <RoadmapResourcesSection
+              treeNode={data}
+              userOwnsRoadmap={true}
+              queriesToInvalidate={[""]}
+              roadmapId={undefined}
+              userEmail={currentUser?.email}
+              cookiesUser={cookies.user}
+            />
+          )}
+        </div>
+      </div>
     </main>
   );
 }
