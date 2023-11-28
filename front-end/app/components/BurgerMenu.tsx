@@ -99,6 +99,7 @@ export default function BurgerMenu({ handleSignOut }: BurgerMenuProps) {
         )}
       </div>
       <PromptMessage 
+        type="warning"
         open={open} 
         onClose={handleShut}
         onConfirm={() => {

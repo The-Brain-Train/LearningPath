@@ -38,6 +38,7 @@ function SaveButton({ saveClick }: saveButtonProps) {
             Save
           </button>
           <PromptMessage
+            type="confirmation"
             open={open}
             onClose={handleClose}
             onConfirm={handleClick}
@@ -48,6 +49,7 @@ function SaveButton({ saveClick }: saveButtonProps) {
         </div>
       )}
       <PromptMessage 
+        type="error"
         open={saveError}
         onClose={handleSaveErrorClose}
         onConfirm={handleSaveErrorClose}

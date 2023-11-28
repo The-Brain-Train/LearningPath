@@ -65,6 +65,7 @@ export default function PersonalRoadmapCard({
           <Delete id={roadmapMeta.id} onClick={handleOpen} />
         </div>
         <PromptMessage 
+          type="warning"
           open={open}
           onClose={handleClose}
           onConfirm={handleDeleteClick}
