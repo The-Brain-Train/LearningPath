@@ -14,7 +14,7 @@ import LoginIcon from "@mui/icons-material/Login";
 import { useCookies } from "react-cookie";
 import { useState } from "react";
 import { BurgerMenuProps } from "../util/types";
-import { Modal, Typography, Button } from "@mui/material";
+import { PromptMessage } from "./PromptMessage";
 
 export default function BurgerMenu({ handleSignOut }: BurgerMenuProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -98,26 +98,17 @@ export default function BurgerMenu({ handleSignOut }: BurgerMenuProps) {
           </MenuItem>
         )}
       </div>
-      <Modal open={open} onClose={handleShut}>
-        <Box className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 lg:w-96 bg-white rounded shadow-lg rounded-5 text-center p-6">
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Sign out?
-          </Typography>
-          <div className="flex justify-evenly mt-7">
-            <button
-              className="text-red-600"
-              onClick={() => {
-                handleShut();
-                handleSignOut();
-              }}
-            >
-              {" "}
-              YES
-            </button>
-            <button onClick={handleShut}>NO</button>
-          </div>
-        </Box>
-      </Modal>
+      <PromptMessage 
+        open={open} 
+        onClose={handleShut}
+        onConfirm={() => {
+          handleShut();
+          handleSignOut();
+        }}
+        message="Sign out?"
+        confirmText="YES"
+        cancelText="NO"
+      />
     </Box>
   );
 }
