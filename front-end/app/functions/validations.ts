@@ -16,7 +16,7 @@ export const checkEmptyFields = (
   password: string,
 ) => {
   if (name.trim().length === 0) {
-    throw new Error("Name cannot be empty.")
+    throw new Error("Name cannot be empty.");
   }
   if (email.trim().length === 0) {
     throw new Error("Email cannot be empty.");
