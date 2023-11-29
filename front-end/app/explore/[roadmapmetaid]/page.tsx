@@ -23,7 +23,7 @@ import {
   TreeNode,
 } from "@/app/util/types";
 import { FavoriteButton } from "./FavoriteButton";
-import { ResourcesSection } from "../../components/ResourcesSection";
+import { RoadmapResourcesSection } from "../../components/RoadmapResourcesSection";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import CircularProgressWithLabel from "../../components/CircularProgressWithLabel";
 
@@ -194,19 +194,24 @@ function RoadMapId(props: Props) {
                 />
               )}
             </div>
-
-            {!isSmallScreen ? (
-              <div className="w-1/2 items-center justify-center mx-4">
-                <p className="text-white pb-2">Progress: {progressPercentage}%</p>
-                <LinearProgress variant="determinate" value={progressPercentage} className="w-full" />
-              </div>) : (
-              <div className="items-center justify-center mx-6">
-                <CircularProgressWithLabel value={progressPercentage} size={50} />
-              </div>
+            {userOwnsRoadmap() && (
+              !isSmallScreen ? (
+                <div className="w-1/2 items-center justify-center mx-4">
+                  <p className="text-white pb-2">Progress: {progressPercentage}%</p>
+                  <LinearProgress variant="determinate" value={progressPercentage} className="w-full" />
+                </div>) : (
+                <div className="items-center justify-center mx-6">
+                  <CircularProgressWithLabel value={progressPercentage} size={50} />
+                </div>
+              )
             )}
           </div>
-          <IndentedTreeWithData data={roadmapToTreeNode(roadmap)} updateCompletedTopic={handleUpdateUsersCompletedTopic} isCreator={userOwnsRoadmap()} />
-          <ResourcesSection
+          <IndentedTreeWithData
+            data={roadmapToTreeNode(roadmap)}
+            updateCompletedTopic={handleUpdateUsersCompletedTopic}
+            isCreator={userOwnsRoadmap()}
+          />
+          <RoadmapResourcesSection
             treeNode={treeNode}
             userOwnsRoadmap={userOwnsRoadmap()}
             queriesToInvalidate={["roadmap"]}

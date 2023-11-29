@@ -7,6 +7,20 @@ import {
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
+export const signUp = async (formData: any) => {
+  return await fetch(`${BACKEND_URL}/api/auth/signup`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(formData),
+  }).then(response => {
+    if (response.status === 409) {
+      throw new Error("Email address already in use. Please sign in or use a different email.");
+    }
+  })
+};
+
 export const getRoadmaps = async () => {
   const response = await fetch(`${BACKEND_URL}/api/roadmaps`);
   if (!response.ok) {

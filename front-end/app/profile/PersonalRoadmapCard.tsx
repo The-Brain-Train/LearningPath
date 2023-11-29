@@ -3,12 +3,13 @@ import { PersonalRoadmapCardProps } from "../util/types";
 import { generateStarsforExperienceLevel } from "../functions/generateStarsForExperience";
 import Delete from "@mui/icons-material/Delete";
 import { useState } from "react";
-import { Box, Button, Modal, Typography, LinearProgress } from "@mui/material";
+import { LinearProgress } from "@mui/material";
 import { useCookies } from "react-cookie";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getRoadmapProgressOfUser } from "../functions/httpRequests";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import CircularProgressWithLabel from "../components/CircularProgressWithLabel";
+import { PromptMessage } from "../components/PromptMessage";
 
 export default function PersonalRoadmapCard({
   currentUser,
@@ -23,7 +24,6 @@ export default function PersonalRoadmapCard({
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const queryClient = useQueryClient();
   const [cookies] = useCookies(["user"]);
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
 
@@ -60,24 +60,19 @@ export default function PersonalRoadmapCard({
               {roadmapMeta.hours} hours
             </p>
           </div>
-
         </Link>
         <div className="flex-shrink-0 min-w-max flex mx-2 cursor-pointer">
           <Delete id={roadmapMeta.id} onClick={handleOpen} />
         </div>
-        <Modal open={open} onClose={handleClose}>
-          <Box className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 bg-white rounded shadow-lg p-4 rounded-5">
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              Are you sure you want to delete?
-            </Typography>
-            <div className="flex justify-between">
-              <Button onClick={handleClose}>no</Button>
-              <Button className="text-red-600	" onClick={handleDeleteClick}>
-                yes
-              </Button>
-            </div>
-          </Box>
-        </Modal>
+        <PromptMessage 
+          type="warning"
+          open={open}
+          onClose={handleClose}
+          onConfirm={handleDeleteClick}
+          message="Are you sure you want to delete?"
+          confirmText="YES"
+          cancelText="NO"
+        />
       </div>
     </li>
   );

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Avatar from "@mui/material/Avatar";
@@ -13,6 +13,13 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useRouter } from "next/navigation";
+import {
+  checkEmptyFields,
+  validatePassword,
+  validateEmail,
+  confirmPassword,
+} from "../functions/validations";
+import { signUp } from "../functions/httpRequests";
 
 const SignupForm = () => {
   const [formData, setFormData] = useState({
@@ -20,7 +27,6 @@ const SignupForm = () => {
     email: "",
     password: "",
   });
-  const [isFormValid, setIsFormValid] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
@@ -38,69 +44,28 @@ const SignupForm = () => {
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
-    const isEmailValid = emailRegex.test(formData.email);
-
-    if (!isEmailValid) {
-      setError("Invalid email format.");
-      return;
-    }
-
-    const isPasswordValid = formData.password.length >= 5;
-
-    if (!isPasswordValid) {
-      setError("Password must be at least 5 characters long.");
-      return;
-    }
-
-    if (formData.password !== passwordConfirmation) {
-      setError("Passwords don't match.");
-      return;
-    }
-
-    const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
-
     try {
-      const response = await fetch(`${BACKEND_URL}/api/auth/signup`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      checkEmptyFields(formData.name, formData.email, formData.password);
+      validateEmail(formData.email);
+      validatePassword(formData.password);
+      confirmPassword(formData.password, passwordConfirmation);
+      await signUp(formData);
+      setError(null);
+      toast.success("Successful! Being redirected to the login page", {
+        position: "top-center",
+        autoClose: 3000,
+        onClose: () => {
+          router.push('/signin?source=signup');
         },
-        body: JSON.stringify(formData),
       });
-      if (response.status === 200) {
-        toast.success("Successful! Being redirected to the login page", {
-          position: "top-center",
-          autoClose: 3000,
-          onClose: () => {
-            router.push('/signin?source=signup');
-          },
-        });
-      }
-      if (response.status === 409) {
-        setError(
-          "Email address already in use. Please sign in or use a different email."
-        );
-        setTimeout(() => {
-          setError(null);
-        }, 6000);
-      }
-    } catch (error) {
-      console.error("Error:", error);
+    } catch (error: any) {
+      setError(error.message);
+      setTimeout(() => {
+        setError(null);
+      }, 2000);
+      return;
     }
   };
-
-  useEffect(() => {
-    const isPasswordValid =
-      formData.password.length >= 5 &&
-      formData.password === passwordConfirmation;
-
-    setIsFormValid(
-      formData.name.trim() !== "" &&
-        formData.email.trim() !== "" &&
-        isPasswordValid
-    );
-  }, [formData, passwordConfirmation]);
 
   return (
     <Container className="main-background m-0 min-w-full " component="main">
@@ -209,9 +174,15 @@ const SignupForm = () => {
               },
             }}
           />
+          {error && (
+            <Typography className="text-red-500 text-center font-semibold font-xs">
+              {error}
+            </Typography>
+          )}
           <p className="text-white text-xs text-center pt-4">
-            <span className="underline">Note:</span> Password should be atleast
-            5 characters long.
+            <span className="underline">Note:</span> Please choose a stronger password.
+            Password should be at least 8 characters long. Try a mix of uppercase and
+            lowercase letters, numbers, and symbols.
           </p>
           <Button
             type="submit"
@@ -224,7 +195,7 @@ const SignupForm = () => {
           <ToastContainer />
           <Grid container justifyContent="flex-start">
             <Grid item>
-            <Link
+              <Link
                 href="/signin?source=signup"
                 className="text-lg hover:underline text-white"
                 sx={{
@@ -240,11 +211,6 @@ const SignupForm = () => {
           </Grid>
         </Box>
       </Box>
-      {error && (
-        <Typography className="text-red-500 text-center font-semibold font-xs">
-          {error}
-        </Typography>
-      )}
     </Container>
   );
 };

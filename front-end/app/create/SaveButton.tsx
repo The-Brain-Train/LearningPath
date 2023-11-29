@@ -1,8 +1,5 @@
 import React, { useState } from "react";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
+import { PromptMessage } from "../components/PromptMessage";
 
 type saveButtonProps = {
   saveClick: () => void;
@@ -40,31 +37,26 @@ function SaveButton({ saveClick }: saveButtonProps) {
           >
             Save
           </button>
-          <Modal open={open} onClose={handleClose}>
-            <Box className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 bg-white rounded shadow-lg p-6 rounded-5 text-center">
-              <Typography id="modal-modal-title" variant="h6" component="h2">
-                Save this roadmap?
-              </Typography>
-              <div className="flex justify-evenly mt-7">
-                <button className="text-green-500	" onClick={handleClick}>
-                  YES
-                </button>
-                <button className="text-blue-500" onClick={handleClose}>NO</button>
-              </div>
-            </Box>
-          </Modal>
+          <PromptMessage
+            type="confirmation"
+            open={open}
+            onClose={handleClose}
+            onConfirm={handleClick}
+            message="Save this roadmap?"
+            confirmText="YES"
+            cancelText="NO"
+          />
         </div>
       )}
-      <Modal open={saveError} onClose={handleSaveErrorClose}>
-        <Box className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 bg-white rounded shadow-lg p-4 rounded-5">
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            {saveErrorMessage}
-          </Typography>
-          <div className="flex justify-center">
-            <Button onClick={handleSaveErrorClose}>OK</Button>
-          </div>
-        </Box>
-      </Modal>
+      <PromptMessage 
+        type="error"
+        open={saveError}
+        onClose={handleSaveErrorClose}
+        onConfirm={handleSaveErrorClose}
+        message={saveErrorMessage}
+        confirmText="OK"
+        cancelText=""
+      />
     </>
   );
 }
