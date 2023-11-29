@@ -13,16 +13,17 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useRouter } from "next/navigation";
-import {
-  checkEmptyFields,
-  validatePassword,
-  validateEmail,
-  confirmPassword,
-} from "../functions/validations";
+import { validateSignUpForm } from "../functions/validations";
 import { signUp } from "../functions/httpRequests";
 
+export type SignUpFormType = {
+  name: string;
+  email: string;
+  password: string;
+};
+
 const SignupForm = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<SignUpFormType>({
     name: "",
     email: "",
     password: "",
@@ -43,12 +44,9 @@ const SignupForm = () => {
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-
+    
     try {
-      checkEmptyFields(formData.name, formData.email, formData.password);
-      validateEmail(formData.email);
-      validatePassword(formData.password);
-      confirmPassword(formData.password, passwordConfirmation);
+      validateSignUpForm(formData, passwordConfirmation);
       await signUp(formData);
       setError(null);
       toast.success("Successful! Being redirected to the login page", {
