@@ -48,33 +48,54 @@ export default function Explore() {
   };
 
   const { data: roadmaps } = useQuery(["roadmaps"], () => {
+
     let page: number = queryClient.getQueryData(["thisPage"])
       ? queryClient.getQueryData<number>(["thisPage"]) || 0
       : 0;
+
     const experienceLevel =
       queryClient.getQueryData<string>(["experienceLevel"]) || "";
-    const searchText = queryClient.getQueryData<string>(["searchText"]) || "";
+    const searchText =
+      queryClient.getQueryData<string>(["searchText"]) || "";
     const hoursFromFilter =
       queryClient.getQueryData<number>(["hoursFromFilter"]) || 0;
     const hoursToFilter =
       queryClient.getQueryData<number>(["hoursToFilter"]) || 500;
 
+    const prevExperienceLevel =
+      queryClient.getQueryData<string>(["prevExperienceLevel"]) || "";
+    const prevSearchText =
+      queryClient.getQueryData<string>(["prevSearchText"]) || "";
+    const prevHoursFromFilter =
+      queryClient.getQueryData<number>(["prevHoursFromFilter"]) || 0;
+    const prevHoursToFilter =
+      queryClient.getQueryData<number>(["prevHoursToFilter"]) || 500;
+
     if (
-      experienceLevel.length > 0 ||
-      searchText.length > 0 ||
-      hoursFromFilter !== 0 ||
-      hoursToFilter !== 500
+      experienceLevel.length !== prevExperienceLevel.length ||
+      searchText.length !== prevSearchText.length ||
+      hoursFromFilter !== prevHoursFromFilter ||
+      hoursToFilter !== prevHoursToFilter
     ) {
       page = 0;
+      queryClient.setQueryData(["thisPage"], 0);
     }
-    return getRoadmapsFilteredPaged(
-      searchText,
-      experienceLevel,
-      hoursFromFilter,
-      hoursToFilter,
+
+    const result = getRoadmapsFilteredPaged(
+      searchText || "",
+      experienceLevel || "",
+      hoursFromFilter || 0,
+      hoursToFilter || 500,
       page,
       itemsPerPage
     );
+
+    queryClient.setQueryData<string>(["prevExperienceLevel"], experienceLevel);
+    queryClient.setQueryData<string>(["prevSearchText"], searchText);
+    queryClient.setQueryData<number>(["prevHoursFromFilter"], hoursFromFilter)
+    queryClient.setQueryData<number>(["prevHoursToFilter"], hoursToFilter);
+
+    return result;
   });
 
   useEffect(() => {
@@ -170,6 +191,7 @@ export default function Explore() {
           nextLinkClassName={"pagination__link"}
           disabledClassName={"pagination__link--disabled"}
           activeClassName={"pagination__link--active"}
+          forcePage={queryClient.getQueryData<number>(["thisPage"]) || 0}
         />
         <RoadmapsPage
           paginatedRoadmaps={paginatedRoadmaps}
