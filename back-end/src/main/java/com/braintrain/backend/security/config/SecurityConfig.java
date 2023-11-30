@@ -37,7 +37,9 @@ public class SecurityConfig {
                                 "/api/roadmaps",
                                 "/api/roadmaps/{id}",
                                 "/api/roadmaps/findByMeta/{metaId}",
-                                "/api/roadmaps/{userEmail}/resource/{roadmapMetaId}"
+                                "/api/roadmaps/{userEmail}/resource/{roadmapMetaId}",
+                                "/api/notification/user/{userEmail}",
+                                "/api/notification/{id}"
                         )
                         .permitAll().anyRequest().authenticated())
                 .cors(withDefaults())
