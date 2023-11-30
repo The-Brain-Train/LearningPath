@@ -2,6 +2,7 @@ package com.braintrain.backend.service;
 
 
 import com.braintrain.backend.exceptionHandler.exception.EmailAlreadyExistsException;
+import com.braintrain.backend.exceptionHandler.exception.InputFieldException;
 import com.braintrain.backend.exceptionHandler.exception.UserNotFoundException;
 import com.braintrain.backend.model.User;
 import com.braintrain.backend.repository.UserRepository;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 
+import static com.braintrain.backend.util.AppConstants.EMAIL_REGEX;
+import static com.braintrain.backend.util.AppConstants.PASSWORD_REGEX;
 
 @Service
 @RequiredArgsConstructor
@@ -25,11 +28,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final AuthenticationManager authenticationManager;
     @Override
     public JwtAuthenticationResponse signup(SignUpRequest request) {
-        User user = new User(request.getName(), passwordEncoder.encode(request.getPassword()), request.getEmail(), null);
+        validateSignUpRequestData(request);
 
-        if (userRepository.existsByEmail(request.getEmail())) {
-            throw new EmailAlreadyExistsException();
-        }
+        User user = new User(request.getName(), passwordEncoder.encode(request.getPassword()), request.getEmail(), null);
 
         userRepository.save(user);
         var jwt = jwtService.generateToken(user);
@@ -49,4 +50,26 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String jwt = jwtService.generateToken(user);
         return JwtAuthenticationResponse.builder().token(jwt).build();
     }
+
+    private void validateSignUpRequestData(SignUpRequest request) {
+        if (request.getName().isEmpty()) {
+            throw new InputFieldException("Name cannot be empty.");
+        }
+        if (request.getEmail().isEmpty()) {
+            throw new InputFieldException("Email cannot be empty.");
+        }
+        if (request.getPassword().isEmpty()) {
+            throw new InputFieldException("Password cannot be empty.");
+        }
+        if (!request.getEmail().matches(EMAIL_REGEX)) {
+           throw new InputFieldException("Invalid email format.");
+        }
+        if (!request.getPassword().matches(PASSWORD_REGEX)) {
+            throw new InputFieldException("Invalid password.");
+        }
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new EmailAlreadyExistsException();
+        }
+    }
+
 }

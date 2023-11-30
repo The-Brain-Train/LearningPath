@@ -30,6 +30,11 @@ public class GlobalExceptionHandler {
         return displayErrorMessage(LocalDateTime.now(), 401, "/api/auth/signin", ex.getMessage());
     }
 
+    @ExceptionHandler(InputFieldException.class)
+    public ResponseEntity<ErrorMessageResponse> handleInputFieldException(InputFieldException ex) {
+        return displayErrorMessage(LocalDateTime.now(), 400, "/api/auth/signin", ex.getMessage());
+    }
+
     @ExceptionHandler(EmailAlreadyExistsException.class)
     public ResponseEntity<ErrorMessageResponse> handleEmailAlreadyExistsException(EmailAlreadyExistsException ex) {
         return displayErrorMessage(LocalDateTime.now(), 409, "/api/auth/signup", ex.getMessage());

@@ -1,8 +1,16 @@
 import d3 from "d3";
-import { TreeNode } from "./types";
+import { TreeNode } from "../util/types";
 
 export const isMobileView = () => {
   return window.innerWidth < 768;
+};
+
+export const getScreenWidthAdjustValue = () => {
+  if (isMobileView()) {
+    return 25;
+  } else {
+    return 45;
+  }
 };
 
 export const getIconFontSize = () => {
@@ -89,29 +97,3 @@ export const getNodeSize = () => {
   }
 };
 
-export const getScreenWidthAdjustValue = () => {
-  if (isMobileView()) {
-    return 25;
-  } else {
-    return 45;
-  }
-};
-
-// export const foreignObjectStylingForSmallerScreens = (element: SVGForeignObjectElement) => {
-//   const screenWidth = window.innerWidth;
-//   if (screenWidth <= 550) {
-//     d3.select(element).style("font-family", "'Poppins', sans-serif");
-//     d3.select(element)
-//       .select("label")
-//       .style("max-width", "300px")
-//       .style("max-height", "22px")
-//       .style("overflow-x", "auto")
-//       .style("white-space", "nowrap");
-//   }
-//   if (screenWidth <= 450) {
-//     d3.select(element).select("label").style("max-width", "200px");
-//   }
-//   if (screenWidth <= 350) {
-//     d3.select(element).select("label").style("max-width", "150px");
-//   }
-// };

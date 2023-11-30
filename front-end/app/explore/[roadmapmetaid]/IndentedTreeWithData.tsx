@@ -11,8 +11,8 @@ import {
   getNodeSize,
   getIconFontSize,
   getScreenWidthAdjustValue,
-} from "../../util/IndentedTreeUtil";
-import addGoogleFont from "../../util/fontFamily";
+} from "../../functions/indentedTreeMetrics";
+import addGoogleFont from "../../functions/fontFamily";
 import _ from "lodash";
 
 const IndentedTreeWithData = ({

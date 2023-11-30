@@ -1,16 +1,28 @@
+import { SignUpFormType } from "../signup/SignupForm";
+
+export const validateSignUpForm = (
+  formData: SignUpFormType,
+  confirmPassword: string,
+) => {
+  checkEmptyFields(formData.name, formData.email, formData.password);
+  validateEmail(formData.email);
+  validatePassword(formData.password);
+  validateConfirmPassword(formData.password, confirmPassword);
+};
+
 export const checkEmptyFields = (
   name: string,
   email: string,
   password: string,
 ) => {
-  if (name === "") {
-    throw new Error("Enter your name.")
+  if (name.trim().length === 0) {
+    throw new Error("Name cannot be empty.");
   }
-  if (email === "") {
-    throw new Error("Enter your email.");
+  if (email.trim().length === 0) {
+    throw new Error("Email cannot be empty.");
   }
-  if (password === "") {
-    throw new Error("Enter your password.");
+  if (password.trim().length === 0) {
+    throw new Error("Password cannot be empty.");
   }
 };
 
@@ -28,9 +40,9 @@ export const validatePassword = (password: string) => {
   }
 };
 
-export const confirmPassword = (
+export const validateConfirmPassword = (
   password: string,
-  confirmPassword: string
+  confirmPassword: string,
 ) => {
   if (!(password === confirmPassword)) {
     throw new Error("Passwords don't match.");
