@@ -9,6 +9,7 @@ public record NotificationResponseDTO(
         String message,
         String senderEmail,
         String receiverEmail,
+        String roadmapMetaId,
         NotificationType type,
         LocalDateTime timestamp,
         boolean isRead) {

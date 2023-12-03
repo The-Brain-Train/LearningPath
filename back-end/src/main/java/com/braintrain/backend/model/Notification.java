@@ -19,6 +19,7 @@ public class Notification {
     private String message;
     private String senderEmail;
     private String receiverEmail;
+    private String roadmapMetaId;
     private NotificationType type;
     private LocalDateTime timestamp;
     private boolean isRead;
@@ -27,11 +28,13 @@ public class Notification {
             String message,
             String senderEmail,
             String receiverEmail,
+            String roadmapMetaId,
             NotificationType type) {
 
         this.message = message;
         this.senderEmail = senderEmail;
         this.receiverEmail = receiverEmail;
+        this.roadmapMetaId = roadmapMetaId;
         this.type = type;
         this.timestamp = LocalDateTime.now();
         this.isRead = false;

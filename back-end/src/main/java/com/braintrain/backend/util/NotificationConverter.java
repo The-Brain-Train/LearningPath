@@ -15,6 +15,7 @@ public class NotificationConverter {
                 dto.message(),
                 dto.senderEmail(),
                 dto.receiverEmail(),
+                dto.roadmapMetaId(),
                 dto.type()
         );
     }
@@ -25,6 +26,7 @@ public class NotificationConverter {
             notification.getMessage(),
             notification.getSenderEmail(),
             notification.getReceiverEmail(),
+            notification.getRoadmapMetaId(),
             notification.getType(),
             notification.getTimestamp(),
             notification.isRead()

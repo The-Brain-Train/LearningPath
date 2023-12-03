@@ -8,5 +8,6 @@ public record NotificationRequestDTO(
         String message,
         String senderEmail,
         String receiverEmail,
+        String roadmapMetaId,
         NotificationType type) {
 }
