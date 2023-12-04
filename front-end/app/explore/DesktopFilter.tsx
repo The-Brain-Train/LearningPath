@@ -1,5 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useFilterContext } from "./FilterProvider";
+import { Alert } from "@mui/material";
 
 export default function DesktopFilter() {
   const queryClient = useQueryClient();
@@ -78,10 +79,7 @@ export default function DesktopFilter() {
             className="rounded-md h-11 w-20 text-center"
           />
         </div>
-        <span className="text-red-500 w-full text-right">
-          {hourValidationMessage}
-        </span>
-      </div>
+      </div>  
     </div>
   );
 }

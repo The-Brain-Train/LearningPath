@@ -74,9 +74,6 @@ export default function FilterShow() {
           className="rounded-md h-7 w-45 ml-2.5 text-center"
         />
       </div>
-      <div className="text-red-500 w-full text-center">
-        {hourValidationMessage}
-      </div>
     </div>
   );
 }
