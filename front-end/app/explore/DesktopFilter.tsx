@@ -18,7 +18,6 @@ export default function DesktopFilter() {
     setHoursFromFilter,
     hoursToFilter,
     setHoursToFilter,
-    hourValidationMessage,
     validateHours,
   } = filterContext;
 
