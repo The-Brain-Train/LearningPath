@@ -34,7 +34,8 @@ export const validateEmail = (email: string) => {
 };
 
 export const validatePassword = (password: string) => {
-  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=]).{8,}$/;
+  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=*!-]).{8,}$/;
+
   if (!regex.test(password)) {
     throw new Error("Invalid password.");
   }
