@@ -12,9 +12,16 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useCookies } from "react-cookie";
 import { useRouter, useSearchParams } from "next/navigation";
+import { signIn } from "../functions/httpRequests";
+import { validateSignInForm } from "../functions/validations";
+
+export type SignInFormType = {
+  email: string;
+  password: string;
+};
 
 const SigninForm = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<SignInFormType>({
     email: "",
     password: "",
   });
@@ -31,52 +38,29 @@ const SigninForm = () => {
   }) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-
-    if (name === "email") {
-      const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
-      setIsEmailValid(emailRegex.test(value));
-    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (isEmailValid && formData.password.trim() !== "") {
-      const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
-
-      try {
-        const response = await fetch(`${BACKEND_URL}/api/auth/signin`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        });
-        if (response.ok) {
-          const data = await response.json();
-          const token = data.token;
-          setCookie("user", token, {
-            path: "/",
-          });
-          if (directedFromSignup) {
-            router.push("/");
-          } else {
-            router.back();
-          }
-        } else {
-          console.error("Error submitting form data:", response.statusText);
-        }
-        if (response.status === 403) {
-          setError("Incorrect password. Please try again.");
-        }
-        if (response.status === 401) {
-          setError("Invalid Email. Please try again or sign up.");
-        }
-      } catch (error) {
-        setError("An error occurred while signing in.");
+    try {
+      validateSignInForm(formData);
+      const token = await signIn(formData);
+      setError(null);
+      setCookie("user", token, {
+        path: "/",
+      });
+      if (directedFromSignup) {
+        router.push("/");
+      } else {
+        router.back();
       }
-    } else {
-      setError("Please fill out the form correctly.");
+    } catch (error: any) {
+      setError(error.message);
+      setTimeout(() => {
+        setError(null);
+      }, 3000);
+      return;
     }
   };
 
