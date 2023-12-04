@@ -41,6 +41,7 @@ const SignupForm = () => {
     specialChar: false,
     minLength: false,
   });
+  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
 
   const calculatePasswordStrength = (password: string): number => {
     const hasUppercase = /[A-Z]/.test(password);
@@ -198,6 +199,8 @@ const SignupForm = () => {
             autoComplete="new-password"
             onChange={handlePasswordChange}
             value={formData.password}
+            onFocus={() => setIsPasswordFocused(true)}
+            onBlur={() => setIsPasswordFocused(false)}
             InputProps={{
               style: { color: "white" },
             }}
@@ -210,38 +213,40 @@ const SignupForm = () => {
               },
             }}
           />
-          {passwordStrength > 0 && (
-            <div className="password-strength-indicator">
-              <Typography variant="body2" className="text-white">
+          {isPasswordFocused && passwordStrength > 0 && (
+            <div>
+              <Typography variant="body2" className="text-white underline">
                 Password Strength:
               </Typography>
               <LinearProgress
                 variant="determinate"
                 value={(passwordStrength / 5) * 100}
                 sx={{
-                  height: 8,
-                  mt: 1,
-                  mb: 2,
+                  height: 12,
+                  width: 200,
+                  my: 1,
+                  borderRadius: 4,
                   ".css-5xe99f-MuiLinearProgress-bar1": {
                     backgroundColor: "#0e9f6e",
+                    borderRadius: 4,
                   },
                 }}
               />
-              <div className="password-validation-checks">
-                <Typography variant="body2" className="text-white">
-                  Validation Checks:
+              <div>
+                <Typography variant="body2" className="text-white underline">
+                Password requirements:
                 </Typography>
                 <ul className="text-white text-xs">
                   <li>
                     {validationChecks.uppercase ? (
                       <>
                         <CheckCircleIcon sx={{ color: "#0e9f6e", fontSize: 15 }} />
-                        {" "}Uppercase letter
+                        {" "}At least one Uppercase letter
                       </>
                     ) : (
                       <>
                         <CheckCircleIcon sx={{ color: "gray", fontSize: 15 }} />
-                        {" "}Uppercase letter
+                        {" "}At least one Uppercase letter
                       </>
                     )}
                   </li>
@@ -249,12 +254,12 @@ const SignupForm = () => {
                     {validationChecks.lowercase ? (
                       <>
                         <CheckCircleIcon sx={{ color: "#0e9f6e", fontSize: 15 }} />
-                        {" "}Lowercase letter
+                        {" "}At least one Lowercase letter
                       </>
                     ) : (
                       <>
                         <CheckCircleIcon sx={{ color: "gray", fontSize: 15 }} />
-                        {" "}Lowercase letter
+                        {" "}At least one Lowercase letter
                       </>
                     )}
                   </li>
@@ -262,12 +267,12 @@ const SignupForm = () => {
                     {validationChecks.number ? (
                       <>
                         <CheckCircleIcon sx={{ color: "#0e9f6e", fontSize: 15 }} />
-                        {" "}Number
+                        {" "}At least one Number
                       </>
                     ) : (
                       <>
                         <CheckCircleIcon sx={{ color: "gray", fontSize: 15 }} />
-                        {" "}Number
+                        {" "}At least one Number
                       </>
                     )}
                   </li>
@@ -275,12 +280,12 @@ const SignupForm = () => {
                     {validationChecks.specialChar ? (
                       <>
                         <CheckCircleIcon sx={{ color: "#0e9f6e", fontSize: 15 }} />
-                        {" "}Special character
+                        {" "}At least one Special character e.g.: @#$%^&+=*!-
                       </>
                     ) : (
                       <>
                         <CheckCircleIcon sx={{ color: "gray", fontSize: 15 }} />
-                        {" "}Special character
+                        {" "}At least one Special character e.g.: @#$%^&+=*!-
                       </>
                     )}
                   </li>
@@ -288,12 +293,12 @@ const SignupForm = () => {
                     {validationChecks.minLength ? (
                       <>
                         <CheckCircleIcon sx={{ color: "#0e9f6e", fontSize: 15 }} />
-                        {" "}Minimum 8 characters
+                        {" "}At least 8 characters
                       </>
                     ) : (
                       <>
                         <CheckCircleIcon sx={{ color: "gray", fontSize: 15 }} />
-                        {" "}Minimum 8 characters
+                        {" "}At least 8 characters
                       </>
                     )}
                   </li>
