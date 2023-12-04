@@ -16,7 +16,7 @@ export const signUp = async (formData: any) => {
     body: JSON.stringify(formData),
   }).then(response => {
     if (response.status === 409) {
-      throw new Error("Email address already in use. Please sign in or use a different email.");
+      throw new Error("Email already in use. Sign in or use a different email.");
     }
   })
 };

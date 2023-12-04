@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import { validateSignUpForm } from "../functions/validations";
 import { signUp } from "../functions/httpRequests";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { Alert } from "@mui/material";
 
 export type SignUpFormType = {
   name: string;
@@ -29,7 +30,14 @@ const SignupForm = () => {
     email: "",
     password: "",
   });
-  const [error, setError] = useState<string | null>(null);
+  const [genericError, setGenericError] = useState<string | null>(null);
+  const [nameError, setNameError] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [passwordConfirmationError, setPasswordConfirmationError] = useState<
+    string | null
+  >(null);
+
   const router = useRouter();
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [validationChecks, setValidationChecks] = useState({
@@ -40,7 +48,7 @@ const SignupForm = () => {
     minLength: false,
   });
 
-  const calculatePasswordStrength = (password: string): void => {
+  const passwordRequirementsCheck = (password: string): void => {
     const hasUppercase = /[A-Z]/.test(password);
     const hasLowercase = /[a-z]/.test(password);
     const hasDigit = /\d/.test(password);
@@ -58,7 +66,7 @@ const SignupForm = () => {
   const handlePasswordChange = (e: { target: { value: string } }) => {
     const { value } = e.target;
     setFormData({ ...formData, password: value });
-    calculatePasswordStrength(value);
+    passwordRequirementsCheck(value);
   };
 
   const handleInputChange = (e: { target: { name: any; value: any } }) => {
@@ -73,11 +81,14 @@ const SignupForm = () => {
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
+    setNameError(null);
+    setEmailError(null);
+    setPasswordError(null);
+    setPasswordConfirmationError(null);
 
     try {
       validateSignUpForm(formData, passwordConfirmation);
       await signUp(formData);
-      setError(null);
       toast.success("Successful! Being redirected to the login page", {
         position: "top-center",
         autoClose: 3000,
@@ -86,10 +97,31 @@ const SignupForm = () => {
         },
       });
     } catch (error: any) {
-      setError(error.message);
-      setTimeout(() => {
-        setError(null);
-      }, 3000);
+      if (error.message.includes("|")) {
+        const [fieldName, errorMessage] = error.message.split("|");
+        switch (fieldName) {
+          case "name":
+            setNameError(errorMessage);
+            break;
+          case "email":
+            setEmailError(errorMessage);
+            break;
+          case "password":
+            setPasswordError(errorMessage);
+            break;
+          case "passwordConfirmation":
+            setPasswordConfirmationError(errorMessage);
+            break;
+          default:
+            setGenericError(errorMessage);
+            break;
+        }
+      } else {
+        setGenericError(error.message);
+        setTimeout(() => {
+          setGenericError(null);
+        }, 5000);
+      }
       return;
     }
   };
@@ -108,7 +140,7 @@ const SignupForm = () => {
           component="form"
           noValidate
           onSubmit={handleSubmit}
-          className="max-w-xl "
+          className="max-w-xl"
         >
           <TextField
             margin="normal"
@@ -121,6 +153,7 @@ const SignupForm = () => {
             onChange={handleInputChange}
             autoFocus
             value={formData.name}
+            error={Boolean(nameError)}
             InputProps={{
               style: { color: "white" },
             }}
@@ -133,6 +166,9 @@ const SignupForm = () => {
               },
             }}
           />
+          {nameError && (
+            <Alert severity="error" variant="filled">{nameError}</Alert>
+          )}
           <TextField
             margin="normal"
             required
@@ -143,6 +179,7 @@ const SignupForm = () => {
             autoComplete="email"
             onChange={handleInputChange}
             value={formData.email}
+            error={Boolean(emailError)}
             InputProps={{
               style: { color: "white" },
             }}
@@ -155,6 +192,9 @@ const SignupForm = () => {
               },
             }}
           />
+          {emailError && (
+            <Alert severity="error" variant="filled">{emailError}</Alert>
+          )}
           <TextField
             margin="normal"
             required
@@ -166,6 +206,7 @@ const SignupForm = () => {
             autoComplete="new-password"
             onChange={handlePasswordChange}
             value={formData.password}
+            error={Boolean(passwordError)}
             InputProps={{
               style: { color: "white" },
             }}
@@ -178,7 +219,9 @@ const SignupForm = () => {
               },
             }}
           />
-
+          {passwordError && (
+            <Alert severity="error" variant="filled">{passwordError}</Alert>
+          )}
           <TextField
             margin="normal"
             required
@@ -190,6 +233,7 @@ const SignupForm = () => {
             autoComplete="new-password"
             onChange={handlePasswordConfirmationChange}
             value={passwordConfirmation}
+            error={Boolean(passwordConfirmationError)}
             InputProps={{
               style: { color: "white" },
             }}
@@ -202,83 +246,81 @@ const SignupForm = () => {
               },
             }}
           />
-          <div>
-                <Typography variant="body2" className="text-white font-semibold">
-                Password Requirements
-                </Typography>
-                <ul className="text-white text-xs">
-                  <li>
-                    {validationChecks.uppercase ? (
-                      <>
-                        <CheckCircleIcon sx={{ color: "#0e9f6e", fontSize: 15 }} />
-                        {" "}At least one Uppercase letter
-                      </>
-                    ) : (
-                      <>
-                        <CheckCircleIcon sx={{ color: "gray", fontSize: 15 }} />
-                        {" "}At least one Uppercase letter
-                      </>
-                    )}
-                  </li>
-                  <li>
-                    {validationChecks.lowercase ? (
-                      <>
-                        <CheckCircleIcon sx={{ color: "#0e9f6e", fontSize: 15 }} />
-                        {" "}At least one Lowercase letter
-                      </>
-                    ) : (
-                      <>
-                        <CheckCircleIcon sx={{ color: "gray", fontSize: 15 }} />
-                        {" "}At least one Lowercase letter
-                      </>
-                    )}
-                  </li>
-                  <li>
-                    {validationChecks.number ? (
-                      <>
-                        <CheckCircleIcon sx={{ color: "#0e9f6e", fontSize: 15 }} />
-                        {" "}At least one Number
-                      </>
-                    ) : (
-                      <>
-                        <CheckCircleIcon sx={{ color: "gray", fontSize: 15 }} />
-                        {" "}At least one Number
-                      </>
-                    )}
-                  </li>
-                  <li>
-                    {validationChecks.specialChar ? (
-                      <>
-                        <CheckCircleIcon sx={{ color: "#0e9f6e", fontSize: 15 }} />
-                        {" "}At least one Special character e.g.: @#$%^&+=*!-
-                      </>
-                    ) : (
-                      <>
-                        <CheckCircleIcon sx={{ color: "gray", fontSize: 15 }} />
-                        {" "}At least one Special character e.g.: @#$%^&+=*!-
-                      </>
-                    )}
-                  </li>
-                  <li>
-                    {validationChecks.minLength ? (
-                      <>
-                        <CheckCircleIcon sx={{ color: "#0e9f6e", fontSize: 15 }} />
-                        {" "}At least 8 characters
-                      </>
-                    ) : (
-                      <>
-                        <CheckCircleIcon sx={{ color: "gray", fontSize: 15 }} />
-                        {" "}At least 8 characters
-                      </>
-                    )}
-                  </li>
-                </ul>
-              </div>
-          {error && (
-            <Typography className="text-red-500 text-center font-semibold font-xs">
-              {error}
-            </Typography>
+          {passwordConfirmationError && (
+            <Alert severity="error" variant="filled">{passwordConfirmationError}</Alert>
           )}
+          <div>
+            <Typography variant="body2" className="text-white font-semibold">
+              Password Requirements
+            </Typography>
+            <ul className="text-white text-xs">
+              <li>
+                {validationChecks.uppercase ? (
+                  <>
+                    <CheckCircleIcon sx={{ color: "#0e9f6e", fontSize: 15 }} />{" "}
+                    At least one Uppercase letter
+                  </>
+                ) : (
+                  <>
+                    <CheckCircleIcon sx={{ color: "gray", fontSize: 15 }} /> At
+                    least one Uppercase letter
+                  </>
+                )}
+              </li>
+              <li>
+                {validationChecks.lowercase ? (
+                  <>
+                    <CheckCircleIcon sx={{ color: "#0e9f6e", fontSize: 15 }} />{" "}
+                    At least one Lowercase letter
+                  </>
+                ) : (
+                  <>
+                    <CheckCircleIcon sx={{ color: "gray", fontSize: 15 }} /> At
+                    least one Lowercase letter
+                  </>
+                )}
+              </li>
+              <li>
+                {validationChecks.number ? (
+                  <>
+                    <CheckCircleIcon sx={{ color: "#0e9f6e", fontSize: 15 }} />{" "}
+                    At least one Number
+                  </>
+                ) : (
+                  <>
+                    <CheckCircleIcon sx={{ color: "gray", fontSize: 15 }} /> At
+                    least one Number
+                  </>
+                )}
+              </li>
+              <li>
+                {validationChecks.specialChar ? (
+                  <>
+                    <CheckCircleIcon sx={{ color: "#0e9f6e", fontSize: 15 }} />{" "}
+                    At least one Special character e.g.: @#$%^&+=*!-
+                  </>
+                ) : (
+                  <>
+                    <CheckCircleIcon sx={{ color: "gray", fontSize: 15 }} /> At
+                    least one Special character e.g.: @#$%^&+=*!-
+                  </>
+                )}
+              </li>
+              <li>
+                {validationChecks.minLength ? (
+                  <>
+                    <CheckCircleIcon sx={{ color: "#0e9f6e", fontSize: 15 }} />{" "}
+                    At least 8 characters
+                  </>
+                ) : (
+                  <>
+                    <CheckCircleIcon sx={{ color: "gray", fontSize: 15 }} /> At
+                    least 8 characters
+                  </>
+                )}
+              </li>
+            </ul>
+          </div>
           <Button
             type="submit"
             fullWidth
@@ -287,6 +329,9 @@ const SignupForm = () => {
           >
             Sign Up
           </Button>
+          {genericError && (
+            <Alert severity="error" variant="filled">{genericError}</Alert>
+          )}
           <ToastContainer />
           <Grid container justifyContent="flex-start">
             <Grid item>
