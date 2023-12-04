@@ -394,7 +394,7 @@ export const postUserProfilePicture = async (
     }
   );
   if (response.status === 422) {
-    throw new Error("Invalid file type. Please upload an image.");
+    throw new Error("Invalid file. Please use an image.");
   }
   if (!response.ok) {
     throw new Error("Profile picture upload failed");

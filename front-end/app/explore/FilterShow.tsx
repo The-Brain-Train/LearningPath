@@ -16,7 +16,6 @@ export default function FilterShow() {
     setHoursFromFilter,
     hoursToFilter,
     setHoursToFilter,
-    hourValidationMessage,
     validateHours,
   } = filterContext;
 
