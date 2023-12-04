@@ -36,7 +36,7 @@ export const PromptMessage = (props: PromptMessageProps) => {
         <Typography variant="h6" component="h2">
           {props.message}
         </Typography>
-        <div className="flex justify-evenly mt-7">
+        <div className="flex justify-evenly mt-7 flex-row-reverse">
           <button className={confirmButtonTextColor} onClick={props.onConfirm}>
             {props.confirmText}
           </button>
