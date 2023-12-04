@@ -14,6 +14,7 @@ import { useCookies } from "react-cookie";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "../functions/httpRequests";
 import { validateSignInForm } from "../functions/validations";
+import { Alert } from "@mui/material";
 
 export type SignInFormType = {
   email: string;
@@ -74,52 +75,57 @@ const SigninForm = () => {
           Sign in
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            onChange={handleInputChange}
-            value={formData.email}
-            autoFocus
-            InputProps={{
-              style: { color: "white" },
-            }}
-            InputLabelProps={{
-              style: { color: "white" },
-            }}
-            sx={{
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "white",
-              },
-            }}
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            onChange={handleInputChange}
-            value={formData.password}
-            autoComplete="current-password"
-            InputProps={{
-              style: { color: "white" },
-            }}
-            InputLabelProps={{
-              style: { color: "white" },
-            }}
-            sx={{
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "white",
-              },
-            }}
-          />
+          <div>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              onChange={handleInputChange}
+              value={formData.email}
+              autoFocus
+              InputProps={{
+                style: { color: "white" },
+              }}
+              InputLabelProps={{
+                style: { color: "white" },
+              }}
+              sx={{
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "white",
+                },
+              }}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              onChange={handleInputChange}
+              value={formData.password}
+              autoComplete="current-password"
+              InputProps={{
+                style: { color: "white" },
+              }}
+              InputLabelProps={{
+                style: { color: "white" },
+              }}
+              sx={{
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "white",
+                },
+              }}
+            />
+            {error && (
+              <Alert severity="error">{error}</Alert>
+            )}
+          </div>
           <Button
             type="submit"
             fullWidth
@@ -146,11 +152,6 @@ const SigninForm = () => {
           </Grid>
         </Box>
       </Box>
-      {error && (
-        <Typography className=" text-red-500 text-center font-semibold font-xs">
-          {error}
-        </Typography>
-      )}
     </Container>
   );
 };
