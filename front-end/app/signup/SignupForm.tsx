@@ -15,6 +15,8 @@ import Container from "@mui/material/Container";
 import { useRouter } from "next/navigation";
 import { validateSignUpForm } from "../functions/validations";
 import { signUp } from "../functions/httpRequests";
+import { LinearProgress } from "@mui/material";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 export type SignUpFormType = {
   name: string;
@@ -31,6 +33,65 @@ const SignupForm = () => {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [passwordStrength, setPasswordStrength] = useState<number>(0);
+  const [validationChecks, setValidationChecks] = useState({
+    uppercase: false,
+    lowercase: false,
+    number: false,
+    specialChar: false,
+    minLength: false,
+  });
+
+  const calculatePasswordStrength = (password: string): number => {
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasLowercase = /[a-z]/.test(password);
+    const hasDigit = /\d/.test(password);
+    const hasSpecialChar = /[@#$%^&+=*!-]/.test(password);
+    let strength = 0;
+
+    if (hasUppercase) {
+      strength += 1;
+      setValidationChecks((checks) => ({ ...checks, uppercase: true }));
+    } else {
+      setValidationChecks((checks) => ({ ...checks, uppercase: false }));
+    }
+
+    if (hasLowercase) {
+      strength += 1;
+      setValidationChecks((checks) => ({ ...checks, lowercase: true }));
+    } else {
+      setValidationChecks((checks) => ({ ...checks, lowercase: false }));
+    }
+
+    if (hasDigit) {
+      strength += 1;
+      setValidationChecks((checks) => ({ ...checks, number: true }));
+    } else {
+      setValidationChecks((checks) => ({ ...checks, number: false }));
+    }
+
+    if (hasSpecialChar) {
+      strength += 1;
+      setValidationChecks((checks) => ({ ...checks, specialChar: true }));
+    } else {
+      setValidationChecks((checks) => ({ ...checks, specialChar: false }));
+    }
+
+    if (password.length >= 8) {
+      strength += 1;
+      setValidationChecks((checks) => ({ ...checks, minLength: true }));
+    } else {
+      setValidationChecks((checks) => ({ ...checks, minLength: false }));
+    }
+
+    return strength;
+  };
+
+  const handlePasswordChange = (e: { target: { value: string } }) => {
+    const { value } = e.target;
+    setFormData({ ...formData, password: value });
+    setPasswordStrength(calculatePasswordStrength(value));
+  };
 
   const handleInputChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
@@ -44,7 +105,7 @@ const SignupForm = () => {
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    
+
     try {
       validateSignUpForm(formData, passwordConfirmation);
       await signUp(formData);
@@ -53,7 +114,7 @@ const SignupForm = () => {
         position: "top-center",
         autoClose: 3000,
         onClose: () => {
-          router.push('/signin?source=signup');
+          router.push("/signin?source=signup");
         },
       });
     } catch (error: any) {
@@ -135,7 +196,7 @@ const SignupForm = () => {
             type="password"
             id="password"
             autoComplete="new-password"
-            onChange={handleInputChange}
+            onChange={handlePasswordChange}
             value={formData.password}
             InputProps={{
               style: { color: "white" },
@@ -149,6 +210,97 @@ const SignupForm = () => {
               },
             }}
           />
+          {passwordStrength > 0 && (
+            <div className="password-strength-indicator">
+              <Typography variant="body2" className="text-white">
+                Password Strength:
+              </Typography>
+              <LinearProgress
+                variant="determinate"
+                value={(passwordStrength / 5) * 100}
+                sx={{
+                  height: 8,
+                  mt: 1,
+                  mb: 2,
+                  ".css-5xe99f-MuiLinearProgress-bar1": {
+                    backgroundColor: "#0e9f6e",
+                  },
+                }}
+              />
+              <div className="password-validation-checks">
+                <Typography variant="body2" className="text-white">
+                  Validation Checks:
+                </Typography>
+                <ul className="text-white text-xs">
+                  <li>
+                    {validationChecks.uppercase ? (
+                      <>
+                        <CheckCircleIcon sx={{ color: "#0e9f6e", fontSize: 15 }} />
+                        {" "}Uppercase letter
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircleIcon sx={{ color: "gray", fontSize: 15 }} />
+                        {" "}Uppercase letter
+                      </>
+                    )}
+                  </li>
+                  <li>
+                    {validationChecks.lowercase ? (
+                      <>
+                        <CheckCircleIcon sx={{ color: "#0e9f6e", fontSize: 15 }} />
+                        {" "}Lowercase letter
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircleIcon sx={{ color: "gray", fontSize: 15 }} />
+                        {" "}Lowercase letter
+                      </>
+                    )}
+                  </li>
+                  <li>
+                    {validationChecks.number ? (
+                      <>
+                        <CheckCircleIcon sx={{ color: "#0e9f6e", fontSize: 15 }} />
+                        {" "}Number
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircleIcon sx={{ color: "gray", fontSize: 15 }} />
+                        {" "}Number
+                      </>
+                    )}
+                  </li>
+                  <li>
+                    {validationChecks.specialChar ? (
+                      <>
+                        <CheckCircleIcon sx={{ color: "#0e9f6e", fontSize: 15 }} />
+                        {" "}Special character
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircleIcon sx={{ color: "gray", fontSize: 15 }} />
+                        {" "}Special character
+                      </>
+                    )}
+                  </li>
+                  <li>
+                    {validationChecks.minLength ? (
+                      <>
+                        <CheckCircleIcon sx={{ color: "#0e9f6e", fontSize: 15 }} />
+                        {" "}Minimum 8 characters
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircleIcon sx={{ color: "gray", fontSize: 15 }} />
+                        {" "}Minimum 8 characters
+                      </>
+                    )}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          )}
           <TextField
             margin="normal"
             required
@@ -177,11 +329,6 @@ const SignupForm = () => {
               {error}
             </Typography>
           )}
-          <p className="text-white text-xs text-center pt-4">
-            <span className="underline">Note:</span> Please choose a stronger password.
-            Password should be at least 8 characters long. Try a mix of uppercase and
-            lowercase letters, numbers, and symbols.
-          </p>
           <Button
             type="submit"
             fullWidth
