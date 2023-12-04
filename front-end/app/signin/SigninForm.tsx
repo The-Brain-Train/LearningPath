@@ -123,7 +123,7 @@ const SigninForm = () => {
               }}
             />
             {error && (
-              <Alert severity="error">{error}</Alert>
+              <Alert severity="error" variant="filled">{error}</Alert>
             )}
           </div>
           <Button

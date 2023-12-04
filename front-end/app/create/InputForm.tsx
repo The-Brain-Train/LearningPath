@@ -105,9 +105,9 @@ const InputForm = ({
                 onChange={(e) => setUserTopic(e.target.value)}
                 placeholder="Enter Topic!"
                 sx={{ m: 1, minWidth: "90%" }}
-                className="pt-0 rounded-l-md focus:outline-none focus:placeholder-gray-400 text-center placeholder-gray-60 py-3 form-control"
+                className="pt-0 rounded-l-md focus:outline-none focus:placeholder-gray-400 text-center placeholder-gray-60 form-control"
               />
-              {topicError && <div className="text-red-500">{topicError}</div>}
+              {topicError && <div className="text-red-500 ml-2">{topicError}</div>}
               <FormControl sx={{ m: 1, minWidth: "90%" }}>
                 <InputLabel id="demo-simple-select-autowidth-label">
                   Experience Level
@@ -127,7 +127,7 @@ const InputForm = ({
                 </Select>
               </FormControl>
               {experienceError && (
-                <div className="text-red-500">{experienceError}</div>
+                <div className="text-red-500 ml-2">{experienceError}</div>
               )}
               <div>
                 <InputLabel
@@ -153,7 +153,6 @@ const InputForm = ({
                   />
                 </Box>
               </div>
-
               <div className="mt-2 flex justify-start flex-row">
                 <InputLabel className="mt-2 pb-2 text-sm font-black">
                   Add resources
@@ -164,7 +163,6 @@ const InputForm = ({
                   inputProps={{ 'aria-label': 'Toggle' }}
                 />
               </div>
-
               <div className="flex justify-center">
                 <button
                   onClick={handleSubmit}
