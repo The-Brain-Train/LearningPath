@@ -141,6 +141,9 @@ function RoadMapId(props: Props) {
   const { data: progressPercentage } = useQuery<number>(
     [`progressPercentage-${roadmapMetaId}`],
     () => getRoadmapProgressOfUser(currentUser?.email, roadmapMetaId, cookies.user),
+    {
+      enabled: !!currentUser,
+    }
   );
 
   const roadmapToTreeNode = (roadmap: Roadmap | undefined) => {
@@ -194,7 +197,7 @@ function RoadMapId(props: Props) {
                 />
               )}
             </div>
-            {userOwnsRoadmap() && (
+            {currentUser && userOwnsRoadmap() && (
               !isSmallScreen ? (
                 <div className="w-1/2 items-center justify-center mx-4">
                   <p className="text-white pb-2">Progress: {progressPercentage}%</p>
