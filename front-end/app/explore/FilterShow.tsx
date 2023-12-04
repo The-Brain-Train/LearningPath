@@ -49,6 +49,8 @@ export default function FilterShow() {
               e.target.value === "" ? null : parseInt(e.target.value);
             validateHours(newValue, hoursToFilter) &&
               setHoursFromFilter(newValue);
+            queryClient.setQueryData(["hoursFromFilter"], newValue);
+            queryClient.invalidateQueries(["roadmaps"]);
           }}
           placeholder="From"
           className="rounded-md h-7 w-45 mx-2.5 text-center"
@@ -73,9 +75,6 @@ export default function FilterShow() {
           placeholder="To"
           className="rounded-md h-7 w-45 ml-2.5 text-center"
         />
-      </div>
-      <div className="text-red-500 w-full text-center">
-        {hourValidationMessage}
       </div>
     </div>
   );
