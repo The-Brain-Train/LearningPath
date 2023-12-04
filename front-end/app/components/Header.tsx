@@ -76,7 +76,7 @@ export default function Header() {
               className="h-14 w-auto"
               src="/Logo.png"
               alt="LP Logo"
-              width={140}
+              width={150}
               height={60}
               priority
             />
