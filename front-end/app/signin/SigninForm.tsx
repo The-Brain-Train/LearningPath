@@ -28,7 +28,6 @@ const SigninForm = () => {
   const [error, setError] = useState<string | null>(null);
   const [cookies, setCookie] = useCookies(["user"]);
   const router = useRouter();
-  const [isEmailValid, setIsEmailValid] = useState(true);
 
   const searchParams = useSearchParams();
   const directedFromSignup = searchParams.get("source");
@@ -86,8 +85,6 @@ const SigninForm = () => {
             onChange={handleInputChange}
             value={formData.email}
             autoFocus
-            error={!isEmailValid}
-            helperText={!isEmailValid ? "Invalid email format" : ""}
             InputProps={{
               style: { color: "white" },
             }}
