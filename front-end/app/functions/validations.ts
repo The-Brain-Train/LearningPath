@@ -1,3 +1,4 @@
+import { SignInFormType } from "../signin/SigninForm";
 import { SignUpFormType } from "../signup/SignupForm";
 
 export const validateSignUpForm = (
@@ -10,6 +11,11 @@ export const validateSignUpForm = (
   validateConfirmPassword(formData.password, confirmPassword);
 };
 
+export const validateSignInForm = (formData: SignInFormType) => {
+  checkIfEmailAndPasswordAreEmpty(formData.email, formData.password);
+  validateEmail(formData.email);
+}
+
 export const checkEmptyFields = (
   name: string,
   email: string,
@@ -18,12 +24,7 @@ export const checkEmptyFields = (
   if (name.trim().length === 0) {
     throw new Error("Name cannot be empty.");
   }
-  if (email.trim().length === 0) {
-    throw new Error("Email cannot be empty.");
-  }
-  if (password.trim().length === 0) {
-    throw new Error("Password cannot be empty.");
-  }
+  checkIfEmailAndPasswordAreEmpty(email, password);
 };
 
 export const validateEmail = (email: string) => {
@@ -49,3 +50,12 @@ export const validateConfirmPassword = (
     throw new Error("Passwords don't match.");
   }
 };
+
+const checkIfEmailAndPasswordAreEmpty = (email: string, password: string) => {
+  if (email.trim().length === 0) {
+    throw new Error("Email cannot be empty.");
+  }
+  if (password.trim().length === 0) {
+    throw new Error("Password cannot be empty.");
+  }
+}
