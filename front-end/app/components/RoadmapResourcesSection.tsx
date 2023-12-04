@@ -50,23 +50,23 @@ export const RoadmapResourcesSection = (props: RoadmapResourcesSectionProps) => 
         {((props.userOwnsRoadmap && props.roadmapId) ||
           props.treeNode && props.treeNode.resources) &&
           <div className="mt-10 flex flex-left">
-            <p className="text-xl text-center font-bold text-white md:text-2xl pl-4">
+            <p className="text-xl text-center font-bold text-white md:text-3xl pl-4">
               Learning Resources
             </p>
           </div>
         }
-        <div className="mt-5 mx-10">
+        <div className="mt-5 mx-10 md:mt-0 md:mx-0">
           {!isSmallScreen &&
             props.treeNode && props.treeNode.resources &&
             props.treeNode.resources.map((r, index) =>
               <table key={`${r.type}-${index}`} className="table-fixed w-full md:mx-4">
                 <tbody>
-                  <tr className="py-10">
-                    <td className="md:w-1/6 font-bold text-right align-middle pr-4 py-2">
+                  <tr>
+                    <td className="md:w-1/6 md:text-xl font-bold text-left align-middle pr-4 py-2">
                       {r.type}
                     </td>
                     <Link href={r.link} target="_blank" rel="noopener noreferrer">
-                      <td className="md:w-5/6 hover:text-blue-500 hover:font-bold align-middle py-4">
+                      <td className="md:w-5/6 hover:text-blue-500 hover:font-bold align-middle py-4 underline">
                         {r.name}
                       </td>
                     </Link>
