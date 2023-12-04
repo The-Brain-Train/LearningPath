@@ -49,6 +49,8 @@ export default function FilterShow() {
               e.target.value === "" ? null : parseInt(e.target.value);
             validateHours(newValue, hoursToFilter) &&
               setHoursFromFilter(newValue);
+            queryClient.setQueryData(["hoursFromFilter"], newValue);
+            queryClient.invalidateQueries(["roadmaps"]);
           }}
           placeholder="From"
           className="rounded-md h-7 w-45 mx-2.5 text-center"
