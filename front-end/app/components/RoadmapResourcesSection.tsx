@@ -6,19 +6,20 @@ import { addResourcesToRoadmap } from "@/app/functions/httpRequests";
 import { requestPromptOnlyResources } from "../functions/chatPreHistory";
 import { getResponseFromOpenAI } from "../functions/openAIChat";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import OpenInNew from "@mui/icons-material/OpenInNew"
+import OpenInNew from "@mui/icons-material/OpenInNew";
 
 type RoadmapResourcesSectionProps = {
-  treeNode: TreeNode | null,
-  userOwnsRoadmap: boolean,
-  queriesToInvalidate: string[],
-  roadmapId: string | undefined,
-  userEmail: string | null | undefined,
-  cookiesUser: string,
+  treeNode: TreeNode | null;
+  userOwnsRoadmap: boolean;
+  queriesToInvalidate: string[];
+  roadmapId: string | undefined;
+  userEmail: string | null | undefined;
+  cookiesUser: string;
 };
 
-export const RoadmapResourcesSection = (props: RoadmapResourcesSectionProps) => {
-
+export const RoadmapResourcesSection = (
+  props: RoadmapResourcesSectionProps
+) => {
   const queryClient = useQueryClient();
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
 
@@ -43,41 +44,49 @@ export const RoadmapResourcesSection = (props: RoadmapResourcesSectionProps) => 
       },
     });
 
-
   return (
     <>
       <div className="pb-12 text-white flex flex-col">
         {((props.userOwnsRoadmap && props.roadmapId) ||
-          props.treeNode && props.treeNode.resources) &&
+          (props.treeNode && props.treeNode.resources)) && (
           <div className="mt-10 flex flex-left">
             <p className="text-xl text-center font-bold text-white md:text-3xl pl-4">
               Learning Resources
             </p>
           </div>
-        }
+        )}
         <div className="mt-5 mx-10 md:mt-0 md:mx-0">
           {!isSmallScreen &&
-            props.treeNode && props.treeNode.resources &&
-            props.treeNode.resources.map((r, index) =>
-              <table key={`${r.type}-${index}`} className="table-fixed w-full md:mx-4">
+            props.treeNode &&
+            props.treeNode.resources &&
+            props.treeNode.resources.map((r, index) => (
+              <table
+                key={`${r.type}-${index}`}
+                className="table-fixed w-full md:mx-4"
+              >
                 <tbody>
                   <tr>
                     <td className="md:w-1/6 md:text-xl font-bold text-left align-middle pr-4 py-2">
                       {r.type}
                     </td>
-                    <Link href={r.link} target="_blank" rel="noopener noreferrer">
-                      <td className="md:w-5/6 hover:text-blue-500 hover:font-bold align-middle py-4 underline">
+
+                    <td className="md:w-5/6 hover:text-blue-500 hover:font-bold align-middle py-4 underline">
+                      <Link
+                        href={r.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         {r.name}
-                      </td>
-                    </Link>
+                      </Link>
+                    </td>
                   </tr>
                 </tbody>
               </table>
-            )
-          }
+            ))}
           {isSmallScreen &&
-            props.treeNode && props.treeNode.resources &&
-            props.treeNode.resources.map((r, index) =>
+            props.treeNode &&
+            props.treeNode.resources &&
+            props.treeNode.resources.map((r, index) => (
               <ul key={`${r.type}-${index}`}>
                 <li className="font-bold list-disc"> {r.type} </li>
                 <li className="pl-2 pb-1">
@@ -87,10 +96,11 @@ export const RoadmapResourcesSection = (props: RoadmapResourcesSectionProps) => 
                   </Link>
                 </li>
               </ul>
-            )
-          }
+            ))}
           {(!props.treeNode || !props.treeNode.resources) &&
-            !generatingResources && props.userOwnsRoadmap && props.roadmapId && (
+            !generatingResources &&
+            props.userOwnsRoadmap &&
+            props.roadmapId && (
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded"
                 onClick={() => handleAddResources()}
@@ -98,17 +108,16 @@ export const RoadmapResourcesSection = (props: RoadmapResourcesSectionProps) => 
                 Add Resources
               </button>
             )}
-          {
-            generatingResources && props.roadmapId &&
+          {generatingResources && props.roadmapId && (
             <div className="flex flex-row items-center">
               <div className="text-left font-bold text-xl text-slate-300 mr-2">
                 Generating Resources
               </div>
               <CircularProgress />
             </div>
-          }
+          )}
         </div>
       </div>
     </>
-  )
-}
+  );
+};
