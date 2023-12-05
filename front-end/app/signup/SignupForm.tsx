@@ -5,7 +5,6 @@ import "react-toastify/dist/ReactToastify.css";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -25,19 +24,27 @@ export type SignUpFormType = {
   password: string;
 };
 
+type SignUpErrorsType = {
+  name: string | null;
+  email: string | null;
+  password: string | null;
+  passwordConfirmation: string | null;
+  generic: string | null;
+};
+
 const SignupForm = () => {
   const [formData, setFormData] = useState<SignUpFormType>({
     name: "",
     email: "",
     password: "",
   });
-  const [genericError, setGenericError] = useState<string | null>(null);
-  const [nameError, setNameError] = useState<string | null>(null);
-  const [emailError, setEmailError] = useState<string | null>(null);
-  const [passwordError, setPasswordError] = useState<string | null>(null);
-  const [passwordConfirmationError, setPasswordConfirmationError] = useState<
-    string | null
-  >(null);
+  const [validationErrors, setValidationErrors] = useState<SignUpErrorsType>({
+    name: null,
+    email: null,
+    password: null,
+    passwordConfirmation: null,
+    generic: null,
+  });
 
   const router = useRouter();
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
@@ -82,10 +89,6 @@ const SignupForm = () => {
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    setNameError(null);
-    setEmailError(null);
-    setPasswordError(null);
-    setPasswordConfirmationError(null);
 
     try {
       validateSignUpForm(formData, passwordConfirmation);
@@ -100,34 +103,27 @@ const SignupForm = () => {
     } catch (error: any) {
       if (error.message.includes("|")) {
         const [fieldName, errorMessage] = error.message.split("|");
-        switch (fieldName) {
-          case "name":
-            setNameError(errorMessage);
-            break;
-          case "email":
-            setEmailError(errorMessage);
-            break;
-          case "password":
-            setPasswordError(errorMessage);
-            break;
-          case "passwordConfirmation":
-            setPasswordConfirmationError(errorMessage);
-            break;
-          default:
-            setGenericError(errorMessage);
-            break;
-        }
+        setValidationErrors((prevErrors) => ({
+          ...prevErrors,
+          [fieldName]: errorMessage,
+        }));
+
         setTimeout(() => {
-          setNameError(null);
-          setEmailError(null);
-          setPasswordError(null);
-          setPasswordConfirmationError(null);
-          setGenericError(null);
-        }, 5000);
+          setValidationErrors((prevErrors) => ({
+            ...prevErrors,
+            [fieldName]: null,
+          }));
+        }, 3000);
       } else {
-        setGenericError(error.message);
+        setValidationErrors((prevErrors) => ({
+          ...prevErrors,
+          generic: error.message,
+        }));
         setTimeout(() => {
-          setGenericError(null);
+          setValidationErrors((prevErrors) => ({
+            ...prevErrors,
+            generic: null,
+          }));
         }, 5000);
       }
       return;
@@ -148,15 +144,12 @@ const SignupForm = () => {
           component="form"
           noValidate
           onSubmit={handleSubmit}
-          sx={{ mt: 1, maxWidth: 520 }}
+          sx={{ mt: 1, width:"100%", maxWidth: 575 }}
         >
           <SignupFormFields
             formData={formData}
-            nameError={nameError}
-            emailError={emailError}
-            passwordError={passwordError}
+            validationErrors={validationErrors}
             passwordConfirmation={passwordConfirmation} 
-            passwordConfirmationError={passwordConfirmationError}
             handleInputChange={handleInputChange}
             handlePasswordChange={handlePasswordChange}
             handlePasswordConfirmationChange={handlePasswordConfirmationChange}
@@ -172,9 +165,9 @@ const SignupForm = () => {
           >
             Sign Up
           </Button>
-          {genericError && (
+          {validationErrors.generic && (
             <Alert severity="error" variant="filled">
-              {genericError}
+              {validationErrors.generic}
             </Alert>
           )}
           <ToastContainer />

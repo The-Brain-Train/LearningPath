@@ -21,7 +21,7 @@ export type SignInFormType = {
   password: string;
 };
 
-type ErrorType = {
+type SignInErrorsType = {
   email: string | null;
   password: string | null;
   generic: string | null;
@@ -32,7 +32,7 @@ const SigninForm = () => {
     email: "",
     password: "",
   });
-  const [errors, setErrors] = useState<ErrorType>({
+  const [validationErrors, setValidtaionErrors] = useState<SignInErrorsType>({
     email: null,
     password: null,
     generic: null,
@@ -68,24 +68,23 @@ const SigninForm = () => {
     } catch (error: any) {
       if (error.message.includes("|")) {
         const [fieldName, errorMessage] = error.message.split("|");
-        setErrors((prevErrors) => ({
+        setValidtaionErrors((prevErrors) => ({
           ...prevErrors,
           [fieldName]: errorMessage,
         }));
-
         setTimeout(() => {
-          setErrors((prevErrors) => ({
+          setValidtaionErrors((prevErrors) => ({
             ...prevErrors,
             [fieldName]: null,
           }));
         }, 3000);
       } else {
-        setErrors((prevErrors) => ({
+        setValidtaionErrors((prevErrors) => ({
           ...prevErrors,
           generic: error.message,
         }));
         setTimeout(() => {
-          setErrors((prevErrors) => ({
+          setValidtaionErrors((prevErrors) => ({
             ...prevErrors,
             generic: null,
           }));
@@ -109,7 +108,7 @@ const SigninForm = () => {
           component="form"
           onSubmit={handleSubmit}
           noValidate
-          sx={{ mt: 1, maxWidth: 520 }}
+          sx={{ mt: 1, width:"100%", maxWidth: 575 }}
         >
           <TextField
             margin="normal"
@@ -122,7 +121,7 @@ const SigninForm = () => {
             onChange={handleInputChange}
             value={formData.email}
             autoFocus
-            error={Boolean(errors.email)}
+            error={Boolean(validationErrors.email)}
             InputProps={{
               style: { color: "white" },
             }}
@@ -135,13 +134,16 @@ const SigninForm = () => {
               },
             }}
           />
-          {errors.email && (
+          {validationErrors.email && (
             <Alert
               severity="error"
               variant="filled"
-              className="min-w-full inline-flex"
+              sx={{
+                width: "100%",
+                display: "inline-flex"
+              }}
             >
-              {errors.email}
+              {validationErrors.email}
             </Alert>
           )}
           <TextField
@@ -154,7 +156,7 @@ const SigninForm = () => {
             id="password"
             onChange={handleInputChange}
             value={formData.password}
-            error={Boolean(errors.password)}
+            error={Boolean(validationErrors.password)}
             autoComplete="current-password"
             InputProps={{
               style: { color: "white" },
@@ -168,13 +170,17 @@ const SigninForm = () => {
               },
             }}
           />
-          {errors.password && (
+          {validationErrors.password && (
             <Alert
               severity="error"
               variant="filled"
               className="min-w-full inline-flex"
+              sx={{
+                width: "100%",
+                display: "inline-flex"
+              }}
             >
-              {errors.password}
+              {validationErrors.password}
             </Alert>
           )}
           <Button
@@ -185,13 +191,17 @@ const SigninForm = () => {
           >
             Sign In
           </Button>
-          {errors.generic && (
+          {validationErrors.generic && (
             <Alert
               severity="error"
               variant="filled"
               className="min-w-full inline-flex"
+              sx={{
+                width: "100%",
+                display: "inline-flex"
+              }}
             >
-              {errors.generic}
+              {validationErrors.generic}
             </Alert>
           )}
           <Grid container>
