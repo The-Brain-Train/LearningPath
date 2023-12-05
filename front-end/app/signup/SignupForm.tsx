@@ -147,7 +147,7 @@ const SignupForm = () => {
           component="form"
           noValidate
           onSubmit={handleSubmit}
-          sx={{ mt: 1, maxWidth: 575 }}
+          sx={{ mt: 1, maxWidth: 520 }}
         >
           <TextField
             margin="normal"

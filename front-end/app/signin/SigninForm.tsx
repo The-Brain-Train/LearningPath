@@ -26,7 +26,10 @@ const SigninForm = () => {
     email: "",
     password: "",
   });
-  const [error, setError] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [genericError, setGenericError] = useState<string | null>(null);
+
   const [cookies, setCookie] = useCookies(["user"]);
   const router = useRouter();
 
@@ -46,7 +49,6 @@ const SigninForm = () => {
     try {
       validateSignInForm(formData);
       const token = await signIn(formData);
-      setError(null);
       setCookie("user", token, {
         path: "/",
       });
@@ -56,10 +58,30 @@ const SigninForm = () => {
         router.back();
       }
     } catch (error: any) {
-      setError(error.message);
-      setTimeout(() => {
-        setError(null);
-      }, 3000);
+      if (error.message.includes("|")) {
+        const [fieldName, errorMessage] = error.message.split("|");
+        switch (fieldName) {
+          case "email":
+            setEmailError(errorMessage);
+            break;
+          case "password":
+            setPasswordError(errorMessage);
+            break;
+          default:
+            setGenericError(errorMessage);
+            break;
+        }
+        setTimeout(() => {
+          setEmailError(null);
+          setPasswordError(null);
+          setGenericError(null);
+        }, 3000);
+      } else {
+        setGenericError(error.message);
+        setTimeout(() => {
+          setGenericError(null);
+        }, 5000);
+      }
       return;
     }
   };
@@ -74,58 +96,70 @@ const SigninForm = () => {
         <Typography className="text-white" component="h2" variant="h5">
           Sign in
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <div>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              onChange={handleInputChange}
-              value={formData.email}
-              autoFocus
-              InputProps={{
-                style: { color: "white" },
-              }}
-              InputLabelProps={{
-                style: { color: "white" },
-              }}
-              sx={{
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "white",
-                },
-              }}
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              onChange={handleInputChange}
-              value={formData.password}
-              autoComplete="current-password"
-              InputProps={{
-                style: { color: "white" },
-              }}
-              InputLabelProps={{
-                style: { color: "white" },
-              }}
-              sx={{
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "white",
-                },
-              }}
-            />
-            {error && (
-              <Alert severity="error" variant="filled">{error}</Alert>
-            )}
-          </div>
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          noValidate
+          sx={{ mt: 1, maxWidth: 520 }}
+        >
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            onChange={handleInputChange}
+            value={formData.email}
+            autoFocus
+            error={Boolean(emailError)}
+            InputProps={{
+              style: { color: "white" },
+            }}
+            InputLabelProps={{
+              style: { color: "white" },
+            }}
+            sx={{
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: "white",
+              },
+            }}
+          />
+          {emailError && (
+            <Alert severity="error" variant="filled" className="min-w-full inline-flex">
+              {emailError}
+            </Alert>
+          )}
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            onChange={handleInputChange}
+            value={formData.password}
+            error={Boolean(passwordError)}
+            autoComplete="current-password"
+            InputProps={{
+              style: { color: "white" },
+            }}
+            InputLabelProps={{
+              style: { color: "white" },
+            }}
+            sx={{
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: "white",
+              },
+            }}
+          />
+          {passwordError && (
+            <Alert severity="error" variant="filled" className="min-w-full inline-flex">
+              {passwordError}
+            </Alert>
+          )}
           <Button
             type="submit"
             fullWidth
@@ -134,6 +168,11 @@ const SigninForm = () => {
           >
             Sign In
           </Button>
+          {genericError && (
+            <Alert severity="error" variant="filled" className="min-w-full inline-flex">
+              {genericError}
+            </Alert>
+          )}
           <Grid container>
             <Grid item>
               <Link
@@ -149,7 +188,7 @@ const SigninForm = () => {
                 <span className="text-blue-500 font-bold">Sign up</span>
               </Link>
             </Grid>
-          </Grid>
+          </Grid>      
         </Box>
       </Box>
     </Container>
