@@ -5,7 +5,6 @@ import "react-toastify/dist/ReactToastify.css";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -114,7 +113,7 @@ const SignupForm = () => {
             ...prevErrors,
             [fieldName]: null,
           }));
-        }, 5000);
+        }, 3000);
       } else {
         setValidationErrors((prevErrors) => ({
           ...prevErrors,
@@ -145,7 +144,7 @@ const SignupForm = () => {
           component="form"
           noValidate
           onSubmit={handleSubmit}
-          sx={{ mt: 1, maxWidth: 520 }}
+          sx={{ mt: 1, width:"100%", maxWidth: 575 }}
         >
           <SignupFormFields
             formData={formData}

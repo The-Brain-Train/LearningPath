@@ -72,13 +72,12 @@ const SigninForm = () => {
           ...prevErrors,
           [fieldName]: errorMessage,
         }));
-
         setTimeout(() => {
           setValidtaionErrors((prevErrors) => ({
             ...prevErrors,
             [fieldName]: null,
           }));
-        }, 5000);
+        }, 3000);
       } else {
         setValidtaionErrors((prevErrors) => ({
           ...prevErrors,
@@ -109,7 +108,7 @@ const SigninForm = () => {
           component="form"
           onSubmit={handleSubmit}
           noValidate
-          sx={{ mt: 1, maxWidth: 520 }}
+          sx={{ mt: 1, width:"100%", maxWidth: 575 }}
         >
           <TextField
             margin="normal"
@@ -139,7 +138,10 @@ const SigninForm = () => {
             <Alert
               severity="error"
               variant="filled"
-              className="min-w-full inline-flex"
+              sx={{
+                width: "100%",
+                display: "inline-flex"
+              }}
             >
               {validationErrors.email}
             </Alert>
@@ -173,6 +175,10 @@ const SigninForm = () => {
               severity="error"
               variant="filled"
               className="min-w-full inline-flex"
+              sx={{
+                width: "100%",
+                display: "inline-flex"
+              }}
             >
               {validationErrors.password}
             </Alert>
@@ -190,6 +196,10 @@ const SigninForm = () => {
               severity="error"
               variant="filled"
               className="min-w-full inline-flex"
+              sx={{
+                width: "100%",
+                display: "inline-flex"
+              }}
             >
               {validationErrors.generic}
             </Alert>
