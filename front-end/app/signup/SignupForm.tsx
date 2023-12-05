@@ -15,8 +15,9 @@ import Container from "@mui/material/Container";
 import { useRouter } from "next/navigation";
 import { validateSignUpForm } from "../functions/validations";
 import { signUp } from "../functions/httpRequests";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Alert } from "@mui/material";
+import PasswordRequirements from "./PasswordRequirements";
+import SignupFormFields from "./SignupFormFields";
 
 export type SignUpFormType = {
   name: string;
@@ -149,194 +150,20 @@ const SignupForm = () => {
           onSubmit={handleSubmit}
           sx={{ mt: 1, maxWidth: 520 }}
         >
-          <TextField
-            margin="normal"
-            autoComplete="given-name"
-            name="name"
-            required
-            fullWidth
-            id="name"
-            label="Name"
-            onChange={handleInputChange}
-            autoFocus
-            value={formData.name}
-            error={Boolean(nameError)}
-            InputProps={{
-              style: { color: "white" },
-            }}
-            InputLabelProps={{
-              style: { color: "white" },
-            }}
-            sx={{
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "white",
-              },
-            }}
+          <SignupFormFields
+            formData={formData}
+            nameError={nameError}
+            emailError={emailError}
+            passwordError={passwordError}
+            passwordConfirmation={passwordConfirmation} 
+            passwordConfirmationError={passwordConfirmationError}
+            handleInputChange={handleInputChange}
+            handlePasswordChange={handlePasswordChange}
+            handlePasswordConfirmationChange={handlePasswordConfirmationChange}
           />
-          {nameError && (
-            <Alert severity="error" variant="filled" className="min-w-full inline-flex">
-              {nameError}
-            </Alert>
-          )}
-
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            onChange={handleInputChange}
-            value={formData.email}
-            error={Boolean(emailError)}
-            InputProps={{
-              style: { color: "white" },
-            }}
-            InputLabelProps={{
-              style: { color: "white" },
-            }}
-            sx={{
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "white",
-              },
-            }}
+          <PasswordRequirements
+            validationChecks={validationChecks}
           />
-          {emailError && (
-            <Alert severity="error" variant="filled" className="min-w-full inline-flex">
-              {emailError}
-            </Alert>
-          )} 
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="new-password"
-            onChange={handlePasswordChange}
-            value={formData.password}
-            error={Boolean(passwordError)}
-            InputProps={{
-              style: { color: "white" },
-            }}
-            InputLabelProps={{
-              style: { color: "white" },
-            }}
-            sx={{
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "white",
-              },
-            }}
-          />
-          {passwordError && (
-            <Alert severity="error" variant="filled" className="min-w-full inline-flex">
-              {passwordError}
-            </Alert>
-          )}
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="passwordConfirmation"
-            label="Confirm Password"
-            type="password"
-            id="passwordConfirmation"
-            autoComplete="new-password"
-            onChange={handlePasswordConfirmationChange}
-            value={passwordConfirmation}
-            error={Boolean(passwordConfirmationError)}
-            InputProps={{
-              style: { color: "white" },
-            }}
-            InputLabelProps={{
-              style: { color: "white" },
-            }}
-            sx={{
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "white",
-              },
-            }}
-          />
-          {passwordConfirmationError && (
-            <Alert severity="error" variant="filled" className="min-w-full inline-flex">
-              {passwordConfirmationError}
-            </Alert>
-          )}
-          <div>
-            <Typography variant="body2" className="text-white font-semibold">
-              Password Requirements
-            </Typography>
-            <ul className="text-white text-xs">
-              <li>
-                {validationChecks.uppercase ? (
-                  <>
-                    <CheckCircleIcon sx={{ color: "#0e9f6e", fontSize: 15 }} />{" "}
-                    At least one Uppercase letter
-                  </>
-                ) : (
-                  <>
-                    <CheckCircleIcon sx={{ color: "gray", fontSize: 15 }} /> At
-                    least one Uppercase letter
-                  </>
-                )}
-              </li>
-              <li>
-                {validationChecks.lowercase ? (
-                  <>
-                    <CheckCircleIcon sx={{ color: "#0e9f6e", fontSize: 15 }} />{" "}
-                    At least one Lowercase letter
-                  </>
-                ) : (
-                  <>
-                    <CheckCircleIcon sx={{ color: "gray", fontSize: 15 }} /> At
-                    least one Lowercase letter
-                  </>
-                )}
-              </li>
-              <li>
-                {validationChecks.number ? (
-                  <>
-                    <CheckCircleIcon sx={{ color: "#0e9f6e", fontSize: 15 }} />{" "}
-                    At least one Number
-                  </>
-                ) : (
-                  <>
-                    <CheckCircleIcon sx={{ color: "gray", fontSize: 15 }} /> At
-                    least one Number
-                  </>
-                )}
-              </li>
-              <li>
-                {validationChecks.specialChar ? (
-                  <>
-                    <CheckCircleIcon sx={{ color: "#0e9f6e", fontSize: 15 }} />{" "}
-                    At least one Special character e.g.: @#$%^&+=*!-
-                  </>
-                ) : (
-                  <>
-                    <CheckCircleIcon sx={{ color: "gray", fontSize: 15 }} /> At
-                    least one Special character e.g.: @#$%^&+=*!-
-                  </>
-                )}
-              </li>
-              <li>
-                {validationChecks.minLength ? (
-                  <>
-                    <CheckCircleIcon sx={{ color: "#0e9f6e", fontSize: 15 }} />{" "}
-                    At least 8 characters
-                  </>
-                ) : (
-                  <>
-                    <CheckCircleIcon sx={{ color: "gray", fontSize: 15 }} /> At
-                    least 8 characters
-                  </>
-                )}
-              </li>
-            </ul>
-          </div>
           <Button
             type="submit"
             fullWidth
