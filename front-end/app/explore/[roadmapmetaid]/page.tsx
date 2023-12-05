@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import IndentedTreeWithData from "@/app/explore/[roadmapmetaid]/IndentedTreeWithData";
 import {
   addRoadmapMetaToUserFavorites,
@@ -10,10 +10,17 @@ import {
   updateUsersCompletedTopic,
   getRoadmapProgressOfUser,
 } from "@/app/functions/httpRequests";
-import { ArrowBack, Share } from "@mui/icons-material";
+import { ArrowBack, Share} from "@mui/icons-material";
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
+
 import { useRouter } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Box, CircularProgress, IconButton, LinearProgress } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  IconButton,
+  LinearProgress,
+} from "@mui/material";
 import useCurrentUserQuery from "@/app/functions/useCurrentUserQuery";
 import { useCookies } from "react-cookie";
 import {
@@ -26,6 +33,7 @@ import { FavoriteButton } from "./FavoriteButton";
 import { RoadmapResourcesSection } from "../../components/RoadmapResourcesSection";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import CircularProgressWithLabel from "../../components/CircularProgressWithLabel";
+import { Download as DownloadIcon } from "@mui/icons-material";
 
 type Props = {
   params: {
@@ -40,9 +48,37 @@ function RoadMapId(props: Props) {
   const [cookies] = useCookies(["user"]);
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
 
-  const {
-    data: roadmapMetas,
-  } = useQuery<RoadmapMetaList>(["roadmapMetas"], getRoadmaps);
+
+  const downloadRoadmap = () => {
+    const roadmapData = JSON.stringify(roadmap, null, 2);
+    const blob = new Blob([roadmapData], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "roadmap.json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+
+  const [scrollToResources, setScrollToResources] = useState(false);
+
+  const handleScrollToResources = () => {
+    setScrollToResources(true);
+    const resourcesSection = document.getElementById("resources-section");
+
+    if (resourcesSection) {
+      resourcesSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const { data: roadmapMetas } = useQuery<RoadmapMetaList>(
+    ["roadmapMetas"],
+    getRoadmaps
+  );
 
   const { currentUser } = useCurrentUserQuery();
 
@@ -70,7 +106,6 @@ function RoadMapId(props: Props) {
           text: `Check out this roadmap on LearningPath: ${roadmapMeta?.name}`,
           url: window.location.href,
         });
-        
       } catch (error) {
         console.error("Error sharing:", error);
       }
@@ -141,12 +176,13 @@ function RoadMapId(props: Props) {
           console.error("Permission denied: User is not the creator");
           return;
         }
-        const updatedRoadmap: Roadmap | undefined = await updateUsersCompletedTopic(
-          currentUser.email,
-          roadmapMetaId,
-          completedTask,
-          cookies.user
-        );
+        const updatedRoadmap: Roadmap | undefined =
+          await updateUsersCompletedTopic(
+            currentUser.email,
+            roadmapMetaId,
+            completedTask,
+            cookies.user
+          );
         queryClient.invalidateQueries(["roadmap", roadmapMetaId]);
         queryClient.invalidateQueries([`progressPercentage-${roadmapMetaId}`]);
         return updatedRoadmap;
@@ -158,7 +194,8 @@ function RoadMapId(props: Props) {
 
   const { data: progressPercentage } = useQuery<number>(
     [`progressPercentage-${roadmapMetaId}`],
-    () => getRoadmapProgressOfUser(currentUser?.email, roadmapMetaId, cookies.user),
+    () =>
+      getRoadmapProgressOfUser(currentUser?.email, roadmapMetaId, cookies.user),
     {
       enabled: !!currentUser,
     }
@@ -218,31 +255,54 @@ function RoadMapId(props: Props) {
             <IconButton onClick={handleShare}>
               <Share />
             </IconButton>
-            {currentUser && userOwnsRoadmap() && (
-              !isSmallScreen ? (
+            <IconButton onClick={downloadRoadmap}>
+              <DownloadIcon />
+            </IconButton>
+            <IconButton onClick={handleScrollToResources}>
+              <LibraryBooksIcon />
+            </IconButton>
+
+            {currentUser &&
+              userOwnsRoadmap() &&
+              (!isSmallScreen ? (
                 <div className="w-1/2 items-center justify-center mx-4">
-                  <p className="text-white pb-2">Progress: {progressPercentage}%</p>
-                  <LinearProgress variant="determinate" value={progressPercentage !== undefined ? progressPercentage : 0} className="w-full" />
-                </div>) : (
-                <div className="items-center justify-center mx-6">
-                  <CircularProgressWithLabel value={progressPercentage !== undefined ? progressPercentage : 0} size={50} />
+                  <p className="text-white pb-2">
+                    Progress: {progressPercentage}%
+                  </p>
+                  <LinearProgress
+                    variant="determinate"
+                    value={
+                      progressPercentage !== undefined ? progressPercentage : 0
+                    }
+                    className="w-full"
+                  />
                 </div>
-              )
-            )}
+              ) : (
+                <div className="items-center justify-center mx-6">
+                  <CircularProgressWithLabel
+                    value={
+                      progressPercentage !== undefined ? progressPercentage : 0
+                    }
+                    size={50}
+                  />
+                </div>
+              ))}
           </div>
           <IndentedTreeWithData
             data={roadmapToTreeNode(roadmap)}
             updateCompletedTopic={handleUpdateUsersCompletedTopic}
             isCreator={userOwnsRoadmap()}
           />
-          <RoadmapResourcesSection
-            treeNode={treeNode}
-            userOwnsRoadmap={userOwnsRoadmap()}
-            queriesToInvalidate={["roadmap"]}
-            roadmapId={roadmapMetaId}
-            userEmail={currentUser?.email}
-            cookiesUser={cookies.user}
-          />
+          <div id="resources-section">
+            <RoadmapResourcesSection
+              treeNode={treeNode}
+              userOwnsRoadmap={userOwnsRoadmap()}
+              queriesToInvalidate={["roadmap"]}
+              roadmapId={roadmapMetaId}
+              userEmail={currentUser?.email}
+              cookiesUser={cookies.user}
+            />
+          </div>
         </div>
       </div>
     </main>
