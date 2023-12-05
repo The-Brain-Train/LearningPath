@@ -21,14 +21,22 @@ export type SignInFormType = {
   password: string;
 };
 
+type ErrorType = {
+  email: string | null;
+  password: string | null;
+  generic: string | null;
+};
+
 const SigninForm = () => {
   const [formData, setFormData] = useState<SignInFormType>({
     email: "",
     password: "",
   });
-  const [emailError, setEmailError] = useState<string | null>(null);
-  const [passwordError, setPasswordError] = useState<string | null>(null);
-  const [genericError, setGenericError] = useState<string | null>(null);
+  const [errors, setErrors] = useState<ErrorType>({
+    email: null,
+    password: null,
+    generic: null,
+  });
 
   const [cookies, setCookie] = useCookies(["user"]);
   const router = useRouter();
@@ -60,26 +68,27 @@ const SigninForm = () => {
     } catch (error: any) {
       if (error.message.includes("|")) {
         const [fieldName, errorMessage] = error.message.split("|");
-        switch (fieldName) {
-          case "email":
-            setEmailError(errorMessage);
-            break;
-          case "password":
-            setPasswordError(errorMessage);
-            break;
-          default:
-            setGenericError(errorMessage);
-            break;
-        }
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [fieldName]: errorMessage,
+        }));
+
         setTimeout(() => {
-          setEmailError(null);
-          setPasswordError(null);
-          setGenericError(null);
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            [fieldName]: null,
+          }));
         }, 3000);
       } else {
-        setGenericError(error.message);
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          generic: error.message,
+        }));
         setTimeout(() => {
-          setGenericError(null);
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            generic: null,
+          }));
         }, 5000);
       }
       return;
@@ -113,7 +122,7 @@ const SigninForm = () => {
             onChange={handleInputChange}
             value={formData.email}
             autoFocus
-            error={Boolean(emailError)}
+            error={Boolean(errors.email)}
             InputProps={{
               style: { color: "white" },
             }}
@@ -126,9 +135,13 @@ const SigninForm = () => {
               },
             }}
           />
-          {emailError && (
-            <Alert severity="error" variant="filled" className="min-w-full inline-flex">
-              {emailError}
+          {errors.email && (
+            <Alert
+              severity="error"
+              variant="filled"
+              className="min-w-full inline-flex"
+            >
+              {errors.email}
             </Alert>
           )}
           <TextField
@@ -141,7 +154,7 @@ const SigninForm = () => {
             id="password"
             onChange={handleInputChange}
             value={formData.password}
-            error={Boolean(passwordError)}
+            error={Boolean(errors.password)}
             autoComplete="current-password"
             InputProps={{
               style: { color: "white" },
@@ -155,9 +168,13 @@ const SigninForm = () => {
               },
             }}
           />
-          {passwordError && (
-            <Alert severity="error" variant="filled" className="min-w-full inline-flex">
-              {passwordError}
+          {errors.password && (
+            <Alert
+              severity="error"
+              variant="filled"
+              className="min-w-full inline-flex"
+            >
+              {errors.password}
             </Alert>
           )}
           <Button
@@ -168,9 +185,13 @@ const SigninForm = () => {
           >
             Sign In
           </Button>
-          {genericError && (
-            <Alert severity="error" variant="filled" className="min-w-full inline-flex">
-              {genericError}
+          {errors.generic && (
+            <Alert
+              severity="error"
+              variant="filled"
+              className="min-w-full inline-flex"
+            >
+              {errors.generic}
             </Alert>
           )}
           <Grid container>
@@ -188,7 +209,7 @@ const SigninForm = () => {
                 <span className="text-blue-500 font-bold">Sign up</span>
               </Link>
             </Grid>
-          </Grid>      
+          </Grid>
         </Box>
       </Box>
     </Container>
