@@ -75,7 +75,7 @@ function RoadMapId(props: Props) {
         console.error("Error sharing:", error);
       }
     } else {
-      console.log("Web Share API not supported");
+      prompt("Copy the following URL:", window.location.href);
     }
   };
 
