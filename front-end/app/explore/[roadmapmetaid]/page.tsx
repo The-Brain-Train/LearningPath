@@ -10,10 +10,10 @@ import {
   updateUsersCompletedTopic,
   getRoadmapProgressOfUser,
 } from "@/app/functions/httpRequests";
-import { ArrowBack } from "@mui/icons-material";
+import { ArrowBack, Share } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Box, CircularProgress, LinearProgress } from "@mui/material";
+import { Box, CircularProgress, IconButton, LinearProgress } from "@mui/material";
 import useCurrentUserQuery from "@/app/functions/useCurrentUserQuery";
 import { useCookies } from "react-cookie";
 import {
@@ -60,6 +60,24 @@ function RoadMapId(props: Props) {
       enabled: !!currentUser,
     }
   );
+
+  const handleShare = async () => {
+    const roadmapMeta: RoadmapMeta | undefined = findRoadmapMeta(roadmapMetaId);
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: document.title,
+          text: `Check out this roadmap on LearningPath: ${roadmapMeta?.name}`,
+          url: window.location.href,
+        });
+        
+      } catch (error) {
+        console.error("Error sharing:", error);
+      }
+    } else {
+      console.log("Web Share API not supported");
+    }
+  };
 
   const {
     data: roadmap,
@@ -197,6 +215,9 @@ function RoadMapId(props: Props) {
                 />
               )}
             </div>
+            <IconButton onClick={handleShare}>
+              <Share />
+            </IconButton>
             {currentUser && userOwnsRoadmap() && (
               !isSmallScreen ? (
                 <div className="w-1/2 items-center justify-center mx-4">
