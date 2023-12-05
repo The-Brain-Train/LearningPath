@@ -116,6 +116,13 @@ const SignupForm = () => {
             setGenericError(errorMessage);
             break;
         }
+        setTimeout(() => {
+          setNameError(null);
+          setEmailError(null);
+          setPasswordError(null);
+          setPasswordConfirmationError(null);
+          setGenericError(null);
+        }, 5000);
       } else {
         setGenericError(error.message);
         setTimeout(() => {
@@ -140,7 +147,7 @@ const SignupForm = () => {
           component="form"
           noValidate
           onSubmit={handleSubmit}
-          className="max-w-xl"
+          sx={{ mt: 1, maxWidth: 575 }}
         >
           <TextField
             margin="normal"
@@ -167,8 +174,11 @@ const SignupForm = () => {
             }}
           />
           {nameError && (
-            <Alert severity="error" variant="filled">{nameError}</Alert>
+            <Alert severity="error" variant="filled" className="min-w-full inline-flex">
+              {nameError}
+            </Alert>
           )}
+
           <TextField
             margin="normal"
             required
@@ -193,8 +203,10 @@ const SignupForm = () => {
             }}
           />
           {emailError && (
-            <Alert severity="error" variant="filled">{emailError}</Alert>
-          )}
+            <Alert severity="error" variant="filled" className="min-w-full inline-flex">
+              {emailError}
+            </Alert>
+          )} 
           <TextField
             margin="normal"
             required
@@ -220,7 +232,9 @@ const SignupForm = () => {
             }}
           />
           {passwordError && (
-            <Alert severity="error" variant="filled">{passwordError}</Alert>
+            <Alert severity="error" variant="filled" className="min-w-full inline-flex">
+              {passwordError}
+            </Alert>
           )}
           <TextField
             margin="normal"
@@ -247,7 +261,9 @@ const SignupForm = () => {
             }}
           />
           {passwordConfirmationError && (
-            <Alert severity="error" variant="filled">{passwordConfirmationError}</Alert>
+            <Alert severity="error" variant="filled" className="min-w-full inline-flex">
+              {passwordConfirmationError}
+            </Alert>
           )}
           <div>
             <Typography variant="body2" className="text-white font-semibold">
@@ -330,7 +346,9 @@ const SignupForm = () => {
             Sign Up
           </Button>
           {genericError && (
-            <Alert severity="error" variant="filled">{genericError}</Alert>
+            <Alert severity="error" variant="filled">
+              {genericError}
+            </Alert>
           )}
           <ToastContainer />
           <Grid container justifyContent="flex-start">
