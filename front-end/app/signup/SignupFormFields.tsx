@@ -4,13 +4,17 @@ import TextField from "@mui/material/TextField";
 import { Alert } from "@mui/material";
 import { SignUpFormType } from "./SignupForm";
 
+type SignUpErrorProps = {
+  name: string | null;
+  email: string | null;
+  password: string | null;
+  passwordConfirmation: string | null;
+};
+
 interface SignupFormFieldsProps {
   formData: SignUpFormType;
-  nameError: string | null;
-  emailError: string | null;
-  passwordError: string | null;
+  validationErrors: SignUpErrorProps
   passwordConfirmation: string;
-  passwordConfirmationError: string | null;
   handleInputChange: (e: { target: { name: any; value: any } }) => void;
   handlePasswordChange: (e: { target: { value: string } }) => void;
   handlePasswordConfirmationChange: (e: { target: { value: any } }) => void;
@@ -18,11 +22,8 @@ interface SignupFormFieldsProps {
 
 const SignupFormFields: React.FC<SignupFormFieldsProps> = ({
   formData,
-  nameError,
-  emailError,
-  passwordError,
+  validationErrors,
   passwordConfirmation,
-  passwordConfirmationError,
   handleInputChange,
   handlePasswordChange,
   handlePasswordConfirmationChange,
@@ -40,7 +41,7 @@ const SignupFormFields: React.FC<SignupFormFieldsProps> = ({
         onChange={handleInputChange}
         autoFocus
         value={formData.name}
-        error={Boolean(nameError)}
+        error={Boolean(validationErrors.name)}
         InputProps={{
           style: { color: "white" },
         }}
@@ -53,7 +54,7 @@ const SignupFormFields: React.FC<SignupFormFieldsProps> = ({
           },
         }}
       />
-      {nameError && <Alert severity="error" variant="filled">{nameError}</Alert>}
+      {validationErrors.name && <Alert severity="error" variant="filled">{validationErrors.name}</Alert>}
 
       <TextField
         margin="normal"
@@ -65,7 +66,7 @@ const SignupFormFields: React.FC<SignupFormFieldsProps> = ({
         autoComplete="email"
         onChange={handleInputChange}
         value={formData.email}
-        error={Boolean(emailError)}
+        error={Boolean(validationErrors.email)}
         InputProps={{
           style: { color: "white" },
         }}
@@ -78,7 +79,7 @@ const SignupFormFields: React.FC<SignupFormFieldsProps> = ({
           },
         }}
       />
-      {emailError && <Alert severity="error" variant="filled">{emailError}</Alert>}
+      {validationErrors.email && <Alert severity="error" variant="filled">{validationErrors.email}</Alert>}
 
       <TextField
         margin="normal"
@@ -91,7 +92,7 @@ const SignupFormFields: React.FC<SignupFormFieldsProps> = ({
         autoComplete="new-password"
         onChange={handlePasswordChange}
         value={formData.password}
-        error={Boolean(passwordError)}
+        error={Boolean(validationErrors.password)}
         InputProps={{
           style: { color: "white" },
         }}
@@ -104,7 +105,7 @@ const SignupFormFields: React.FC<SignupFormFieldsProps> = ({
           },
         }}
       />
-      {passwordError && <Alert severity="error" variant="filled">{passwordError}</Alert>}
+      {validationErrors.password && <Alert severity="error" variant="filled">{validationErrors.password}</Alert>}
 
       <TextField
         margin="normal"
@@ -117,7 +118,7 @@ const SignupFormFields: React.FC<SignupFormFieldsProps> = ({
         autoComplete="new-password"
         onChange={handlePasswordConfirmationChange}
         value={passwordConfirmation} 
-        error={Boolean(passwordConfirmationError)}
+        error={Boolean(validationErrors.passwordConfirmation)}
         InputProps={{
           style: { color: "white" },
         }}
@@ -130,7 +131,7 @@ const SignupFormFields: React.FC<SignupFormFieldsProps> = ({
           },
         }}
       />
-      {passwordConfirmationError && <Alert severity="error" variant="filled">{passwordConfirmationError}</Alert>}
+      {validationErrors.passwordConfirmation && <Alert severity="error" variant="filled">{validationErrors.passwordConfirmation}</Alert>}
     </>
   );
 };
