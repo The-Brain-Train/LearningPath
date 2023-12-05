@@ -201,10 +201,10 @@ function RoadMapId(props: Props) {
               !isSmallScreen ? (
                 <div className="w-1/2 items-center justify-center mx-4">
                   <p className="text-white pb-2">Progress: {progressPercentage}%</p>
-                  <LinearProgress variant="determinate" value={progressPercentage} className="w-full" />
+                  <LinearProgress variant="determinate" value={progressPercentage !== undefined ? progressPercentage : 0} className="w-full" />
                 </div>) : (
                 <div className="items-center justify-center mx-6">
-                  <CircularProgressWithLabel value={progressPercentage} size={50} />
+                  <CircularProgressWithLabel value={progressPercentage !== undefined ? progressPercentage : 0} size={50} />
                 </div>
               )
             )}

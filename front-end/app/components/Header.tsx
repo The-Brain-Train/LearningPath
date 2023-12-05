@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useCookies } from "react-cookie";
 import jwtDecode from "jwt-decode";
 import { User } from "../util/types";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getUserProfilePicture } from "../functions/httpRequests";
 import BurgerMenu from "./BurgerMenu";
@@ -62,7 +62,7 @@ export default function Header() {
                       height={35}
                       alt="User profile picture"
                       className="rounded-full w-auto"
-                      layout="fixed" // or "intrinsic" depending on your use case
+                      layout="fixed" 
                     />
                   ) : (
                     <Image
