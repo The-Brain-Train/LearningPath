@@ -50,7 +50,9 @@ function RoadMapId(props: Props) {
   const queryClient = useQueryClient();
   const [cookies] = useCookies(["user"]);
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
-  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
+    null
+  );
 
   const downloadRoadmap = () => {
     const roadmapData = JSON.stringify(roadmap, null, 2);
@@ -72,7 +74,7 @@ function RoadMapId(props: Props) {
     if (roadmapSvgElement) {
       const svgData = new XMLSerializer().serializeToString(roadmapSvgElement);
       const modifiedSvgData = svgData.replace(/fill="#fff"/g, 'fill="#000"');
-      const blob = new Blob([modifiedSvgData], { type: 'image/svg+xml' });
+      const blob = new Blob([modifiedSvgData], { type: "image/svg+xml" });
       const url = URL.createObjectURL(blob);
 
       const a = document.createElement("a");
@@ -87,8 +89,8 @@ function RoadMapId(props: Props) {
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
-  };  
-   
+  };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -305,39 +307,47 @@ function RoadMapId(props: Props) {
                 />
               )}
               <IconButton
-                className="text-white cursor-pointer"
+                className="text-white cursor-pointer text-center"
                 onClick={handleShare}
               >
                 <Tooltip title="Share">
-                  <Share />
+                  <div>
+                    <Share />
+                    <div style={{ fontSize: "7px" }}>Share</div>
+                  </div>
                 </Tooltip>
               </IconButton>
+
               <IconButton
-                className="text-white cursor-pointer"
+                className="text-white cursor-pointer text-center"
                 onClick={handleClick}
               >
                 <Tooltip title="Download">
-                  <DownloadIcon />
+                  <div>
+                    <DownloadIcon />
+                    <div style={{ fontSize: "7px" }}>Download</div>
+                  </div>
                 </Tooltip>
               </IconButton>
+
               <Menu
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={downloadRoadmap}>
-                  As JSON
-                </MenuItem>
-                <MenuItem onClick={downloadRoadmapAsSvg}>
-                  As SVG
-                </MenuItem>
+                <MenuItem onClick={downloadRoadmap}>As JSON</MenuItem>
+                <MenuItem onClick={downloadRoadmapAsSvg}>As SVG</MenuItem>
               </Menu>
+
               <IconButton
-                className="text-white cursor-pointer"
+                className="text-white cursor-pointer text-center"
                 onClick={handleScrollToResources}
               >
                 <Tooltip title="Resource">
-                  <LibraryBooksIcon />
+                  <div>
+                    <LibraryBooksIcon />
+                    <div style={{ fontSize: "7px" }}>Resource</div>
+                  </div>
                 </Tooltip>
               </IconButton>
             </div>
