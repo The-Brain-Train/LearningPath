@@ -37,7 +37,11 @@ import { RoadmapResourcesSection } from "../../components/RoadmapResourcesSectio
 import useMediaQuery from "@mui/material/useMediaQuery";
 import CircularProgressWithLabel from "../../components/CircularProgressWithLabel";
 import { Download as DownloadIcon } from "@mui/icons-material";
-import { downloadRoadmapAsJson, downloadRoadmapAsSvg } from "./downloadRoadmap";
+import {
+  downloadRoadmapAsJson,
+  downloadRoadmapAsSvg,
+  shareRoadmap,
+} from "./roadmapIdUtils";
 
 type Props = {
   params: {
@@ -97,19 +101,7 @@ function RoadMapId(props: Props) {
 
   const handleShare = async () => {
     const roadmapMeta: RoadmapMeta | undefined = findRoadmapMeta(roadmapMetaId);
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: document.title,
-          text: `Check out this roadmap on LearningPath: ${roadmapMeta?.name}`,
-          url: window.location.href,
-        });
-      } catch (error) {
-        console.error("Error sharing:", error);
-      }
-    } else {
-      prompt("Copy the following URL:", window.location.href);
-    }
+    shareRoadmap(roadmapMeta?.name);
   };
 
   const {
@@ -207,11 +199,11 @@ function RoadMapId(props: Props) {
 
   const handleDownloadRoadmapAsJson = () => {
     downloadRoadmapAsJson(roadmap);
-  }
+  };
 
   const handleDownloadRoadmapAsSvg = () => {
     downloadRoadmapAsSvg();
-  }
+  };
 
   if (isError) {
     return (
@@ -283,7 +275,7 @@ function RoadMapId(props: Props) {
               )}
               <IconButton
                 onClick={handleShare}
-                sx={{color: "white", textAlign: "center", cursor: "pointer"}}
+                sx={{ color: "white", textAlign: "center", cursor: "pointer" }}
               >
                 <Tooltip title="Share">
                   <div>
@@ -292,10 +284,9 @@ function RoadMapId(props: Props) {
                   </div>
                 </Tooltip>
               </IconButton>
-
               <IconButton
                 onClick={handleClick}
-                sx={{color: "white", textAlign: "center", cursor: "pointer"}}
+                sx={{ color: "white", textAlign: "center", cursor: "pointer" }}
               >
                 <Tooltip title="Download">
                   <div>
@@ -304,19 +295,19 @@ function RoadMapId(props: Props) {
                   </div>
                 </Tooltip>
               </IconButton>
-
               <Menu
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleDownloadRoadmapAsJson}>As JSON</MenuItem>
+                <MenuItem onClick={handleDownloadRoadmapAsJson}>
+                  As JSON
+                </MenuItem>
                 <MenuItem onClick={handleDownloadRoadmapAsSvg}>As SVG</MenuItem>
               </Menu>
-
               <IconButton
                 onClick={handleScrollToResources}
-                sx={{color: "white", textAlign: "center", cursor: "pointer"}}
+                sx={{ color: "white", textAlign: "center", cursor: "pointer" }}
               >
                 <Tooltip title="Resource">
                   <div>

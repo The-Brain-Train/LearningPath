@@ -61,3 +61,19 @@ export const downloadRoadmapAsSvg = async () => {
     URL.revokeObjectURL(url);
   }
 };
+
+export const shareRoadmap = async (roadmapName: string | undefined) => {
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: document.title,
+        text: `Check out this roadmap on LearningPath: ${roadmapName}`,
+        url: window.location.href,
+      });
+    } catch (error) {
+      console.error("Error sharing:", error);
+    }
+  } else {
+    prompt("Copy the following URL:", window.location.href);
+  }
+}
