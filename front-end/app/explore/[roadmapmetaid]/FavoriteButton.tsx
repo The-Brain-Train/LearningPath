@@ -19,11 +19,11 @@ export const FavoriteButton = ({
       <Tooltip title="Favorite">
         <div>
           <FavoriteIcon />
-          <div style={{ fontSize: "7px" }}>Unfavorite</div>
+          <div style={{ fontSize: "7px" }}>Favorite</div>
         </div>
       </Tooltip>
     ) : (
-      <Tooltip title="Unfavorite">
+      <Tooltip title="Favorite">
         <div>
           <FavoriteBorderIcon />
           <div style={{ fontSize: "7px" }}>Favorite</div>
