@@ -152,8 +152,12 @@ const IndentedTreeWithData = ({
           const completedCheckbox = d.data.completedTopic ? "checked" : "";
           return `
             <div class="flex items-center content-div">
-              <input ${completedCheckbox} type="checkbox" value=${d.data.name} class="w-4 h-4 md:w-5 md:h-5">
-              <label class="text-white text:xs md:text-lg ml-2">${d.data.name}</label>
+            <input ${
+              completedCheckbox ? "checked" : ""
+            } type="checkbox" value="${d.data.name}" class="w-4 h-4 md:w-5 md:h-5" />
+              <label class="text-white text:xs md:text-lg ml-2">${
+                d.data.name
+              }</label>
             </div>
           `;
         })
@@ -311,7 +315,7 @@ const IndentedTreeWithData = ({
           Hours
         </p>
       </div>
-      <svg ref={svgRef}></svg>
+      <svg id="roadmap-svg" ref={svgRef}></svg>
     </div>
   );
 };
