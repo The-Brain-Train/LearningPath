@@ -7,7 +7,6 @@ import { CustomNode, CreateIndentedTreeProps } from "../util/types";
 import Link from "next/link";
 import {
   getHoursFontSize,
-  getLabelFontSize,
   getLinkLength,
   getTextXOffset,
   getLabelXOffset,
@@ -231,7 +230,7 @@ const IndentedTree = ({
               {data !== null ? (
                 <div className="max-w-screen-xl parent-roadmap-container">
                   <ArrowBack
-                    className="text-white cursor-pointer"
+                    className="text-white cursor-pointer my-3"
                     onClick={() => setData(null)}
                   />
                   <div className="flex justify-between px-2 ">
