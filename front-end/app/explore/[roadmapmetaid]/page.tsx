@@ -20,6 +20,8 @@ import {
   CircularProgress,
   IconButton,
   LinearProgress,
+  Menu,
+  MenuItem,
   Tooltip,
 } from "@mui/material";
 import useCurrentUserQuery from "@/app/functions/useCurrentUserQuery";
@@ -48,6 +50,7 @@ function RoadMapId(props: Props) {
   const queryClient = useQueryClient();
   const [cookies] = useCookies(["user"]);
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
   const downloadRoadmap = () => {
     const roadmapData = JSON.stringify(roadmap, null, 2);
@@ -64,21 +67,29 @@ function RoadMapId(props: Props) {
   };
 
   const downloadRoadmapAsSvg = async () => {
-    const roadmapSvgElement = document.getElementById('roadmap-svg');
+    const roadmapSvgElement = document.getElementById("roadmap-svg");
     console.log(roadmapSvgElement);
     if (roadmapSvgElement) {
       const svgData = new XMLSerializer().serializeToString(roadmapSvgElement);
-      const blob = new Blob([svgData], { type: 'image/svg+xml' });
+      const blob = new Blob([svgData], { type: "image/svg+xml" });
       const url = URL.createObjectURL(blob);
- 
-      const a = document.createElement('a');
+
+      const a = document.createElement("a");
       a.href = url;
-      a.download = 'roadmap.svg';
+      a.download = "roadmap.svg";
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     }
+  };
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };  
+   
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
   const [scrollToResources, setScrollToResources] = useState(false);
@@ -260,46 +271,6 @@ function RoadMapId(props: Props) {
                 }}
               />
             </div>
-            <div>
-              {currentUser && (
-                <FavoriteButton
-                  onClick={toggleFavorite}
-                  isFavorite={isRoadmapInFavorites}
-                />
-              )}
-              <IconButton
-                className="text-white cursor-pointer"
-                onClick={handleShare}
-              >
-                <Tooltip title="Share">
-                  <Share />
-                </Tooltip>
-              </IconButton>
-              <IconButton
-                className="text-white cursor-pointer"
-                onClick={downloadRoadmap}
-              >
-                <Tooltip title="Download">
-                  <DownloadIcon />
-                </Tooltip>
-              </IconButton>
-              <IconButton
-                className="text-white cursor-pointer"
-                onClick={downloadRoadmapAsSvg}
-              >
-                <Tooltip title="Download">
-                  <DownloadIcon />
-                </Tooltip>
-              </IconButton>
-              <IconButton
-                className="text-white cursor-pointer"
-                onClick={handleScrollToResources}
-              >
-                <Tooltip title="Resource">
-                  <LibraryBooksIcon />
-                </Tooltip>
-              </IconButton>
-            </div>
             {currentUser &&
               userOwnsRoadmap() &&
               (!isSmallScreen ? (
@@ -325,6 +296,50 @@ function RoadMapId(props: Props) {
                   />
                 </div>
               ))}
+            <div>
+              {currentUser && (
+                <FavoriteButton
+                  onClick={toggleFavorite}
+                  isFavorite={isRoadmapInFavorites}
+                />
+              )}
+              <IconButton
+                className="text-white cursor-pointer"
+                onClick={handleShare}
+              >
+                <Tooltip title="Share">
+                  <Share />
+                </Tooltip>
+              </IconButton>
+              <IconButton
+                className="text-white cursor-pointer"
+                onClick={handleClick}
+              >
+                <Tooltip title="Download">
+                  <DownloadIcon />
+                </Tooltip>
+              </IconButton>
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={downloadRoadmap}>
+                  As JSON
+                </MenuItem>
+                <MenuItem onClick={downloadRoadmapAsSvg}>
+                  As SVG
+                </MenuItem>
+              </Menu>
+              <IconButton
+                className="text-white cursor-pointer"
+                onClick={handleScrollToResources}
+              >
+                <Tooltip title="Resource">
+                  <LibraryBooksIcon />
+                </Tooltip>
+              </IconButton>
+            </div>
           </div>
           <IndentedTreeWithData
             data={roadmapToTreeNode(roadmap)}
