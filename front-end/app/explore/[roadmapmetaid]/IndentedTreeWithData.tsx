@@ -4,13 +4,10 @@ import * as d3 from "d3";
 import { CustomNode, ExploreIndentedTreeProps } from "../../util/types";
 import {
   getHoursFontSize,
-  getLabelFontSize,
   getLinkLength,
-  getTextXOffset,
-  getLabelXOffset,
   getNodeSize,
-  getIconFontSize,
   getScreenWidthAdjustValue,
+  getTextOffset,
 } from "../../functions/indentedTreeMetrics";
 import addGoogleFont from "../../functions/fontFamily";
 import _ from "lodash";
@@ -96,31 +93,26 @@ const IndentedTreeWithData = ({
       )
       .attr("fill", "#fff");
 
-    node
-      .append("text")
-      .attr("x", (d) => d.depth * nodeSize + getLabelXOffset(d, -10, 40))
-      .attr("y", 5)
-      .style("font-size", getIconFontSize())
-      .style("fill", (d) => (d.children ? "black" : "#fff"))
-      .text((d) => {
-        if (d.depth === 0) {
-          return "📚";
-        } else if (d.height === 0) {
-          return "";
-        } else {
-          return "📘";
-        }
-      });
-
-    node
-      .filter((d) => d.height !== 0)
+      node
+      .filter((d) => d.depth === 0)
       .append("foreignObject")
-      .attr("x", (d) => d.depth * nodeSize + getTextXOffset(d, 10, 60))
+      .attr("x", (d) => d.depth * nodeSize + getTextOffset(-20, -30))
       .attr("y", -15)
       .attr("width", 550)
       .attr("height", 32)
       .html(function (d) {
-        return `<p class="text-white text-lg md:text-xl ml-2 mt-1 md:mt-0 md:ml-4">${d.data.name}</p>`;
+        return `<p class="text-white text-lg md:text-xl ml-2 mt-1 md:mt-0 md:ml-4">📚 ${d.data.name}</p>`;
+      })
+
+    node
+      .filter((d) => d.height !== 0 && d.depth !== 0)
+      .append("foreignObject")
+      .attr("x", (d) => d.depth * nodeSize + getTextOffset(-15, 30))
+      .attr("y", -15)
+      .attr("width", 550)
+      .attr("height", 32)
+      .html(function (d) {
+        return `<p class="text-white text-lg md:text-xl ml-2 mt-1 md:mt-0 md:ml-4">📘 ${d.data.name}</p>`;
       })
       .each(function (d) {
         const screenWidth = window.innerWidth;
@@ -144,7 +136,7 @@ const IndentedTreeWithData = ({
       node
         .filter((d) => d.height === 0)
         .append("foreignObject")
-        .attr("x", (d) => d.depth * nodeSize + getTextXOffset(d, 10, 60))
+        .attr("x", (d) => d.depth * nodeSize + getTextOffset(10, 60))
         .attr("y", -10)
         .attr("width", 550)
         .attr("height", 50)
@@ -196,30 +188,14 @@ const IndentedTreeWithData = ({
 
     if (!isCreator) {
       node
-        .append("text")
-        .attr("x", (d) => d.depth * nodeSize + getLabelXOffset(d, -10, 40))
-        .attr("y", 5)
-        .style("font-size", getIconFontSize())
-        .style("fill", (d) => (d.children ? "black" : "#fff"))
-        .text((d) => {
-          if (d.depth === 0) {
-            return "📚";
-          } else if (d.height === 0) {
-            return "📖";
-          } else {
-            return "📘";
-          }
-        });
-
-      node
         .filter((d) => d.height === 0)
         .append("foreignObject")
-        .attr("x", (d) => d.depth * nodeSize + getTextXOffset(d, 10, 60))
-        .attr("y", -15)
+        .attr("x", (d) => d.depth * nodeSize + getTextOffset(-5, 30))
+        .attr("y", getTextOffset(-10, -15))
         .attr("width", 550)
-        .attr("height", 25)
+        .attr("height", 32)
         .html(function (d) {
-          return `<p class="text-white text-sm md:text-lg ml-2 mt-1 md:mt-0 md:ml-4">${d.data.name}</p>`;
+          return `<p class="text-white text-sm md:text-lg">📖 ${d.data.name}</p>`;
         })
         .each(function (d) {
           const screenWidth = window.innerWidth;
