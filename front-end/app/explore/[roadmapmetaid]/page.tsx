@@ -71,7 +71,8 @@ function RoadMapId(props: Props) {
     console.log(roadmapSvgElement);
     if (roadmapSvgElement) {
       const svgData = new XMLSerializer().serializeToString(roadmapSvgElement);
-      const blob = new Blob([svgData], { type: "image/svg+xml" });
+      const modifiedSvgData = svgData.replace(/fill="#fff"/g, 'fill="#000"');
+      const blob = new Blob([modifiedSvgData], { type: 'image/svg+xml' });
       const url = URL.createObjectURL(blob);
 
       const a = document.createElement("a");
