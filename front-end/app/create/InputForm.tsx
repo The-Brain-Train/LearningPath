@@ -34,6 +34,10 @@ const InputForm = ({
     setExperience(event.target.value);
   };
 
+  const capitalizeFirstLetter = (text: string) => {
+    return text.charAt(0).toUpperCase() + text.slice(1);
+  };  
+
   const handleSubmit = () => {
     if (!userTopic) {
       setTopicError("Topic is required");
@@ -102,7 +106,7 @@ const InputForm = ({
               <TextField
                 type="text"
                 value={userTopic}
-                onChange={(e) => setUserTopic(e.target.value)}
+                onChange={(e) => setUserTopic(capitalizeFirstLetter(e.target.value))}
                 placeholder="Enter Topic!"
                 sx={{ m: 1, minWidth: "90%" }}
                 className="pt-0 rounded-l-md focus:outline-none focus:placeholder-gray-400 text-center placeholder-gray-60 form-control"
