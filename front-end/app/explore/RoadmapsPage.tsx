@@ -97,8 +97,8 @@ export const RoadmapsPage = (props: RoadmapsPageProps) => {
             <div className="flex justify-between flex-col my-4 mx-4">
               <div className="flex justify-between flex-row">
                 <p
-                  className="overflow-ellipsis overflow-hidden whitespace-nowrap text-xl"
-                  style={{ textTransform: "capitalize", maxWidth: "200px" }}
+                  className="overflow-ellipsis overflow-hidden whitespace-nowrap text-xl capitalize"
+                  style={{maxWidth: "200px" }}
                 >
                   {roadmap.name}
                 </p>
