@@ -57,6 +57,18 @@ export const getLabelWidth = (d: d3.HierarchyNode<TreeNode>) => {
   }
 };
 
+export const getTextXOffset = (
+  d: d3.HierarchyNode<TreeNode>,
+  mobile: number,
+  desktop: number
+) => {
+  if (isMobileView()) {
+    return mobile;
+  } else {
+    return d.depth === 0 ? mobile + 20 : desktop;
+  }
+};
+
 export const getTextOffset = (
   mobile: number,
   desktop: number
