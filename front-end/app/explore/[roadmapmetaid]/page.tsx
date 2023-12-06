@@ -83,7 +83,7 @@ function RoadMapId(props: Props) {
       if (screenWidth < 768) {
         clonedSvgElement.setAttribute(
           "viewBox",
-          `10 -30 ${screenWidth} ${mobileHeight}`
+          `-10 -30 ${screenWidth} ${mobileHeight}`
         );
       } else {
         clonedSvgElement.setAttribute(
