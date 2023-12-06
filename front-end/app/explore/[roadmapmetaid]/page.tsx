@@ -37,6 +37,7 @@ import { RoadmapResourcesSection } from "../../components/RoadmapResourcesSectio
 import useMediaQuery from "@mui/material/useMediaQuery";
 import CircularProgressWithLabel from "../../components/CircularProgressWithLabel";
 import { Download as DownloadIcon } from "@mui/icons-material";
+import { downloadRoadmapAsJson, downloadRoadmapAsSvg } from "./downloadRoadmap";
 
 type Props = {
   params: {
@@ -53,68 +54,7 @@ function RoadMapId(props: Props) {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
-
-  const downloadRoadmap = () => {
-    const roadmapData = JSON.stringify(roadmap, null, 2);
-    const blob = new Blob([roadmapData], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "roadmap.json";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  };
-
-  const downloadRoadmapAsSvg = async () => {
-    const roadmapSvgElement = document.getElementById("roadmap-svg");
-
-    if (roadmapSvgElement instanceof SVGElement) {
-      const clonedSvgElement = roadmapSvgElement.cloneNode(true) as SVGElement;
-
-      const screenWidth = window.innerWidth;
-      const desktopHeight = roadmapSvgElement.scrollHeight;
-      const mobileHeight = roadmapSvgElement.scrollHeight * 1.1;
-
-      clonedSvgElement.setAttribute("width", "100%");
-      clonedSvgElement.setAttribute("height", "100%");
-      if (screenWidth < 768) {
-        clonedSvgElement.setAttribute(
-          "viewBox",
-          `-20 -30 ${screenWidth} ${mobileHeight}`
-        );
-      } else {
-        clonedSvgElement.setAttribute(
-          "viewBox",
-          `-30 -30 ${screenWidth}  ${desktopHeight}`
-        );
-      }
-      
-      const textElements = clonedSvgElement.querySelectorAll("text");
-      textElements.forEach((textElement) => {
-        textElement.setAttribute("font-weight", "normal");
-        textElement.style.fontWeight = "normal";
-        textElement.setAttribute("font-size", "14");
-        textElement.style.fontSize = "14px";
-      });
-
-      const svgData = new XMLSerializer().serializeToString(clonedSvgElement);
-      const modifiedSvgData = svgData.replace(/fill="#fff"/g, 'fill="#000"');
-
-      const blob = new Blob([modifiedSvgData], { type: "image/svg+xml" });
-      const url = URL.createObjectURL(blob);
-
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "roadmap.svg";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }
-  };
+  const [scrollToResources, setScrollToResources] = useState(false);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -123,8 +63,6 @@ function RoadMapId(props: Props) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  const [scrollToResources, setScrollToResources] = useState(false);
 
   const handleScrollToResources = () => {
     setScrollToResources(true);
@@ -267,6 +205,14 @@ function RoadMapId(props: Props) {
 
   const treeNode = roadmapToTreeNode(roadmap);
 
+  const handleDownloadRoadmapAsJson = () => {
+    downloadRoadmapAsJson(roadmap);
+  }
+
+  const handleDownloadRoadmapAsSvg = () => {
+    downloadRoadmapAsSvg();
+  }
+
   if (isError) {
     return (
       <main className="bg-white">
@@ -364,8 +310,8 @@ function RoadMapId(props: Props) {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={downloadRoadmap}>As JSON</MenuItem>
-                <MenuItem onClick={downloadRoadmapAsSvg}>As SVG</MenuItem>
+                <MenuItem onClick={handleDownloadRoadmapAsJson}>As JSON</MenuItem>
+                <MenuItem onClick={handleDownloadRoadmapAsSvg}>As SVG</MenuItem>
               </Menu>
 
               <IconButton
