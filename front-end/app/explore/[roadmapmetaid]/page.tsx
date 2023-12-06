@@ -10,8 +10,8 @@ import {
   updateUsersCompletedTopic,
   getRoadmapProgressOfUser,
 } from "@/app/functions/httpRequests";
-import { ArrowBack, Share} from "@mui/icons-material";
-import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
+import { ArrowBack, Share } from "@mui/icons-material";
+import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 
 import { useRouter } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -20,6 +20,7 @@ import {
   CircularProgress,
   IconButton,
   LinearProgress,
+  Tooltip,
 } from "@mui/material";
 import useCurrentUserQuery from "@/app/functions/useCurrentUserQuery";
 import { useCookies } from "react-cookie";
@@ -48,7 +49,6 @@ function RoadMapId(props: Props) {
   const [cookies] = useCookies(["user"]);
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
 
-
   const downloadRoadmap = () => {
     const roadmapData = JSON.stringify(roadmap, null, 2);
     const blob = new Blob([roadmapData], { type: "application/json" });
@@ -62,7 +62,6 @@ function RoadMapId(props: Props) {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
-
 
   const [scrollToResources, setScrollToResources] = useState(false);
 
@@ -236,32 +235,45 @@ function RoadMapId(props: Props) {
           <div className="flex items-center justify-between my-5">
             <div>
               <ArrowBack
-                fontSize="large"
-                className="text-slate-300 m-3 cursor-pointer"
+                className="text-white cursor-pointer"
                 onClick={() => {
                   queryClient.invalidateQueries(["roadmaps"]);
                   router.back();
                 }}
               />
             </div>
-            <div className="flex-grow text-center">
+            <div>
               {currentUser && (
                 <FavoriteButton
                   onClick={toggleFavorite}
                   isFavorite={isRoadmapInFavorites}
                 />
               )}
+              <IconButton
+                className="text-white cursor-pointer"
+                onClick={handleShare}
+              >
+                <Tooltip title="Share">
+                  <Share />
+                </Tooltip>
+              </IconButton>
+              <IconButton
+                className="text-white cursor-pointer"
+                onClick={downloadRoadmap}
+              >
+                <Tooltip title="Download">
+                  <DownloadIcon />
+                </Tooltip>
+              </IconButton>
+              <IconButton
+                className="text-white cursor-pointer"
+                onClick={handleScrollToResources}
+              >
+                <Tooltip title="Resource">
+                  <LibraryBooksIcon />
+                </Tooltip>
+              </IconButton>
             </div>
-            <IconButton onClick={handleShare}>
-              <Share />
-            </IconButton>
-            <IconButton onClick={downloadRoadmap}>
-              <DownloadIcon />
-            </IconButton>
-            <IconButton onClick={handleScrollToResources}>
-              <LibraryBooksIcon />
-            </IconButton>
-
             {currentUser &&
               userOwnsRoadmap() &&
               (!isSmallScreen ? (
