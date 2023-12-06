@@ -12,8 +12,8 @@ export const FavoriteButton = ({
   isFavorite,
 }: FavoriteButtonProps) => (
   <IconButton
-    className="text-white cursor-pointer text-center"
     onClick={onClick}
+    sx={{color: "white", textAlign: "center", cursor: "pointer"}}
   >
     {isFavorite ? (
       <Tooltip title="Favorite">

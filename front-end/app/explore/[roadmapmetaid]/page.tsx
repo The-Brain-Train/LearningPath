@@ -73,7 +73,6 @@ function RoadMapId(props: Props) {
 
     if (roadmapSvgElement instanceof SVGElement) {
       const clonedSvgElement = roadmapSvgElement.cloneNode(true) as SVGElement;
-      console.log(clonedSvgElement);
 
       const screenWidth = window.innerWidth;
       const height = roadmapSvgElement.scrollHeight;
@@ -329,8 +328,8 @@ function RoadMapId(props: Props) {
                 />
               )}
               <IconButton
-                className="text-white cursor-pointer text-center"
                 onClick={handleShare}
+                sx={{color: "white", textAlign: "center", cursor: "pointer"}}
               >
                 <Tooltip title="Share">
                   <div>
@@ -341,8 +340,8 @@ function RoadMapId(props: Props) {
               </IconButton>
 
               <IconButton
-                className="text-white cursor-pointer text-center"
                 onClick={handleClick}
+                sx={{color: "white", textAlign: "center", cursor: "pointer"}}
               >
                 <Tooltip title="Download">
                   <div>
@@ -362,8 +361,8 @@ function RoadMapId(props: Props) {
               </Menu>
 
               <IconButton
-                className="text-white cursor-pointer text-center"
                 onClick={handleScrollToResources}
+                sx={{color: "white", textAlign: "center", cursor: "pointer"}}
               >
                 <Tooltip title="Resource">
                   <div>
