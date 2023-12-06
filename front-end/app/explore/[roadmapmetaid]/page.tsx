@@ -75,15 +75,23 @@ function RoadMapId(props: Props) {
       const clonedSvgElement = roadmapSvgElement.cloneNode(true) as SVGElement;
 
       const screenWidth = window.innerWidth;
-      const height = roadmapSvgElement.scrollHeight;
+      const desktopHeight = roadmapSvgElement.scrollHeight;
+      const mobileHeight = roadmapSvgElement.scrollHeight * 1.1;
 
       clonedSvgElement.setAttribute("width", "100%");
       clonedSvgElement.setAttribute("height", "100%");
-      clonedSvgElement.setAttribute(
-        "viewBox",
-        `-30 -30 ${screenWidth} ${height}`
-      );
-
+      if (screenWidth < 768) {
+        clonedSvgElement.setAttribute(
+          "viewBox",
+          `0 -30 ${screenWidth} ${mobileHeight}`
+        );
+      } else {
+        clonedSvgElement.setAttribute(
+          "viewBox",
+          `-30 -30 ${screenWidth}  ${desktopHeight}`
+        );
+      }
+      
       const textElements = clonedSvgElement.querySelectorAll("text");
       textElements.forEach((textElement) => {
         textElement.setAttribute("font-weight", "normal");
