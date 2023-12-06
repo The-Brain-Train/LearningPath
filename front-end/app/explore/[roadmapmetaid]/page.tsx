@@ -79,11 +79,18 @@ function RoadMapId(props: Props) {
 
       clonedSvgElement.setAttribute("width", "100%");
       clonedSvgElement.setAttribute("height", "100%");
-      clonedSvgElement.setAttribute(
-        "viewBox",
-        `-30 -30 ${screenWidth} ${height}`
-      );
-
+      if (screenWidth < 768) {
+        clonedSvgElement.setAttribute(
+          "viewBox",
+          `0 -30 ${screenWidth} ${height}`
+        );
+      } else {
+        clonedSvgElement.setAttribute(
+          "viewBox",
+          `-30 -30 ${screenWidth} ${height}`
+        );
+      }
+      
       const textElements = clonedSvgElement.querySelectorAll("text");
       textElements.forEach((textElement) => {
         textElement.setAttribute("font-weight", "normal");
