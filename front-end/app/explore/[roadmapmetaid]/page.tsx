@@ -63,6 +63,24 @@ function RoadMapId(props: Props) {
     URL.revokeObjectURL(url);
   };
 
+  const downloadRoadmapAsSvg = async () => {
+    const roadmapSvgElement = document.getElementById('roadmap-svg');
+    console.log(roadmapSvgElement);
+    if (roadmapSvgElement) {
+      const svgData = new XMLSerializer().serializeToString(roadmapSvgElement);
+      const blob = new Blob([svgData], { type: 'image/svg+xml' });
+      const url = URL.createObjectURL(blob);
+ 
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'roadmap.svg';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+  };
+
   const [scrollToResources, setScrollToResources] = useState(false);
 
   const handleScrollToResources = () => {
@@ -260,6 +278,14 @@ function RoadMapId(props: Props) {
               <IconButton
                 className="text-white cursor-pointer"
                 onClick={downloadRoadmap}
+              >
+                <Tooltip title="Download">
+                  <DownloadIcon />
+                </Tooltip>
+              </IconButton>
+              <IconButton
+                className="text-white cursor-pointer"
+                onClick={downloadRoadmapAsSvg}
               >
                 <Tooltip title="Download">
                   <DownloadIcon />
