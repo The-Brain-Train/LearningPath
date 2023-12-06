@@ -70,10 +70,32 @@ function RoadMapId(props: Props) {
 
   const downloadRoadmapAsSvg = async () => {
     const roadmapSvgElement = document.getElementById("roadmap-svg");
-    console.log(roadmapSvgElement);
-    if (roadmapSvgElement) {
-      const svgData = new XMLSerializer().serializeToString(roadmapSvgElement);
+
+    if (roadmapSvgElement instanceof SVGElement) {
+      const clonedSvgElement = roadmapSvgElement.cloneNode(true) as SVGElement;
+      console.log(clonedSvgElement);
+
+      const screenWidth = window.innerWidth;
+      const height = roadmapSvgElement.scrollHeight;
+
+      clonedSvgElement.setAttribute("width", "100%");
+      clonedSvgElement.setAttribute("height", "100%");
+      clonedSvgElement.setAttribute(
+        "viewBox",
+        `-30 -30 ${screenWidth} ${height}`
+      );
+
+      const textElements = clonedSvgElement.querySelectorAll("text");
+      textElements.forEach((textElement) => {
+        textElement.setAttribute("font-weight", "normal");
+        textElement.style.fontWeight = "normal";
+        textElement.setAttribute("font-size", "14");
+        textElement.style.fontSize = "14px";
+      });
+
+      const svgData = new XMLSerializer().serializeToString(clonedSvgElement);
       const modifiedSvgData = svgData.replace(/fill="#fff"/g, 'fill="#000"');
+
       const blob = new Blob([modifiedSvgData], { type: "image/svg+xml" });
       const url = URL.createObjectURL(blob);
 
