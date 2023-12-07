@@ -27,8 +27,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     private final JwtServiceImpl jwtServiceImpl;
     private final UserRepository userRepository;
 
-    String frontendUrl;
-
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
@@ -44,7 +42,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             String userName = oidcUser.getAttributes().get("name").toString();
 
             User user = userRepository.findByEmail(email);
-            String token = "";
+            String token;
             if (user != null){
                 token = jwtServiceImpl.generateToken(user);
             } else{
@@ -54,14 +52,14 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                 userRepository.save(newUser);
                 token = jwtServiceImpl.generateToken(newUser);
             }
-            response.addCookie(createNewCookie(oidcUser.getIdToken().getTokenValue()));
+            response.addCookie(createNewCookie(token));
             response.setHeader("Access-Control-Allow-Credentials", "true");
             response.sendRedirect("http://localhost:3000/");
         }
     }
 
     private Cookie createNewCookie(String tokenValue) {
-        Cookie cookie = new Cookie("JwtToken", tokenValue);
+        Cookie cookie = new Cookie("user", tokenValue);
         cookie.setHttpOnly(true);
         cookie.setMaxAge(3500);
         cookie.setSecure(true);
