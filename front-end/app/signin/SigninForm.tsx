@@ -15,6 +15,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "../functions/httpRequests";
 import { validateSignInForm } from "../functions/validations";
 import { Alert } from "@mui/material";
+import { ProviderSignin } from "./ProviderSignin";
 
 export type SignInFormType = {
   email: string;
@@ -108,7 +109,7 @@ const SigninForm = () => {
           component="form"
           onSubmit={handleSubmit}
           noValidate
-          sx={{ mt: 1, width:"100%", maxWidth: 575 }}
+          sx={{ mt: 1, width: "100%", maxWidth: 575 }}
         >
           <TextField
             margin="normal"
@@ -140,7 +141,7 @@ const SigninForm = () => {
               variant="filled"
               sx={{
                 width: "100%",
-                display: "inline-flex"
+                display: "inline-flex",
               }}
             >
               {validationErrors.email}
@@ -177,7 +178,7 @@ const SigninForm = () => {
               className="min-w-full inline-flex"
               sx={{
                 width: "100%",
-                display: "inline-flex"
+                display: "inline-flex",
               }}
             >
               {validationErrors.password}
@@ -198,12 +199,13 @@ const SigninForm = () => {
               className="min-w-full inline-flex"
               sx={{
                 width: "100%",
-                display: "inline-flex"
+                display: "inline-flex",
               }}
             >
               {validationErrors.generic}
             </Alert>
           )}
+
           <Grid container>
             <Grid item>
               <Link
@@ -220,6 +222,7 @@ const SigninForm = () => {
               </Link>
             </Grid>
           </Grid>
+          <ProviderSignin />
         </Box>
       </Box>
     </Container>
