@@ -34,11 +34,11 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException {
         if (authentication.getPrincipal() instanceof OidcUser oidcUser) {
-            try {
-                jwtServiceImpl.validateJWTString(oidcUser.getIdToken().getTokenValue());
-            } catch (JwtException e) {
-                response.sendRedirect("http://localhost:3000/signin");
-            }
+//            try {
+//                jwtServiceImpl.validateJWTString(oidcUser.getIdToken().getTokenValue());
+//            } catch (JwtException e) {
+//                response.sendRedirect("http://localhost:3000/signin");
+//            }
 
             String email = oidcUser.getAttributes().get("email").toString();
             String userName = oidcUser.getAttributes().get("name").toString();
@@ -66,7 +66,8 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         cookie.setMaxAge(3500);
         cookie.setSecure(true);
         cookie.setPath("/");
-        cookie.setDomain(getDomain("https://learning-path-brain-train.vercel.app/"));
+        cookie.setDomain(getDomain("http://localhost:3000/"));
+        System.out.println(cookie);
         return cookie;
     }
 

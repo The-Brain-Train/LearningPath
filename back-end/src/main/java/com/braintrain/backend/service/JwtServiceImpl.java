@@ -80,6 +80,7 @@ public class JwtServiceImpl implements JwtService{
         return Keys.hmacShaKeyFor(keyBytes);
     }
     public Jwt validateJWTString(String JWTToken) throws JwtException {
+        System.out.println(JWTToken);
         Jwt jwt = jwtDecoder.decode(JWTToken);
         validator.validate(jwt);
         return jwt;
