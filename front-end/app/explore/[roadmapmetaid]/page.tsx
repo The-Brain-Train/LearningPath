@@ -1,47 +1,34 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import IndentedTreeWithData from "@/app/explore/[roadmapmetaid]/IndentedTreeWithData";
 import {
-  addRoadmapMetaToUserFavorites,
   getRoadmaps,
   getRoadmapByMetaId,
-  getUserFavorites,
-  removeRoadmapMetaFromUserFavorites,
   updateUsersCompletedTopic,
   getRoadmapProgressOfUser,
 } from "@/app/functions/httpRequests";
-import { ArrowBack, Share } from "@mui/icons-material";
-import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
-
+import { ArrowBack } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Box,
   CircularProgress,
-  IconButton,
   LinearProgress,
-  Menu,
-  MenuItem,
-  Tooltip,
 } from "@mui/material";
 import useCurrentUserQuery from "@/app/functions/useCurrentUserQuery";
 import { useCookies } from "react-cookie";
 import {
   Roadmap,
-  RoadmapMeta,
   RoadmapMetaList,
   TreeNode,
 } from "@/app/util/types";
-import { FavoriteButton } from "./FavoriteButton";
 import { RoadmapResourcesSection } from "../../components/RoadmapResourcesSection";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import CircularProgressWithLabel from "../../components/CircularProgressWithLabel";
-import { Download as DownloadIcon } from "@mui/icons-material";
 import {
-  downloadRoadmapAsJson,
-  downloadRoadmapAsSvg,
-  shareRoadmap,
+  findRoadmapMeta,
 } from "./roadmapIdUtils";
+import { RoadmapMenu } from "./RoadmapMenu";
 
 type Props = {
   params: {
@@ -55,54 +42,12 @@ function RoadMapId(props: Props) {
   const queryClient = useQueryClient();
   const [cookies] = useCookies(["user"]);
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
-  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
-    null
-  );
-  const [scrollToResources, setScrollToResources] = useState(false);
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleScrollToResources = () => {
-    setScrollToResources(true);
-    const resourcesSection = document.getElementById("resources-section");
-
-    if (resourcesSection) {
-      resourcesSection.scrollIntoView({ behavior: "smooth" });
-    }
-  };
+  const { currentUser } = useCurrentUserQuery();
 
   const { data: roadmapMetas } = useQuery<RoadmapMetaList>(
     ["roadmapMetas"],
     getRoadmaps
   );
-
-  const { currentUser } = useCurrentUserQuery();
-
-  const fetchUserFavorites = async () => {
-    return await getUserFavorites(
-      currentUser ? currentUser?.email : null,
-      cookies.user
-    );
-  };
-
-  const { data: favorites, refetch: refetchFavorites } = useQuery(
-    ["favorites"],
-    fetchUserFavorites,
-    {
-      enabled: !!currentUser,
-    }
-  );
-
-  const handleShare = async () => {
-    const roadmapMeta: RoadmapMeta | undefined = findRoadmapMeta(roadmapMetaId);
-    shareRoadmap(roadmapMeta?.name);
-  };
 
   const {
     data: roadmap,
@@ -113,34 +58,8 @@ function RoadMapId(props: Props) {
     return JSON.parse(roadmap.obj);
   });
 
-  const isRoadmapInFavorites = favorites?.some(
-    (favorite: RoadmapMeta) => favorite.id === roadmapMetaId
-  );
-
-  const toggleFavorite = async () => {
-    const matchingRoadmapMeta = findRoadmapMeta(roadmapMetaId);
-    if (!matchingRoadmapMeta) {
-      console.error(`RoadmapMeta not found for roadmapId: ${roadmapMetaId}`);
-      return;
-    }
-    if (isRoadmapInFavorites) {
-      await removeRoadmapMetaFromUserFavorites(
-        currentUser?.email,
-        matchingRoadmapMeta,
-        cookies.user
-      );
-    } else {
-      await addRoadmapMetaToUserFavorites(
-        currentUser?.email,
-        matchingRoadmapMeta,
-        cookies.user
-      );
-    }
-    refetchFavorites();
-  };
-
   const userOwnsRoadmap = () => {
-    const roadmapMeta = findRoadmapMeta(roadmapMetaId);
+    const roadmapMeta = findRoadmapMeta(roadmapMetaId, roadmapMetas);
     if (
       currentUser &&
       roadmapMeta &&
@@ -149,13 +68,6 @@ function RoadMapId(props: Props) {
       return true;
     }
     return false;
-  };
-
-  const findRoadmapMeta = (roadmapId: string): RoadmapMeta | undefined => {
-    if (roadmapMetas == undefined) return;
-    return roadmapMetas.roadmapMetaList.find(
-      (roadmapMeta: RoadmapMeta) => roadmapMeta.id === roadmapId
-    );
   };
 
   const handleUpdateUsersCompletedTopic = async (completedTask: string) => {
@@ -196,14 +108,6 @@ function RoadMapId(props: Props) {
   };
 
   const treeNode = roadmapToTreeNode(roadmap);
-
-  const handleDownloadRoadmapAsJson = () => {
-    downloadRoadmapAsJson(roadmap);
-  };
-
-  const handleDownloadRoadmapAsSvg = () => {
-    downloadRoadmapAsSvg();
-  };
 
   if (isError) {
     return (
@@ -266,57 +170,7 @@ function RoadMapId(props: Props) {
                   />
                 </div>
               ))}
-            <div>
-              {currentUser && (
-                <FavoriteButton
-                  onClick={toggleFavorite}
-                  isFavorite={isRoadmapInFavorites}
-                />
-              )}
-              <IconButton
-                onClick={handleShare}
-                sx={{ color: "white", textAlign: "center", cursor: "pointer" }}
-              >
-                <Tooltip title="Share">
-                  <div>
-                    <Share />
-                    <div style={{ fontSize: "7px" }}>Share</div>
-                  </div>
-                </Tooltip>
-              </IconButton>
-              <IconButton
-                onClick={handleClick}
-                sx={{ color: "white", textAlign: "center", cursor: "pointer" }}
-              >
-                <Tooltip title="Download">
-                  <div>
-                    <DownloadIcon />
-                    <div style={{ fontSize: "7px" }}>Download</div>
-                  </div>
-                </Tooltip>
-              </IconButton>
-              <Menu
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleDownloadRoadmapAsJson}>
-                  As JSON
-                </MenuItem>
-                <MenuItem onClick={handleDownloadRoadmapAsSvg}>As SVG</MenuItem>
-              </Menu>
-              <IconButton
-                onClick={handleScrollToResources}
-                sx={{ color: "white", textAlign: "center", cursor: "pointer" }}
-              >
-                <Tooltip title="Resource">
-                  <div>
-                    <LibraryBooksIcon />
-                    <div style={{ fontSize: "7px" }}>Resource</div>
-                  </div>
-                </Tooltip>
-              </IconButton>
-            </div>
+            <RoadmapMenu currentUser={currentUser} roadmap={roadmap} roadmapMetaId={roadmapMetaId} roadmapMetaList={roadmapMetas}/>
           </div>
           <IndentedTreeWithData
             data={roadmapToTreeNode(roadmap)}
