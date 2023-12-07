@@ -49,11 +49,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             if (user != null){
                 token = jwtServiceImpl.generateToken(user);
             } else{
-                User newUser = new User();
-                newUser.setEmail(email);
-                newUser.setName(userName);
-                newUser.setProfilePicture(profilePicture);
-                newUser.setRole(Role.USER);
+                User newUser = new User(userName, email, profilePicture);
 
                 userRepository.save(newUser);
                 token = jwtServiceImpl.generateToken(newUser);
