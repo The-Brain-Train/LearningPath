@@ -1,6 +1,8 @@
 package com.braintrain.backend.security.config;
 
 
+import com.braintrain.backend.model.User;
+import com.braintrain.backend.repository.UserRepository;
 import com.braintrain.backend.service.JwtServiceImpl;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.Cookie;
@@ -22,7 +24,8 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
-    private final JwtServiceImpl jwtValidation;
+    private final JwtServiceImpl jwtServiceImpl;
+    private final UserRepository userRepository;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -32,8 +35,20 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             DefaultOAuth2User oauth2User = (DefaultOAuth2User) authentication.getPrincipal();
 
             // Extract the necessary information from oauth2User, such as username
-            String username = oauth2User.getName();
-
+            String email = oauth2User.getAttributes().get("email").toString();
+            String userName = oauth2User.getAttributes().get("name").toString();
+            // first check if email address is present in your data base
+            User user = userRepository.findByEmail(email);
+            String token = "";
+            if(user != null){
+                token = jwtServiceImpl.generateToken(user);
+            }else{
+                User newUser = new User();
+                newUser.setEmail(email);
+                newUser.setName(userName);
+                userRepository.save(newUser);
+                token = jwtServiceImpl.generateToken(newUser);
+            }
             // Generate JWT token if needed
             //String jwtToken = jwtValidation.generateToken(username);
         }
