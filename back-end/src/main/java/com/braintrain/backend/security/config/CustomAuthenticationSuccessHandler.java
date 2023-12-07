@@ -38,8 +38,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 //            } catch (JwtException e) {
 //                response.sendRedirect("http://localhost:3000/signin");
 //            }
-
-            System.out.println(oidcUser);
+            
 
             String email = oidcUser.getAttributes().get("email").toString();
             String userName = oidcUser.getAttributes().get("name").toString();
@@ -60,7 +59,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                 token = jwtServiceImpl.generateToken(newUser);
             }
             response.addCookie(createNewCookie(token));
-            response.setHeader("Access-Control-Allow-Credentials", "true");
             response.sendRedirect("http://localhost:3000/");
         }
     }
