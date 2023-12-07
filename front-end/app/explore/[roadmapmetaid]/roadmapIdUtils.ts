@@ -1,4 +1,4 @@
-import { Roadmap } from "@/app/util/types";
+import { Roadmap, RoadmapMeta, RoadmapMetaList } from "@/app/util/types";
 
 export const downloadRoadmapAsJson = (roadmap: Roadmap | undefined) => {
   const roadmapData = JSON.stringify(roadmap, null, 2);
@@ -77,3 +77,10 @@ export const shareRoadmap = async (roadmapName: string | undefined) => {
     prompt("Copy the following URL:", window.location.href);
   }
 }
+
+export const findRoadmapMeta = (roadmapId: string, roadmapMetas: RoadmapMetaList | undefined): RoadmapMeta | undefined => {
+  if (roadmapMetas == undefined) return;
+  return roadmapMetas.roadmapMetaList.find(
+    (roadmapMeta: RoadmapMeta) => roadmapMeta.id === roadmapId
+  );
+};
