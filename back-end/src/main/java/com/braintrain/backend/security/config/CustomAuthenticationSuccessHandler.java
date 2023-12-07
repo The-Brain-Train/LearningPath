@@ -1,6 +1,7 @@
 package com.braintrain.backend.security.config;
 
 
+import com.braintrain.backend.model.Role;
 import com.braintrain.backend.model.User;
 import com.braintrain.backend.repository.UserRepository;
 import com.braintrain.backend.service.JwtServiceImpl;
@@ -38,8 +39,11 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 //                response.sendRedirect("http://localhost:3000/signin");
 //            }
 
+            System.out.println(oidcUser);
+
             String email = oidcUser.getAttributes().get("email").toString();
             String userName = oidcUser.getAttributes().get("name").toString();
+            String profilePicture = oidcUser.getAttributes().get("picture").toString();
 
             User user = userRepository.findByEmail(email);
             String token;
@@ -49,6 +53,9 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                 User newUser = new User();
                 newUser.setEmail(email);
                 newUser.setName(userName);
+                newUser.setProfilePicture(profilePicture);
+                newUser.setRole(Role.USER);
+
                 userRepository.save(newUser);
                 token = jwtServiceImpl.generateToken(newUser);
             }
@@ -60,12 +67,9 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
     private Cookie createNewCookie(String tokenValue) {
         Cookie cookie = new Cookie("user", tokenValue);
-        cookie.setHttpOnly(true);
         cookie.setMaxAge(3500);
-        cookie.setSecure(true);
         cookie.setPath("/");
         cookie.setDomain(getDomain("http://localhost:3000/"));
-        System.out.println(cookie);
         return cookie;
     }
 
