@@ -6,7 +6,7 @@ export const ProviderSignin = () => (
       <div className="w-full h-[1px] bg-gray-300"></div>
     </div>
     <button
-      onClick={() => window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL}/oauth2/authorization/github`}
+      onClick={() => window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL}/oauth2/authorization/google`}
       aria-label="Continue with google"
       role="button"
       className="focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-700 py-3.5 px-4 border rounded-lg border-white flex items-center w-full mt-10 justify-center"
