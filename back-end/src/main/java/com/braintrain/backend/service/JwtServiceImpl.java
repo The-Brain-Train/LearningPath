@@ -9,7 +9,11 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-
+import org.springframework.security.oauth2.client.oidc.authentication.OidcIdTokenValidator;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtException;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -20,6 +24,9 @@ import java.util.function.Function;
 public class JwtServiceImpl implements JwtService{
     @Value("${token.signing.key}")
     private String jwtSigningKey;
+
+    private OidcIdTokenValidator validator;
+    private JwtDecoder jwtDecoder;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -72,4 +79,10 @@ public class JwtServiceImpl implements JwtService{
         byte[] keyBytes= Decoders.BASE64.decode(jwtSigningKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
+    public Jwt validateJWTString(String JWTToken) throws JwtException {
+        Jwt jwt = jwtDecoder.decode(JWTToken);
+        validator.validate(jwt);
+        return jwt;
+    }
+    
 }

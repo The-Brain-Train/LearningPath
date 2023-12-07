@@ -27,6 +27,7 @@ public class SecurityConfig {
 
     private JwtAuthenticationFilter authFilter;
     private UserServiceSpringSecurity userServiceSpringSecurity;
+    private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -41,6 +42,8 @@ public class SecurityConfig {
                         )
                         .permitAll().anyRequest().authenticated())
                 .cors(withDefaults())
+                .oauth2Login(oauth2 -> oauth2
+                        .successHandler(customAuthenticationSuccessHandler))
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider()).addFilterBefore(
                         authFilter, UsernamePasswordAuthenticationFilter.class);
