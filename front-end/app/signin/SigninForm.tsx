@@ -105,123 +105,125 @@ const SigninForm = () => {
         <Typography className="text-white" component="h2" variant="h5">
           Sign in
         </Typography>
-        <Box
-          component="form"
-          onSubmit={handleSubmit}
-          noValidate
-          sx={{ mt: 1, width: "100%", maxWidth: 575 }}
-        >
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            onChange={handleInputChange}
-            value={formData.email}
-            autoFocus
-            error={Boolean(validationErrors.email)}
-            InputProps={{
-              style: { color: "white" },
-            }}
-            InputLabelProps={{
-              style: { color: "white" },
-            }}
-            sx={{
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "white",
-              },
-            }}
-          />
-          {validationErrors.email && (
-            <Alert
-              severity="error"
-              variant="filled"
-              sx={{
-                width: "100%",
-                display: "inline-flex",
-              }}
-            >
-              {validationErrors.email}
-            </Alert>
-          )}
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            onChange={handleInputChange}
-            value={formData.password}
-            error={Boolean(validationErrors.password)}
-            autoComplete="current-password"
-            InputProps={{
-              style: { color: "white" },
-            }}
-            InputLabelProps={{
-              style: { color: "white" },
-            }}
-            sx={{
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "white",
-              },
-            }}
-          />
-          {validationErrors.password && (
-            <Alert
-              severity="error"
-              variant="filled"
-              className="min-w-full inline-flex"
-              sx={{
-                width: "100%",
-                display: "inline-flex",
-              }}
-            >
-              {validationErrors.password}
-            </Alert>
-          )}
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2, bgcolor: "#1976d2 !important" }}
+        <Box sx={{ mt: 1, width: "100%", maxWidth: 575 }}>
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            noValidate
+            
           >
-            Sign In
-          </Button>
-          {validationErrors.generic && (
-            <Alert
-              severity="error"
-              variant="filled"
-              className="min-w-full inline-flex"
-              sx={{
-                width: "100%",
-                display: "inline-flex",
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              onChange={handleInputChange}
+              value={formData.email}
+              autoFocus
+              error={Boolean(validationErrors.email)}
+              InputProps={{
+                style: { color: "white" },
               }}
-            >
-              {validationErrors.generic}
-            </Alert>
-          )}
-
-          <Grid container>
-            <Grid item>
-              <Link
-                href="/signup"
-                className="text-lg hover:underline text-white"
+              InputLabelProps={{
+                style: { color: "white" },
+              }}
+              sx={{
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "white",
+                },
+              }}
+            />
+            {validationErrors.email && (
+              <Alert
+                severity="error"
+                variant="filled"
                 sx={{
-                  color: "white !important",
-                  fontSize: "1.125rem !important",
-                  lineHeight: "1.75rem !important",
+                  width: "100%",
+                  display: "inline-flex",
                 }}
               >
-                Don&apos;t have an account?{" "}
-                <span className="text-blue-500 font-bold">Sign up</span>
-              </Link>
+                {validationErrors.email}
+              </Alert>
+            )}
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              onChange={handleInputChange}
+              value={formData.password}
+              error={Boolean(validationErrors.password)}
+              autoComplete="current-password"
+              InputProps={{
+                style: { color: "white" },
+              }}
+              InputLabelProps={{
+                style: { color: "white" },
+              }}
+              sx={{
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "white",
+                },
+              }}
+            />
+            {validationErrors.password && (
+              <Alert
+                severity="error"
+                variant="filled"
+                className="min-w-full inline-flex"
+                sx={{
+                  width: "100%",
+                  display: "inline-flex",
+                }}
+              >
+                {validationErrors.password}
+              </Alert>
+            )}
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2, bgcolor: "#1976d2 !important" }}
+            >
+              Sign In
+            </Button>
+            {validationErrors.generic && (
+              <Alert
+                severity="error"
+                variant="filled"
+                className="min-w-full inline-flex"
+                sx={{
+                  width: "100%",
+                  display: "inline-flex",
+                }}
+              >
+                {validationErrors.generic}
+              </Alert>
+            )}
+
+            <Grid container>
+              <Grid item>
+                <Link
+                  href="/signup"
+                  className="text-lg hover:underline text-white"
+                  sx={{
+                    color: "white !important",
+                    fontSize: "1.125rem !important",
+                    lineHeight: "1.75rem !important",
+                  }}
+                >
+                  Don&apos;t have an account?{" "}
+                  <span className="text-blue-500 font-bold">Sign up</span>
+                </Link>
+              </Grid>
             </Grid>
-          </Grid>
+          </Box>
           <ProviderSignin />
         </Box>
       </Box>
