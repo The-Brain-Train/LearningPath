@@ -27,35 +27,54 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     private final JwtServiceImpl jwtServiceImpl;
     private final UserRepository userRepository;
 
+    String frontendUrl;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException {
-        if (authentication.getPrincipal() instanceof DefaultOAuth2User) {
-            DefaultOAuth2User oauth2User = (DefaultOAuth2User) authentication.getPrincipal();
+        if (authentication.getPrincipal() instanceof OidcUser oidcUser) {
+            try {
+                jwtServiceImpl.validateJWTString(oidcUser.getIdToken().getTokenValue());
+            } catch (JwtException e) {
+                response.sendRedirect("http://localhost:3000/signin");
+            }
 
-            // Extract the necessary information from oauth2User, such as username
-            String email = oauth2User.getAttributes().get("email").toString();
-            String userName = oauth2User.getAttributes().get("name").toString();
-            // first check if email address is present in your data base
+            String email = oidcUser.getAttributes().get("email").toString();
+            String userName = oidcUser.getAttributes().get("name").toString();
+
             User user = userRepository.findByEmail(email);
             String token = "";
-            if(user != null){
+            if (user != null){
                 token = jwtServiceImpl.generateToken(user);
-            }else{
+            } else{
                 User newUser = new User();
                 newUser.setEmail(email);
                 newUser.setName(userName);
                 userRepository.save(newUser);
                 token = jwtServiceImpl.generateToken(newUser);
             }
-            // Generate JWT token if needed
-            //String jwtToken = jwtValidation.generateToken(username);
+            response.addCookie(createNewCookie(oidcUser.getIdToken().getTokenValue()));
+            response.setHeader("Access-Control-Allow-Credentials", "true");
+            response.sendRedirect("http://localhost:3000/");
         }
+    }
 
-        // If the authentication is not OIDC user, you may handle other cases here
+    private Cookie createNewCookie(String tokenValue) {
+        Cookie cookie = new Cookie("JwtToken", tokenValue);
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(3500);
+        cookie.setSecure(true);
+        cookie.setPath("/");
+        cookie.setDomain(getDomain("https://learning-path-brain-train.vercel.app/"));
+        return cookie;
+    }
 
-        response.setHeader("Access-Control-Allow-Credentials", "true");
+    private String getDomain(String url) {
+        if ("https://learning-path-brain-train.vercel.app/".equals(url)) {
+            return "learning-path-brain-train.vercel.app";
+        }
+        return "localhost";
     }
 }
 

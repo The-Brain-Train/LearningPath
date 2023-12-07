@@ -23,6 +23,9 @@ spring:
 field:
   updater:
     enabled: false
+#website:
+#  base-url:
+#    frontend: ${FRONTEND_URL}
 gcp:
   config:
     file: ${GCP_SERVICE}
