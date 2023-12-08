@@ -33,12 +33,11 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException {
         if (authentication.getPrincipal() instanceof OidcUser oidcUser) {
-//            try {
-//                jwtServiceImpl.validateJWTString(oidcUser.getIdToken().getTokenValue());
-//            } catch (JwtException e) {
-//                response.sendRedirect("http://localhost:3000/signin");
-//            }
-            
+            try {
+                jwtServiceImpl.validateJWTString(oidcUser.getIdToken().getTokenValue());
+            } catch (JwtException e) {
+                response.sendRedirect("http://localhost:3000/signin");
+            }
 
             String email = oidcUser.getAttributes().get("email").toString();
             String userName = oidcUser.getAttributes().get("name").toString();
