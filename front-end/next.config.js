@@ -23,8 +23,6 @@ const nextConfig = {
     }
     return config;
   },
-  reactStrictMode: true,
-  distDir: "dist",
 };
 
 module.exports = nextConfig;
