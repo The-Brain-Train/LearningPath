@@ -17,9 +17,9 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
-
     private final JwtServiceImpl jwtServiceImpl;
     private final UserRepository userRepository;
+    private final WebsiteProperties websiteProperties;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -31,7 +31,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             try {
                 jwtServiceImpl.validateJWTString(oidcUser.getIdToken().getTokenValue());
             } catch (JwtException e) {
-                response.sendRedirect("http://localhost:3000/signin");
+                response.sendRedirect(websiteProperties.frontend() + "signin");
             }
 
             String email = oidcUser.getAttributes().get("email").toString();
@@ -49,15 +49,15 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                 token = jwtServiceImpl.generateToken(newUser);
             }
             response.addCookie(createNewCookie(token));
-            response.sendRedirect("http://localhost:3000/");
+            response.sendRedirect(websiteProperties.frontend());
         }
     }
 
     private Cookie createNewCookie(String tokenValue) {
         Cookie cookie = new Cookie("user", tokenValue);
-        cookie.setMaxAge(3500);
+        cookie.setMaxAge(350000);
         cookie.setPath("/");
-        cookie.setDomain(getDomain("http://localhost:3000/"));
+        cookie.setDomain(getDomain(websiteProperties.frontend()));
         return cookie;
     }
 

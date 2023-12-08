@@ -17,15 +17,15 @@ spring:
           google:
             client-id: ${GOOGLE_CLIENT_ID}
             client-secret: ${GOOGLE_CLIENT_SECRET}
-#          github:
-#            client-id: ${GITHUB_CLIENT_ID}
-#            client-secret: ${GITHUB_CLIENT_SECRET}
 field:
   updater:
     enabled: false
-#website:
-#  base-url:
+website:
+  base-url:
+    frontend: http://localhost:3000/
 #    frontend: ${FRONTEND_URL}
+    backend: http://localhost:8080/
+#    backend: ${BACKEND_URL}
 gcp:
   config:
     file: ${GCP_SERVICE}
