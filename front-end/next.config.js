@@ -1,16 +1,30 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    webpack: (config, { dev }) => {
-      if (!dev) {
-        config.stats = {
-          warningsFilter: /serializing big strings/,
-        };
-      }
-      return config;
-    },
-    reactStrictMode: true,
-    distDir: 'dist',
-  };
+  images: {
+    domains: [
+      "lh3.googleusercontent.com",
+      "localhost",
+      "storage.googleapis.com",
+    ],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "avatars.githubusercontent.com",
+        port: "",
+        pathname: "/u/**",
+      },
+    ],
+  },
+  webpack: (config, { dev }) => {
+    if (!dev) {
+      config.stats = {
+        warningsFilter: /serializing big strings/,
+      };
+    }
+    return config;
+  },
+  reactStrictMode: true,
+  distDir: "dist",
+};
 
-  module.exports = nextConfig;
-  
+module.exports = nextConfig;
