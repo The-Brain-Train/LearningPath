@@ -22,8 +22,8 @@ field:
     enabled: false
 website:
   base-url:
-    # frontend: http://localhost:3000/
-    frontend: ${FRONTEND_URL}
+    frontend: http://localhost:3000/
+    # frontend: ${FRONTEND_URL}
     # backend: http://localhost:8080/
     backend: ${BACKEND_URL}
 gcp:
