@@ -14,7 +14,7 @@ services:
   name: nextjs-static
   env: static
   buildCommand: npm install && npm run build && npm run export
-  staticPublishPath: out
+  staticPublishPath: .next
   pullRequestPreviewsEnabled: true     # optional
   envVars:
   - key: NODE_ENV
