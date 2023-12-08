@@ -19,6 +19,9 @@ const nextConfig = {
       }
       return config;
     },
+    reactStrictMode: true,
+    distDir: 'dist',
+    output: 'export'
   };
 
   module.exports = nextConfig;
