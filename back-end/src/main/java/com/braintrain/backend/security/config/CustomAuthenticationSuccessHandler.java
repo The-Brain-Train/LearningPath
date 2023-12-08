@@ -1,7 +1,5 @@
 package com.braintrain.backend.security.config;
 
-
-import com.braintrain.backend.model.Role;
 import com.braintrain.backend.model.User;
 import com.braintrain.backend.repository.UserRepository;
 import com.braintrain.backend.service.JwtServiceImpl;
@@ -14,9 +12,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-
-
-
 import java.io.IOException;
 
 @Component
