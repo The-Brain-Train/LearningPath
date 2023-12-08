@@ -62,7 +62,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     }
 
     private String getDomain(String url) {
-        if ("https://learning-path-brain-train.vercel.app/".equals(url)) {
+        if (websiteProperties.frontend().equals(url)) {
             return "learning-path-brain-train.vercel.app";
         }
         return "localhost";
