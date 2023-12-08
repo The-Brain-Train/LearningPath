@@ -56,7 +56,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
     private Cookie createNewCookie(String tokenValue) {
         Cookie cookie = new Cookie("user", tokenValue);
-        // cookie.setSecure(true);
+        cookie.setSecure(true);
         cookie.setMaxAge(350000);
         cookie.setPath("/");
         cookie.setDomain(getDomain(websiteProperties.frontend()));
