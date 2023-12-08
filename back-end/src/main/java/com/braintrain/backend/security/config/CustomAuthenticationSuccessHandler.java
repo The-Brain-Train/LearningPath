@@ -48,6 +48,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                 userRepository.save(newUser);
                 token = jwtServiceImpl.generateToken(newUser);
             }
+            System.out.println(createNewCookie(token));
             response.addCookie(createNewCookie(token));
             response.sendRedirect(websiteProperties.frontend());
         }
@@ -63,9 +64,12 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     }
 
     private String getDomain(String url) {
+    
         if (websiteProperties.frontend().equals(url)) {
+            System.out.println(url);
             return "learning-path-pi.vercel.app";
         }
+        System.out.println("not triggered");
         return "localhost";
     }
 }
