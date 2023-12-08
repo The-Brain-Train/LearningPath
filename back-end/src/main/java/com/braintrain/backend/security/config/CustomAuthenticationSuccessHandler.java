@@ -26,6 +26,8 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException {
         if (authentication.getPrincipal() instanceof OidcUser oidcUser) {
+            String token;
+
             try {
                 jwtServiceImpl.validateJWTString(oidcUser.getIdToken().getTokenValue());
             } catch (JwtException e) {
@@ -37,7 +39,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             String profilePicture = oidcUser.getAttributes().get("picture").toString();
 
             User user = userRepository.findByEmail(email);
-            String token;
+
             if (user != null){
                 token = jwtServiceImpl.generateToken(user);
             } else{

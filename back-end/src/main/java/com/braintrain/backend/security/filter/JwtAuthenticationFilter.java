@@ -26,18 +26,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authorization");
         String jwtToken = null;
         String userEmail = null;
-        // checking if auth header is present in the request, if not then return.
-        // this will throw 403 forbidden exception
+
         if(StringUtils.isEmpty(authHeader) || !StringUtils.startsWith(authHeader,"Bearer ")){
             filterChain.doFilter(request, response);
             return;
         }
-        //if JWT token is present, then get the token.
+
         jwtToken = authHeader.substring(7);
-        // every token will have user details, fetch the username from it
+
         userEmail = jwtServiceImpl.extractUsername(jwtToken);
 
-        // If userinfo is present and is not authentication, then do authentication.
         if(StringUtils.isNotEmpty(userEmail)
                 && SecurityContextHolder.getContext().getAuthentication() == null){
             UserDetails userDetails = userServiceSpringSecurity.userDetailsService().loadUserByUsername(userEmail);
