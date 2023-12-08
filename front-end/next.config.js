@@ -20,10 +20,6 @@ const nextConfig = {
       return config;
     },
   };
-  
-  module.exports = {
-    distDir: 'build',
-  }
 
   module.exports = nextConfig;
   
