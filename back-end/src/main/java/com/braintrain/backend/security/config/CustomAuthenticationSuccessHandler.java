@@ -67,7 +67,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     private String getDomain(String url) {
         if (websiteProperties.frontend().equals(url)) {
             System.out.println(url);
-            return "learning-path-pi.vercel.app";
+            return "learning-path-pi.vercel";
         }
         System.out.println("not triggered");
         return "localhost";
