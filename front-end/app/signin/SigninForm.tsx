@@ -224,7 +224,7 @@ const SigninForm = () => {
               </Grid>
             </Grid>
           </Box>
-          <ProviderSignin />
+          {/* <ProviderSignin /> */}
         </Box>
       </Box>
     </Container>
