@@ -64,7 +64,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
     private String getDomain(String url) {
         if (websiteProperties.frontend().equals(url)) {
-            return "learning-path-p405.onrender";
+            return "learning-path-3lfy.onrender";
         }
         return "localhost";
     }
