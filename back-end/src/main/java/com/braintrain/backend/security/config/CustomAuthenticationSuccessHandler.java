@@ -59,18 +59,18 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         cookie.setSecure(true);
         cookie.setMaxAge(350000);
         cookie.setPath("/");
-        cookie.setDomain(getDomain(websiteProperties.frontend()));
+        cookie.setDomain("learning-path.onrender.com");
         System.out.println(cookie.getDomain());
         return cookie;
     }
 
-    private String getDomain(String url) {
-        if (websiteProperties.frontend().equals(url)) {
-            System.out.println(url);
-            return "learning-path-pi.vercel";
-        }
-        System.out.println("not triggered");
-        return "localhost";
-    }
+    // private String getDomain(String url) {
+    //     if (websiteProperties.frontend().equals(url)) {
+    //         System.out.println(url);
+    //         return "learning-path-pi.vercel";
+    //     }
+    //     System.out.println("not triggered");
+    //     return "localhost";
+    // }
 }
 
