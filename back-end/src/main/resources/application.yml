@@ -4,15 +4,28 @@ spring:
   data:
     mongodb:
       uri: mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@learningpathcluster.xszn5ys.mongodb.net/${DB_NAME}
-#      uri: mongodb://root:example@localhost:27017/learningPathTest?authSource=admin
-#      database: learningPathTest
+      #  uri: mongodb://root:example@localhost:27017/learningPathTest?authSource=admin
+      #  database: learningPathTest
   servlet:
     multipart:
       max-request-size: 10MB
       max-file-size: 10MB
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
 field:
   updater:
     enabled: false
+website:
+  base-url:
+    # frontend: http://localhost:3000/
+    frontend: ${FRONTEND_URL}
+    # backend: http://localhost:8080/
+    backend: ${BACKEND_URL}
 gcp:
   config:
     file: ${GCP_SERVICE}
@@ -26,10 +39,11 @@ logging:
   level:
     org:
       springframework:
+        security: trace
         boot:
           autoconfigure: ERROR
 token:
   signing:
     key: ${TOKEN_SIGNING_KEY}
-#    key: 5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437
+    #  key: 5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437
 

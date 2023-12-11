@@ -1,70 +1,40 @@
 "use client";
-import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useCookies } from "react-cookie";
 import jwtDecode from "jwt-decode";
-import Image from "next/legacy/image";
-import dynamic from "next/dynamic";
 import { User } from "../util/types";
+import Image from "next/legacy/image";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getUserProfilePicture } from "../functions/httpRequests";
-import { useRouter } from "next/navigation";
-
-const DynamicBurgerMenu = dynamic(() => import("./BurgerMenu"));
+import BurgerMenu from "./BurgerMenu";
 
 export default function Header() {
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [profilePictureUrl, setProfilePictureUrl] = useState<
-    string | undefined
-  >(undefined);
-  const router = useRouter();
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const user = jwtDecode(cookies.user) as User | null;
-        setCurrentUser(user);
-
-        if (user) {
-          const pictureUrl = await getUserProfilePicture(
-            user.email,
-            cookies.user
-          );
-          setProfilePictureUrl(pictureUrl);
-        }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-
-    if (cookies.user) {
-      fetchUserData();
+  const { data: currentUser } = useQuery<User | null>(
+    ["currentUser"],
+    async () => {
+      const user = jwtDecode(cookies.user) as User | null;
+      return user;
+    },
+    {
+      enabled: !!cookies.user,
     }
-  }, [cookies.user]);
+  );
 
-  useEffect(() => {
-    const updateProfilePicture = async () => {
-      try {
-        if (currentUser) {
-          const newPictureUrl = await getUserProfilePicture(
-            currentUser.email,
-            cookies.user
-          );
-          setProfilePictureUrl(newPictureUrl);
-        }
-      } catch (error) {
-        console.error("Error updating profile picture:", error);
-      }
-    };
-
-    updateProfilePicture();
-  }, [currentUser, cookies.user]);
+  const { data: profilePictureUrl } = useQuery<string>(
+    ["profilePictureUrl"],
+    () => getUserProfilePicture(currentUser?.email as string, cookies.user),
+    {
+      enabled: !!currentUser,
+    }
+  );
 
   const handleSignOut = () => {
-    setCurrentUser(null);
-    setProfilePictureUrl(undefined);
     removeCookie("user");
-    router.push("/");
+    queryClient.removeQueries(["currentUser"]);
+    queryClient.removeQueries(["profilePictureUrl"]);
   };
 
   return (
@@ -76,7 +46,7 @@ export default function Header() {
               className="h-14 w-auto"
               src="/Logo.png"
               alt="LP Logo"
-              width={140}
+              width={150}
               height={60}
               priority
             />
@@ -92,7 +62,7 @@ export default function Header() {
                       height={35}
                       alt="User profile picture"
                       className="rounded-full w-auto"
-                      layout="fixed" // or "intrinsic" depending on your use case
+                      layout="fixed" 
                     />
                   ) : (
                     <Image
@@ -112,7 +82,7 @@ export default function Header() {
                 </p>
               </Link>
             ) : null}
-            <DynamicBurgerMenu handleSignOut={handleSignOut} />
+            <BurgerMenu handleSignOut={handleSignOut} />
           </div>
         </div>
       </header>

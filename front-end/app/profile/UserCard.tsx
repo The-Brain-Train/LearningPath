@@ -8,6 +8,7 @@ import {
 } from "../functions/httpRequests";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { Alert } from "@mui/material";
 
 export default function Card({ currentUser }: UserProps) {
   const [cookies] = useCookies(["user"]);
@@ -27,7 +28,7 @@ export default function Card({ currentUser }: UserProps) {
       },
       onError: (error) => {
         setErrorMessage(error.message);
-        setTimeout(()=> setErrorMessage(null), 5000);
+        setTimeout(() => setErrorMessage(null), 5000);
       },
     }
   );
@@ -90,7 +91,7 @@ export default function Card({ currentUser }: UserProps) {
             required
           />
         </label>
-        {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
+        {errorMessage && <Alert className="mt-3" severity="error" variant="filled">{errorMessage}</Alert>}
       </div>
     </div>
   );

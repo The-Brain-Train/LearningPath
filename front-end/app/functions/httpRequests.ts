@@ -16,10 +16,32 @@ export const signUp = async (formData: any) => {
     body: JSON.stringify(formData),
   }).then(response => {
     if (response.status === 409) {
-      throw new Error("Email address already in use. Please sign in or use a different email.");
+      throw new Error("Email already in use. Sign in or use a different email.");
     }
   })
 };
+
+export const signIn = async (formData: any) => {
+  const response = await fetch(`${BACKEND_URL}/api/auth/signin`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(formData),
+  });
+  if (response.ok) {
+    const data = await response.json();
+    return data.token;
+  } else {
+    console.error("Error submitting form data:", response.statusText);
+  }
+  if (response.status === 403) {
+    throw new Error("Incorrect password.");
+  }
+  if (response.status === 401) {
+    throw new Error("Invalid Email. Please try again or sign up.");
+  }
+}
 
 export const getRoadmaps = async () => {
   const response = await fetch(`${BACKEND_URL}/api/roadmaps`);
@@ -372,7 +394,7 @@ export const postUserProfilePicture = async (
     }
   );
   if (response.status === 422) {
-    throw new Error("Invalid file type. Please upload an image.");
+    throw new Error("Invalid file. Please use an image.");
   }
   if (!response.ok) {
     throw new Error("Profile picture upload failed");

@@ -1,21 +1,34 @@
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import { IconButton, Tooltip } from "@mui/material";
 
 type FavoriteButtonProps = {
   onClick: () => void;
   isFavorite: boolean;
 };
 
-export const FavoriteButton = ({ onClick, isFavorite }: FavoriteButtonProps) => (
-  <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full text-sm md:text-xl" onClick={onClick}>
+export const FavoriteButton = ({
+  onClick,
+  isFavorite,
+}: FavoriteButtonProps) => (
+  <IconButton
+    onClick={onClick}
+    sx={{color: "white", textAlign: "center", cursor: "pointer"}}
+  >
     {isFavorite ? (
-      <p>
-        <FavoriteIcon /> Remove from favorites
-      </p>
+      <Tooltip title="Favorite">
+        <div>
+          <FavoriteIcon />
+          <div style={{ fontSize: "7px" }}>Favorite</div>
+        </div>
+      </Tooltip>
     ) : (
-      <p>
-        <FavoriteBorderIcon /> Add to favorites
-      </p>
+      <Tooltip title="Favorite">
+        <div>
+          <FavoriteBorderIcon />
+          <div style={{ fontSize: "7px" }}>Favorite</div>
+        </div>
+      </Tooltip>
     )}
-  </button>
+  </IconButton>
 );

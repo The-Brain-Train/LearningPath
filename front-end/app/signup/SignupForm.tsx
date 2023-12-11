@@ -5,7 +5,6 @@ import "react-toastify/dist/ReactToastify.css";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -15,11 +14,22 @@ import Container from "@mui/material/Container";
 import { useRouter } from "next/navigation";
 import { validateSignUpForm } from "../functions/validations";
 import { signUp } from "../functions/httpRequests";
+import { Alert } from "@mui/material";
+import PasswordRequirements from "./PasswordRequirements";
+import SignupFormFields from "./SignupFormFields";
 
 export type SignUpFormType = {
   name: string;
   email: string;
   password: string;
+};
+
+type SignUpErrorsType = {
+  name: string | null;
+  email: string | null;
+  password: string | null;
+  passwordConfirmation: string | null;
+  generic: string | null;
 };
 
 const SignupForm = () => {
@@ -28,9 +38,44 @@ const SignupForm = () => {
     email: "",
     password: "",
   });
-  const [error, setError] = useState<string | null>(null);
+  const [validationErrors, setValidationErrors] = useState<SignUpErrorsType>({
+    name: null,
+    email: null,
+    password: null,
+    passwordConfirmation: null,
+    generic: null,
+  });
+
   const router = useRouter();
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [validationChecks, setValidationChecks] = useState({
+    uppercase: false,
+    lowercase: false,
+    number: false,
+    specialChar: false,
+    minLength: false,
+  });
+
+  const passwordRequirementsCheck = (password: string): void => {
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasLowercase = /[a-z]/.test(password);
+    const hasDigit = /\d/.test(password);
+    const hasSpecialChar = /[@#$%^&+=*!-]/.test(password);
+
+    setValidationChecks({
+      uppercase: hasUppercase,
+      lowercase: hasLowercase,
+      number: hasDigit,
+      specialChar: hasSpecialChar,
+      minLength: password.length >= 8,
+    });
+  };
+
+  const handlePasswordChange = (e: { target: { value: string } }) => {
+    const { value } = e.target;
+    setFormData({ ...formData, password: value });
+    passwordRequirementsCheck(value);
+  };
 
   const handleInputChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
@@ -44,23 +89,43 @@ const SignupForm = () => {
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    
+
     try {
       validateSignUpForm(formData, passwordConfirmation);
       await signUp(formData);
-      setError(null);
       toast.success("Successful! Being redirected to the login page", {
         position: "top-center",
         autoClose: 3000,
         onClose: () => {
-          router.push('/signin?source=signup');
+          router.push("/signin?source=signup");
         },
       });
     } catch (error: any) {
-      setError(error.message);
-      setTimeout(() => {
-        setError(null);
-      }, 2000);
+      if (error.message.includes("|")) {
+        const [fieldName, errorMessage] = error.message.split("|");
+        setValidationErrors((prevErrors) => ({
+          ...prevErrors,
+          [fieldName]: errorMessage,
+        }));
+
+        setTimeout(() => {
+          setValidationErrors((prevErrors) => ({
+            ...prevErrors,
+            [fieldName]: null,
+          }));
+        }, 3000);
+      } else {
+        setValidationErrors((prevErrors) => ({
+          ...prevErrors,
+          generic: error.message,
+        }));
+        setTimeout(() => {
+          setValidationErrors((prevErrors) => ({
+            ...prevErrors,
+            generic: null,
+          }));
+        }, 5000);
+      }
       return;
     }
   };
@@ -79,109 +144,19 @@ const SignupForm = () => {
           component="form"
           noValidate
           onSubmit={handleSubmit}
-          className="max-w-xl "
+          sx={{ mt: 1, width:"100%", maxWidth: 575 }}
         >
-          <TextField
-            margin="normal"
-            autoComplete="given-name"
-            name="name"
-            required
-            fullWidth
-            id="name"
-            label="Name"
-            onChange={handleInputChange}
-            autoFocus
-            value={formData.name}
-            InputProps={{
-              style: { color: "white" },
-            }}
-            InputLabelProps={{
-              style: { color: "white" },
-            }}
-            sx={{
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "white",
-              },
-            }}
+          <SignupFormFields
+            formData={formData}
+            validationErrors={validationErrors}
+            passwordConfirmation={passwordConfirmation} 
+            handleInputChange={handleInputChange}
+            handlePasswordChange={handlePasswordChange}
+            handlePasswordConfirmationChange={handlePasswordConfirmationChange}
           />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            onChange={handleInputChange}
-            value={formData.email}
-            InputProps={{
-              style: { color: "white" },
-            }}
-            InputLabelProps={{
-              style: { color: "white" },
-            }}
-            sx={{
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "white",
-              },
-            }}
+          <PasswordRequirements
+            validationChecks={validationChecks}
           />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="new-password"
-            onChange={handleInputChange}
-            value={formData.password}
-            InputProps={{
-              style: { color: "white" },
-            }}
-            InputLabelProps={{
-              style: { color: "white" },
-            }}
-            sx={{
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "white",
-              },
-            }}
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="passwordConfirmation"
-            label="Confirm Password"
-            type="password"
-            id="passwordConfirmation"
-            autoComplete="new-password"
-            onChange={handlePasswordConfirmationChange}
-            value={passwordConfirmation}
-            InputProps={{
-              style: { color: "white" },
-            }}
-            InputLabelProps={{
-              style: { color: "white" },
-            }}
-            sx={{
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "white",
-              },
-            }}
-          />
-          {error && (
-            <Typography className="text-red-500 text-center font-semibold font-xs">
-              {error}
-            </Typography>
-          )}
-          <p className="text-white text-xs text-center pt-4">
-            <span className="underline">Note:</span> Please choose a stronger password.
-            Password should be at least 8 characters long. Try a mix of uppercase and
-            lowercase letters, numbers, and symbols.
-          </p>
           <Button
             type="submit"
             fullWidth
@@ -190,6 +165,11 @@ const SignupForm = () => {
           >
             Sign Up
           </Button>
+          {validationErrors.generic && (
+            <Alert severity="error" variant="filled">
+              {validationErrors.generic}
+            </Alert>
+          )}
           <ToastContainer />
           <Grid container justifyContent="flex-start">
             <Grid item>

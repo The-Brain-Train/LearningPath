@@ -41,6 +41,16 @@ public class User  implements UserDetails {
         this.downVotes = new ArrayList<>();
     }
 
+    public User(String name, String email, String profilePicture) {
+        this.name = name;
+        this.email = email;
+        this.role = Role.USER;
+        this.favorites = new ArrayList<>();
+        this.profilePicture = profilePicture;
+        this.upVotes = new ArrayList<>();
+        this.downVotes = new ArrayList<>();
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));

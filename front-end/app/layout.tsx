@@ -17,7 +17,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
 
-  const DynamicHeader = dynamic(() => import("./components/Header"));
+  const DynamicHeader = dynamic(() => import("./components/Header"), { ssr: false });
 
   return (
     <html lang="en">

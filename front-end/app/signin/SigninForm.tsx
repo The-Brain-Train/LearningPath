@@ -12,16 +12,35 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useCookies } from "react-cookie";
 import { useRouter, useSearchParams } from "next/navigation";
+import { signIn } from "../functions/httpRequests";
+import { validateSignInForm } from "../functions/validations";
+import { Alert } from "@mui/material";
+import { ProviderSignin } from "./ProviderSignin";
+
+export type SignInFormType = {
+  email: string;
+  password: string;
+};
+
+type SignInErrorsType = {
+  email: string | null;
+  password: string | null;
+  generic: string | null;
+};
 
 const SigninForm = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<SignInFormType>({
     email: "",
     password: "",
   });
-  const [error, setError] = useState<string | null>(null);
+  const [validationErrors, setValidtaionErrors] = useState<SignInErrorsType>({
+    email: null,
+    password: null,
+    generic: null,
+  });
+
   const [cookies, setCookie] = useCookies(["user"]);
   const router = useRouter();
-  const [isEmailValid, setIsEmailValid] = useState(true);
 
   const searchParams = useSearchParams();
   const directedFromSignup = searchParams.get("source");
@@ -31,52 +50,48 @@ const SigninForm = () => {
   }) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-
-    if (name === "email") {
-      const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
-      setIsEmailValid(emailRegex.test(value));
-    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (isEmailValid && formData.password.trim() !== "") {
-      const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
-
-      try {
-        const response = await fetch(`${BACKEND_URL}/api/auth/signin`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        });
-        if (response.ok) {
-          const data = await response.json();
-          const token = data.token;
-          setCookie("user", token, {
-            path: "/",
-          });
-          if (directedFromSignup) {
-            router.push("/");
-          } else {
-            router.back();
-          }
-        } else {
-          console.error("Error submitting form data:", response.statusText);
-        }
-        if (response.status === 403) {
-          setError("Incorrect password. Please try again.");
-        }
-        if (response.status === 401) {
-          setError("Invalid Email. Please try again or sign up.");
-        }
-      } catch (error) {
-        setError("An error occurred while signing in.");
+    try {
+      validateSignInForm(formData);
+      const token = await signIn(formData);
+      setCookie("user", token, {
+        path: "/",
+      });
+      if (directedFromSignup) {
+        router.push("/");
+      } else {
+        router.back();
       }
-    } else {
-      setError("Please fill out the form correctly.");
+    } catch (error: any) {
+      if (error.message.includes("|")) {
+        const [fieldName, errorMessage] = error.message.split("|");
+        setValidtaionErrors((prevErrors) => ({
+          ...prevErrors,
+          [fieldName]: errorMessage,
+        }));
+        setTimeout(() => {
+          setValidtaionErrors((prevErrors) => ({
+            ...prevErrors,
+            [fieldName]: null,
+          }));
+        }, 3000);
+      } else {
+        setValidtaionErrors((prevErrors) => ({
+          ...prevErrors,
+          generic: error.message,
+        }));
+        setTimeout(() => {
+          setValidtaionErrors((prevErrors) => ({
+            ...prevErrors,
+            generic: null,
+          }));
+        }, 5000);
+      }
+      return;
     }
   };
 
@@ -90,86 +105,128 @@ const SigninForm = () => {
         <Typography className="text-white" component="h2" variant="h5">
           Sign in
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            onChange={handleInputChange}
-            value={formData.email}
-            autoFocus
-            error={!isEmailValid}
-            helperText={!isEmailValid ? "Invalid email format" : ""}
-            InputProps={{
-              style: { color: "white" },
-            }}
-            InputLabelProps={{
-              style: { color: "white" },
-            }}
-            sx={{
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "white",
-              },
-            }}
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            onChange={handleInputChange}
-            value={formData.password}
-            autoComplete="current-password"
-            InputProps={{
-              style: { color: "white" },
-            }}
-            InputLabelProps={{
-              style: { color: "white" },
-            }}
-            sx={{
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "white",
-              },
-            }}
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2, bgcolor: "#1976d2 !important" }}
+        <Box sx={{ mt: 1, width: "100%", maxWidth: 575 }}>
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            noValidate
+            
           >
-            Sign In
-          </Button>
-          <Grid container>
-            <Grid item>
-              <Link
-                href="/signup"
-                className="text-lg hover:underline text-white"
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              onChange={handleInputChange}
+              value={formData.email}
+              autoFocus
+              error={Boolean(validationErrors.email)}
+              InputProps={{
+                style: { color: "white" },
+              }}
+              InputLabelProps={{
+                style: { color: "white" },
+              }}
+              sx={{
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "white",
+                },
+              }}
+            />
+            {validationErrors.email && (
+              <Alert
+                severity="error"
+                variant="filled"
                 sx={{
-                  color: "white !important",
-                  fontSize: "1.125rem !important",
-                  lineHeight: "1.75rem !important",
+                  width: "100%",
+                  display: "inline-flex",
                 }}
               >
-                Don&apos;t have an account?{" "}
-                <span className="text-blue-500 font-bold">Sign up</span>
-              </Link>
+                {validationErrors.email}
+              </Alert>
+            )}
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              onChange={handleInputChange}
+              value={formData.password}
+              error={Boolean(validationErrors.password)}
+              autoComplete="current-password"
+              InputProps={{
+                style: { color: "white" },
+              }}
+              InputLabelProps={{
+                style: { color: "white" },
+              }}
+              sx={{
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "white",
+                },
+              }}
+            />
+            {validationErrors.password && (
+              <Alert
+                severity="error"
+                variant="filled"
+                className="min-w-full inline-flex"
+                sx={{
+                  width: "100%",
+                  display: "inline-flex",
+                }}
+              >
+                {validationErrors.password}
+              </Alert>
+            )}
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2, bgcolor: "#1976d2 !important" }}
+            >
+              Sign In
+            </Button>
+            {validationErrors.generic && (
+              <Alert
+                severity="error"
+                variant="filled"
+                className="min-w-full inline-flex"
+                sx={{
+                  width: "100%",
+                  display: "inline-flex",
+                }}
+              >
+                {validationErrors.generic}
+              </Alert>
+            )}
+
+            <Grid container>
+              <Grid item>
+                <Link
+                  href="/signup"
+                  className="text-lg hover:underline text-white"
+                  sx={{
+                    color: "white !important",
+                    fontSize: "1.125rem !important",
+                    lineHeight: "1.75rem !important",
+                  }}
+                >
+                  Don&apos;t have an account?{" "}
+                  <span className="text-blue-500 font-bold">Sign up</span>
+                </Link>
+              </Grid>
             </Grid>
-          </Grid>
+          </Box>
+          {/* <ProviderSignin /> */}
         </Box>
       </Box>
-      {error && (
-        <Typography className=" text-red-500 text-center font-semibold font-xs">
-          {error}
-        </Typography>
-      )}
     </Container>
   );
 };
