@@ -10,13 +10,21 @@ import BurgerMenu from "./BurgerMenu";
 import { useRouter } from "next/navigation";
 import useCurrentUserQuery from "../functions/useCurrentUserQuery";
 
-
-
 export default function Header() {
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
   const queryClient = useQueryClient();
   const router = useRouter();
-  const { currentUser, isLoading } = useCurrentUserQuery();
+
+  const { data: currentUser } = useQuery<User | null>(
+    ["currentUser"],
+    async () => {
+      const user = jwtDecode(cookies.user) as User | null;
+      return user;
+    },
+    {
+      enabled: !!cookies.user,
+    }
+  );
 
   const { data: profilePictureUrl } = useQuery<string>(
     ["profilePictureUrl"],
@@ -58,7 +66,7 @@ export default function Header() {
                       height={35}
                       alt="User profile picture"
                       className="rounded-full w-auto"
-                      layout="fixed" 
+                      layout="fixed"
                     />
                   ) : (
                     <Image
