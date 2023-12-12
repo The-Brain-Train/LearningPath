@@ -48,21 +48,25 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                 userRepository.save(newUser);
                 token = jwtServiceImpl.generateToken(newUser);
             }
-            System.out.println(createNewCookie(token));
-            response.addCookie(createNewCookie(token));
-            response.sendRedirect(websiteProperties.frontend());
+
+//            response.addCookie(createNewCookie(token));
+
+            String redirectUrl = websiteProperties.frontend() + "?token=" +
+                    token;
+            response.sendRedirect(redirectUrl);
         }
+
     }
 
-    private Cookie createNewCookie(String tokenValue) {
-        Cookie cookie = new Cookie("user", tokenValue);
-        cookie.setSecure(true);
-        cookie.setMaxAge(350000);
-        cookie.setPath("/");
-        cookie.setDomain("learning-path.onrender.com");
-        System.out.println(cookie.getDomain());
-        return cookie;
-    }
+//    private Cookie createNewCookie(String tokenValue) {
+//        Cookie cookie = new Cookie("user", tokenValue);
+//        cookie.setSecure(true);
+//        cookie.setMaxAge(350000);
+//        cookie.setPath("/");
+//        cookie.setDomain("localhost");
+//        System.out.println(cookie.getDomain());
+//        return cookie;
+//    }
 
     // private String getDomain(String url) {
     //     if (websiteProperties.frontend().equals(url)) {
