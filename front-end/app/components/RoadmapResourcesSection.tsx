@@ -7,6 +7,8 @@ import { requestPromptOnlyResources } from "../functions/chatPreHistory";
 import { getResponseFromOpenAI } from "../functions/openAIChat";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import OpenInNew from "@mui/icons-material/OpenInNew";
+import SuggestResourceForm from "../explore/[roadmapmetaid]/SuggestResourceForm";
+import { useState } from "react";
 
 type RoadmapResourcesSectionProps = {
   treeNode: TreeNode | null;
@@ -17,11 +19,24 @@ type RoadmapResourcesSectionProps = {
   cookiesUser: string;
 };
 
+type SuggestResourceType = {
+  title: string | null;
+  type: string | null;
+  link: string | null;
+};
+
 export const RoadmapResourcesSection = (
   props: RoadmapResourcesSectionProps
 ) => {
   const queryClient = useQueryClient();
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
+
+  const [suggestResourceData, setSuggestResourceData] =
+    useState<SuggestResourceType>({
+      title: null,
+      type: null,
+      link: null,
+    });
 
   const { mutateAsync: handleAddResources, isLoading: generatingResources } =
     useMutation({
@@ -44,17 +59,27 @@ export const RoadmapResourcesSection = (
       },
     });
 
+  const { mutateAsync: handleSuggestResources, isLoading: suggestingResources } =
+    useMutation({
+      mutationFn: async () => {
+
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries(props.queriesToInvalidate);
+      },
+    });
+
   return (
     <>
       <div className="pb-12 text-white flex flex-col">
         {((props.userOwnsRoadmap && props.roadmapId) ||
           (props.treeNode && props.treeNode.resources)) && (
-          <div className="mt-10 flex flex-left">
-            <p className="text-xl text-center font-bold text-white md:text-3xl pl-4">
-              Learning Resources
-            </p>
-          </div>
-        )}
+            <div className="mt-10 flex flex-left">
+              <p className="text-xl text-center font-bold text-white md:text-3xl pl-4">
+                Learning Resources
+              </p>
+            </div>
+          )}
         <div className="mt-5 mx-10 md:mt-0 md:mx-0">
           {!isSmallScreen &&
             props.treeNode &&
@@ -116,6 +141,20 @@ export const RoadmapResourcesSection = (
               <CircularProgress />
             </div>
           )}
+          {(props.treeNode || !props.treeNode.resources) &&
+            !generatingResources &&
+            !props.userOwnsRoadmap &&
+            props.roadmapId && (
+              <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded"
+                onClick={() => handleSuggestResources()}
+              >
+                Suggest Resources
+              </button>
+            )}
+          <SuggestResourceForm
+            setSuggestResourceData={setSuggestResourceData}
+          />
         </div>
       </div>
     </>
