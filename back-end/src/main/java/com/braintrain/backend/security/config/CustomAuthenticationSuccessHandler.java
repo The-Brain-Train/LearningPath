@@ -31,7 +31,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             try {
                 jwtServiceImpl.validateJWTString(oidcUser.getIdToken().getTokenValue());
             } catch (JwtException e) {
-                response.sendRedirect(websiteProperties.frontend() + "signin");
+                response.sendRedirect("https://learning-path-pi.vercel.app/signin");
             }
 
             String email = oidcUser.getAttributes().get("email").toString();
@@ -51,7 +51,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
 //            response.addCookie(createNewCookie(token));
 
-            String redirectUrl = websiteProperties.frontend() + "?token=" +
+            String redirectUrl = "https://learning-path-pi.vercel.app/?token=" +
                     token;
             response.sendRedirect(redirectUrl);
         }

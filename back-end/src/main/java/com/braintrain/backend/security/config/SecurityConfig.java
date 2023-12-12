@@ -44,7 +44,7 @@ public class SecurityConfig {
                                 "/api/roadmaps/{userEmail}/resource/{roadmapMetaId}"
                         )
                         .permitAll().anyRequest().authenticated())
-                .cors(withLearningPathDefaults(websiteProperties.frontend()))
+                .cors(withLearningPathDefaults("https://learning-path-pi.vercel.app/"))
                 .oauth2Login(oauth2 -> oauth2
                         .successHandler(customAuthenticationSuccessHandler))
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
