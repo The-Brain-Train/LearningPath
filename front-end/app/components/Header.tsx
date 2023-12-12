@@ -8,22 +8,14 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getUserProfilePicture } from "../functions/httpRequests";
 import BurgerMenu from "./BurgerMenu";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useCurrentUserWithRetries } from "../functions/useCurrentUserWithRetries";
 
 export default function Header() {
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
   const queryClient = useQueryClient();
   const router = useRouter();
-
-  const { data: currentUser } = useQuery<User | null>(
-    ["currentUser"],
-    async () => {
-      const user = jwtDecode(cookies.user) as User | null;
-      return user;
-    },
-    {
-      enabled: !!cookies.user,
-    }
-  );
+  const currentUser = useCurrentUserWithRetries();
 
   const { data: profilePictureUrl } = useQuery<string>(
     ["profilePictureUrl"],
