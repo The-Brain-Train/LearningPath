@@ -8,59 +8,35 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getUserProfilePicture } from "../functions/httpRequests";
 import BurgerMenu from "./BurgerMenu";
 import { useRouter } from "next/navigation";
-import useCurrentUserQuery from "../functions/useCurrentUserQuery";
-import { useEffect, useState } from "react";
-import JwtAuth from "./JwtAuth";
 
 export default function Header() {
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
   const queryClient = useQueryClient();
   const router = useRouter();
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [profilePictureUrl, setProfilePictureUrl] = useState<string | null>(
-    null
+
+  const { data: currentUser } = useQuery<User | null>(
+    ["currentUser"],
+    async () => {
+      const user = jwtDecode(cookies.user) as User | null;
+      return user;
+    },
+    {
+      enabled: !!cookies.user,
+    }
   );
 
-  // const { data: currentUser } = useQuery<User | null>(
-  //   ["currentUser"],
-  //   async () => {
-  //     const user = jwtDecode(cookies.user) as User | null;
-  //     return user;
-  //   },
-  //   {
-  //     enabled: !!cookies.user,
-  //   }
-  // );
-
-  // const { data: profilePictureUrl } = useQuery<string>(
-  //   ["profilePictureUrl"],
-  //   () => getUserProfilePicture(currentUser?.email as string, cookies.user),
-  //   {
-  //     enabled: !!currentUser,
-  //   }
-  // );
-
-  useEffect(() => {
-    if (cookies.user) {
-      const user = jwtDecode(cookies.user) as User | null;
-      setCurrentUser(user);
-
-      if (user) {
-        getUserProfilePicture(user.email, cookies.user)
-          .then((url: string) => setProfilePictureUrl(url))
-          .catch((error: Error) => {
-            console.error(error);
-          });
-      }
+  const { data: profilePictureUrl } = useQuery<string>(
+    ["profilePictureUrl"],
+    () => getUserProfilePicture(currentUser?.email as string, cookies.user),
+    {
+      enabled: !!currentUser,
     }
-  }, [cookies.user]);
+  );
 
   const handleSignOut = () => {
     removeCookie("user");
-    setCurrentUser(null);
-    setProfilePictureUrl(null);
-    // queryClient.removeQueries(["currentUser"]);
-    // queryClient.removeQueries(["profilePictureUrl"]);
+    queryClient.removeQueries(["currentUser"]);
+    queryClient.removeQueries(["profilePictureUrl"]);
     router.push("/");
   };
 
