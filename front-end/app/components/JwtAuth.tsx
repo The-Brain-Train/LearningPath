@@ -36,6 +36,7 @@ const JwtAuth = () => {
     if (token && (isTokenExpired || !cookies.user)) {
       setTimeout(() => {
         router.push("/");
+        window.location.reload();
       }, 500);
     }
   }, [token, isTokenExpired, cookies.user, router]);
