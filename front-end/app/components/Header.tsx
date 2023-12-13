@@ -7,12 +7,25 @@ import Image from "next/legacy/image";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getUserProfilePicture } from "../functions/httpRequests";
 import BurgerMenu from "./BurgerMenu";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Header() {
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
   const queryClient = useQueryClient();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
+
+  useEffect(() => {
+    if (token) {
+      const tokenString = Array.isArray(token) ? token[0] : token;
+      setCookie("user", tokenString, {
+        path: "/",
+      });
+      router.push("/");
+    }
+  }, [token, setCookie, router]);
 
   const { data: currentUser } = useQuery<User | null>(
     ["currentUser"],
