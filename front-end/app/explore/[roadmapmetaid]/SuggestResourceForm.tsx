@@ -1,12 +1,13 @@
 import { Box, FormControl, InputLabel, MenuItem, Modal, Select, SelectChangeEvent, TextField } from "@mui/material"
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { modalStyle } from "../../create/createModalStyle";
+import { SuggestResourceType } from "@/app/components/RoadmapResourcesSection";
 
 type SuggestResourceFormType = {
-    setSuggestResourceData: SuggestResourceType;
+    setSuggestResourceData: Dispatch<SetStateAction<SuggestResourceType>>;
 };
 
-const SuggestResourceForm = () => {
+const SuggestResourceForm = (setSuggestResourceData: SuggestResourceFormType) => {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -38,7 +39,7 @@ const SuggestResourceForm = () => {
             setLinkError("Link is required");
             setTimeout(() => setLinkError(null), 3000);
         }
-
+        console.log(title + " " + type + " " + link);
     };
 
 
@@ -57,9 +58,14 @@ const SuggestResourceForm = () => {
                     >
                         Title:
                     </InputLabel>
-                    <TextField>
-
-                    </TextField>
+                    <TextField
+                        type="text"
+                        value={title}
+                        onChange={(e) => setTitle(capitalizeFirstLetter(e.target.value))}
+                        placeholder="Enter Title!"
+                        sx={{ m: 1, minWidth: "90%" }}
+                        className="pt-0 rounded-l-md focus:outline-none focus:placeholder-gray-400 text-center placeholder-gray-60 form-control"
+                    />
 
                     <FormControl sx={{ m: 1, minWidth: "90%" }}>
                         <InputLabel id="demo-simple-select-autowidth-label">
@@ -82,9 +88,14 @@ const SuggestResourceForm = () => {
 
                     <InputLabel>
                     </InputLabel>
-                    <TextField>
-
-                    </TextField>
+                    <TextField 
+                     type="text"
+                     value={link}
+                     onChange={(e) => setLink(e.target.value)}
+                     placeholder="Enter Link!"
+                     sx={{ m: 1, minWidth: "90%" }}
+                     className="pt-0 rounded-l-md focus:outline-none focus:placeholder-gray-400 text-center placeholder-gray-60 form-control"
+                    />
 
                     <div className="flex justify-center">
                         <button

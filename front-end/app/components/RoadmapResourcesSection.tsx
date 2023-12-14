@@ -19,7 +19,7 @@ type RoadmapResourcesSectionProps = {
   cookiesUser: string;
 };
 
-type SuggestResourceType = {
+export type SuggestResourceType = {
   title: string | null;
   type: string | null;
   link: string | null;
@@ -141,7 +141,7 @@ export const RoadmapResourcesSection = (
               <CircularProgress />
             </div>
           )}
-          {(props.treeNode || !props.treeNode.resources) &&
+          {(props.treeNode && !props.treeNode.resources) &&
             !generatingResources &&
             !props.userOwnsRoadmap &&
             props.roadmapId && (

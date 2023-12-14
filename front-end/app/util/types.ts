@@ -106,12 +106,3 @@ export type InputFormProps = {
 export type BurgerMenuProps = {
   handleSignOut: () => void;
 }
-
-export type ResourcesSectionProps = {
-  treeNode: TreeNode | null | undefined;
-  userOwnsRoadmap: boolean;
-  queriesToInvalidate: string[];
-  roadmapId: string | undefined;
-  userEmail: string | null | undefined;
-  cookiesUser: string;
-};
