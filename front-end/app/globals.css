@@ -16,8 +16,8 @@ main {
   padding-bottom: 30px;
 }
 
-details {
-  list-style: none;
+details summary::-webkit-details-marker {
+  display:none;
 }
 
 .main-background {
