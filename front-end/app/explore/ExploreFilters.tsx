@@ -104,7 +104,7 @@ export default function FilterShow() {
                 step="10"
                 id="FilterHoursFrom"
                 placeholder="From"
-                className="p-2.5 w-20 rounded-md border-gray-200 shadow-sm sm:text-sm"
+                className="p-2.5 w-32 rounded-md border-gray-200 shadow-sm sm:text-sm"
                 value={hoursFromFilter === null ? "" : hoursFromFilter}
                 onChange={(e) => {
                   const newValue =
@@ -122,7 +122,7 @@ export default function FilterShow() {
                 min="0"
                 id="FilterHoursTo"
                 placeholder="To"
-                className="w-20 p-2.5 rounded-md border-gray-200 shadow-sm sm:text-sm"
+                className="w-32 p-2.5 rounded-md border-gray-200 shadow-sm sm:text-sm"
                 value={hoursToFilter === null ? "" : hoursToFilter}
                 onChange={(e) => {
                   const newValue =
