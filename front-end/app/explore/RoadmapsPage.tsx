@@ -84,7 +84,7 @@ export const RoadmapsPage = (props: RoadmapsPageProps) => {
 
   return (
     <ul
-      className="grid lg:grid-cols-3 gap-4 lg:gap-10 font-semibold mb-5 mx-10"
+      className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8 font-semibold mb-5 mx-10"
       style={{ fontFamily: "Poppins" }}
     >
       {props.paginatedRoadmaps.map((roadmap: RoadmapMeta) => (
