@@ -140,7 +140,7 @@ export default function Explore() {
     <FilterProvider>
       <main className="main-background min-h-max flex items-center flex-col">
         <h1 className="text-white text-4xl md:text-5xl mt-5 mb-3 max-w-sm md:max-w-lg font-bold  text-center mx-3">Explore our Community Roadmaps</h1>
-        <div className="flex flex-col md:flex-row lg:mt-5 mb-5 md:mb-12 md:items-center gap-3 md:gap-5">
+        <div className="flex flex-col md:flex-row md:mt-5 mb-5 md:mb-12 md:items-center gap-3 md:gap-5 w-72 md:w-[780px]">
           <Paper
             component="div"
             className="py-2 px-4 flex w-15 max-h-12 mt-6 md:w-80"

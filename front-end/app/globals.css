@@ -16,6 +16,10 @@ main {
   padding-bottom: 30px;
 }
 
+details {
+  list-style: none;
+}
+
 .main-background {
   background: linear-gradient(151deg, rgba(81, 85, 133, 1) 0%, rgba(0, 32, 74, 1) 50%, rgba(81, 85, 133, 1) 100%);
   min-height: 100vh;

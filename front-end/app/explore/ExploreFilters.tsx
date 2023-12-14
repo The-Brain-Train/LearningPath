@@ -80,7 +80,7 @@ export default function FilterShow() {
                 queryClient.invalidateQueries(["roadmaps"]);
               }}
               id="experienceLevel_disabled"
-              className="font-medium bg-gray-50 border border-gray-300 text-gray-900 rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="font-medium p-2.5 w-full rounded-md border-gray-200 shadow-sm h-[44px]"
             >
               <option value="" selected>
                 All
@@ -104,7 +104,7 @@ export default function FilterShow() {
                 step="10"
                 id="FilterHoursFrom"
                 placeholder="From"
-                className="p-2.5 w-32 rounded-md border-gray-200 shadow-sm sm:text-sm"
+                className="font-medium p-2.5 w-32 rounded-md border-gray-200 shadow-sm"
                 value={hoursFromFilter === null ? "" : hoursFromFilter}
                 onChange={(e) => {
                   const newValue =
@@ -122,7 +122,7 @@ export default function FilterShow() {
                 min="0"
                 id="FilterHoursTo"
                 placeholder="To"
-                className="w-32 p-2.5 rounded-md border-gray-200 shadow-sm sm:text-sm"
+                className="font-medium w-32 p-2.5 rounded-md border-gray-200 shadow-sm"
                 value={hoursToFilter === null ? "" : hoursToFilter}
                 onChange={(e) => {
                   const newValue =
