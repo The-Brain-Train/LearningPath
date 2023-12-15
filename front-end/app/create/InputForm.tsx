@@ -20,73 +20,100 @@ const InputForm = ({
   resetForm,
 }: InputFormProps) => {
   const [open, setOpen] = useState(false);
-  const [experience, setExperience] = useState("");
-  const [userTopic, setUserTopic] = useState<string>("");
-  const [sliderValue, setSliderValue] = useState<number>(30);
   const [topicError, setTopicError] = useState<string | null>(null);
   const [experienceError, setExperienceError] = useState<string | null>(null);
-  const [toggleValue, setToggleValue] = useState(false);
-
+  const [inputDataForm, setInputDataForm] = useState({
+    userTopic: "",
+    hours: 30,
+    experience: "",
+    resources: false,
+  });
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setExperience(event.target.value);
+  const handleExperienceChange = (event: SelectChangeEvent) => {
+    setInputDataForm({
+      ...inputDataForm,
+      experience: event.target.value,
+    });
   };
 
-  const capitalizeFirstLetter = (text: string) => {
-    return text.charAt(0).toUpperCase() + text.slice(1);
+  const handleTopicChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const capitalizedText =
+      e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1);
+    setInputDataForm({
+      ...inputDataForm,
+      userTopic: capitalizedText,
+    });
+  };
+
+  const handleHoursChange = (event: Event, newValue: number | number[]) => {
+    setInputDataForm({
+      ...inputDataForm,
+      hours: newValue as number,
+    });
+  };
+
+  const handleResourceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputDataForm({
+      ...inputDataForm,
+      resources: event.target.checked,
+    });
   };
 
   const handleSubmit = () => {
-    if (!userTopic) {
+    if (!inputDataForm.userTopic) {
       setTopicError("Topic is required");
       setTimeout(() => setTopicError(null), 3000);
     }
 
-    if (!experience) {
+    if (!inputDataForm.experience) {
       setExperienceError("Experience level is required");
       setTimeout(() => setExperienceError(null), 3000);
     }
 
-    if (userTopic && experience) {
+    if (inputDataForm.userTopic && inputDataForm.experience) {
       setRoadmapInputData({
-        topic: userTopic,
-        hours: sliderValue,
-        experienceLevel: experience,
-        resources: toggleValue,
+        topic: inputDataForm.userTopic,
+        hours: inputDataForm.hours,
+        experienceLevel: inputDataForm.experience,
+        resources: inputDataForm.resources,
       });
-      setUserTopic("");
-      setExperience("");
-      setSliderValue(30);
-      setToggleValue(false);
+      setInputDataForm({
+        userTopic: "",
+        hours: 30,
+        experience: "",
+        resources: false,
+      });
       handleClose();
     }
   };
 
   return (
     <div className="flex flex-col items-center text-center">
-      <h1 className="text-white text-4xl md:text-5xl mt-8 mb-3 max-w-sm md:max-w-lg font-bold text-center mx-3">
-        Create Your Roadmap
-      </h1>
       {data === null && (
-        <div className="mt-5 max-w-xs">
-          <div className="flex justify-center">
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-xl"
-              onClick={() => {
-                handleOpen();
-                resetForm();
-              }}
-            >
-              Create
-            </button>
+        <>
+          <h1 className="text-white text-4xl md:text-5xl mt-8 mb-3 max-w-sm md:max-w-lg font-bold text-center mx-3">
+            Create your Roadmap
+          </h1>
+          <div className="mt-5 max-w-xs">
+            <div className="flex justify-center">
+              <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-xl"
+                onClick={() => {
+                  handleOpen();
+                  resetForm();
+                }}
+              >
+                Create
+              </button>
+            </div>
+            <p className="text-white text-xs pt-5 px-4">
+              <span className="underline">Note:</span> You must have an account
+              and be signed in to save roadmaps
+            </p>
           </div>
-          <p className="text-white text-xs pt-5 px-4">
-            <span className="underline">Note:</span> You must have an account
-            and be signed in to save roadmaps
-          </p>
-        </div>
+        </>
       )}
       <Modal
         open={open}
@@ -104,10 +131,8 @@ const InputForm = ({
             </InputLabel>
             <TextField
               type="text"
-              value={userTopic}
-              onChange={(e) =>
-                setUserTopic(capitalizeFirstLetter(e.target.value))
-              }
+              value={inputDataForm.userTopic}
+              onChange={handleTopicChange}
               placeholder="Enter Topic!"
               sx={{ m: 1, minWidth: "90%" }}
               className="pt-0 rounded-l-md focus:outline-none focus:placeholder-gray-400 text-center placeholder-gray-60 form-control"
@@ -122,8 +147,8 @@ const InputForm = ({
               <Select
                 labelId="demo-simple-select-autowidth-label"
                 id="demo-simple-select-autowidth"
-                value={experience}
-                onChange={handleChange}
+                value={inputDataForm.experience}
+                onChange={handleExperienceChange}
                 autoWidth
                 label="Experience Level"
                 className="border-white"
@@ -146,10 +171,8 @@ const InputForm = ({
               <Box sx={{ minWidth: "80%" }}>
                 <Slider
                   aria-label="Hours"
-                  value={sliderValue}
-                  onChange={(event, newValue) =>
-                    setSliderValue(newValue as number)
-                  }
+                  value={inputDataForm.hours}
+                  onChange={handleHoursChange}
                   defaultValue={30}
                   getAriaValueText={valuetext}
                   valueLabelDisplay="auto"
@@ -165,8 +188,8 @@ const InputForm = ({
                 Add resources
               </InputLabel>
               <Switch
-                checked={toggleValue}
-                onChange={() => setToggleValue(!toggleValue)}
+                checked={inputDataForm.resources}
+                onChange={handleResourceChange}
                 inputProps={{ "aria-label": "Toggle" }}
               />
             </div>
