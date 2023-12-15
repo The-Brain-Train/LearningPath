@@ -23,7 +23,7 @@ export default function HomePage() {
             <p className="text-center text-xl pb-5 sm:text-2xl leading-10 sm:text-left">
               LearningPath is an exciting and innovative learning management
               tool that&apos;s designed to set you up on the best path for
-              learning. Here you can create and explore roadmaps for any skill you wish to learn
+              learning. Here you can create or explore roadmaps for any skill you wish to learn.
             </p>
             <div className="flex justify-center gap-4 mt-3 sm:text-xl md:justify-start">
               <Link
