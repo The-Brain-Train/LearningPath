@@ -2,7 +2,7 @@ import { useFilterContext } from "./FilterProvider";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 
-export default function FilterShow() {
+export default function ExploreFilters() {
   const queryClient = useQueryClient();
   const filterContext = useFilterContext();
   const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth > 768);
@@ -82,7 +82,7 @@ export default function FilterShow() {
               id="experienceLevel_disabled"
               className="font-medium p-2.5 w-full rounded-md border-gray-200 shadow-sm h-[44px]"
             >
-              <option value="" selected>
+              <option value="">
                 All
               </option>
               <option value="beginner">Beginner</option>

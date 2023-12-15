@@ -58,8 +58,14 @@ const SigninForm = () => {
     try {
       validateSignInForm(formData);
       const token = await signIn(formData);
+      const expirationDate = new Date();
+      expirationDate.setDate(expirationDate.getDate() + 1);
+
       setCookie("user", token, {
         path: "/",
+        sameSite: "none",
+        secure: true, 
+        expires: expirationDate
       });
       if (directedFromSignup) {
         router.push("/");
@@ -206,7 +212,6 @@ const SigninForm = () => {
                 {validationErrors.generic}
               </Alert>
             )}
-
             <Grid container>
               <Grid item>
                 <Link

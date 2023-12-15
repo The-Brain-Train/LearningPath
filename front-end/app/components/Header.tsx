@@ -20,8 +20,14 @@ export default function Header() {
   useEffect(() => {
     if (token) {
       const tokenString = Array.isArray(token) ? token[0] : token;
+      const expirationDate = new Date();
+      expirationDate.setDate(expirationDate.getDate() + 1);
+
       setCookie("user", tokenString, {
         path: "/",
+        sameSite: "none",
+        secure: true, 
+        expires: expirationDate
       });
       router.push("/");
     }
@@ -69,7 +75,7 @@ export default function Header() {
           </Link>
           <div className="flex flex-row">
             {currentUser ? (
-              <Link href="/profile" className="flex gap-1 mr-3 items-center">
+              <Link href="/profile" className="flex gap-1 sm:mr-0 mr-3 items-center">
                 <div className="h-8 w-8 relative rounded-full overflow-hidden">
                   {profilePictureUrl ? (
                     <Image
