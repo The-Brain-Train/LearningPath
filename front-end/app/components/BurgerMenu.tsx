@@ -69,15 +69,18 @@ export default function BurgerMenu({ handleSignOut }: BurgerMenuProps) {
           </MenuItem>
           {cookies.user ? (
             <MenuItem onClick={handleOpen}>
-              <LoginIcon /> <p className="pl-2">Sign Out</p>
+              <LoginIcon /> <p className="pl-2">Sign out</p>
             </MenuItem>
           ) : (
-            <MenuItem onClick={() => router.push("/signin")}>
-              <LogoutIcon />{" "}
-              <p className="pl-2 flex flex-col">
-                <span>Sign In</span>
-              </p>
-            </MenuItem>
+            <div className="my-3 ml-7">
+              <Link
+                type="button"
+                className=" text-white w-full bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2 text-center"
+                href={"/signin"}
+              >
+                Sign in
+              </Link>
+            </div>
           )}
         </Menu>
       </div>
@@ -90,16 +93,16 @@ export default function BurgerMenu({ handleSignOut }: BurgerMenuProps) {
         </MenuItem>
         {cookies.user ? (
           <MenuItem onClick={handleOpen}>
-            <LoginIcon /> <p className="pl-2">Sign Out</p>
+            <LoginIcon /> <p className="pl-2">Sign out</p>
           </MenuItem>
         ) : (
-            <Link
-              type="button"
-              className="mt-2 ml-4 text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
-              href={"/signin"}
-            >
-              Sign in
-            </Link>  
+          <Link
+            type="button"
+            className="mt-2 ml-4 text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+            href={"/signin"}
+          >
+            Sign in
+          </Link>
         )}
       </div>
       <PromptMessage

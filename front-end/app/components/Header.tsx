@@ -75,7 +75,7 @@ export default function Header() {
           </Link>
           <div className="flex flex-row">
             {currentUser ? (
-              <Link href="/profile" className="flex gap-1 mr-3 items-center">
+              <Link href="/profile" className="flex gap-1 sm:mr-0 mr-3 items-center">
                 <div className="h-8 w-8 relative rounded-full overflow-hidden">
                   {profilePictureUrl ? (
                     <Image
