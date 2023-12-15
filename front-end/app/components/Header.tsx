@@ -20,8 +20,14 @@ export default function Header() {
   useEffect(() => {
     if (token) {
       const tokenString = Array.isArray(token) ? token[0] : token;
+      const expirationDate = new Date();
+      expirationDate.setDate(expirationDate.getDate() + 1);
+
       setCookie("user", tokenString, {
         path: "/",
+        sameSite: "none",
+        secure: true, 
+        expires: expirationDate
       });
       router.push("/");
     }
