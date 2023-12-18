@@ -10,6 +10,11 @@ import Slider from "@mui/material/Slider";
 import { InputFormProps } from "../util/types";
 import { modalStyle } from "./createModalStyle";
 
+type FormValidationErrors = {
+  topicError: string | null;
+  experienceError: string | null;
+};
+
 function valuetext(value: number) {
   return `${value}`;
 }
@@ -20,8 +25,11 @@ const InputForm = ({
   resetForm,
 }: InputFormProps) => {
   const [open, setOpen] = useState(false);
-  const [topicError, setTopicError] = useState<string | null>(null);
-  const [experienceError, setExperienceError] = useState<string | null>(null);
+  const [formValidationErrors, setFormValidationErrors] =
+    useState<FormValidationErrors>({
+      topicError: null,
+      experienceError: null,
+    });
   const [inputDataForm, setInputDataForm] = useState({
     userTopic: "",
     hours: 30,
@@ -61,16 +69,36 @@ const InputForm = ({
     });
   };
 
-  const handleSubmit = () => {
-    if (!inputDataForm.userTopic) {
-      setTopicError("Topic is required");
-      setTimeout(() => setTopicError(null), 3000);
+  const handleErrorsOnSubmit = (
+    inputDataField: string,
+    dataFieldError: string,
+    errorMessage: string
+  ) => {
+    if (!inputDataField) {
+      setFormValidationErrors((prevErrors) => ({
+        ...prevErrors,
+        [dataFieldError]: errorMessage,
+      }));
+      setTimeout(() => {
+        setFormValidationErrors((prevErrors) => ({
+          ...prevErrors,
+          [dataFieldError]: null,
+        }));
+      }, 3000);
     }
+  };
 
-    if (!inputDataForm.experience) {
-      setExperienceError("Experience level is required");
-      setTimeout(() => setExperienceError(null), 3000);
-    }
+  const handleSubmit = () => {
+    handleErrorsOnSubmit(
+      inputDataForm.userTopic,
+      "topicError",
+      "Topic is required"
+    );
+    handleErrorsOnSubmit(
+      inputDataForm.experience,
+      "experienceError",
+      "Experience level is required"
+    );
 
     if (inputDataForm.userTopic && inputDataForm.experience) {
       setRoadmapInputData({
@@ -99,7 +127,7 @@ const InputForm = ({
           <div className="mt-5 max-w-xs">
             <div className="flex justify-center">
               <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-xl"
+                className="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-bold rounded-lg text-xl px-5 py-2.5 text-center me-2 mb-2"
                 onClick={() => {
                   handleOpen();
                   resetForm();
@@ -137,8 +165,10 @@ const InputForm = ({
               sx={{ m: 1, minWidth: "90%" }}
               className="pt-0 rounded-l-md focus:outline-none focus:placeholder-gray-400 text-center placeholder-gray-60 form-control"
             />
-            {topicError && (
-              <div className="text-red-500 ml-2">{topicError}</div>
+            {formValidationErrors.topicError && (
+              <div className="text-red-500 ml-2">
+                {formValidationErrors.topicError}
+              </div>
             )}
             <FormControl sx={{ m: 1, minWidth: "90%" }}>
               <InputLabel id="demo-simple-select-autowidth-label">
@@ -158,8 +188,10 @@ const InputForm = ({
                 <MenuItem value={"expert"}>Expert</MenuItem>
               </Select>
             </FormControl>
-            {experienceError && (
-              <div className="text-red-500 ml-2">{experienceError}</div>
+            {formValidationErrors.experienceError && (
+              <div className="text-red-500 ml-2">
+                {formValidationErrors.experienceError}
+              </div>
             )}
             <div>
               <InputLabel
