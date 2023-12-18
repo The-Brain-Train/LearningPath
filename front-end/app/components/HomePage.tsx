@@ -14,12 +14,12 @@ export default function HomePage() {
           <Image
             src="/roadmap1.jpeg"
             alt="Create Roadmap"
-            className="mt-0 py-5 lg:w-80 basis-full rounded-lg"
+            className="mt-0 my-5 lg:w-80 basis-full rounded-xl"
             height={280}
             width={280}
             priority
           />
-          <div>
+          <div className="basis-full">
             <p className="text-center text-xl pb-5 sm:text-2xl leading-10 sm:text-left">
               LearningPath is an exciting and innovative learning management
               tool that&apos;s designed to set you up on the best path for
@@ -68,7 +68,7 @@ export default function HomePage() {
                 <Image
                   src="/roadmap3.jpeg"
                   alt="Create Roadmap"
-                  className="mt-2 mb-3 basis-10/12 rounded-lg sm:mt-0"
+                  className="mt-2 mb-3 basis-11/12 rounded-xl sm:mt-0 max-w-md"
                   height={250}
                   width={250}
                 />
@@ -95,7 +95,7 @@ export default function HomePage() {
                 <Image
                   src="/roadmap4.jpg"
                   alt="Create Roadmap"
-                  className="mt-2 mb-3 basis-10/12 rounded-lg sm:mt-0"
+                  className="mt-2 mb-3 basis-11/12 rounded-xl sm:mt-0 max-w-md"
                   height={250}
                   width={250}
                 />
@@ -117,7 +117,7 @@ export default function HomePage() {
                 <Image
                   src="/progress-tracking.jpg"
                   alt="Create Roadmap"
-                  className="mt-2 mb-3 basis-full rounded-xl sm:mt-0"
+                  className="mt-2 mb-3 basis-full rounded-xl sm:mt-0 max-w-md"
                   height={250}
                   width={250}
                 />
@@ -145,7 +145,7 @@ export default function HomePage() {
                 <Image
                   src="/roadmap2.jpeg"
                   alt="Create Roadmap"
-                  className="mt-2 mb-3 basis-full rounded-lg sm:mt-0"
+                  className="mt-2 mb-3 basis-11/12 rounded-xl sm:mt-0 max-w-md"
                   height={250}
                   width={250}
                 />
