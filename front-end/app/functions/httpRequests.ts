@@ -455,4 +455,23 @@ export const postNotification = async (
   }
   const data: string = await response.text();
   return data;
-}
+};
+
+export const getUnreadNotificationsOfUser = async (
+  userEmail: string | null,
+  token: string
+) => {
+  const response = await fetch(
+    `${BACKEND_URL}/api/notification/user/${userEmail}/unread`,
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch user notifications");
+  }
+  const data = await response.json();
+  return data;
+};
