@@ -1,3 +1,4 @@
+import { SignUpFormType } from "../signup/SignupForm";
 import {
   RoadmapMetaList,
   Roadmap,
@@ -7,18 +8,21 @@ import {
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-export const signUp = async (formData: any) => {
-  return await fetch(`${BACKEND_URL}/api/auth/signup`, {
+export const signUp = async (formData: SignUpFormType) => {
+  const response = await fetch(`${BACKEND_URL}/api/auth/signup`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(formData),
-  }).then(response => {
-    if (response.status === 409) {
-      throw new Error("Email already in use. Sign in or use a different email.");
-    }
-  })
+  });
+  if (response.ok) {
+    const data = await response.json();
+    return data.token;
+  }
+  if (response.status === 409) {
+    throw new Error("Email already in use. Sign in or use a different email.");
+  }
 };
 
 export const signIn = async (formData: any) => {
