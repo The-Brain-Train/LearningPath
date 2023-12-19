@@ -1,7 +1,7 @@
 import { Box, FormControl, InputLabel, MenuItem, Modal, Select, SelectChangeEvent, TextField } from "@mui/material"
 import { Dispatch, SetStateAction, useState } from "react";
 import { modalStyle } from "../../create/createModalStyle";
-import { SuggestResourceType } from "@/app/components/RoadmapResourcesSection";
+// import { SuggestResourceType } from "@/app/components/RoadmapResourcesSection";
 import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import { postNotification } from "../../functions/httpRequests";
 import { ResourceType, RoadmapMeta } from "../../util/types";
@@ -10,13 +10,13 @@ type SuggestResourceFormType = {
     roadmapMetaId: string | undefined;
     userEmail: string | null | undefined;
     cookiesUser: string;
-    setSuggestResourceData: Dispatch<SetStateAction<SuggestResourceType>>;
-    resetForm: Dispatch<SetStateAction<SuggestResourceType>>;
+    // setSuggestResourceData: Dispatch<SetStateAction<SuggestResourceType>>;
+    // resetForm: Dispatch<SetStateAction<SuggestResourceType>>;
 };
 
 const SuggestResourceForm = (props: SuggestResourceFormType) => {
     const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
+    // const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const [name, setName] = useState<string>("");
     const [type, setType] = useState("");
@@ -46,6 +46,12 @@ const SuggestResourceForm = (props: SuggestResourceFormType) => {
         return text.charAt(0).toUpperCase() + text.slice(1);
     };
 
+    const resetForm = () => {
+        setName("");
+        setType("");
+        setLink("");
+    };
+
     const handleSubmit = () => {
         if (!name) {
             setNameError("Name is required");
@@ -64,14 +70,16 @@ const SuggestResourceForm = (props: SuggestResourceFormType) => {
         const roadmapMeta = queryClient.getQueryData<RoadmapMeta>([`roadmapMeta-${props.roadmapMetaId}`]);
         const message = `You have new resourse suggestion for roadmap ${roadmapMeta?.name}.`
         postNotification(
-            message, 
-            JSON.stringify(body), 
-            props.userEmail, 
-            roadmapMeta?.userEmail, 
-            roadmapMeta?.id, 
+            message,
+            JSON.stringify(body),
+            props.userEmail,
+            roadmapMeta?.userEmail,
+            roadmapMeta?.id,
             "ROADMAP_RESOURCE_SUGGESTED",
             props.cookiesUser
         );
+        resetForm();
+        handleClose();
     };
 
 

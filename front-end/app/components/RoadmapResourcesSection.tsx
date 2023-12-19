@@ -19,32 +19,11 @@ type RoadmapResourcesSectionProps = {
   cookiesUser: string;
 };
 
-export type SuggestResourceType = {
-  title: string | null;
-  type: string | null;
-  link: string | null;
-};
-
 export const RoadmapResourcesSection = (
   props: RoadmapResourcesSectionProps
 ) => {
   const queryClient = useQueryClient();
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
-
-  const [suggestResourceData, setSuggestResourceData] =
-    useState<SuggestResourceType>({
-      title: null,
-      type: null,
-      link: null,
-    });
-
-  const resetForm = () => {
-    setSuggestResourceData({
-      title: null,
-      type: null,
-      link: null,
-    });
-  };
 
   const { mutateAsync: handleAddResources, isLoading: generatingResources } =
     useMutation({
@@ -160,8 +139,6 @@ export const RoadmapResourcesSection = (
             roadmapMetaId={props.roadmapMetaId}
             userEmail={props.userEmail}
             cookiesUser={props.cookiesUser}
-            setSuggestResourceData={setSuggestResourceData}
-            resetForm={resetForm}
           />
         </div>
       </div>
