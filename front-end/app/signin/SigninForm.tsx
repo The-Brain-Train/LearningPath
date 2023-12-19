@@ -39,6 +39,8 @@ const SigninForm = () => {
     generic: null,
   });
 
+  const hasError = (fieldName: keyof SignInErrorsType) => Boolean(validationErrors[fieldName]);
+
   const [cookies, setCookie] = useCookies(["user"]);
   const router = useRouter();
 
@@ -119,7 +121,6 @@ const SigninForm = () => {
             
           >
             <TextField
-              margin="normal"
               required
               fullWidth
               id="email"
@@ -140,22 +141,31 @@ const SigninForm = () => {
                 "& .MuiOutlinedInput-notchedOutline": {
                   borderColor: "white",
                 },
+                marginBottom: hasError('email') ? '0' : '36px',
               }}
             />
-            {validationErrors.email && (
+            {hasError('email') && (
               <Alert
                 severity="error"
                 variant="filled"
                 sx={{
+                  marginY: "6px",
+                  padding: "0px",
                   width: "100%",
+                  height: "24px",
                   display: "inline-flex",
+                  "& .MuiAlert-icon": {
+                    padding: "0px 2px",
+                  },
+                  "& .MuiAlert-message": {
+                    padding: "0px",
+                  }
                 }}
               >
                 {validationErrors.email}
               </Alert>
             )}
             <TextField
-              margin="normal"
               required
               fullWidth
               name="password"
@@ -176,16 +186,26 @@ const SigninForm = () => {
                 "& .MuiOutlinedInput-notchedOutline": {
                   borderColor: "white",
                 },
+                marginBottom: hasError('password') ? '0' : '36px',
               }}
             />
-            {validationErrors.password && (
+            { hasError('password') && (
               <Alert
                 severity="error"
                 variant="filled"
                 className="min-w-full inline-flex"
                 sx={{
+                  marginY: "6px",
+                  padding: "0px",
                   width: "100%",
+                  height: "24px",
                   display: "inline-flex",
+                  "& .MuiAlert-icon": {
+                    padding: "0px 2px",
+                  },
+                  "& .MuiAlert-message": {
+                    padding: "0px",
+                  }
                 }}
               >
                 {validationErrors.password}
@@ -205,8 +225,17 @@ const SigninForm = () => {
                 variant="filled"
                 className="min-w-full inline-flex"
                 sx={{
+                  marginY: "6px",
+                  padding: "0px",
                   width: "100%",
+                  height: "24px",
                   display: "inline-flex",
+                  "& .MuiAlert-icon": {
+                    padding: "0px 2px",
+                  },
+                  "& .MuiAlert-message": {
+                    padding: "0px",
+                  }
                 }}
               >
                 {validationErrors.generic}
