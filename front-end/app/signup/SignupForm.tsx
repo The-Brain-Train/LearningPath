@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -17,6 +16,7 @@ import { signUp } from "../functions/httpRequests";
 import { Alert } from "@mui/material";
 import PasswordRequirements from "./PasswordRequirements";
 import SignupFormFields from "./SignupFormFields";
+import { useCookies } from "react-cookie";
 
 export type SignUpFormType = {
   name: string;
@@ -33,6 +33,9 @@ type SignUpErrorsType = {
 };
 
 const SignupForm = () => {
+  const [cookies, setCookie] = useCookies(["user"]);
+  const router = useRouter();
+  const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [formData, setFormData] = useState<SignUpFormType>({
     name: "",
     email: "",
@@ -45,9 +48,6 @@ const SignupForm = () => {
     passwordConfirmation: null,
     generic: null,
   });
-
-  const router = useRouter();
-  const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [validationChecks, setValidationChecks] = useState({
     uppercase: false,
     lowercase: false,
@@ -92,14 +92,17 @@ const SignupForm = () => {
 
     try {
       validateSignUpForm(formData, passwordConfirmation);
-      await signUp(formData);
-      toast.success("Successful! Being redirected to the login page", {
-        position: "top-center",
-        autoClose: 3000,
-        onClose: () => {
-          router.push("/signin?source=signup");
-        },
+      const token: string = await signUp(formData);
+      const expirationDate = new Date();
+
+      expirationDate.setDate(expirationDate.getDate() + 1);
+      setCookie("user", token, {
+        path: "/",
+        sameSite: "none",
+        secure: true, 
+        expires: expirationDate
       });
+      router.push("/");
     } catch (error: any) {
       if (error.message.includes("|")) {
         const [fieldName, errorMessage] = error.message.split("|");
@@ -170,7 +173,6 @@ const SignupForm = () => {
               {validationErrors.generic}
             </Alert>
           )}
-          <ToastContainer />
           <Grid container justifyContent="flex-start">
             <Grid item>
               <Link
