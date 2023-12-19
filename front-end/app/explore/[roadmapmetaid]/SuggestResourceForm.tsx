@@ -2,9 +2,11 @@ import { Box, FormControl, InputLabel, MenuItem, Modal, Select, SelectChangeEven
 import { Dispatch, SetStateAction, useState } from "react";
 import { modalStyle } from "../../create/createModalStyle";
 import { SuggestResourceType } from "@/app/components/RoadmapResourcesSection";
+import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
 
 type SuggestResourceFormType = {
     setSuggestResourceData: Dispatch<SetStateAction<SuggestResourceType>>;
+    resetForm: Dispatch<SetStateAction<SuggestResourceType>>;
 };
 
 const SuggestResourceForm = (setSuggestResourceData: SuggestResourceFormType) => {
@@ -18,9 +20,19 @@ const SuggestResourceForm = (setSuggestResourceData: SuggestResourceFormType) =>
     const [typeError, setTypeError] = useState<string | null>(null);
     const [linkError, setLinkError] = useState<string | null>(null);
 
+    const queryClient = useQueryClient();
+
     const handleChange = (event: SelectChangeEvent) => {
         setType(event.target.value);
     };
+
+    const showHideModel = () => {
+        const open = queryClient.getQueryData<boolean>(["showSuggestResourceForm"]);
+        setOpen(open || false);
+        queryClient.setQueryData(["showSuggestResourceForm"], false);
+    };
+
+    useQuery(["showSuggestResourceFormQuery"], showHideModel);
 
     const capitalizeFirstLetter = (text: string) => {
         return text.charAt(0).toUpperCase() + text.slice(1);
@@ -88,13 +100,13 @@ const SuggestResourceForm = (setSuggestResourceData: SuggestResourceFormType) =>
 
                     <InputLabel>
                     </InputLabel>
-                    <TextField 
-                     type="text"
-                     value={link}
-                     onChange={(e) => setLink(e.target.value)}
-                     placeholder="Enter Link!"
-                     sx={{ m: 1, minWidth: "90%" }}
-                     className="pt-0 rounded-l-md focus:outline-none focus:placeholder-gray-400 text-center placeholder-gray-60 form-control"
+                    <TextField
+                        type="text"
+                        value={link}
+                        onChange={(e) => setLink(e.target.value)}
+                        placeholder="Enter Link!"
+                        sx={{ m: 1, minWidth: "90%" }}
+                        className="pt-0 rounded-l-md focus:outline-none focus:placeholder-gray-400 text-center placeholder-gray-60 form-control"
                     />
 
                     <div className="flex justify-center">

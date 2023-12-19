@@ -38,6 +38,14 @@ export const RoadmapResourcesSection = (
       link: null,
     });
 
+  const resetForm = () => {
+    setSuggestResourceData({
+      title: null,
+      type: null,
+      link: null,
+    });
+  };
+
   const { mutateAsync: handleAddResources, isLoading: generatingResources } =
     useMutation({
       mutationFn: async () => {
@@ -59,15 +67,10 @@ export const RoadmapResourcesSection = (
       },
     });
 
-  const { mutateAsync: handleSuggestResources, isLoading: suggestingResources } =
-    useMutation({
-      mutationFn: async () => {
-
-      },
-      onSuccess: () => {
-        queryClient.invalidateQueries(props.queriesToInvalidate);
-      },
-    });
+  const handleSuggestResources = () => {
+    queryClient.setQueryData(["showSuggestResourceForm"], true);
+    queryClient.invalidateQueries(["showSuggestResourceFormQuery"]);
+  };
 
   return (
     <>
@@ -154,6 +157,7 @@ export const RoadmapResourcesSection = (
             )}
           <SuggestResourceForm
             setSuggestResourceData={setSuggestResourceData}
+            resetForm={resetForm}
           />
         </div>
       </div>
