@@ -1,7 +1,7 @@
 import React from "react";
 import TextField from "@mui/material/TextField";
-import { Alert } from "@mui/material";
 import { SignUpFormType } from "./SignupForm";
+import AuthenticationFormError from "../components/AuthenticationFormError";
 
 type SignUpErrorProps = {
   name: string | null;
@@ -58,25 +58,7 @@ const SignupFormFields: React.FC<SignupFormFieldsProps> = ({
         }}
       />
       {hasError('name') && (
-        <Alert
-          severity="error"
-          variant="filled"
-          sx={{
-            marginY: "6px",
-            padding: "0px",
-            width: "100%",
-            height: "24px",
-            display: "inline-flex",
-            "& .MuiAlert-icon": {
-              padding: "0px 2px",
-            },
-            "& .MuiAlert-message": {
-              padding: "0px",
-            }
-          }}
-        >
-          {validationErrors.name}
-        </Alert>
+        <AuthenticationFormError errorMessage={validationErrors.name || ""}/>
       )}
       <TextField
         required
@@ -102,25 +84,7 @@ const SignupFormFields: React.FC<SignupFormFieldsProps> = ({
         }}
       />
       {hasError('email') && (
-        <Alert
-          severity="error"
-          variant="filled"
-          sx={{
-            marginY: "6px",
-            padding: "0px",
-            height: "24px",
-            width: "100%",
-            display: "inline-flex",
-            "& .MuiAlert-icon": {
-              padding: "0px 2px",
-            },
-            "& .MuiAlert-message": {
-              padding: "0px",
-            }
-          }}
-        >
-          {validationErrors.email}
-        </Alert>
+        <AuthenticationFormError errorMessage={validationErrors.email || ""}/>
       )}
       <TextField
         required
@@ -147,25 +111,7 @@ const SignupFormFields: React.FC<SignupFormFieldsProps> = ({
         }}
       />
       {hasError('password') && (
-        <Alert
-          severity="error"
-          variant="filled"
-          sx={{
-            marginY: "6px",
-            padding: "0px",
-            width: "100%",
-            height: "24px",
-            display: "inline-flex",
-            "& .MuiAlert-icon": {
-              padding: "0px 2px",
-            },
-            "& .MuiAlert-message": {
-              padding: "0px",
-            }
-          }}
-        >
-          {validationErrors.password}
-        </Alert>
+       <AuthenticationFormError errorMessage={validationErrors.password || ""}/>
       )}
       <TextField
         required
@@ -192,25 +138,7 @@ const SignupFormFields: React.FC<SignupFormFieldsProps> = ({
         }}
       />
       {hasError('passwordConfirmation') && (
-        <Alert
-          severity="error"
-          variant="filled"
-          sx={{
-            marginY: "6px",
-            padding: "0px",
-            width: "100%",
-            height: "24px",
-            display: "inline-flex",
-            "& .MuiAlert-icon": {
-              padding: "0px 2px",
-            },
-            "& .MuiAlert-message": {
-              padding: "0px",
-            }
-          }}
-        >
-          {validationErrors.passwordConfirmation}
-        </Alert>
+        <AuthenticationFormError errorMessage={validationErrors.passwordConfirmation || ""}/>
       )}
     </div>
   );

@@ -14,8 +14,8 @@ import { useCookies } from "react-cookie";
 import { useRouter } from "next/navigation";
 import { signIn } from "../functions/httpRequests";
 import { validateSignInForm } from "../functions/validations";
-import { Alert } from "@mui/material";
 import { ProviderSignin } from "./ProviderSignin";
+import AuthenticationFormError from "../components/AuthenticationFormError";
 
 export type SignInFormType = {
   email: string;
@@ -134,25 +134,7 @@ const SigninForm = () => {
               }}
             />
             {hasError("email") && (
-              <Alert
-                severity="error"
-                variant="filled"
-                sx={{
-                  marginY: "6px",
-                  padding: "0px",
-                  width: "100%",
-                  height: "24px",
-                  display: "inline-flex",
-                  "& .MuiAlert-icon": {
-                    padding: "0px 2px",
-                  },
-                  "& .MuiAlert-message": {
-                    padding: "0px",
-                  },
-                }}
-              >
-                {validationErrors.email}
-              </Alert>
+              <AuthenticationFormError errorMessage={validationErrors.email|| ""}/>
             )}
             <TextField
               required
@@ -179,56 +161,18 @@ const SigninForm = () => {
               }}
             />
             {hasError("password") && (
-              <Alert
-                severity="error"
-                variant="filled"
-                className="min-w-full inline-flex"
-                sx={{
-                  marginY: "6px",
-                  padding: "0px",
-                  width: "100%",
-                  height: "24px",
-                  display: "inline-flex",
-                  "& .MuiAlert-icon": {
-                    padding: "0px 2px",
-                  },
-                  "& .MuiAlert-message": {
-                    padding: "0px",
-                  },
-                }}
-              >
-                {validationErrors.password}
-              </Alert>
+              <AuthenticationFormError errorMessage={validationErrors.password || ""}/>
             )}
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 1, mb: 2, bgcolor: "#1976d2 !important" }}
+              sx={{ mt: 1, marginBottom: hasError("generic") ? "0" : "36px", bgcolor: "#1976d2 !important" }}
             >
               Sign In
             </Button>
-            {validationErrors.generic && (
-              <Alert
-                severity="error"
-                variant="filled"
-                className="min-w-full inline-flex"
-                sx={{
-                  marginY: "6px",
-                  padding: "0px",
-                  width: "100%",
-                  height: "24px",
-                  display: "inline-flex",
-                  "& .MuiAlert-icon": {
-                    padding: "0px 2px",
-                  },
-                  "& .MuiAlert-message": {
-                    padding: "0px",
-                  },
-                }}
-              >
-                {validationErrors.generic}
-              </Alert>
+            {hasError("generic") && (
+              <AuthenticationFormError errorMessage={validationErrors.generic || ""}/>
             )}
             <Grid container>
               <Grid item>

@@ -13,10 +13,10 @@ import Container from "@mui/material/Container";
 import { useRouter } from "next/navigation";
 import { validateSignUpForm } from "../functions/validations";
 import { signUp } from "../functions/httpRequests";
-import { Alert } from "@mui/material";
 import PasswordRequirements from "./PasswordRequirements";
 import SignupFormFields from "./SignupFormFields";
 import { useCookies } from "react-cookie";
+import AuthenticationFormError from "../components/AuthenticationFormError";
 
 export type SignUpFormType = {
   name: string;
@@ -136,7 +136,7 @@ const SignupForm = () => {
   return (
     <Container className="main-background m-0 min-w-full " component="main">
       <CssBaseline />
-      <Box className="mt-20 flex flex-col items-center">
+      <Box className="mt-16 flex flex-col items-center">
         <Avatar sx={{ m: 1, bgcolor: "#141832" }}>
           <LockOutlinedIcon />
         </Avatar>
@@ -164,14 +164,12 @@ const SignupForm = () => {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2, bgcolor: "#1976d2 !important" }}
+            sx={{ mt: 1, marginBottom: validationErrors.generic ? "0" : "36px", bgcolor: "#1976d2 !important" }}
           >
             Sign Up
           </Button>
           {validationErrors.generic && (
-            <Alert severity="error" variant="filled">
-              {validationErrors.generic}
-            </Alert>
+            <AuthenticationFormError errorMessage={validationErrors.generic || ""}/>
           )}
           <Grid container justifyContent="flex-start">
             <Grid item>
