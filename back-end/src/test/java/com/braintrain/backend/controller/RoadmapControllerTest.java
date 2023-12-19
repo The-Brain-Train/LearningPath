@@ -417,18 +417,16 @@ class RoadmapControllerTest {
 
         if (authToken != null) {
             String uriToUpdateStatus = "http://localhost:%s/api/roadmaps/%s/completedTopic/%s".formatted(port, userEmail, roadmapMetaId);
-            String uriToFetchRoadmap = "http://localhost:%s/api/roadmaps/findByMeta/%s".formatted(port, roadmapMetaId);
 
             HttpHeaders headers = new HttpHeaders();
             headers.set("Authorization", "Bearer " + authToken);
             HttpEntity<String> entity = new HttpEntity<>(completedTopic, headers);
 
-            ResponseEntity<Roadmap> exchange = restTemplate.exchange(uriToUpdateStatus, HttpMethod.PUT, entity, Roadmap.class);
-            ResponseEntity<Roadmap> updatedRoadmap = restTemplate.exchange(uriToFetchRoadmap, HttpMethod.GET, HttpEntity.EMPTY, Roadmap.class);
+            ResponseEntity<Roadmap> updatedRoadmap = restTemplate.exchange(uriToUpdateStatus, HttpMethod.PUT, entity, Roadmap.class);
 
             boolean checkForUpdatedTopic = checkIfTopicUpdatedInRoadmap(Objects.requireNonNull(updatedRoadmap.getBody()), completedTopic);
 
-            assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
+            assertThat(updatedRoadmap.getStatusCode()).isEqualTo(HttpStatus.OK);
             assertThat(checkForUpdatedTopic).isTrue();
         }
     }
