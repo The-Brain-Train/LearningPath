@@ -17,6 +17,7 @@ public class Notification {
     @Id
     private String id;
     private String message;
+    private String body;
     private String senderEmail;
     private String receiverEmail;
     private String roadmapMetaId;
@@ -26,12 +27,14 @@ public class Notification {
 
     public Notification(
             String message,
+            String body,
             String senderEmail,
             String receiverEmail,
             String roadmapMetaId,
             NotificationType type) {
 
         this.message = message;
+        this.body = body;
         this.senderEmail = senderEmail;
         this.receiverEmail = receiverEmail;
         this.roadmapMetaId = roadmapMetaId;

@@ -13,6 +13,7 @@ public class NotificationConverter {
     public static Notification fromNotificationRequestDto(NotificationRequestDTO dto) {
         return new Notification(
                 dto.message(),
+                dto.body(),
                 dto.senderEmail(),
                 dto.receiverEmail(),
                 dto.roadmapMetaId(),
@@ -24,6 +25,7 @@ public class NotificationConverter {
         return new NotificationResponseDTO(
             notification.getId(),
             notification.getMessage(),
+            notification.getBody(),
             notification.getSenderEmail(),
             notification.getReceiverEmail(),
             notification.getRoadmapMetaId(),

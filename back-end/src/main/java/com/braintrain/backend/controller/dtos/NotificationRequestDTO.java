@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 public record NotificationRequestDTO(
         String message,
+        String body,
         String senderEmail,
         String receiverEmail,
         String roadmapMetaId,
