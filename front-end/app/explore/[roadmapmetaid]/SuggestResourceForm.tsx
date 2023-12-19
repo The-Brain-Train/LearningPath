@@ -1,8 +1,16 @@
-import { Box, FormControl, InputLabel, MenuItem, Modal, Select, SelectChangeEvent, TextField } from "@mui/material"
-import { Dispatch, SetStateAction, useState } from "react";
+import {
+    Box,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Modal,
+    Select,
+    SelectChangeEvent,
+    TextField
+} from "@mui/material"
+import { useState } from "react";
 import { modalStyle } from "../../create/createModalStyle";
-// import { SuggestResourceType } from "@/app/components/RoadmapResourcesSection";
-import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { postNotification } from "../../functions/httpRequests";
 import { ResourceType, RoadmapMeta } from "../../util/types";
 
@@ -10,13 +18,10 @@ type SuggestResourceFormType = {
     roadmapMetaId: string | undefined;
     userEmail: string | null | undefined;
     cookiesUser: string;
-    // setSuggestResourceData: Dispatch<SetStateAction<SuggestResourceType>>;
-    // resetForm: Dispatch<SetStateAction<SuggestResourceType>>;
 };
 
 const SuggestResourceForm = (props: SuggestResourceFormType) => {
     const [open, setOpen] = useState(false);
-    // const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const [name, setName] = useState<string>("");
     const [type, setType] = useState("");
@@ -65,10 +70,16 @@ const SuggestResourceForm = (props: SuggestResourceFormType) => {
             setLinkError("Link is required");
             setTimeout(() => setLinkError(null), 3000);
         }
-        console.log(name + " " + type + " " + link);
+
         const body: ResourceType = { name: name, type: type, link: link };
-        const roadmapMeta = queryClient.getQueryData<RoadmapMeta>([`roadmapMeta-${props.roadmapMetaId}`]);
-        const message = `You have new resourse suggestion for roadmap ${roadmapMeta?.name}.`
+        const roadmapMeta =
+            queryClient.getQueryData<RoadmapMeta>(
+                [`roadmapMeta-${props.roadmapMetaId}`]
+            );
+
+        const message =
+            `You have new resourse suggestion for roadmap ${roadmapMeta?.name}.`
+
         postNotification(
             message,
             JSON.stringify(body),
@@ -78,6 +89,7 @@ const SuggestResourceForm = (props: SuggestResourceFormType) => {
             "ROADMAP_RESOURCE_SUGGESTED",
             props.cookiesUser
         );
+
         resetForm();
         handleClose();
     };

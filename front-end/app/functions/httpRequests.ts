@@ -434,17 +434,16 @@ export const postNotification = async (
   const requestBody = {
     message: message,
     body: body,
-    senderEmail: senderEmail, 
+    senderEmail: senderEmail,
     receiverEmail: receiverEmail,
     roadmapMetaId: roadmapMetaId,
     type: type
-};
-  console.log("token " + token);
+  };
   const response = await fetch(
     `${BACKEND_URL}/api/notification`,
     {
       method: "POST",
-      body: JSON.stringify(requestBody), 
+      body: JSON.stringify(requestBody),
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + token,
@@ -455,6 +454,5 @@ export const postNotification = async (
     throw new Error("Failed to create Notification");
   }
   const data: string = await response.text();
-  console.log("after calling post notification " + data);
   return data;
 }

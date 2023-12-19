@@ -8,7 +8,6 @@ import { getResponseFromOpenAI } from "../functions/openAIChat";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import OpenInNew from "@mui/icons-material/OpenInNew";
 import SuggestResourceForm from "../explore/[roadmapmetaid]/SuggestResourceForm";
-import { useState } from "react";
 
 type RoadmapResourcesSectionProps = {
   treeNode: TreeNode | null;
