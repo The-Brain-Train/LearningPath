@@ -78,7 +78,7 @@ export type TreeNode = {
 export type ResourceType = {
   name: string;
   type: string;
-  link: string;
+  link: string | null;
 }
 
 export interface CustomNode extends d3.HierarchyPointNode<any> {
@@ -106,3 +106,5 @@ export type InputFormProps = {
 export type BurgerMenuProps = {
   handleSignOut: () => void;
 }
+
+
