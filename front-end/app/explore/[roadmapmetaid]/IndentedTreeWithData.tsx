@@ -44,8 +44,8 @@ const IndentedTreeWithData = ({
     let width: any = screenWidth;
     const height = (nodes.length + 1) * nodeSize;
 
-    if (screenWidth >= 1280) {
-      width = 1280;
+    if (screenWidth >= 1024) {
+      width = 1024;
     }
 
     const columns = [
@@ -101,7 +101,7 @@ const IndentedTreeWithData = ({
       .attr("width", 550)
       .attr("height", 32)
       .html(function (d) {
-        return `<p class="text-white text-lg md:text-xl ml-2 mt-1 md:mt-0 md:ml-4">📚 ${d.data.name}</p>`;
+        return `<p class="text-white text-lg md:text-xl ml-2 mt-1 md:mt-0 md:ml-4 font-bold">📚 ${d.data.name}</p>`;
       })
 
     node
@@ -112,7 +112,7 @@ const IndentedTreeWithData = ({
       .attr("width", 550)
       .attr("height", 32)
       .html(function (d) {
-        return `<p class="text-white text-lg md:text-xl ml-2 mt-1 md:mt-0 md:ml-4">📘 ${d.data.name}</p>`;
+        return `<p class="text-white text-lg md:text-xl ml-2 mt-1 md:mt-0 md:ml-4 font-bold">📘 ${d.data.name}</p>`;
       })
       .each(function (d) {
         const screenWidth = window.innerWidth;
