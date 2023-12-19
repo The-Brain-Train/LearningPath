@@ -19,7 +19,7 @@ import java.util.List;
 public class NotificationController {
     private final NotificationService service;
 
-    @GetMapping("/user/{userEmail}")
+    @GetMapping("/user/{userEmail}/all")
     public ResponseEntity<List<NotificationResponseDTO>> getAllNotifications(
             @PathVariable String userEmail) {
 
@@ -29,6 +29,20 @@ public class NotificationController {
 
         List<NotificationResponseDTO> notificationDTOS =
                 service.getAllNotificationsOfUser(userEmail);
+
+        return ResponseEntity.ok(notificationDTOS);
+    }
+
+    @GetMapping("/user/{userEmail}/unread")
+    public ResponseEntity<List<NotificationResponseDTO>> getUnreadNotifications(
+            @PathVariable String userEmail) {
+
+        if (userEmail == null) {
+            throw new UserNotFoundException("User not found for email: " + userEmail);
+        }
+
+        List<NotificationResponseDTO> notificationDTOS =
+                service.getUnreadNotificationsOfUser(userEmail);
 
         return ResponseEntity.ok(notificationDTOS);
     }

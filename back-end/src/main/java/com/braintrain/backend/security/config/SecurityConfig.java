@@ -39,7 +39,8 @@ public class SecurityConfig {
                                 "/api/roadmaps/{id}",
                                 "/api/roadmaps/findByMeta/{metaId}",
                                 "/api/roadmaps/{userEmail}/resource/{roadmapMetaId}",
-                                "/api/notification/user/{userEmail}",
+                                "/api/notification/user/{userEmail}/all",
+                                "/api/notification/user/{userEmail}/unread",
                                 "/api/notification/{id}",
                                 "/api/notification"
                         )

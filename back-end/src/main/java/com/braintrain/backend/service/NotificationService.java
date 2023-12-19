@@ -32,4 +32,9 @@ public class NotificationService {
         return NotificationConverter.toNotificationResponseDTOList(notifications);
     }
 
+    public List<NotificationResponseDTO> getUnreadNotificationsOfUser(String userEmail) {
+        List<Notification> unreadNotifications = repo.findAllByReceiverEmailAndIsRead(userEmail, false);
+        return NotificationConverter.toNotificationResponseDTOList(unreadNotifications);
+    }
+
 }
