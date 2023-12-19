@@ -176,7 +176,7 @@ const SignupForm = () => {
           <Grid container justifyContent="flex-start">
             <Grid item>
               <Link
-                href="/signin?source=signup"
+                href="/signin"
                 className="text-lg hover:underline text-white"
                 sx={{
                   color: "white !important",
