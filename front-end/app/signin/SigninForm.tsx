@@ -11,7 +11,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useCookies } from "react-cookie";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { signIn } from "../functions/httpRequests";
 import { validateSignInForm } from "../functions/validations";
 import { Alert } from "@mui/material";
@@ -39,13 +39,11 @@ const SigninForm = () => {
     generic: null,
   });
 
-  const hasError = (fieldName: keyof SignInErrorsType) => Boolean(validationErrors[fieldName]);
+  const hasError = (fieldName: keyof SignInErrorsType) =>
+    Boolean(validationErrors[fieldName]);
 
   const [cookies, setCookie] = useCookies(["user"]);
   const router = useRouter();
-
-  const searchParams = useSearchParams();
-  const directedFromSignup = searchParams.get("source");
 
   const handleInputChange = (e: {
     target: { name: string; value: string };
@@ -66,14 +64,10 @@ const SigninForm = () => {
       setCookie("user", token, {
         path: "/",
         sameSite: "none",
-        secure: true, 
-        expires: expirationDate
+        secure: true,
+        expires: expirationDate,
       });
-      if (directedFromSignup) {
-        router.push("/");
-      } else {
-        router.back();
-      }
+      router.back();
     } catch (error: any) {
       if (error.message.includes("|")) {
         const [fieldName, errorMessage] = error.message.split("|");
@@ -106,7 +100,7 @@ const SigninForm = () => {
   return (
     <Container component="main" className="main-background m-0 min-w-full">
       <CssBaseline />
-      <Box className="mt-20 flex flex-col items-center">
+      <Box className="mt-16 flex flex-col items-center">
         <Avatar sx={{ m: 1, bgcolor: "#141832" }}>
           <LockOutlinedIcon />
         </Avatar>
@@ -114,12 +108,7 @@ const SigninForm = () => {
           Sign in
         </Typography>
         <Box sx={{ mt: 1, width: "100%", maxWidth: 575 }}>
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            
-          >
+          <Box component="form" onSubmit={handleSubmit} noValidate>
             <TextField
               required
               fullWidth
@@ -141,10 +130,10 @@ const SigninForm = () => {
                 "& .MuiOutlinedInput-notchedOutline": {
                   borderColor: "white",
                 },
-                marginBottom: hasError('email') ? '0' : '36px',
+                marginBottom: hasError("email") ? "0" : "36px",
               }}
             />
-            {hasError('email') && (
+            {hasError("email") && (
               <Alert
                 severity="error"
                 variant="filled"
@@ -159,7 +148,7 @@ const SigninForm = () => {
                   },
                   "& .MuiAlert-message": {
                     padding: "0px",
-                  }
+                  },
                 }}
               >
                 {validationErrors.email}
@@ -186,10 +175,10 @@ const SigninForm = () => {
                 "& .MuiOutlinedInput-notchedOutline": {
                   borderColor: "white",
                 },
-                marginBottom: hasError('password') ? '0' : '36px',
+                marginBottom: hasError("password") ? "0" : "36px",
               }}
             />
-            { hasError('password') && (
+            {hasError("password") && (
               <Alert
                 severity="error"
                 variant="filled"
@@ -205,7 +194,7 @@ const SigninForm = () => {
                   },
                   "& .MuiAlert-message": {
                     padding: "0px",
-                  }
+                  },
                 }}
               >
                 {validationErrors.password}
@@ -235,7 +224,7 @@ const SigninForm = () => {
                   },
                   "& .MuiAlert-message": {
                     padding: "0px",
-                  }
+                  },
                 }}
               >
                 {validationErrors.generic}
