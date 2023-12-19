@@ -484,15 +484,11 @@ class RoadmapControllerTest {
 
     private String signUpAndSignInUser() {
         String signUpURI = "http://localhost:%s/api/auth/signup".formatted(port);
-        String signInURI = "http://localhost:%s/api/auth/signin".formatted(port);
 
         SignUpRequest signUpRequest = new SignUpRequest("Edward", "edwardsemail@gmail.com", "Password1!", "USER");
-        SignInRequest signInRequest = new SignInRequest("edwardsemail@gmail.com", "Password1!");
+        ResponseEntity<JwtAuthenticationResponse> signUpResponse = restTemplate.exchange(signUpURI, HttpMethod.POST, new HttpEntity<>(signUpRequest), JwtAuthenticationResponse.class);
+        JwtAuthenticationResponse jwtAuthenticationResponse = signUpResponse.getBody();
 
-        restTemplate.exchange(signUpURI, HttpMethod.POST, new HttpEntity<>(signUpRequest), JwtAuthenticationResponse.class);
-
-        ResponseEntity<JwtAuthenticationResponse> signInResponse = restTemplate.exchange(signInURI, HttpMethod.POST, new HttpEntity<>(signInRequest), JwtAuthenticationResponse.class);
-        JwtAuthenticationResponse jwtAuthenticationResponse = signInResponse.getBody();
         if (jwtAuthenticationResponse != null) {
             return jwtAuthenticationResponse.getToken();
         }
