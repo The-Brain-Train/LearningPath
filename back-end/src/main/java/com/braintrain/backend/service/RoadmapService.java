@@ -210,6 +210,11 @@ public class RoadmapService {
         return roadmap;
     }
 
+    public Roadmap createCopyOfRoadmap(String userEmail, String roadmapMetaId) {
+        Roadmap existingRoadmap = findRoadmapByMetaId(roadmapMetaId);
+        return new Roadmap(existingRoadmap.getObj(), userEmail, existingRoadmap.getExperienceLevel(), existingRoadmap.getHours());
+    }
+
     private boolean updateChildCompletionStatus(RoadmapContent roadmapContent, String childElementName) {
         boolean anyChildUpdated = false;
         boolean childFound = false;

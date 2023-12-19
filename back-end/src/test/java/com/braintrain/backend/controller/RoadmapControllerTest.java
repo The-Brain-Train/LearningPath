@@ -453,6 +453,11 @@ class RoadmapControllerTest {
         }
     }
 
+    @Test
+    void shouldCreateCopyOfRoadmapWithUserEmail() {
+
+    }
+
     private boolean checkIfTopicUpdatedInRoadmap(Roadmap roadmap, String completedTopic) {
         String roadmapDataString = roadmap.getObj();
         ObjectMapper objectMapper = new ObjectMapper();
