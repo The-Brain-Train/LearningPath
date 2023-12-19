@@ -11,6 +11,10 @@ import com.braintrain.backend.security.dao.SignInRequest;
 import com.braintrain.backend.security.dao.SignUpRequest;
 import com.braintrain.backend.service.UserService;
 import com.braintrain.backend.util.CustomPageImpl;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.api.client.json.Json;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -405,29 +409,60 @@ class RoadmapControllerTest {
         }
     }
 
-//    @Test
-//    void shouldUpdateRoadmapTopicStatus() {
-//        String userEmail = "edwardsemail@gmail.com";
-//        String roadmapMetaId = createdRoadmapMeta.getId();
-//        String completedTopic = "Syntax";
-//
-//        if (authToken != null) {
-//            String uriToUpdateStatus = "http://localhost:%s/api/roadmaps/%s/completedTopic/%s".formatted(port, userEmail, roadmapMetaId);
-//            String uriToFetchRoadmap = "http://localhost:%s/api/roadmaps/findByMeta/%s".formatted(port, roadmapMetaId);
-//
-//            HttpHeaders headers = new HttpHeaders();
-//            headers.set("Authorization", "Bearer " + authToken);
-//            HttpEntity<String> entity = new HttpEntity<>(completedTopic, headers);
-//
-//            restTemplate.exchange(uriToUpdateStatus, HttpMethod.PUT, entity, Roadmap.class);
-//
-//            ResponseEntity<Roadmap> updatedRoadmap = restTemplate.exchange(uriToFetchRoadmap, HttpMethod.GET, HttpEntity.EMPTY, Roadmap.class);
-//
-//            assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
-//
-//        }
-//
-//    }
+    @Test
+    void shouldUpdateRoadmapTopicStatus() {
+        String userEmail = "edwardsemail@gmail.com";
+        String roadmapMetaId = createdRoadmapMeta.getId();
+        String completedTopic = "Syntax";
+
+        if (authToken != null) {
+            String uriToUpdateStatus = "http://localhost:%s/api/roadmaps/%s/completedTopic/%s".formatted(port, userEmail, roadmapMetaId);
+            String uriToFetchRoadmap = "http://localhost:%s/api/roadmaps/findByMeta/%s".formatted(port, roadmapMetaId);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", "Bearer " + authToken);
+            HttpEntity<String> entity = new HttpEntity<>(completedTopic, headers);
+
+            ResponseEntity<Roadmap> exchange = restTemplate.exchange(uriToUpdateStatus, HttpMethod.PUT, entity, Roadmap.class);
+            ResponseEntity<Roadmap> updatedRoadmap = restTemplate.exchange(uriToFetchRoadmap, HttpMethod.GET, HttpEntity.EMPTY, Roadmap.class);
+
+            boolean checkForUpdatedTopic = checkIfTopicUpdatedInRoadmap(Objects.requireNonNull(updatedRoadmap.getBody()), completedTopic);
+
+            assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
+            assertThat(checkForUpdatedTopic).isTrue();
+        }
+    }
+
+
+
+    private boolean checkIfTopicUpdatedInRoadmap(Roadmap roadmap, String completedTopic) {
+        String roadmapDataString = roadmap.getObj();
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            RoadmapContent roadmapContent = objectMapper.readValue(roadmapDataString, RoadmapContent.class);
+            return searchCompletedTopic(roadmapContent.getChildren(), completedTopic);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private boolean searchCompletedTopic(List<RoadmapContentChild> children, String completedTopic) {
+        for (RoadmapContentChild child : children) {
+            if (child.getName().equals(completedTopic)) {
+                return child.isCompletedTopic();
+            }
+
+            List<RoadmapContentChild> grandChildren = child.getChildren();
+            if (grandChildren != null) {
+                boolean found = searchCompletedTopic(grandChildren, completedTopic);
+                if (found) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     private String signUpAndSignInUser() {
         String signUpURI = "http://localhost:%s/api/auth/signup".formatted(port);
