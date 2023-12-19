@@ -27,10 +27,13 @@ const SignupFormFields: React.FC<SignupFormFieldsProps> = ({
   handlePasswordChange,
   handlePasswordConfirmationChange,
 }) => {
+
+  const hasError = (fieldName: keyof SignUpErrorProps) => Boolean(validationErrors[fieldName]);
+
+
   return (
-    <>
+    <div >
       <TextField
-        margin="normal"
         autoComplete="given-name"
         name="name"
         required
@@ -51,22 +54,31 @@ const SignupFormFields: React.FC<SignupFormFieldsProps> = ({
           "& .MuiOutlinedInput-notchedOutline": {
             borderColor: "white",
           },
+          marginBottom: hasError('name') ? '0' : '36px',
         }}
       />
-      {validationErrors.name && (
+      {hasError('name') && (
         <Alert
           severity="error"
           variant="filled"
           sx={{
+            marginY: "6px",
+            padding: "0px",
             width: "100%",
+            height: "24px",
             display: "inline-flex",
+            "& .MuiAlert-icon": {
+              padding: "0px 2px",
+            },
+            "& .MuiAlert-message": {
+              padding: "0px",
+            }
           }}
         >
           {validationErrors.name}
         </Alert>
       )}
       <TextField
-        margin="normal"
         required
         fullWidth
         id="email"
@@ -86,22 +98,31 @@ const SignupFormFields: React.FC<SignupFormFieldsProps> = ({
           "& .MuiOutlinedInput-notchedOutline": {
             borderColor: "white",
           },
+          marginBottom: hasError('email') ? '0' : '36px',
         }}
       />
-      {validationErrors.email && (
+      {hasError('email') && (
         <Alert
           severity="error"
           variant="filled"
           sx={{
+            marginY: "6px",
+            padding: "0px",
+            height: "24px",
             width: "100%",
             display: "inline-flex",
+            "& .MuiAlert-icon": {
+              padding: "0px 2px",
+            },
+            "& .MuiAlert-message": {
+              padding: "0px",
+            }
           }}
         >
           {validationErrors.email}
         </Alert>
       )}
       <TextField
-        margin="normal"
         required
         fullWidth
         name="password"
@@ -122,22 +143,31 @@ const SignupFormFields: React.FC<SignupFormFieldsProps> = ({
           "& .MuiOutlinedInput-notchedOutline": {
             borderColor: "white",
           },
+          marginBottom: hasError('password') ? '0' : '36px',
         }}
       />
-      {validationErrors.password && (
+      {hasError('password') && (
         <Alert
           severity="error"
           variant="filled"
           sx={{
+            marginY: "6px",
+            padding: "0px",
             width: "100%",
+            height: "24px",
             display: "inline-flex",
+            "& .MuiAlert-icon": {
+              padding: "0px 2px",
+            },
+            "& .MuiAlert-message": {
+              padding: "0px",
+            }
           }}
         >
           {validationErrors.password}
         </Alert>
       )}
       <TextField
-        margin="normal"
         required
         fullWidth
         name="passwordConfirmation"
@@ -158,21 +188,31 @@ const SignupFormFields: React.FC<SignupFormFieldsProps> = ({
           "& .MuiOutlinedInput-notchedOutline": {
             borderColor: "white",
           },
+          marginBottom: hasError('passwordConfirmation') ? '0' : '36px',
         }}
       />
-      {validationErrors.passwordConfirmation && (
+      {hasError('passwordConfirmation') && (
         <Alert
           severity="error"
           variant="filled"
           sx={{
+            marginY: "6px",
+            padding: "0px",
             width: "100%",
+            height: "24px",
             display: "inline-flex",
+            "& .MuiAlert-icon": {
+              padding: "0px 2px",
+            },
+            "& .MuiAlert-message": {
+              padding: "0px",
+            }
           }}
         >
           {validationErrors.passwordConfirmation}
         </Alert>
       )}
-    </>
+    </div>
   );
 };
 
