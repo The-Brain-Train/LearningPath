@@ -19,6 +19,7 @@ import useCurrentUserQuery from "@/app/functions/useCurrentUserQuery";
 import { useCookies } from "react-cookie";
 import {
   Roadmap,
+  RoadmapMeta,
   RoadmapMetaList,
   TreeNode,
 } from "@/app/util/types";
@@ -46,8 +47,16 @@ function RoadMapId(props: Props) {
 
   const { data: roadmapMetas } = useQuery<RoadmapMetaList>(
     ["roadmapMetas"],
-    getRoadmaps
+    getRoadmaps,
+    {
+      onSuccess: (data) => {onRoadMapMetasFetch(data)}
+    }
   );
+
+  const onRoadMapMetasFetch = (data: RoadmapMetaList) => {
+    const roadmapMeta = findRoadmapMeta(roadmapMetaId, data);
+    queryClient.setQueryData<RoadmapMeta>([`roadmapMeta-${roadmapMetaId}`], roadmapMeta);
+  }
 
   const {
     data: roadmap,
@@ -59,7 +68,8 @@ function RoadMapId(props: Props) {
   });
 
   const userOwnsRoadmap = () => {
-    const roadmapMeta = findRoadmapMeta(roadmapMetaId, roadmapMetas);
+    const roadmapMeta = queryClient.getQueryData<RoadmapMeta>([`roadmapMeta-${roadmapMetaId}`]);
+    //const roadmapMeta = findRoadmapMeta(roadmapMetaId, roadmapMetas);
     if (
       currentUser &&
       roadmapMeta &&
@@ -182,7 +192,7 @@ function RoadMapId(props: Props) {
               treeNode={treeNode}
               userOwnsRoadmap={userOwnsRoadmap()}
               queriesToInvalidate={["roadmap"]}
-              roadmapId={roadmapMetaId}
+              roadmapMetaId={roadmapMetaId}
               userEmail={currentUser?.email}
               cookiesUser={cookies.user}
             />
