@@ -431,7 +431,27 @@ class RoadmapControllerTest {
         }
     }
 
+    @Test
+    void shouldReturn404IfTopicDoesNotExistOnRoadmap() {
+        String userEmail = "edwardsemail@gmail.com";
+        String roadmapMetaId = createdRoadmapMeta.getId();
+        String completedTopic = "hrhhe";
 
+        if (authToken != null) {
+            String uriToUpdateStatus = "http://localhost:%s/api/roadmaps/%s/completedTopic/%s".formatted(port, userEmail, roadmapMetaId);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", "Bearer " + authToken);
+            HttpEntity<String> entity = new HttpEntity<>(completedTopic, headers);
+
+            try {
+                restTemplate.exchange(uriToUpdateStatus, HttpMethod.PUT, entity, Void.class);
+                fail("should throw exception");
+            } catch (HttpClientErrorException err) {
+                assertThat(err.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+            }
+        }
+    }
 
     private boolean checkIfTopicUpdatedInRoadmap(Roadmap roadmap, String completedTopic) {
         String roadmapDataString = roadmap.getObj();
