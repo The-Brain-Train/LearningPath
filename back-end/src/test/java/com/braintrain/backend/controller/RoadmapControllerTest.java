@@ -458,6 +458,11 @@ class RoadmapControllerTest {
 
     }
 
+    @Test
+    void shouldReturn400IfRoadmapOwnerAttemptsToCreateCopyOfRoadmap() {
+
+    }
+
     private boolean checkIfTopicUpdatedInRoadmap(Roadmap roadmap, String completedTopic) {
         String roadmapDataString = roadmap.getObj();
         ObjectMapper objectMapper = new ObjectMapper();
