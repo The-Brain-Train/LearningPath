@@ -421,3 +421,40 @@ export const getRoadmapCountOfUser = async (
   const data = await response.json();
   return data;
 };
+
+export const postNotification = async (
+  message: string,
+  body: string | null,
+  senderEmail: string | null | undefined,
+  receiverEmail: string | null | undefined,
+  roadmapMetaId: string | null | undefined,
+  type: string,
+  token: string
+) => {
+  const requestBody = {
+    message: message,
+    body: body,
+    senderEmail: senderEmail, 
+    receiverEmail: receiverEmail,
+    roadmapMetaId: roadmapMetaId,
+    type: type
+};
+  console.log("token " + token);
+  const response = await fetch(
+    `${BACKEND_URL}/api/notification`,
+    {
+      method: "POST",
+      body: JSON.stringify(requestBody), 
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Failed to create Notification");
+  }
+  const data: string = await response.text();
+  console.log("after calling post notification " + data);
+  return data;
+}
