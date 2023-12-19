@@ -133,6 +133,18 @@ public class RoadmapController {
         return ResponseEntity.created(uri).body(userFavorites);
     }
 
+    @PostMapping("/{userEmail/createRoadmapCopy/{roadmapMetaId}")
+    public ResponseEntity<Roadmap> createRoadmapCopyForUser(@PathVariable String userEmail, @RequestBody String roadmapMetaId) {
+        User user = userService.getUserByEmail(userEmail);
+
+        if (user == null) {
+            throw new UserNotFoundException("User not found for email: " + userEmail);
+        }
+
+        Roadmap copyOfRoadmap = service.createCopyOfRoadmap(userEmail, roadmapMetaId);
+        return ResponseEntity.ok(copyOfRoadmap);
+    }
+
     @PutMapping("/{userEmail}/completedTopic/{roadmapMetaId}")
     public ResponseEntity<Roadmap> updateCompletedTopicStatus(@RequestBody String completedTopic, @PathVariable String roadmapMetaId) {
         Roadmap updatedRoadmap = service.markTopicOfChildAsComplete(roadmapMetaId, completedTopic);
