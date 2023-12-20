@@ -133,7 +133,7 @@ public class RoadmapController {
         return ResponseEntity.created(uri).body(userFavorites);
     }
 
-    @PostMapping("/{userEmail/createRoadmapCopy/{roadmapMetaId}")
+    @PostMapping("/{userEmail}/createRoadmapCopy/{roadmapMetaId}")
     public ResponseEntity<RoadmapMeta> createRoadmapCopyForUser(@PathVariable String userEmail, @RequestBody String roadmapMetaId) {
         User user = userService.getUserByEmail(userEmail);
 
