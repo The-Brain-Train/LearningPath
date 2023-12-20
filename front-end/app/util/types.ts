@@ -105,6 +105,7 @@ export type InputFormProps = {
 
 export type BurgerMenuProps = {
   handleSignOut: () => void;
+  currentUser: User | null | undefined;
 }
 
 

@@ -62,7 +62,7 @@ export default function Header() {
                       height={35}
                       alt="User profile picture"
                       className="rounded-full w-auto"
-                      layout="fixed" 
+                      layout="fixed"
                     />
                   ) : (
                     <Image
@@ -82,7 +82,10 @@ export default function Header() {
                 </p>
               </Link>
             ) : null}
-            <BurgerMenu handleSignOut={handleSignOut} />
+            <BurgerMenu
+              handleSignOut={handleSignOut}
+              currentUser={currentUser}
+            />
           </div>
         </div>
       </header>

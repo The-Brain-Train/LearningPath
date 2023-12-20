@@ -3,6 +3,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import IconButton from "@mui/material/IconButton";
 import HomeIcon from "@mui/icons-material/Home";
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import CreateIcon from "@mui/icons-material/Create";
 import ExploreIcon from "@mui/icons-material/Explore";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -15,8 +16,10 @@ import { useCookies } from "react-cookie";
 import { useState } from "react";
 import { BurgerMenuProps } from "../util/types";
 import { PromptMessage } from "./PromptMessage";
+import { getUnreadNotificationsOfUser } from "../functions/httpRequests";
+import { useQuery } from "@tanstack/react-query";
 
-export default function BurgerMenu({ handleSignOut }: BurgerMenuProps) {
+export default function BurgerMenu(props: BurgerMenuProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const router = useRouter();
   const isOpen = Boolean(anchorEl);
@@ -24,6 +27,7 @@ export default function BurgerMenu({ handleSignOut }: BurgerMenuProps) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleShut = () => setOpen(false);
+  const [notificationsVisible, setNotificationsVisible] = useState(false);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -31,6 +35,15 @@ export default function BurgerMenu({ handleSignOut }: BurgerMenuProps) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const { data: unreadNotifications } = useQuery(
+    ["unreadNotifications"],
+    () => getUnreadNotificationsOfUser(props.currentUser?.email as string, cookies.user),
+    {
+      enabled: !!props.currentUser,
+    }
+  );
+
   return (
     <Box className="flex items-center text-center">
       <div className="sm:hidden">
@@ -81,6 +94,27 @@ export default function BurgerMenu({ handleSignOut }: BurgerMenuProps) {
         </Menu>
       </div>
       <div className="hidden sm:flex">
+        <MenuItem onClick={() => { setNotificationsVisible(!notificationsVisible) }}>
+          <div className="relative">
+            <div className="flex flex-row items-center">
+              <NotificationsIcon className="my-5" />
+              <p className="pl-2">Notifications</p>
+            </div>
+            {notificationsVisible && <div className="absolute w-36 right-0 bg-white rounded-md shadow-xl z-10">
+              {unreadNotifications &&
+                unreadNotifications.map((n, index) => (
+                  <a
+                    href="#"
+                    key={index}
+                    className="block px-4 py-2 text-sm capitalize text-gray-700 hover:bg-gray-500 hover:text-gray-50">
+                    {n.message}
+                  </a>
+                ))
+              }
+            </div>}
+          </div>
+        </MenuItem>
+
         <MenuItem onClick={() => router.push("/create")}>
           <CreateIcon /> <p className="pl-2">Create</p>
         </MenuItem>
@@ -97,13 +131,13 @@ export default function BurgerMenu({ handleSignOut }: BurgerMenuProps) {
           </MenuItem>
         )}
       </div>
-      <PromptMessage 
+      <PromptMessage
         type="warning"
-        open={open} 
+        open={open}
         onClose={handleShut}
         onConfirm={() => {
           handleShut();
-          handleSignOut();
+          props.handleSignOut();
         }}
         message="Sign out?"
         confirmText="YES"
