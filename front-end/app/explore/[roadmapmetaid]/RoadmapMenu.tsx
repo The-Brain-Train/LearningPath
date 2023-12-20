@@ -1,6 +1,7 @@
 import { IconButton, Menu, MenuItem, Tooltip } from "@mui/material";
 import { FavoriteButton } from "./FavoriteButton";
-import { Download as DownloadIcon, Share } from "@mui/icons-material";
+import { Download as DownloadIcon, Share} from "@mui/icons-material";
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import { Roadmap, RoadmapMeta, RoadmapMetaList, User } from "@/app/util/types";
 import { useState } from "react";
@@ -12,6 +13,7 @@ import {
 } from "./roadmapIdUtils";
 import {
   addRoadmapMetaToUserFavorites,
+  createCopyOfRoadmapForCurrentUser,
   getUserFavorites,
   removeRoadmapMetaFromUserFavorites,
 } from "@/app/functions/httpRequests";
@@ -109,6 +111,10 @@ export const RoadmapMenu = ({
     shareRoadmap(roadmapMeta?.name);
   };
 
+  const handleCreateRoadmapCopy = async () => {
+    await createCopyOfRoadmapForCurrentUser(currentUser?.email, roadmapMetaId, cookies.user);
+  }
+
   return (
     <div>
       {currentUser && (
@@ -117,6 +123,17 @@ export const RoadmapMenu = ({
           isFavorite={isRoadmapInFavorites}
         />
       )}
+      <IconButton
+        onClick={handleCreateRoadmapCopy}
+        sx={{ color: "white", textAlign: "center", cursor: "pointer" }}
+      >
+        <Tooltip title="Create copy">
+          <div>
+            <ContentCopyIcon />
+            <div style={{ fontSize: "7px" }}>Create copy</div>
+          </div>
+        </Tooltip>
+      </IconButton>
       <IconButton
         onClick={handleShare}
         sx={{ color: "white", textAlign: "center", cursor: "pointer" }}
