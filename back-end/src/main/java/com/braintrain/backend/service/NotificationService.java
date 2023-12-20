@@ -16,25 +16,45 @@ import java.util.Optional;
 public class NotificationService {
 
     private final NotificationRepository repo;
+    private final NotificationConverter converter;
 
     public Notification addNotification(NotificationRequestDTO dto) {
-        Notification notification = NotificationConverter.fromNotificationRequestDto(dto);
+        Notification notification = converter.fromNotificationRequestDto(dto);
         return repo.save(notification);
     }
 
     public NotificationResponseDTO getNotificationById(String id) {
         Optional<Notification> notification = repo.findById(id);
-        return NotificationConverter.toNotificationResponseDTO(notification.get());
+        return converter.toNotificationResponseDTO(notification.get());
     }
 
     public List<NotificationResponseDTO> getAllNotificationsOfUser(String userEmail) {
         List<Notification> notifications = repo.findAllByReceiverEmail(userEmail);
-        return NotificationConverter.toNotificationResponseDTOList(notifications);
+        return converter.toNotificationResponseDTOList(notifications);
     }
 
     public List<NotificationResponseDTO> getUnreadNotificationsOfUser(String userEmail) {
         List<Notification> unreadNotifications = repo.findAllByReceiverEmailAndIsRead(userEmail, false);
-        return NotificationConverter.toNotificationResponseDTOList(unreadNotifications);
+        return converter.toNotificationResponseDTOList(unreadNotifications);
     }
 
+    public NotificationResponseDTO markNotificationAsRead(String id) {
+        Optional<Notification> notification = repo.findById(id);
+        if (notification.isPresent()) {
+            notification.get().setRead(true);
+            repo.save(notification.get());
+            return converter.toNotificationResponseDTO(notification.get());
+        }
+        throw new RuntimeException("Notification is not found.");
+    }
+
+    public NotificationResponseDTO markNotificationAsUnRead(String id) {
+        Optional<Notification> notification = repo.findById(id);
+        if (notification.isPresent()) {
+            notification.get().setRead(false);
+            repo.save(notification.get());
+            return converter.toNotificationResponseDTO(notification.get());
+        }
+        throw new RuntimeException("Notification is not found.");
+    }
 }
