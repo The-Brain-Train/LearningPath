@@ -34,7 +34,7 @@ public class RoadmapService {
         validateDTORoadmapInput(roadmapDTO.roadmap());
         validateRoadmapCount(roadmapDTO.userEmail());
         Roadmap roadmap = repo.save(new Roadmap(roadmapDTO.roadmap(), roadmapDTO.userEmail(), roadmapDTO.experienceLevel(), roadmapDTO.hours()));
-        return metaRepo.save(new RoadmapMeta(roadmapDTO.name(), roadmap.getId(), roadmapDTO.userEmail(), roadmapDTO.experienceLevel(), roadmapDTO.hours()));
+        return metaRepo.save(new RoadmapMeta(roadmapDTO.name(), roadmap.getId(), roadmapDTO.userEmail(), roadmapDTO.experienceLevel(), roadmapDTO.hours(), true));
     }
 
     public RoadmapMetaListDTO getAllRoadmapsMeta() {
@@ -210,11 +210,13 @@ public class RoadmapService {
         return roadmap;
     }
 
-    public Roadmap createCopyOfRoadmap(String userEmail, String roadmapMetaId) {
+    public RoadmapMeta createCopyOfRoadmap(String userEmail, String roadmapMetaId) {
         Roadmap existingRoadmap = findRoadmapByMetaId(roadmapMetaId);
-//        Roadmap roadmap = repo.save(new Roadmap(existingRoadmap.getObj(), userEmail, existingRoadmap.getExperienceLevel(), existingRoadmap.getHours()));
-//        RoadmapMeta roadmapMeta =  metaRepo.save(new RoadmapMeta(roadmapDTO.name(), roadmap.getId(), roadmapDTO.userEmail(), roadmapDTO.experienceLevel(), roadmapDTO.hours()));
-        return new Roadmap(existingRoadmap.getObj(), userEmail, existingRoadmap.getExperienceLevel(), existingRoadmap.getHours());
+        Optional<RoadmapMeta> optionalExistingRoadmapMeta = metaRepo.findById(roadmapMetaId);
+        RoadmapMeta existingRoadmapMeta = optionalExistingRoadmapMeta.orElseThrow();
+
+        Roadmap roadmap = repo.save(new Roadmap(existingRoadmap.getObj(), userEmail, existingRoadmap.getExperienceLevel(), existingRoadmap.getHours()));
+        return metaRepo.save(new RoadmapMeta(existingRoadmapMeta.getName(), roadmap.getId(), userEmail, existingRoadmapMeta.getExperienceLevel(), existingRoadmapMeta.getHours(), false));
     }
 
     private boolean updateChildCompletionStatus(RoadmapContent roadmapContent, String childElementName) {
