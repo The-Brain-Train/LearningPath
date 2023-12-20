@@ -3,7 +3,6 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import IconButton from "@mui/material/IconButton";
 import HomeIcon from "@mui/icons-material/Home";
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import CreateIcon from "@mui/icons-material/Create";
 import ExploreIcon from "@mui/icons-material/Explore";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -16,8 +15,7 @@ import { useCookies } from "react-cookie";
 import { useState } from "react";
 import { BurgerMenuProps } from "../util/types";
 import { PromptMessage } from "./PromptMessage";
-import { getUnreadNotificationsOfUser } from "../functions/httpRequests";
-import { useQuery } from "@tanstack/react-query";
+import NotificationPane from "./NotificationPane";
 
 export default function BurgerMenu(props: BurgerMenuProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -35,14 +33,6 @@ export default function BurgerMenu(props: BurgerMenuProps) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  const { data: unreadNotifications } = useQuery(
-    ["unreadNotifications"],
-    () => getUnreadNotificationsOfUser(props.currentUser?.email as string, cookies.user),
-    {
-      enabled: !!props.currentUser,
-    }
-  );
 
   return (
     <Box className="flex items-center text-center">
@@ -96,25 +86,11 @@ export default function BurgerMenu(props: BurgerMenuProps) {
       <div className="hidden sm:flex">
         {props.currentUser &&
           <MenuItem onClick={() => { setNotificationsVisible(!notificationsVisible) }}>
-            <div className="relative">
-              {/* <div className="flex flex-row items-center"> */}
-                <NotificationsIcon className="my-5" />
-                {/* <p className="pl-2">Notifications</p> */}
-              {/* </div> */}
-              {notificationsVisible &&
-                <div className="absolute w-80 right-0 bg-white rounded-md shadow-xl z-10">
-                  {unreadNotifications &&
-                    unreadNotifications.map((n, index) => (
-                      <a
-                        href="#"
-                        key={index}
-                        className="block px-4 py-2 h-16 text-sm capitalize line-clamp-3 text-left whitespace-normal text-gray-700 hover:bg-gray-500 hover:text-gray-50">
-                        {n.message}
-                      </a>
-                    ))
-                  }
-                </div>}
-            </div>
+            <NotificationPane 
+              currentUser={props.currentUser}
+              cookieUserToken={cookies.user}
+              notificationsVisible={notificationsVisible}
+            />
           </MenuItem>}
 
         <MenuItem onClick={() => router.push("/create")}>
