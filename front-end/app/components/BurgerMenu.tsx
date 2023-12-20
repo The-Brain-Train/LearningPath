@@ -94,26 +94,28 @@ export default function BurgerMenu(props: BurgerMenuProps) {
         </Menu>
       </div>
       <div className="hidden sm:flex">
-        <MenuItem onClick={() => { setNotificationsVisible(!notificationsVisible) }}>
-          <div className="relative">
-            <div className="flex flex-row items-center">
-              <NotificationsIcon className="my-5" />
-              <p className="pl-2">Notifications</p>
+        {props.currentUser &&
+          <MenuItem onClick={() => { setNotificationsVisible(!notificationsVisible) }}>
+            <div className="relative">
+              {/* <div className="flex flex-row items-center"> */}
+                <NotificationsIcon className="my-5" />
+                {/* <p className="pl-2">Notifications</p> */}
+              {/* </div> */}
+              {notificationsVisible &&
+                <div className="absolute w-80 right-0 bg-white rounded-md shadow-xl z-10">
+                  {unreadNotifications &&
+                    unreadNotifications.map((n, index) => (
+                      <a
+                        href="#"
+                        key={index}
+                        className="block px-4 py-2 h-16 text-sm capitalize line-clamp-3 text-left whitespace-normal text-gray-700 hover:bg-gray-500 hover:text-gray-50">
+                        {n.message}
+                      </a>
+                    ))
+                  }
+                </div>}
             </div>
-            {notificationsVisible && <div className="absolute w-36 right-0 bg-white rounded-md shadow-xl z-10">
-              {unreadNotifications &&
-                unreadNotifications.map((n, index) => (
-                  <a
-                    href="#"
-                    key={index}
-                    className="block px-4 py-2 text-sm capitalize text-gray-700 hover:bg-gray-500 hover:text-gray-50">
-                    {n.message}
-                  </a>
-                ))
-              }
-            </div>}
-          </div>
-        </MenuItem>
+          </MenuItem>}
 
         <MenuItem onClick={() => router.push("/create")}>
           <CreateIcon /> <p className="pl-2">Create</p>
