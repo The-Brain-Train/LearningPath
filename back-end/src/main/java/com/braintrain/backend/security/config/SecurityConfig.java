@@ -42,7 +42,9 @@ public class SecurityConfig {
                                 "/api/notification/user/{userEmail}/all",
                                 "/api/notification/user/{userEmail}/unread",
                                 "/api/notification/{id}",
-                                "/api/notification"
+                                "/api/notification",
+                                "/api/notification/{id}/read",
+                                "/api/notification/{id}/unread"
                         )
                         .permitAll().anyRequest().authenticated())
                 .cors(withDefaults())

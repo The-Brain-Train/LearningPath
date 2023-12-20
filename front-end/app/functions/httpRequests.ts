@@ -475,3 +475,41 @@ export const getUnreadNotificationsOfUser = async (
   const data = await response.json();
   return data;
 };
+
+export const markNotificationAsRead = async (
+  notificationId: string,
+  token: string
+) => {
+  const response = await fetch(
+    `${BACKEND_URL}/api/notification/{notificationId}/read`,
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Failed to update notification status as read.");
+  }
+  const data = await response.json();
+  return data;
+};
+
+export const markNotificationAsUnRead = async (
+  notificationId: string,
+  token: string
+) => {
+  const response = await fetch(
+    `${BACKEND_URL}/api/notification/{notificationId}/unread`,
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Failed to update notification status as unread.");
+  }
+  const data = await response.json();
+  return data;
+};
