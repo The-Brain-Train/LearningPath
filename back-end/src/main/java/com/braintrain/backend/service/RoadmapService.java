@@ -153,7 +153,11 @@ public class RoadmapService {
         Roadmap roadmap = findRoadmapByMetaId(roadmapMetaId);
         try {
             RoadmapContent roadmapContent = objectMapper.readValue(roadmap.getObj(), RoadmapContent.class);
-            roadmapContent.setResources(resources);
+            if (roadmapContent.getResources() == null || roadmapContent.getResources().isEmpty()) {
+                roadmapContent.setResources(resources);
+            } else {
+                roadmapContent.getResources().addAll(resources);
+            }
             String content = objectMapper.writeValueAsString(roadmapContent);
             roadmap.setObj(content);
             repo.save(roadmap);

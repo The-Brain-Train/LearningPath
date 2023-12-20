@@ -256,7 +256,7 @@ export const getRoadmapProgressOfUser = async (
 
 export const addResourcesToRoadmap = async (
   userEmail: string | null | undefined,
-  roadmapMetaId: string | undefined,
+  roadmapMetaId: string | null | undefined,
   chatGptResourceResponse: string,
   token: string
 ) => {
