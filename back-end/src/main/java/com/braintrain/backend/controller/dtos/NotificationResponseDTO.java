@@ -9,9 +9,12 @@ public record NotificationResponseDTO(
         String message,
         String body,
         String senderEmail,
+        String senderName,
         String receiverEmail,
         String roadmapMetaId,
+        String roadmapName,
         NotificationType type,
         LocalDateTime timestamp,
+        String timeDiffMessage,
         boolean isRead) {
 }
