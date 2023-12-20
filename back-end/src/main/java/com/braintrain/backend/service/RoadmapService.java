@@ -216,6 +216,7 @@ public class RoadmapService {
         RoadmapMeta existingRoadmapMeta = optionalExistingRoadmapMeta.orElseThrow();
 
         Roadmap roadmap = repo.save(new Roadmap(existingRoadmap.getObj(), userEmail, existingRoadmap.getExperienceLevel(), existingRoadmap.getHours()));
+
         return metaRepo.save(new RoadmapMeta(existingRoadmapMeta.getName(), roadmap.getId(), userEmail, existingRoadmapMeta.getExperienceLevel(), existingRoadmapMeta.getHours(), false));
     }
 
