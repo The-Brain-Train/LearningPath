@@ -322,20 +322,17 @@ export const createCopyOfRoadmapForCurrentUser = async (
   roadmapMetaId: string,
   token: string
 ) => {
-  try {
-    const response = await fetch(
-      `${BACKEND_URL}/api/roadmaps/${userEmail}/createRoadmapCopy/${roadmapMetaId}`,
-      {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      }
-    );
-    if (!response.ok) {
-      throw new Error("Failed to create a copy of roadmap");
+  const response = await fetch(
+    `${BACKEND_URL}/api/roadmaps/${userEmail}/createRoadmapCopy/${roadmapMetaId}`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
     }
-  } catch (error) {
-    console.error("Failed to create roadmap copy: " + error);
+  );
+  if (!response.ok) {
+    throw new Error("Failed to create a copy of roadmap");
   }
 };
 
