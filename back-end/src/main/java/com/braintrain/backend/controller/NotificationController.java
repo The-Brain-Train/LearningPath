@@ -63,4 +63,18 @@ public class NotificationController {
         URI uri = URI.create("api/notification" + notification.getId());
         return ResponseEntity.created(uri).body(notification);
     }
+
+    @PutMapping("{id}/read")
+    public ResponseEntity<NotificationResponseDTO> markAsRead(
+            @PathVariable String id) {
+        NotificationResponseDTO notificationDTO = service.markNotificationAsRead(id);
+        return ResponseEntity.ok(notificationDTO);
+    }
+
+    @PutMapping("{id}/unread")
+    public ResponseEntity<NotificationResponseDTO> markAsUnRead(
+            @PathVariable String id) {
+        NotificationResponseDTO notificationDTO = service.markNotificationAsUnRead(id);
+        return ResponseEntity.ok(notificationDTO);
+    }
 }
