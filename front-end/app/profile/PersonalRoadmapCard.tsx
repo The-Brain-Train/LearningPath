@@ -16,6 +16,9 @@ export default function PersonalRoadmapCard({
   roadmapMeta,
   handleDelete,
 }: PersonalRoadmapCardProps) {
+
+  if (!roadmapMeta.originalOwner) return null;
+
   const handleDeleteClick = () => {
     handleDelete(roadmapMeta);
     handleClose();
