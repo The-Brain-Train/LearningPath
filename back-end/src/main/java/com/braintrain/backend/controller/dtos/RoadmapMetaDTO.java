@@ -7,5 +7,6 @@ public record RoadmapMetaDTO(String id,
                              String experienceLevel,
                              int hours,
                              Long upVotes,
-                             Long downVotes) {
+                             Long downVotes,
+                             boolean originalOwner) {
 }
