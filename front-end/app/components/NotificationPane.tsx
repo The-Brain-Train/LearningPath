@@ -7,12 +7,18 @@ import {
   TextField
 } from "@mui/material";
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { getUnreadNotificationsOfUser } from "../functions/httpRequests";
 import { User } from '../util/types';
 import { useState } from "react";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { modalStyle } from "../create/createModalStyle";
-import { addResourcesToRoadmap, markNotificationAsRead, markNotificationAsUnRead } from "../functions/httpRequests";
+import {
+  addResourcesToRoadmap,
+  getUnreadNotificationsOfUser,
+  getAllNotificationsOfUser,
+  markNotificationAsRead,
+  markNotificationAsUnRead
+} from "../functions/httpRequests";
+import CircleIcon from '@mui/icons-material/Circle';
 
 type NotificationPaneType = {
   currentUser: User | null | undefined;
@@ -52,6 +58,16 @@ const NotificationPane = (props: NotificationPaneType) => {
     }
   );
 
+  const { data: allNotifications } = useQuery<NotificationType[]>(
+    ["allNotifications"],
+    () => getAllNotificationsOfUser(
+      props.currentUser?.email as string,
+      props.cookieUserToken),
+    {
+      enabled: !!props.currentUser,
+    }
+  );
+
   const showHideModel = () => {
     const open =
       queryClient.getQueryData<boolean>(["showSuggestResourceNotification"]) || false;
@@ -62,7 +78,7 @@ const NotificationPane = (props: NotificationPaneType) => {
 
   const handleNotificationClick = (notification: NotificationType) => {
     markNotificationAsRead(
-      notification.id, 
+      notification.id,
       props.cookieUserToken
     );
     setCurrentNotification(notification);
@@ -98,9 +114,9 @@ const NotificationPane = (props: NotificationPaneType) => {
         {/* <p className="pl-2">Notifications</p> */}
         {/* </div> */}
         {props.notificationsVisible &&
-          <div className="absolute w-80 right-0 bg-white rounded-md shadow-xl z-10 overflow-y-auto max-h-80">
-            {unreadNotifications &&
-              unreadNotifications.map((n, index) => (
+          <div className="absolute w-96 right-0 bg-white rounded-md shadow-xl z-10 overflow-y-auto max-h-80">
+            {allNotifications &&
+              allNotifications.map((n, index) => (
                 <div
                   onClick={() => handleNotificationClick(n)}
                   key={index}
@@ -116,6 +132,9 @@ const NotificationPane = (props: NotificationPaneType) => {
                         {` ${n.message} `}
                         <span className="font-bold">{n.roadmapName}</span>
                       </p>
+                    </div>
+                    <div className="flex items-end pl-2">
+                      {!n.isRead && <CircleIcon color="primary" fontSize="inherit" />}
                     </div>
                   </div>
                   <div className="text-left pl-7 pt-2 text-xs text-sky-700">
