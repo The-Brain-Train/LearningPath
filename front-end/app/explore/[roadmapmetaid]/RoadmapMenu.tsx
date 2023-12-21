@@ -20,6 +20,9 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { useCookies } from "react-cookie";
 import { PromptMessage } from "@/app/components/PromptMessage";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert, { AlertColor } from "@mui/material/Alert";
+
 
 type RoadmapMenuProps = {
   currentUser: User | null | undefined;
@@ -45,6 +48,32 @@ export const RoadmapMenu = ({
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleCloseModal = () => setOpen(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor | undefined>('success');
+
+  const handleDownloadRoadmapAsJson = () => {
+    downloadRoadmapAsJson(roadmap);
+    setSnackbarMessage("Roadmap downloaded successfully!");
+    setSnackbarSeverity('success');
+    setOpenSnackbar(true);
+  };
+
+  const handleCreateRoadmapCopy = async () => {
+    await createCopyOfRoadmapForCurrentUser(
+      currentUser?.email,
+      roadmapMetaId,
+      cookies.user
+    );
+    handleCloseModal();
+    setSnackbarMessage("Roadmap copied successfully!");
+    setSnackbarSeverity("success");
+    setOpenSnackbar(true);
+  };
+
+  const handleSnackbarClose = () => {
+    setOpenSnackbar(false);
+  };
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -59,12 +88,11 @@ export const RoadmapMenu = ({
     }
   };
 
-  const handleDownloadRoadmapAsJson = () => {
-    downloadRoadmapAsJson(roadmap);
-  };
-
   const handleDownloadRoadmapAsSvg = () => {
     downloadRoadmapAsSvg();
+    setSnackbarMessage("Roadmap downloaded successfully!");
+    setSnackbarSeverity("success");
+    setOpenSnackbar(true);
   };
 
   const toggleFavorite = async () => {
@@ -116,10 +144,7 @@ export const RoadmapMenu = ({
     shareRoadmap(roadmapMeta?.name);
   };
 
-  const handleCreateRoadmapCopy = async () => {
-    await createCopyOfRoadmapForCurrentUser(currentUser?.email, roadmapMetaId, cookies.user);
-    handleCloseModal();
-  }
+
 
   return (
     <div>
@@ -186,6 +211,20 @@ export const RoadmapMenu = ({
           </div>
         </Tooltip>
       </IconButton>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={5000}
+        onClose={handleSnackbarClose}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+        >
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
     </div>
   );
 };
