@@ -478,11 +478,6 @@ class RoadmapControllerTest {
     }
 
     @Test
-    void newCopyOfRoadmapShouldBeCreatedWithNoTopicsCompleted() {
-
-    }
-
-    @Test
     void shouldReturn400IfRoadmapOwnerAttemptsToCreateCopyOfOwnRoadmap() {
         String userEmail = "edwardsemail@gmail.com";
         String roadmapMetaId = createdRoadmapMeta.getId();
@@ -502,6 +497,36 @@ class RoadmapControllerTest {
             }
         }
     }
+//
+//    @Test
+//    void newCopyOfRoadmapShouldBeCreatedWithNoTopicsCompleted() {
+//        boolean isAnytopicCompleted = false;
+//
+//        try {
+//            RoadmapContent roadmapContent = objectMapper.readValue(newRoadmap.getObj(), RoadmapContent.class);
+//
+//            isAnytopicCompleted = checkIfAnyChildTopicIsCompleted(roadmapContent.getChildren());
+//
+//            assertFalse(isAnytopicCompleted);
+//
+//        } catch (JsonProcessingException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+//
+//    private boolean checkIfAnyChildTopicIsCompleted(List<RoadmapContentChild> children) {
+//        if (children != null) {
+//            for (RoadmapContentChild child : children) {
+//                if (child.isCompletedTopic()) {
+//                    return true;
+//                }
+//                if (checkIfAnyChildTopicIsCompleted(child.getChildren())) {
+//                    return true;
+//                }
+//            }
+//        }
+//        return false;
+//    }
 
     private boolean checkIfTopicUpdatedInRoadmap(Roadmap roadmap, String completedTopic) {
         String roadmapDataString = roadmap.getObj();
