@@ -215,9 +215,28 @@ public class RoadmapService {
         Optional<RoadmapMeta> optionalExistingRoadmapMeta = metaRepo.findById(roadmapMetaId);
         RoadmapMeta existingRoadmapMeta = optionalExistingRoadmapMeta.orElseThrow();
 
-        Roadmap roadmap = repo.save(new Roadmap(existingRoadmap.getObj(), userEmail, existingRoadmap.getExperienceLevel(), existingRoadmap.getHours()));
+        Roadmap roadmap = new Roadmap(existingRoadmap.getObj(), userEmail, existingRoadmap.getExperienceLevel(), existingRoadmap.getHours());
 
+        try {
+            RoadmapContent roadmapContent = objectMapper.readValue(roadmap.getObj(), RoadmapContent.class);
+            roadmapContent.setCompletedTopic(false);
+            updateChildCompletionRecursively(roadmapContent.getChildren());
+            String updatedRoadmapContent = objectMapper.writeValueAsString(roadmapContent);
+            roadmap.setObj(updatedRoadmapContent);
+            repo.save(roadmap);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
         return metaRepo.save(new RoadmapMeta(existingRoadmapMeta.getName(), roadmap.getId(), userEmail, existingRoadmapMeta.getExperienceLevel(), existingRoadmapMeta.getHours(), false));
+    }
+
+    private void updateChildCompletionRecursively(List<RoadmapContentChild> children) {
+        if (children != null) {
+            for (RoadmapContentChild child : children) {
+                child.setCompletedTopic(false);
+                updateChildCompletionRecursively(child.getChildren());
+            }
+        }
     }
 
     private boolean updateChildCompletionStatus(RoadmapContent roadmapContent, String childElementName) {
