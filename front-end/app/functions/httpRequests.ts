@@ -86,9 +86,26 @@ export const getRoadmap = async (roadMapId: string) => {
   return data;
 };
 
+export const getRoadmapMeta = async (roadmapMetaId: string, token: string) => {
+  const response = await fetch(`${BACKEND_URL}/api/roadmaps/findRoadmapMeta/${roadmapMetaId}/roadmapMeta`,
+  {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  }
+  
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch roadmaps");
+  }
+  const data: RoadmapMeta = await response.json();
+  return data;
+};
+
 export const getRoadmapByMetaId = async (roadmapMetaId: string) => {
   const response = await fetch(
-    `${BACKEND_URL}/api/roadmaps/findByMeta/${roadmapMetaId}`
+    `${BACKEND_URL}/api/roadmaps/findRoadmapByMeta/${roadmapMetaId}`
   );
   if (!response.ok) {
     throw new Error("Failed to fetch roadmap");
