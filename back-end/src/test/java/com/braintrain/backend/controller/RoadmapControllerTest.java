@@ -459,6 +459,16 @@ class RoadmapControllerTest {
     }
 
     @Test
+    void newCopyOfRoadmapShouldBeCreatedWithNoTopicsCompleted() {
+
+    }
+
+    @Test
+    void shouldReturn400IfUserAttemptsToDuplicateMoreThan1OfTheSameRoadmap() {
+        
+    }
+
+    @Test
     void shouldReturn400IfRoadmapOwnerAttemptsToCreateCopyOfRoadmap() {
 
     }
