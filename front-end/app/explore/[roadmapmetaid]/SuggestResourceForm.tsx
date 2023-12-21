@@ -12,7 +12,7 @@ import { useState } from "react";
 import { modalStyle } from "../../create/createModalStyle";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { postNotification } from "../../functions/httpRequests";
-import { ResourceType, RoadmapMeta } from "../../util/types";
+import { ResourceListType, RoadmapMeta } from "../../util/types";
 
 type SuggestResourceFormType = {
   roadmapMetaId: string | undefined;
@@ -71,7 +71,8 @@ const SuggestResourceForm = (props: SuggestResourceFormType) => {
       setTimeout(() => setLinkError(null), 3000);
     }
 
-    const body: ResourceType = { name: name, type: type, link: link };
+    const body: ResourceListType = { 
+      resources: [{ name: name, type: type, link: link }]};
     const roadmapMeta =
       queryClient.getQueryData<RoadmapMeta>(
         [`roadmapMeta-${props.roadmapMetaId}`]

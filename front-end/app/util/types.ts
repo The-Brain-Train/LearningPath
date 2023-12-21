@@ -81,6 +81,10 @@ export type ResourceType = {
   link: string | null;
 }
 
+export type ResourceListType = {
+  resources: ResourceType[];
+}
+
 export interface CustomNode extends d3.HierarchyPointNode<any> {
   index: number;
 }

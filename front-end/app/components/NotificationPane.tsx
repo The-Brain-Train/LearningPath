@@ -61,13 +61,10 @@ const NotificationPane = (props: NotificationPaneType) => {
   };
 
   const handleNotificationClick = (notification: NotificationType) => {
-    // if (!currentNotification) {
-    //   return;
-    // }
-    // markNotificationAsRead(
-    //   currentNotification.id, 
-    //   props.cookieUserToken
-    // );
+    markNotificationAsRead(
+      notification.id, 
+      props.cookieUserToken
+    );
     setCurrentNotification(notification);
     setOpen(true);
   };
@@ -80,14 +77,17 @@ const NotificationPane = (props: NotificationPaneType) => {
       props.currentUser?.email,
       currentNotification.roadmapMetaId,
       JSON.stringify(currentNotification.body),
-      props.cookieUserToken
+      props.cookieUserToken,
+      false
     );
+    handleClose();
   };
 
   const handleResourceSuggestionReject = () => {
     if (!currentNotification) {
       return;
     }
+    handleClose();
   };
 
   return (
@@ -101,7 +101,7 @@ const NotificationPane = (props: NotificationPaneType) => {
           <div className="absolute w-80 right-0 bg-white rounded-md shadow-xl z-10 overflow-y-auto max-h-80">
             {unreadNotifications &&
               unreadNotifications.map((n, index) => (
-                <li
+                <div
                   onClick={() => handleNotificationClick(n)}
                   key={index}
                   className="block px-4 py-2 h-18 line-clamp-3 text-left whitespace-normal text-gray-700 hover:bg-gray-500 hover:text-gray-50"
@@ -123,7 +123,7 @@ const NotificationPane = (props: NotificationPaneType) => {
                       {n.timeDiffMessage}
                     </p>
                   </div>
-                </li>
+                </div>
               ))
             }
           </div>}

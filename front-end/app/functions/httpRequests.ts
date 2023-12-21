@@ -3,6 +3,7 @@ import {
   Roadmap,
   RoadmapDTO,
   RoadmapMeta,
+  ResourceListType,
 } from "../util/types";
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -258,7 +259,8 @@ export const addResourcesToRoadmap = async (
   userEmail: string | null | undefined,
   roadmapMetaId: string | null | undefined,
   chatGptResourceResponse: string,
-  token: string
+  token: string,
+  fromGpt: boolean = true,
 ) => {
   try {
     const response = await fetch(
@@ -269,7 +271,8 @@ export const addResourcesToRoadmap = async (
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
         },
-        body: JSON.stringify(chatGptResourceResponse),
+        body: fromGpt ? JSON.stringify(chatGptResourceResponse) :
+          JSON.parse(chatGptResourceResponse),
       }
     );
     if (!response.ok) {
@@ -481,9 +484,11 @@ export const markNotificationAsRead = async (
   token: string
 ) => {
   const response = await fetch(
-    `${BACKEND_URL}/api/notification/{notificationId}/read`,
+    `${BACKEND_URL}/api/notification/${notificationId}/read`,
     {
+      method: "PUT",
       headers: {
+        "Content-Type": "application/json",
         Authorization: "Bearer " + token,
       },
     }
@@ -500,9 +505,11 @@ export const markNotificationAsUnRead = async (
   token: string
 ) => {
   const response = await fetch(
-    `${BACKEND_URL}/api/notification/{notificationId}/unread`,
+    `${BACKEND_URL}/api/notification/${notificationId}/unread`,
     {
+      method: "PUT",
       headers: {
+        "Content-Type": "application/json",
         Authorization: "Bearer " + token,
       },
     }
