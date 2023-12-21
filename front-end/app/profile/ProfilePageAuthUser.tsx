@@ -127,7 +127,7 @@ const ProfilePageAuthUser = ({ currentUser }: UserProps) => {
                   (roadmapMeta) => !roadmapMeta.originalOwner
                 ) && (
                   <p className="text-slate-300">
-                    Your adopted roadmaps list is empty.
+                    Your roadmaps list is empty.
                   </p>
                 )}
               </ul>
