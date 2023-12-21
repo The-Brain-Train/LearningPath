@@ -48,6 +48,7 @@ class RoadmapControllerTest {
     ResponseEntity<RoadmapMeta> exchange;
     private RoadmapMeta createdRoadmapMeta;
     private static String authToken;
+    private static String secondUserAuthToken;
     private List<String> filterRoadmapMetaIds;
 
     @BeforeEach
@@ -57,7 +58,8 @@ class RoadmapControllerTest {
         exchange = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(dto), RoadmapMeta.class);
         createdRoadmapMeta = exchange.getBody();
         createRoadmaps();
-        authToken = signUpAndSignInUser();
+        authToken = signUpAndSignInUser("edwardsemail@gmail.com");
+        secondUserAuthToken = signUpAndSignInUser("123@gmail.com");
     }
 
     @AfterEach
@@ -70,8 +72,12 @@ class RoadmapControllerTest {
         }
 
         User user = userService.getUserByEmail("edwardsemail@gmail.com");
+        User user2 = userService.getUserByEmail("123@gmail.com");
         if (user != null) {
             userService.deleteUser(user);
+        }
+        if (user2 != null) {
+            userService.deleteUser(user2);
         }
     }
 
@@ -455,7 +461,20 @@ class RoadmapControllerTest {
 
     @Test
     void shouldCreateCopyOfRoadmapWithUserEmail() {
+        String userEmail = "123@gmail.com";
+        String roadmapMetaId = createdRoadmapMeta.getId();
 
+        if (secondUserAuthToken != null) {
+            String uri= "http://localhost:%s/api/roadmaps/%s/createRoadmapCopy/%s".formatted(port, userEmail, roadmapMetaId);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", "Bearer " + authToken);
+            HttpEntity<String> entity = new HttpEntity<>(headers);
+
+            ResponseEntity<RoadmapMeta> response = restTemplate.exchange(uri, HttpMethod.POST, entity, RoadmapMeta.class);
+
+            assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        }
     }
 
     @Test
@@ -513,10 +532,10 @@ class RoadmapControllerTest {
         return false;
     }
 
-    private String signUpAndSignInUser() {
+    private String signUpAndSignInUser(String userEmail) {
         String signUpURI = "http://localhost:%s/api/auth/signup".formatted(port);
 
-        SignUpRequest signUpRequest = new SignUpRequest("Edward", "edwardsemail@gmail.com", "Password1!", "USER");
+        SignUpRequest signUpRequest = new SignUpRequest("Edward", userEmail, "Password1!", "USER");
         ResponseEntity<JwtAuthenticationResponse> signUpResponse = restTemplate.exchange(signUpURI, HttpMethod.POST, new HttpEntity<>(signUpRequest), JwtAuthenticationResponse.class);
         JwtAuthenticationResponse jwtAuthenticationResponse = signUpResponse.getBody();
 
