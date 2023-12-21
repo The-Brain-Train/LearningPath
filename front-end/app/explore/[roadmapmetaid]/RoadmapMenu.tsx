@@ -19,6 +19,7 @@ import {
 } from "@/app/functions/httpRequests";
 import { useQuery } from "@tanstack/react-query";
 import { useCookies } from "react-cookie";
+import { PromptMessage } from "@/app/components/PromptMessage";
 
 type RoadmapMenuProps = {
   currentUser: User | null | undefined;
@@ -40,6 +41,10 @@ export const RoadmapMenu = ({
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleCloseModal = () => setOpen(false);
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -113,6 +118,7 @@ export const RoadmapMenu = ({
 
   const handleCreateRoadmapCopy = async () => {
     await createCopyOfRoadmapForCurrentUser(currentUser?.email, roadmapMetaId, cookies.user);
+    handleCloseModal();
   }
 
   return (
@@ -124,7 +130,7 @@ export const RoadmapMenu = ({
         />
       )}
       <IconButton
-        onClick={handleCreateRoadmapCopy}
+        onClick={handleOpen}
         sx={{ color: "white", textAlign: "center", cursor: "pointer" }}
       >
         <Tooltip title="Create copy">
@@ -134,6 +140,15 @@ export const RoadmapMenu = ({
           </div>
         </Tooltip>
       </IconButton>
+      <PromptMessage
+            type="confirmation"
+            open={open}
+            onClose={handleCloseModal}
+            onConfirm={handleCreateRoadmapCopy}
+            message="Create A Copy?"
+            confirmText="YES"
+            cancelText="NO"
+          />
       <IconButton
         onClick={handleShare}
         sx={{ color: "white", textAlign: "center", cursor: "pointer" }}
