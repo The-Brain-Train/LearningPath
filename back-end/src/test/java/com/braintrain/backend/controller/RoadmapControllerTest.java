@@ -464,13 +464,24 @@ class RoadmapControllerTest {
     }
 
     @Test
-    void shouldReturn400IfUserAttemptsToDuplicateMoreThan1OfTheSameRoadmap() {
-        
-    }
+    void shouldReturn400IfRoadmapOwnerAttemptsToCreateCopyOfOwnRoadmap() {
+        String userEmail = "edwardsemail@gmail.com";
+        String roadmapMetaId = createdRoadmapMeta.getId();
 
-    @Test
-    void shouldReturn400IfRoadmapOwnerAttemptsToCreateCopyOfRoadmap() {
+        if (authToken != null) {
+            String uri= "http://localhost:%s/api/roadmaps/%s/createRoadmapCopy/%s".formatted(port, userEmail, roadmapMetaId);
 
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", "Bearer " + authToken);
+            HttpEntity<String> entity = new HttpEntity<>(headers);
+
+            try {
+                restTemplate.exchange(uri, HttpMethod.POST, entity, RoadmapMeta.class);
+                fail("should throw exception");
+            } catch (HttpClientErrorException err) {
+                assertThat(err.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+            }
+        }
     }
 
     private boolean checkIfTopicUpdatedInRoadmap(Roadmap roadmap, String completedTopic) {
