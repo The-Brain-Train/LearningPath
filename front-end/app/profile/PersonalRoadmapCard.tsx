@@ -18,24 +18,21 @@ export default function PersonalRoadmapCard({
 }: PersonalRoadmapCardProps) {
   if (!roadmapMeta.originalOwner) return null;
 
-  const [open, setOpen] = useState(false);
-  const handleClose = () => setOpen(false);
-  const handleOpen = () => setOpen(true);
-
-  const [cookies] = useCookies(["user"]);
-
-  const isSmallScreen = useMediaQuery("(max-width: 768px)");
-
-  const { data: progressPercentage } = useQuery<number>(
-    [`progressPercentage-${roadmapMeta.id}`],
-    () =>
-      getRoadmapProgressOfUser(currentUser?.email, roadmapMeta.id, cookies.user)
-  );
-
   const handleDeleteClick = () => {
     handleDelete(roadmapMeta);
     handleClose();
   };
+
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const [cookies] = useCookies(["user"]);
+  const isSmallScreen = useMediaQuery("(max-width: 768px)");
+
+  const { data: progressPercentage } = useQuery<number>(
+    [`progressPercentage-${roadmapMeta.id}`],
+    () => getRoadmapProgressOfUser(currentUser?.email, roadmapMeta.id, cookies.user),
+  );
 
   return (
     <li
