@@ -2,6 +2,7 @@ package com.braintrain.backend.service;
 
 import com.braintrain.backend.controller.dtos.*;
 import com.braintrain.backend.exceptionHandler.exception.ChildElementNotFoundException;
+import com.braintrain.backend.exceptionHandler.exception.RoadmapAlreadyOwnedByUserException;
 import com.braintrain.backend.exceptionHandler.exception.RoadmapCountExceededException;
 import com.braintrain.backend.exceptionHandler.exception.RoadmapNotFoundException;
 import com.braintrain.backend.model.*;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -212,10 +214,16 @@ public class RoadmapService {
 
     public RoadmapMeta createCopyOfRoadmap(String userEmail, String roadmapMetaId) {
         Roadmap existingRoadmap = findRoadmapByMetaId(roadmapMetaId);
+
+        if (existingRoadmap.getUserEmail().equals(userEmail)) {
+            throw new RoadmapAlreadyOwnedByUserException();
+        }
+
         Optional<RoadmapMeta> optionalExistingRoadmapMeta = metaRepo.findById(roadmapMetaId);
         RoadmapMeta existingRoadmapMeta = optionalExistingRoadmapMeta.orElseThrow();
 
-        Roadmap roadmap = new Roadmap(existingRoadmap.getObj(), userEmail, existingRoadmap.getExperienceLevel(), existingRoadmap.getHours());
+        Roadmap roadmap = new Roadmap(existingRoadmap.getObj(), userEmail, existingRoadmap.getExperienceLevel(),
+                existingRoadmap.getHours());
 
         try {
             RoadmapContent roadmapContent = objectMapper.readValue(roadmap.getObj(), RoadmapContent.class);
@@ -227,7 +235,10 @@ public class RoadmapService {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-        return metaRepo.save(new RoadmapMeta(existingRoadmapMeta.getName(), roadmap.getId(), userEmail, existingRoadmapMeta.getExperienceLevel(), existingRoadmapMeta.getHours(), false));
+        RoadmapMeta duplicatedRoadmapMeta = new RoadmapMeta(existingRoadmapMeta.getName(), roadmap.getId(), userEmail,
+                existingRoadmapMeta.getExperienceLevel(), existingRoadmapMeta.getHours(), false);
+
+        return metaRepo.save(duplicatedRoadmapMeta);
     }
 
     private void updateChildCompletionRecursively(List<RoadmapContentChild> children) {
