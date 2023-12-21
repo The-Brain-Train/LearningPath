@@ -120,24 +120,24 @@ const NotificationPane = (props: NotificationPaneType) => {
                 <div
                   onClick={() => handleNotificationClick(n)}
                   key={index}
-                  className="block px-4 py-2 h-18 line-clamp-3 text-left whitespace-normal text-gray-700 hover:bg-gray-500 hover:text-gray-50"
+                  className="block px-4 py-2 h-18 line-clamp-3 text-left whitespace-normal text-gray-700 hover:bg-gray-300"
                 >
                   <div className="flex flex-row">
                     <div className="items-center pr-2 py-2">
                       <p className="text-base">💡</p>
                     </div>
                     <div>
-                      <p className="text-sm">
+                      <p className={`text-sm ${n.isRead ? 'text-gray-500' : 'text-gray-800'}`}>
                         <span className="font-bold">{n.senderName}</span>
                         {` ${n.message} `}
                         <span className="font-bold">{n.roadmapName}</span>
                       </p>
                     </div>
-                    <div className="flex items-end pl-2">
+                    <div className="flex items-end">
                       {!n.isRead && <CircleIcon color="primary" fontSize="inherit" />}
                     </div>
                   </div>
-                  <div className="text-left pl-7 pt-2 text-xs text-sky-700">
+                  <div className={`text-left pl-7 pt-2 text-xs ${n.isRead ? 'text-gray-500' : 'text-sky-700'}`}>
                     <p>
                       {n.timeDiffMessage}
                     </p>
