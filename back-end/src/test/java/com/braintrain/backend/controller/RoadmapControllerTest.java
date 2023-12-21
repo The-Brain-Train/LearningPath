@@ -101,7 +101,7 @@ class RoadmapControllerTest {
     @Test
     void shouldReturnRoadmapWhenRoadmapMetaIdIsGiven() {
         String roadmapMetaId = createdRoadmapMeta.getId();
-        String uri = "http://localhost:%s/api/roadmaps/findByMeta/%s".formatted(port, roadmapMetaId);
+        String uri = "http://localhost:%s/api/roadmaps/findRoadmapByMeta/%s".formatted(port, roadmapMetaId);
 
         ResponseEntity<Roadmap> exchange = restTemplate.exchange(uri, HttpMethod.GET, HttpEntity.EMPTY, Roadmap.class);
 
