@@ -66,7 +66,7 @@ export const RoadmapMenu = ({
       cookies.user
     );
     handleCloseModal();
-    setSnackbarMessage("Roadmap copied successfully!");
+    setSnackbarMessage("Roadmap copied successfully to My Roadmaps!");
     setSnackbarSeverity("success");
     setOpenSnackbar(true);
   };
@@ -149,9 +149,7 @@ export const RoadmapMenu = ({
     );
     shareRoadmap(roadmapMeta?.name);
   };
-
-
-
+  
   return (
     <div>
       {currentUser && (
