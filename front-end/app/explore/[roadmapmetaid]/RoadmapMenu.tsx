@@ -107,14 +107,20 @@ export const RoadmapMenu = ({
         matchingRoadmapMeta,
         cookies.user
       );
+      setSnackbarMessage("Roadmap removed from favorites!");
+      setSnackbarSeverity("info");
     } else {
       await addRoadmapMetaToUserFavorites(
         currentUser?.email,
         matchingRoadmapMeta,
         cookies.user
       );
+      setSnackbarMessage("Roadmap added to favorites!");
+      setSnackbarSeverity("success");
     }
+
     refetchFavorites();
+    setOpenSnackbar(true);
   };
 
   const fetchUserFavorites = async () => {
