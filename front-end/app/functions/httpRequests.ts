@@ -479,6 +479,25 @@ export const getUnreadNotificationsOfUser = async (
   return data;
 };
 
+export const getAllNotificationsOfUser = async (
+  userEmail: string | null,
+  token: string
+) => {
+  const response = await fetch(
+    `${BACKEND_URL}/api/notification/user/${userEmail}/all`,
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch user notifications");
+  }
+  const data = await response.json();
+  return data;
+};
+
 export const markNotificationAsRead = async (
   notificationId: string,
   token: string
