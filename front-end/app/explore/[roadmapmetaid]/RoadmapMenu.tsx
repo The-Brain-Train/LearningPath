@@ -4,7 +4,7 @@ import { Download as DownloadIcon, Share} from "@mui/icons-material";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import { Roadmap, RoadmapMeta, RoadmapMetaList, User } from "@/app/util/types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   downloadRoadmapAsJson,
   downloadRoadmapAsSvg,
@@ -14,6 +14,7 @@ import {
 import {
   addRoadmapMetaToUserFavorites,
   createCopyOfRoadmapForCurrentUser,
+  getRoadmapMeta,
   getUserFavorites,
   removeRoadmapMetaFromUserFavorites,
 } from "@/app/functions/httpRequests";
@@ -51,6 +52,7 @@ export const RoadmapMenu = ({
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor | undefined>('success');
+  const [roadmapMeta, setRoadmapMeta] = useState<RoadmapMeta | null>(null);
 
   const handleDownloadRoadmapAsJson = () => {
     downloadRoadmapAsJson(roadmap);
@@ -130,6 +132,20 @@ export const RoadmapMenu = ({
     );
   };
 
+  const fetchRoadmapMeta = async () => {
+    try {
+      const fetchedRoadmapMeta = await getRoadmapMeta(roadmapMetaId, cookies.user);
+      setRoadmapMeta(fetchedRoadmapMeta);
+    } catch (error) {
+      console.error('Error fetching roadmapMeta:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchRoadmapMeta();
+  }, [roadmapMetaId]);
+
+
   const { data: favorites, refetch: refetchFavorites } = useQuery(
     ["favorites"],
     fetchUserFavorites,
@@ -158,17 +174,19 @@ export const RoadmapMenu = ({
           isFavorite={isRoadmapInFavorites}
         />
       )}
-      <IconButton
-        onClick={handleOpen}
-        sx={{ color: "white", textAlign: "center", cursor: "pointer" }}
-      >
-        <Tooltip title="Create copy">
-          <div>
-            <ContentCopyIcon />
-            <div style={{ fontSize: "7px" }}>Create copy</div>
-          </div>
-        </Tooltip>
-      </IconButton>
+     {roadmapMeta && roadmapMeta.userEmail !== currentUser?.email && (
+        <IconButton
+          onClick={handleOpen}
+          sx={{ color: "white", textAlign: "center", cursor: "pointer" }}
+        >
+          <Tooltip title="Create copy">
+            <div>
+              <ContentCopyIcon />
+              <div style={{ fontSize: "7px" }}>Create copy</div>
+            </div>
+          </Tooltip>
+        </IconButton>
+      )}
       <PromptMessage
             type="confirmation"
             open={open}
