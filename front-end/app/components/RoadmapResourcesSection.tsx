@@ -104,7 +104,7 @@ export const RoadmapResourcesSection = (
                 </li>
               </ul>
             ))}
-          {(!props.treeNode || !props.treeNode.resources) &&
+          {
             !generatingResources &&
             props.userOwnsRoadmap &&
             props.roadmapMetaId && (
@@ -123,7 +123,7 @@ export const RoadmapResourcesSection = (
               <CircularProgress />
             </div>
           )}
-          {(props.treeNode && !props.treeNode.resources) &&
+          {
             !generatingResources &&
             !props.userOwnsRoadmap &&
             props.roadmapMetaId && (
