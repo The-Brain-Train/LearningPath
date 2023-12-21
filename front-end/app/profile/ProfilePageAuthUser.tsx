@@ -15,12 +15,11 @@ import {
   AccordionHeader,
   AccordionBody,
 } from "@material-tailwind/react";
-import PersonalRoadmapCard from "./PersonalRoadmapCard";
 import FavoriteRoadmapCard from "./FavoriteRoadmapCard";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCookies } from "react-cookie";
 import { Icon } from "../components/AccordionIcon";
-import AdoptedRoadmapCard from "./AdoptedRoadmapCard";
+import PersonalRoadmapCard from "./PersonalRoadmapCard";
 
 const ProfilePageAuthUser = ({ currentUser }: UserProps) => {
   const [open, setOpen] = useState(0);
@@ -123,13 +122,6 @@ const ProfilePageAuthUser = ({ currentUser }: UserProps) => {
                     handleDelete={handleDelete}
                   />
                 ))}
-                {userRoadmaps?.roadmapMetaList.every(
-                  (roadmapMeta) => !roadmapMeta.originalOwner
-                ) && (
-                  <p className="text-slate-300">
-                    Your roadmaps list is empty.
-                  </p>
-                )}
               </ul>
             ) : (
               <p className="text-slate-300">You have no roadmaps.</p>
@@ -161,44 +153,6 @@ const ProfilePageAuthUser = ({ currentUser }: UserProps) => {
               </ul>
             ) : (
               <p className="text-slate-300">Your favorites list is empty.</p>
-            )}
-          </AccordionBody>
-        </Accordion>
-        <Accordion
-          className="sm:max-w-2xl"
-          open={open === 3}
-          icon={<Icon id={3} open={open} />}
-        >
-          <AccordionHeader
-            onClick={() => handleOpen(3)}
-            className="p-3 dark:border-opacity-50 text-white"
-            style={{ backgroundColor: "#141832" }}
-          >
-            My Adopted Roadmaps
-          </AccordionHeader>
-          <AccordionBody className="py-0">
-            {userRoadmaps && userRoadmaps.roadmapMetaList.length > 0 ? (
-              <ul className="flex flex-col justify-center">
-                {userRoadmaps?.roadmapMetaList.map((roadmapMeta, index) => (
-                  <AdoptedRoadmapCard
-                    currentUser={currentUser}
-                    roadmapMeta={roadmapMeta}
-                    key={index}
-                    handleDelete={handleDelete}
-                  />
-                ))}
-                {userRoadmaps?.roadmapMetaList.every(
-                  (roadmapMeta) => roadmapMeta.originalOwner
-                ) && (
-                  <p className="text-slate-300">
-                    Your adopted roadmaps list is empty.
-                  </p>
-                )}
-              </ul>
-            ) : (
-              <p className="text-slate-300">
-                Your adopted roadmaps list is empty.
-              </p>
             )}
           </AccordionBody>
         </Accordion>
