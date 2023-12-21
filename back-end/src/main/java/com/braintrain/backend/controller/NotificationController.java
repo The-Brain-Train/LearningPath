@@ -64,14 +64,14 @@ public class NotificationController {
         return ResponseEntity.created(uri).body(notification);
     }
 
-    @PutMapping("{id}/read")
+    @PutMapping("/{id}/read")
     public ResponseEntity<NotificationResponseDTO> markAsRead(
             @PathVariable String id) {
         NotificationResponseDTO notificationDTO = service.markNotificationAsRead(id);
         return ResponseEntity.ok(notificationDTO);
     }
 
-    @PutMapping("{id}/unread")
+    @PutMapping("/{id}/unread")
     public ResponseEntity<NotificationResponseDTO> markAsUnRead(
             @PathVariable String id) {
         NotificationResponseDTO notificationDTO = service.markNotificationAsUnRead(id);
