@@ -12,7 +12,7 @@ import { User } from '../util/types';
 import { useState } from "react";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { modalStyle } from "../create/createModalStyle";
-import { addResourcesToRoadmap } from "../functions/httpRequests";
+import { addResourcesToRoadmap, markNotificationAsRead, markNotificationAsUnRead } from "../functions/httpRequests";
 
 type NotificationPaneType = {
   currentUser: User | null | undefined;
@@ -61,6 +61,13 @@ const NotificationPane = (props: NotificationPaneType) => {
   };
 
   const handleNotificationClick = (notification: NotificationType) => {
+    // if (!currentNotification) {
+    //   return;
+    // }
+    // markNotificationAsRead(
+    //   currentNotification.id, 
+    //   props.cookieUserToken
+    // );
     setCurrentNotification(notification);
     setOpen(true);
   };
@@ -78,7 +85,9 @@ const NotificationPane = (props: NotificationPaneType) => {
   };
 
   const handleResourceSuggestionReject = () => {
-
+    if (!currentNotification) {
+      return;
+    }
   };
 
   return (
@@ -130,22 +139,25 @@ const NotificationPane = (props: NotificationPaneType) => {
         >
           <Box sx={modalStyle}>
             <div>
-              <FormLabel>
+              {/* <FormLabel className="text-white">
                 {currentNotification.body}
-              </FormLabel>
+              </FormLabel> */}
+              <span>
+                {currentNotification.body}
+              </span>
               <div className="flex flex-row justify-between">
-              <button
-                onClick={handleResourceSuggestionConfirm}
-                className="w-2/6 mx-4 bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 border border-blue-700 rounded"
-              >
+                <button
+                  onClick={handleResourceSuggestionConfirm}
+                  className="w-2/6 mx-4 bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 border border-blue-700 rounded"
+                >
                   Confirm
-              </button>
-              <button
-                onClick={handleResourceSuggestionReject}
-                className="w-2/6 mx-4 bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 border border-blue-700 rounded"
-              >
+                </button>
+                <button
+                  onClick={handleResourceSuggestionReject}
+                  className="w-2/6 mx-4 bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 border border-blue-700 rounded"
+                >
                   Reject
-              </button>
+                </button>
               </div>
             </div>
           </Box>
