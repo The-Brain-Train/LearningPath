@@ -464,7 +464,7 @@ class RoadmapControllerTest {
     }
 
     @Test
-    void shouldReturn400IfUserAttemptsToDuplicateMoreThan1OfTheSameRoadmap() {
+    void shouldReturn400IfRoadmapOwnerAttemptsToCreateCopyOfOwnRoadmap() {
         String userEmail = "edwardsemail@gmail.com";
         String roadmapMetaId = createdRoadmapMeta.getId();
 
@@ -476,17 +476,12 @@ class RoadmapControllerTest {
             HttpEntity<String> entity = new HttpEntity<>(headers);
 
             try {
-                restTemplate.exchange(uri, HttpMethod.POST, entity, Void.class);
+                restTemplate.exchange(uri, HttpMethod.POST, entity, RoadmapMeta.class);
                 fail("should throw exception");
             } catch (HttpClientErrorException err) {
                 assertThat(err.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
             }
         }
-    }
-
-    @Test
-    void shouldReturn400IfRoadmapOwnerAttemptsToCreateCopyOfRoadmap() {
-
     }
 
     private boolean checkIfTopicUpdatedInRoadmap(Roadmap roadmap, String completedTopic) {
