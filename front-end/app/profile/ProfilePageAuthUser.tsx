@@ -51,7 +51,7 @@ const ProfilePageAuthUser = ({ currentUser }: UserProps) => {
   );
 
   const deleteRoadmapMutation = useMutation((roadmapMeta: RoadmapMeta) =>
-    deleteRoadmap(roadmapMeta.id)
+    deleteRoadmap(roadmapMeta.id, cookies.user)
   );
 
   const removeFavoriteMutation = useMutation((roadmapMeta: RoadmapMeta) =>

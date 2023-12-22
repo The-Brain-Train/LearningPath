@@ -114,8 +114,11 @@ export const getRoadmapByMetaId = async (roadmapMetaId: string) => {
   return data;
 };
 
-export const deleteRoadmap = async (roadMapId: string) => {
+export const deleteRoadmap = async (roadMapId: string, token: string) => {
   const response = await fetch(`${BACKEND_URL}/api/roadmaps/${roadMapId}`, {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
     method: "DELETE",
   });
   if (!response.ok) {
