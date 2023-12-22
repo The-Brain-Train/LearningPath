@@ -13,6 +13,7 @@ import { modalStyle } from "../../util/modalStyle";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { postNotification } from "../../functions/httpRequests";
 import { ResourceListType, RoadmapMeta } from "../../util/types";
+import { resourceSuggestedMessage } from "../../util/constants";
 
 type SuggestResourceFormType = {
   roadmapMetaId: string | undefined;
@@ -77,11 +78,9 @@ const SuggestResourceForm = (props: SuggestResourceFormType) => {
       queryClient.getQueryData<RoadmapMeta>(
         [`roadmapMeta-${props.roadmapMetaId}`]
       );
-
-    const message = "suggested you a new resource for roadmap";
    
     postNotification(
-      message,
+      resourceSuggestedMessage,
       JSON.stringify(body),
       props.userEmail,
       roadmapMeta?.userEmail,

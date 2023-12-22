@@ -1,0 +1,1 @@
+export const resourceSuggestedMessage = "suggested you a new resource for roadmap";
