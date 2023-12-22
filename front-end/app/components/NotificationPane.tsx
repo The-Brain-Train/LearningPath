@@ -1,9 +1,8 @@
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { ResourceType, User } from '../util/types';
+import { User } from '../util/types';
 import { MouseEvent, useState } from "react";
 import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
 import {
-  getUnreadNotificationsOfUser,
   getAllNotificationsOfUser,
   markNotificationAsRead,
   markNotificationAsUnRead,
@@ -42,16 +41,6 @@ const NotificationPane = (props: NotificationPaneType) => {
   const handleCloseSuggestedResourseBox = () => setOpenSuggestedResourseBox(false);
   const [currentNotification, setCurrentNotification] = useState<NotificationType | null>(null);
   const queryClient = useQueryClient();
-
-  const { data: unreadNotifications } = useQuery<NotificationType[]>(
-    ["unreadNotifications"],
-    () => getUnreadNotificationsOfUser(
-      props.currentUser?.email as string,
-      props.cookieUserToken),
-    {
-      enabled: !!props.currentUser,
-    }
-  );
 
   const { data: allNotifications } = useQuery<NotificationType[]>(
     ["allNotifications"],
