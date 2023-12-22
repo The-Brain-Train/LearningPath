@@ -29,12 +29,17 @@ public class NotificationService {
     }
 
     public List<NotificationResponseDTO> getAllNotificationsOfUser(String userEmail) {
-        List<Notification> notifications = repo.findAllByReceiverEmail(userEmail);
+        List<Notification> notifications =
+                repo.findAllByReceiverEmailOrderByTimestampDesc(userEmail);
         return converter.toNotificationResponseDTOList(notifications);
     }
 
     public List<NotificationResponseDTO> getUnreadNotificationsOfUser(String userEmail) {
-        List<Notification> unreadNotifications = repo.findAllByReceiverEmailAndIsRead(userEmail, false);
+        List<Notification> unreadNotifications =
+                repo.findAllByReceiverEmailAndIsReadOrderByTimestampDesc(
+                        userEmail,
+                        false
+                );
         return converter.toNotificationResponseDTOList(unreadNotifications);
     }
 
