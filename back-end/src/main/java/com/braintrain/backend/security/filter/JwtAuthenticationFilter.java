@@ -32,15 +32,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String jwtToken = null;
         String userEmail = null;
 
-        if (StringUtils.isEmpty(authHeader) || !StringUtils.startsWith(authHeader, "Bearer ")) {
-            sendUnauthorizedResponse(response);
-            return;
-        }
-
-//        if(StringUtils.isEmpty(authHeader) || !StringUtils.startsWith(authHeader,"Bearer ")){
-//            filterChain.doFilter(request, response);
+//        if (StringUtils.isEmpty(authHeader) || !StringUtils.startsWith(authHeader, "Bearer ")) {
+//            sendUnauthorizedResponse(response);
 //            return;
 //        }
+
+        if(StringUtils.isEmpty(authHeader) || !StringUtils.startsWith(authHeader,"Bearer ")){
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         jwtToken = authHeader.substring(7);
 
