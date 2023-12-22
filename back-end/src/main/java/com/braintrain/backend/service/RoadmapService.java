@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -222,7 +221,7 @@ public class RoadmapService {
         return roadmap;
     }
 
-    public RoadmapMeta createCopyOfRoadmap(String userEmail, String roadmapMetaId) {
+    public Roadmap createCopyOfRoadmap(String userEmail, String roadmapMetaId) {
         Roadmap existingRoadmap = findRoadmapByMetaId(roadmapMetaId);
 
         if (existingRoadmap.getUserEmail().equals(userEmail)) {
@@ -245,10 +244,11 @@ public class RoadmapService {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-        RoadmapMeta duplicatedRoadmapMeta = new RoadmapMeta(existingRoadmapMeta.getName(), roadmap.getId(), userEmail,
-                existingRoadmapMeta.getExperienceLevel(), existingRoadmapMeta.getHours(), false);
 
-        return metaRepo.save(duplicatedRoadmapMeta);
+        metaRepo.save(new RoadmapMeta(existingRoadmapMeta.getName(), roadmap.getId(), userEmail,
+                existingRoadmapMeta.getExperienceLevel(), existingRoadmapMeta.getHours(), false));
+
+        return roadmap;
     }
 
     private void updateChildCompletionRecursively(List<RoadmapContentChild> children) {

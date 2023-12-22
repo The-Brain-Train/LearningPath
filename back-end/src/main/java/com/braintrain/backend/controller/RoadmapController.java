@@ -139,14 +139,14 @@ public class RoadmapController {
     }
 
     @PostMapping("/{userEmail}/createRoadmapCopy/{roadmapMetaId}")
-    public ResponseEntity<RoadmapMeta> createRoadmapCopyForUser(@PathVariable String userEmail, @PathVariable String roadmapMetaId) {
+    public ResponseEntity<Roadmap> createRoadmapCopyForUser(@PathVariable String userEmail, @PathVariable String roadmapMetaId) {
         User user = userService.getUserByEmail(userEmail);
 
         if (user == null) {
             throw new UserNotFoundException("User not found for email: " + userEmail);
         }
 
-        RoadmapMeta copyOfRoadmap = service.createCopyOfRoadmap(userEmail, roadmapMetaId);
+        Roadmap copyOfRoadmap = service.createCopyOfRoadmap(userEmail, roadmapMetaId);
         return ResponseEntity.ok(copyOfRoadmap);
     }
 

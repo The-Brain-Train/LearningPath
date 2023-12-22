@@ -7,14 +7,11 @@ import com.braintrain.backend.controller.dtos.RoadmapMetaListDTO;
 import com.braintrain.backend.controller.dtos.UserFavoritesDTO;
 import com.braintrain.backend.model.*;
 import com.braintrain.backend.security.dao.JwtAuthenticationResponse;
-import com.braintrain.backend.security.dao.SignInRequest;
 import com.braintrain.backend.security.dao.SignUpRequest;
 import com.braintrain.backend.service.UserService;
 import com.braintrain.backend.util.CustomPageImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.api.client.json.Json;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -43,6 +40,8 @@ class RoadmapControllerTest {
     @Autowired
     RestTemplate restTemplate;
     @Autowired
+    private ObjectMapper objectMapper;
+    @Autowired
     UserService userService;
     private static final String BASE_URL = "http://localhost:%s/api/roadmaps";
     ResponseEntity<RoadmapMeta> exchange;
@@ -50,7 +49,6 @@ class RoadmapControllerTest {
     private static String authToken;
     private static String secondUserAuthToken;
     private List<String> filterRoadmapMetaIds;
-
     @BeforeEach
     public void setUp() throws IOException {
         String uri = BASE_URL.formatted(port);
@@ -497,36 +495,48 @@ class RoadmapControllerTest {
             }
         }
     }
-//
-//    @Test
-//    void newCopyOfRoadmapShouldBeCreatedWithNoTopicsCompleted() {
-//        boolean isAnytopicCompleted = false;
-//
-//        try {
-//            RoadmapContent roadmapContent = objectMapper.readValue(newRoadmap.getObj(), RoadmapContent.class);
-//
-//            isAnytopicCompleted = checkIfAnyChildTopicIsCompleted(roadmapContent.getChildren());
-//
-//            assertFalse(isAnytopicCompleted);
-//
-//        } catch (JsonProcessingException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//
-//    private boolean checkIfAnyChildTopicIsCompleted(List<RoadmapContentChild> children) {
-//        if (children != null) {
-//            for (RoadmapContentChild child : children) {
-//                if (child.isCompletedTopic()) {
-//                    return true;
-//                }
-//                if (checkIfAnyChildTopicIsCompleted(child.getChildren())) {
-//                    return true;
-//                }
-//            }
-//        }
-//        return false;
-//    }
+
+    @Test
+    void newCopyOfRoadmapShouldBeCreatedWithNoTopicsCompleted() {
+        String roadmapMetaId = createdRoadmapMeta.getId();
+        String userEmail = "123@gmail.com";
+        boolean isAnyTopicCompleted = false;
+
+        if (secondUserAuthToken != null) {
+            String uri= "http://localhost:%s/api/roadmaps/%s/createRoadmapCopy/%s".formatted(port, userEmail, roadmapMetaId);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", "Bearer " + authToken);
+            HttpEntity<String> entity = new HttpEntity<>(headers);
+
+            ResponseEntity<Roadmap> copiedRoadmap = restTemplate.exchange(uri, HttpMethod.POST, entity, Roadmap.class);
+
+            try {
+                String roadmapData = copiedRoadmap.getBody().getObj();
+                RoadmapContent roadmapContent = objectMapper.readValue(roadmapData, RoadmapContent.class);
+
+                isAnyTopicCompleted = checkIfAnyChildTopicIsCompleted(roadmapContent.getChildren());
+
+                assertFalse(isAnyTopicCompleted);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    private boolean checkIfAnyChildTopicIsCompleted(List<RoadmapContentChild> children) {
+        if (children != null) {
+            for (RoadmapContentChild child : children) {
+                if (child.isCompletedTopic()) {
+                    return true;
+                }
+                if (checkIfAnyChildTopicIsCompleted(child.getChildren())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     private boolean checkIfTopicUpdatedInRoadmap(Roadmap roadmap, String completedTopic) {
         String roadmapDataString = roadmap.getObj();
