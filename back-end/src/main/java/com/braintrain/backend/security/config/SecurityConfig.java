@@ -45,11 +45,11 @@ public class SecurityConfig {
                         )
                         .permitAll().anyRequest().authenticated())
                 .cors(withLearningPathDefaults(websiteProperties.frontend()))
-                .oauth2Login(oauth2 -> oauth2
-                        .successHandler(customAuthenticationSuccessHandler))
-                .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider()).addFilterBefore(
                         authFilter, UsernamePasswordAuthenticationFilter.class)
+                .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
+                .oauth2Login(oauth2 -> oauth2
+                        .successHandler(customAuthenticationSuccessHandler))
                 .csrf(CsrfConfigurer::disable);
         return http.build();
     }
