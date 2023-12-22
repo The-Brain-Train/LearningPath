@@ -1,10 +1,13 @@
 "use client";
 import { Box, CircularProgress } from "@mui/material";
 import ProfilePageUnauthUser from "./ProfilePageUnauthUser";
-import ProfilePageAuthUser from "./ProfilePageAuthUser";
 import useCurrentUserQuery from "../functions/useCurrentUserQuery";
+import dynamic from "next/dynamic";
+
 
 const Profile = () => {
+  const DynamicProfilePageAuthUser = dynamic(() => import("./ProfilePageAuthUser"));
+
   const { currentUser, isLoading } = useCurrentUserQuery();
 
   if (isLoading) {
@@ -22,7 +25,7 @@ const Profile = () => {
   return (
     <>
       {currentUser ? (
-        <ProfilePageAuthUser currentUser={currentUser} />
+        <DynamicProfilePageAuthUser currentUser={currentUser} />
       ) : (
         <ProfilePageUnauthUser />
       )}

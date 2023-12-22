@@ -24,7 +24,7 @@ class RoadmapServiceTest {
 
     @BeforeEach
     public void setup() throws IOException {
-        RoadmapDTO dto = TestHelper.createRoadmapDTO("Java", Paths.get("src/test/resources/java.json"));
+        RoadmapDTO dto = TestHelper.createRoadmapDTO("Java", Paths.get("src/test/resources/testJsons/java.json"));
         roadmapMeta = roadmapService.createRoadmap(dto);
     }
 

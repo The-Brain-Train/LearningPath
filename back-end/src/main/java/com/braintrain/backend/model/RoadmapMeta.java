@@ -19,6 +19,7 @@ public class RoadmapMeta {
     private int hours;
     private Long upVotes = 0L;
     private Long downVotes = 0L;
+    private boolean originalOwner;
 
     public RoadmapMeta(String name, String roadmapReferenceId, String userEmail, String experienceLevel, int hours) {
         this.name = name;
@@ -26,5 +27,14 @@ public class RoadmapMeta {
         this.userEmail = userEmail;
         this.experienceLevel = experienceLevel;
         this.hours = hours;
+    }
+
+    public RoadmapMeta(String name, String roadmapReferenceId, String userEmail, String experienceLevel, int hours, boolean originalOwner) {
+        this.name = name;
+        this.roadmapReferenceId = roadmapReferenceId;
+        this.userEmail = userEmail;
+        this.experienceLevel = experienceLevel;
+        this.hours = hours;
+        this.originalOwner = originalOwner;
     }
 }

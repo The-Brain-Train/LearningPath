@@ -1,5 +1,6 @@
 package com.braintrain.backend.util;
 
+import com.braintrain.backend.model.RoadmapMeta;
 import com.braintrain.backend.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,14 +25,11 @@ public class MongoFieldUpdater {
     public void initialize() {
         if (fieldUpdaterEnabled) {
             Query query = new Query(
-                    Criteria.where("upVotes").exists(false)
-                            .and("downVotes").exists(false)
+                    Criteria.where("").exists(false)
             );
             Update update = new Update()
-                    .set("upVotes", new ArrayList<>())
-                    .set("downVotes", new ArrayList<>());
-
-            mongoTemplate.updateMulti(query, update, User.class);
+                    .set("", true);
+            mongoTemplate.updateMulti(query, update, RoadmapMeta.class);
         }
     }
 }

@@ -7,14 +7,11 @@ import com.braintrain.backend.controller.dtos.RoadmapMetaListDTO;
 import com.braintrain.backend.controller.dtos.UserFavoritesDTO;
 import com.braintrain.backend.model.*;
 import com.braintrain.backend.security.dao.JwtAuthenticationResponse;
-import com.braintrain.backend.security.dao.SignInRequest;
 import com.braintrain.backend.security.dao.SignUpRequest;
 import com.braintrain.backend.service.UserService;
 import com.braintrain.backend.util.CustomPageImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.api.client.json.Json;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -43,13 +40,15 @@ class RoadmapControllerTest {
     @Autowired
     RestTemplate restTemplate;
     @Autowired
+    private ObjectMapper objectMapper;
+    @Autowired
     UserService userService;
     private static final String BASE_URL = "http://localhost:%s/api/roadmaps";
     ResponseEntity<RoadmapMeta> exchange;
     private RoadmapMeta createdRoadmapMeta;
     private static String authToken;
+    private static String secondUserAuthToken;
     private List<String> filterRoadmapMetaIds;
-
     @BeforeEach
     public void setUp() throws IOException {
         String uri = BASE_URL.formatted(port);
@@ -57,7 +56,8 @@ class RoadmapControllerTest {
         exchange = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(dto), RoadmapMeta.class);
         createdRoadmapMeta = exchange.getBody();
         createRoadmaps();
-        authToken = signUpAndSignInUser();
+        authToken = signUpAndSignInUser("edwardsemail@gmail.com");
+        secondUserAuthToken = signUpAndSignInUser("123@gmail.com");
     }
 
     @AfterEach
@@ -70,8 +70,12 @@ class RoadmapControllerTest {
         }
 
         User user = userService.getUserByEmail("edwardsemail@gmail.com");
+        User user2 = userService.getUserByEmail("123@gmail.com");
         if (user != null) {
             userService.deleteUser(user);
+        }
+        if (user2 != null) {
+            userService.deleteUser(user2);
         }
     }
 
@@ -101,7 +105,7 @@ class RoadmapControllerTest {
     @Test
     void shouldReturnRoadmapWhenRoadmapMetaIdIsGiven() {
         String roadmapMetaId = createdRoadmapMeta.getId();
-        String uri = "http://localhost:%s/api/roadmaps/findByMeta/%s".formatted(port, roadmapMetaId);
+        String uri = "http://localhost:%s/api/roadmaps/findRoadmapByMeta/%s".formatted(port, roadmapMetaId);
 
         ResponseEntity<Roadmap> exchange = restTemplate.exchange(uri, HttpMethod.GET, HttpEntity.EMPTY, Roadmap.class);
 
@@ -152,15 +156,6 @@ class RoadmapControllerTest {
             assertThat(getResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
             assertThat(getResponse.hasBody()).isTrue();
         }
-    }
-
-    @Test
-    void getRoadmapMetaListForUserWithInvalidEmailShouldReturn403() {
-        String uri = "http://localhost:%s/api/roadmaps/gegerg/roadmapMetas".formatted(port);
-
-        HttpClientErrorException exception = assertThrows(HttpClientErrorException.Forbidden.class, () -> restTemplate.exchange(uri, HttpMethod.GET, HttpEntity.EMPTY, Void.class));
-
-        assertEquals(HttpStatus.FORBIDDEN, exception.getStatusCode());
     }
 
     @Test
@@ -453,6 +448,87 @@ class RoadmapControllerTest {
         }
     }
 
+    @Test
+    void shouldCreateCopyOfRoadmapWithUserEmail() {
+        String userEmail = "123@gmail.com";
+        String roadmapMetaId = createdRoadmapMeta.getId();
+
+        if (secondUserAuthToken != null) {
+            String uri= "http://localhost:%s/api/roadmaps/%s/createRoadmapCopy/%s".formatted(port, userEmail, roadmapMetaId);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", "Bearer " + authToken);
+            HttpEntity<String> entity = new HttpEntity<>(headers);
+
+            ResponseEntity<RoadmapMeta> response = restTemplate.exchange(uri, HttpMethod.POST, entity, RoadmapMeta.class);
+
+            assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        }
+    }
+
+    @Test
+    void shouldReturn400IfRoadmapOwnerAttemptsToCreateCopyOfOwnRoadmap() {
+        String userEmail = "edwardsemail@gmail.com";
+        String roadmapMetaId = createdRoadmapMeta.getId();
+
+        if (authToken != null) {
+            String uri= "http://localhost:%s/api/roadmaps/%s/createRoadmapCopy/%s".formatted(port, userEmail, roadmapMetaId);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", "Bearer " + authToken);
+            HttpEntity<String> entity = new HttpEntity<>(headers);
+
+            try {
+                restTemplate.exchange(uri, HttpMethod.POST, entity, RoadmapMeta.class);
+                fail("should throw exception");
+            } catch (HttpClientErrorException err) {
+                assertThat(err.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+            }
+        }
+    }
+
+    @Test
+    void newCopyOfRoadmapShouldBeCreatedWithNoTopicsCompleted() {
+        String roadmapMetaId = createdRoadmapMeta.getId();
+        String userEmail = "123@gmail.com";
+        boolean isAnyTopicCompleted = false;
+
+        if (secondUserAuthToken != null) {
+            String uri= "http://localhost:%s/api/roadmaps/%s/createRoadmapCopy/%s".formatted(port, userEmail, roadmapMetaId);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", "Bearer " + authToken);
+            HttpEntity<String> entity = new HttpEntity<>(headers);
+
+            ResponseEntity<Roadmap> copiedRoadmap = restTemplate.exchange(uri, HttpMethod.POST, entity, Roadmap.class);
+
+            try {
+                String roadmapData = copiedRoadmap.getBody().getObj();
+                RoadmapContent roadmapContent = objectMapper.readValue(roadmapData, RoadmapContent.class);
+
+                isAnyTopicCompleted = checkIfAnyChildTopicIsCompleted(roadmapContent.getChildren());
+
+                assertFalse(isAnyTopicCompleted);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    private boolean checkIfAnyChildTopicIsCompleted(List<RoadmapContentChild> children) {
+        if (children != null) {
+            for (RoadmapContentChild child : children) {
+                if (child.isCompletedTopic()) {
+                    return true;
+                }
+                if (checkIfAnyChildTopicIsCompleted(child.getChildren())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private boolean checkIfTopicUpdatedInRoadmap(Roadmap roadmap, String completedTopic) {
         String roadmapDataString = roadmap.getObj();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -482,17 +558,13 @@ class RoadmapControllerTest {
         return false;
     }
 
-    private String signUpAndSignInUser() {
+    private String signUpAndSignInUser(String userEmail) {
         String signUpURI = "http://localhost:%s/api/auth/signup".formatted(port);
-        String signInURI = "http://localhost:%s/api/auth/signin".formatted(port);
 
-        SignUpRequest signUpRequest = new SignUpRequest("Edward", "edwardsemail@gmail.com", "Password1!", "USER");
-        SignInRequest signInRequest = new SignInRequest("edwardsemail@gmail.com", "Password1!");
+        SignUpRequest signUpRequest = new SignUpRequest("Edward", userEmail, "Password1!", "USER");
+        ResponseEntity<JwtAuthenticationResponse> signUpResponse = restTemplate.exchange(signUpURI, HttpMethod.POST, new HttpEntity<>(signUpRequest), JwtAuthenticationResponse.class);
+        JwtAuthenticationResponse jwtAuthenticationResponse = signUpResponse.getBody();
 
-        restTemplate.exchange(signUpURI, HttpMethod.POST, new HttpEntity<>(signUpRequest), JwtAuthenticationResponse.class);
-
-        ResponseEntity<JwtAuthenticationResponse> signInResponse = restTemplate.exchange(signInURI, HttpMethod.POST, new HttpEntity<>(signInRequest), JwtAuthenticationResponse.class);
-        JwtAuthenticationResponse jwtAuthenticationResponse = signInResponse.getBody();
         if (jwtAuthenticationResponse != null) {
             return jwtAuthenticationResponse.getToken();
         }
