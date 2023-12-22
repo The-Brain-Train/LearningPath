@@ -557,6 +557,6 @@ export const deleteNotification = async (
   if (!response.ok) {
     throw new Error("Failed to update notification status as unread.");
   }
-  const data = await response.json();
+  const data = await response.text();
   return data;
 };
