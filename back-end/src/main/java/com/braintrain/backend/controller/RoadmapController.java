@@ -187,6 +187,7 @@ public class RoadmapController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRoadmap(@PathVariable String id) {
         RoadmapMeta roadmapMeta = service.getRoadmapMetaById(id);
+        service.removeRoadmapFromFavorites(roadmapMeta);
         service.delete(roadmapMeta);
         return ResponseEntity.noContent().build();
     }

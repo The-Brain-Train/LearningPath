@@ -83,6 +83,16 @@ public class RoadmapService {
         metaRepo.delete(roadmapMeta);
     }
 
+    public void removeRoadmapFromFavorites(RoadmapMeta roadmapMeta) {
+        List<User> users = userRepo.findAll();
+        for (User user : users) {
+            if(user.getFavorites() != null){
+                user.getFavorites().remove(roadmapMeta);
+                userRepo.save(user);
+            }
+        }
+    }
+
     public void deleteRoadmapMeta(String id) {
         metaRepo.deleteById(id);
     }
