@@ -9,7 +9,7 @@ import {
   TextField
 } from "@mui/material";
 import { useState } from "react";
-import { modalStyle } from "../../create/createModalStyle";
+import { modalStyle } from "../../util/modalStyle";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { postNotification } from "../../functions/httpRequests";
 import { ResourceListType, RoadmapMeta } from "../../util/types";
