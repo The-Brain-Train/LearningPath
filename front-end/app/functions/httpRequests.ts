@@ -45,7 +45,7 @@ export const signIn = async (formData: any) => {
   if (response.status === 401) {
     throw new Error("Invalid Email. Please try again or sign up.");
   }
-}
+};
 
 export const getRoadmaps = async () => {
   const response = await fetch(`${BACKEND_URL}/api/roadmaps`);
@@ -57,21 +57,25 @@ export const getRoadmaps = async () => {
 };
 
 export const getRoadmapsFilteredPaged = async (
-  name: string, experienceLevel: string | null | undefined,
-  fromHour: number | null | undefined, toHour: number | null | undefined,
-  page: number, size: number) => {
+  name: string,
+  experienceLevel: string | null | undefined,
+  fromHour: number | null | undefined,
+  toHour: number | null | undefined,
+  page: number,
+  size: number
+) => {
   const response = await fetch(
     `${BACKEND_URL}/api/roadmaps/filter?` +
-    `name=${name}&experienceLevel=${experienceLevel}&` +
-    `fromHour=${fromHour}&toHour=${toHour}&` +
-    `page=${page}&size=${size}`
+      `name=${name}&experienceLevel=${experienceLevel}&` +
+      `fromHour=${fromHour}&toHour=${toHour}&` +
+      `page=${page}&size=${size}`
   );
   if (!response.ok) {
     throw new Error("Failed to fetch roadmaps");
   }
   const data = await response.json();
   return data;
-}
+};
 
 export const getRoadmap = async (roadMapId: string) => {
   const response = await fetch(`${BACKEND_URL}/api/roadmaps/${roadMapId}`);
@@ -82,8 +86,27 @@ export const getRoadmap = async (roadMapId: string) => {
   return data;
 };
 
+export const getRoadmapMeta = async (roadmapMetaId: string, token: string) => {
+  const response = await fetch(`${BACKEND_URL}/api/roadmaps/findRoadmapMeta/${roadmapMetaId}/roadmapMeta`,
+  {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  }
+  
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch roadmaps");
+  }
+  const data: RoadmapMeta = await response.json();
+  return data;
+};
+
 export const getRoadmapByMetaId = async (roadmapMetaId: string) => {
-  const response = await fetch(`${BACKEND_URL}/api/roadmaps/findByMeta/${roadmapMetaId}`);
+  const response = await fetch(
+    `${BACKEND_URL}/api/roadmaps/findRoadmapByMeta/${roadmapMetaId}`
+  );
   if (!response.ok) {
     throw new Error("Failed to fetch roadmap");
   }
@@ -91,8 +114,11 @@ export const getRoadmapByMetaId = async (roadmapMetaId: string) => {
   return data;
 };
 
-export const deleteRoadmap = async (roadMapId: string) => {
+export const deleteRoadmap = async (roadMapId: string, token: string) => {
   const response = await fetch(`${BACKEND_URL}/api/roadmaps/${roadMapId}`, {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
     method: "DELETE",
   });
   if (!response.ok) {
@@ -102,7 +128,6 @@ export const deleteRoadmap = async (roadMapId: string) => {
 };
 
 export const postRoadmap = async (roadmap: RoadmapDTO, token: string) => {
-
   return await fetch(`${BACKEND_URL}/api/roadmaps`, {
     method: "POST",
     headers: {
@@ -110,9 +135,9 @@ export const postRoadmap = async (roadmap: RoadmapDTO, token: string) => {
       Authorization: "Bearer " + token,
     },
     body: JSON.stringify(roadmap),
-  }).then(response => {
+  }).then((response) => {
     if (response.status === 400) {
-      return response.text().then(txt => {
+      return response.text().then((txt) => {
         throw new Error(txt);
       });
     }
@@ -120,10 +145,13 @@ export const postRoadmap = async (roadmap: RoadmapDTO, token: string) => {
       throw new Error("Failed to add roadmap");
     }
     return response.json();
-  })
+  });
 };
 
-export const getUsersRoadmapMetas = async (userEmail: string, token: string) => {
+export const getUsersRoadmapMetas = async (
+  userEmail: string,
+  token: string
+) => {
   const response = await fetch(
     `${BACKEND_URL}/api/roadmaps/${userEmail}/roadmapMetas`,
     {
@@ -192,7 +220,7 @@ export const upVoteRoadmap = async (
           Authorization: "Bearer " + token,
         },
       }
-    )
+    );
     if (!response.ok) {
       throw new Error(
         `Failed to upVote roadmap. Status code: ${response.status}`
@@ -307,6 +335,25 @@ export const updateUsersCompletedTopic = async (
   }
   const data: Roadmap = await response.json();
   return data;
+};
+
+export const createCopyOfRoadmapForCurrentUser = async (
+  userEmail: string | null | undefined,
+  roadmapMetaId: string,
+  token: string
+) => {
+  const response = await fetch(
+    `${BACKEND_URL}/api/roadmaps/${userEmail}/createRoadmapCopy/${roadmapMetaId}`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Failed to create a copy of roadmap");
+  }
 };
 
 export const addRoadmapMetaToUserFavorites = async (

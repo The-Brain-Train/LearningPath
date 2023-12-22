@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("api/users")
 @AllArgsConstructor
-@CrossOrigin
+@CrossOrigin("*")
 public class UserController {
     private final UserService userService;
     private final FileService fileService;
@@ -22,7 +22,7 @@ public class UserController {
     public ResponseEntity<String> updateProfilePicture(@PathVariable String userEmail, @RequestParam("file") MultipartFile file) {
         User user = userService.getUserByEmail(userEmail);
         String userProfilePictureUrl = user.getProfilePicture();
-        if (userProfilePictureUrl != null){
+        if (userProfilePictureUrl != null && userProfilePictureUrl.contains("https://storage.googleapis.com/")){
             fileService.deleteFile(userProfilePictureUrl);
         }
         return ResponseEntity.ok(userService.saveProfilePicture(userEmail, file));

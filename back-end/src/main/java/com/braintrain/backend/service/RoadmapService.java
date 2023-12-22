@@ -2,6 +2,7 @@ package com.braintrain.backend.service;
 
 import com.braintrain.backend.controller.dtos.*;
 import com.braintrain.backend.exceptionHandler.exception.ChildElementNotFoundException;
+import com.braintrain.backend.exceptionHandler.exception.RoadmapAlreadyOwnedByUserException;
 import com.braintrain.backend.exceptionHandler.exception.RoadmapCountExceededException;
 import com.braintrain.backend.exceptionHandler.exception.RoadmapNotFoundException;
 import com.braintrain.backend.model.*;
@@ -34,7 +35,7 @@ public class RoadmapService {
         validateDTORoadmapInput(roadmapDTO.roadmap());
         validateRoadmapCount(roadmapDTO.userEmail());
         Roadmap roadmap = repo.save(new Roadmap(roadmapDTO.roadmap(), roadmapDTO.userEmail(), roadmapDTO.experienceLevel(), roadmapDTO.hours()));
-        return metaRepo.save(new RoadmapMeta(roadmapDTO.name(), roadmap.getId(), roadmapDTO.userEmail(), roadmapDTO.experienceLevel(), roadmapDTO.hours()));
+        return metaRepo.save(new RoadmapMeta(roadmapDTO.name(), roadmap.getId(), roadmapDTO.userEmail(), roadmapDTO.experienceLevel(), roadmapDTO.hours(), true));
     }
 
     public RoadmapMetaListDTO getAllRoadmapsMeta() {
@@ -79,6 +80,16 @@ public class RoadmapService {
         if(roadmapMeta == null) return;
         repo.deleteById(roadmapMeta.getRoadmapReferenceId());
         metaRepo.delete(roadmapMeta);
+    }
+
+    public void removeRoadmapFromFavorites(RoadmapMeta roadmapMeta) {
+        List<User> users = userRepo.findAll();
+        for (User user : users) {
+            if(user.getFavorites() != null){
+                user.getFavorites().remove(roadmapMeta);
+                userRepo.save(user);
+            }
+        }
     }
 
     public void deleteRoadmapMeta(String id) {
@@ -208,6 +219,45 @@ public class RoadmapService {
             throw new RuntimeException(e);
         }
         return roadmap;
+    }
+
+    public Roadmap createCopyOfRoadmap(String userEmail, String roadmapMetaId) {
+        Roadmap existingRoadmap = findRoadmapByMetaId(roadmapMetaId);
+
+        if (existingRoadmap.getUserEmail().equals(userEmail)) {
+            throw new RoadmapAlreadyOwnedByUserException();
+        }
+
+        Optional<RoadmapMeta> optionalExistingRoadmapMeta = metaRepo.findById(roadmapMetaId);
+        RoadmapMeta existingRoadmapMeta = optionalExistingRoadmapMeta.orElseThrow();
+
+        Roadmap roadmap = new Roadmap(existingRoadmap.getObj(), userEmail, existingRoadmap.getExperienceLevel(),
+                existingRoadmap.getHours());
+
+        try {
+            RoadmapContent roadmapContent = objectMapper.readValue(roadmap.getObj(), RoadmapContent.class);
+            roadmapContent.setCompletedTopic(false);
+            updateChildCompletionRecursively(roadmapContent.getChildren());
+            String updatedRoadmapContent = objectMapper.writeValueAsString(roadmapContent);
+            roadmap.setObj(updatedRoadmapContent);
+            repo.save(roadmap);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+        metaRepo.save(new RoadmapMeta(existingRoadmapMeta.getName(), roadmap.getId(), userEmail,
+                existingRoadmapMeta.getExperienceLevel(), existingRoadmapMeta.getHours(), false));
+
+        return roadmap;
+    }
+
+    private void updateChildCompletionRecursively(List<RoadmapContentChild> children) {
+        if (children != null) {
+            for (RoadmapContentChild child : children) {
+                child.setCompletedTopic(false);
+                updateChildCompletionRecursively(child.getChildren());
+            }
+        }
     }
 
     private boolean updateChildCompletionStatus(RoadmapContent roadmapContent, String childElementName) {

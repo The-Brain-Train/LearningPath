@@ -48,9 +48,14 @@ public class RoadmapController {
         return ResponseEntity.of(service.getRoadmapById(id));
     }
 
-    @GetMapping("/findByMeta/{metaId}")
+    @GetMapping("/findRoadmapByMeta/{metaId}")
     public ResponseEntity<Roadmap> findRoadmapByMetaId(@PathVariable String metaId) {
         return ResponseEntity.ok(service.findRoadmapByMetaId(metaId));
+    }
+
+    @GetMapping("/findRoadmapMeta/{metaId}/roadmapMeta")
+    public ResponseEntity<RoadmapMeta> findRoadmapMeta(@PathVariable String metaId){
+        return ResponseEntity.ok(service.getRoadmapMetaById(metaId));
     }
 
     @GetMapping("/{userEmail}/roadmapMetas")
@@ -133,6 +138,18 @@ public class RoadmapController {
         return ResponseEntity.created(uri).body(userFavorites);
     }
 
+    @PostMapping("/{userEmail}/createRoadmapCopy/{roadmapMetaId}")
+    public ResponseEntity<Roadmap> createRoadmapCopyForUser(@PathVariable String userEmail, @PathVariable String roadmapMetaId) {
+        User user = userService.getUserByEmail(userEmail);
+
+        if (user == null) {
+            throw new UserNotFoundException("User not found for email: " + userEmail);
+        }
+
+        Roadmap copyOfRoadmap = service.createCopyOfRoadmap(userEmail, roadmapMetaId);
+        return ResponseEntity.ok(copyOfRoadmap);
+    }
+
     @PutMapping("/{userEmail}/completedTopic/{roadmapMetaId}")
     public ResponseEntity<Roadmap> updateCompletedTopicStatus(@RequestBody String completedTopic, @PathVariable String roadmapMetaId) {
         Roadmap updatedRoadmap = service.markTopicOfChildAsComplete(roadmapMetaId, completedTopic);
@@ -170,6 +187,7 @@ public class RoadmapController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRoadmap(@PathVariable String id) {
         RoadmapMeta roadmapMeta = service.getRoadmapMetaById(id);
+        service.removeRoadmapFromFavorites(roadmapMeta);
         service.delete(roadmapMeta);
         return ResponseEntity.noContent().build();
     }
