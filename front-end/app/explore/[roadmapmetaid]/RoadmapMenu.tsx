@@ -14,9 +14,16 @@ import {
   addRoadmapMetaToUserFavorites,
   getUserFavorites,
   removeRoadmapMetaFromUserFavorites,
+  postNotification,
 } from "@/app/functions/httpRequests";
 import { useQuery } from "@tanstack/react-query";
 import { useCookies } from "react-cookie";
+import { 
+  roadmapFavoritedMessage, 
+  roadmapUnfavoritedMessage, 
+  roadmapUpVotedMessage, 
+  roadmapDownVotedMessage, 
+} from "../../util/constants";
 
 type RoadmapMenuProps = {
   currentUser: User | null | undefined;
@@ -78,6 +85,17 @@ export const RoadmapMenu = ({
         matchingRoadmapMeta,
         cookies.user
       );
+      console.log("before creating favorited notification");
+      await postNotification(
+        roadmapFavoritedMessage,
+        null,
+        currentUser?.email,
+        matchingRoadmapMeta?.userEmail,
+        matchingRoadmapMeta?.id,
+        "ROADMAP_FAVORITED",
+        cookies.user
+      );
+      console.log("after creating favorited notification");
     }
     refetchFavorites();
   };
