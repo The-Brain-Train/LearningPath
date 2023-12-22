@@ -34,14 +34,11 @@ const ProfilePageAuthUser = ({ currentUser }: UserProps) => {
     }
   );
 
-  const { data: favorites } = useQuery<RoadmapMeta[]>(
+  const { data: favorites, refetch: refetchFavorites } = useQuery<RoadmapMeta[]>(
     ["favorites"],
     () => getUserFavorites(currentUser?.email as string, cookies.user),
     {
       enabled: !!currentUser,
-      onSuccess: () => {
-        queryClient.invalidateQueries(["favorites"]);
-      },
     }
   );
   
@@ -65,12 +62,8 @@ const ProfilePageAuthUser = ({ currentUser }: UserProps) => {
         roadmapMeta,
         cookies.user
       ),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["favorites"]);
-      },
-    }
   );
+
   
 
   const handleDelete = async (roadmapMeta: RoadmapMeta) => {
@@ -92,8 +85,12 @@ const ProfilePageAuthUser = ({ currentUser }: UserProps) => {
     }
   };
 
-  const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
-
+  const handleOpen = (value: number) => {
+    setOpen(open === value ? 0 : value);
+    if (value === 2) {
+      refetchFavorites();
+    }
+  };
   return (
     <main className="main-background min-h-max ">
       <section className="flex items-center flex-col pb-3">
