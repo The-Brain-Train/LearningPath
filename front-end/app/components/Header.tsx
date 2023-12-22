@@ -85,19 +85,18 @@ export default function Header() {
                 </p>
               </Link>
             ) : null}
-
-            <NotificationPane 
-              currentUser={currentUser}
-              cookieUserToken={cookies.user}
-              notificationsVisible={notificationsVisible}
-              onIconClick={() => { setNotificationsVisible(!notificationsVisible) }}
-            />
-
+            {currentUser &&
+              <NotificationPane
+                currentUser={currentUser}
+                cookieUserToken={cookies.user}
+                notificationsVisible={notificationsVisible}
+                onIconClick={() => { setNotificationsVisible(!notificationsVisible) }}
+              />
+            }
             <BurgerMenu
               handleSignOut={handleSignOut}
               currentUser={currentUser}
             />
-            
           </div>
         </div>
       </header>
