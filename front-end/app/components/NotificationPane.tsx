@@ -16,7 +16,8 @@ import {
   getUnreadNotificationsOfUser,
   getAllNotificationsOfUser,
   markNotificationAsRead,
-  markNotificationAsUnRead
+  markNotificationAsUnRead,
+  deleteNotification
 } from "../functions/httpRequests";
 import CircleIcon from '@mui/icons-material/Circle';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -98,7 +99,7 @@ const NotificationPane = (props: NotificationPaneType) => {
     setCurNotificationOption(-1);
   };
 
-  const { mutateAsync: mutateNotification } =
+  const { mutateAsync: mutateNotificationStatusClick } =
     useMutation(
       async ({ notification }: { notification: NotificationType }): Promise<any> => {
         return notification.isRead
@@ -113,13 +114,24 @@ const NotificationPane = (props: NotificationPaneType) => {
 
   const handleNotificationStatusClick = (e: MouseEvent, notification: NotificationType) => {
     e.stopPropagation();
-    mutateNotification({ notification: notification });
+    mutateNotificationStatusClick({ notification: notification });
     setCurNotificationOption(-1);
   };
 
+  const { mutateAsync: mutateNotificationDeleteClick } =
+  useMutation(
+    async ({ notification }: { notification: NotificationType }): Promise<any> => {
+      return deleteNotification(notification.id, props.cookieUserToken);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["allNotifications"]);
+      },
+    });
+
   const handleNotificationDeleteClick = (e: MouseEvent, notification: NotificationType) => {
     e.stopPropagation();
-
+    mutateNotificationDeleteClick({ notification: notification });
     setCurNotificationOption(-1);
   };
 
