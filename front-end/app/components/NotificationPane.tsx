@@ -11,6 +11,7 @@ import {
 import CircleIcon from '@mui/icons-material/Circle';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import ResourceSuggestionView from "./ResourceSuggestionView";
+import { useRouter } from 'next/navigation'
 
 type NotificationPaneType = {
   currentUser: User | null | undefined;
@@ -39,10 +40,11 @@ const NotificationPane = (props: NotificationPaneType) => {
 
   const [openSuggestedResourseBox, setOpenSuggestedResourseBox] = useState(false);
   const [curNotificationOption, setCurNotificationOption] = useState(-1);
-  const handleCloseSuggestedResourseBox = () => setOpenSuggestedResourseBox(false);
   const [currentNotification, setCurrentNotification] = useState<NotificationType | null>(null);
-  const queryClient = useQueryClient();
   const [unreadCount, setUnreadCount] = useState(0);
+  const handleCloseSuggestedResourseBox = () => setOpenSuggestedResourseBox(false);
+  const queryClient = useQueryClient();
+  const router = useRouter()
 
   const { data: allNotifications, isSuccess: allNotificationsRecieved } =
     useQuery<NotificationType[]>(
@@ -54,26 +56,32 @@ const NotificationPane = (props: NotificationPaneType) => {
         enabled: !!props.currentUser,
       }
     );
-  // if (allNotificationsRecieved && allNotifications.length > 0) {
-  //   // allNotifications.filter(n => n.timestamp)
-  //   //allNotifications.forEach(n => console.log("timestamp" + n.timestamp))
-
-  //   const count = allNotifications.filter(n => !n.isRead).length;
-  //   setUnreadCount(count);
-  // };
 
   useEffect(() => {
     if (allNotificationsRecieved && allNotifications.length > 0) {
       const count = allNotifications.filter(n => !n.isRead).length;
       setUnreadCount(count);
+    } else {
+      setUnreadCount(0);
     }
   }, [allNotifications]);
 
+  const { mutateAsync: mutateNotificationClick } =
+    useMutation(
+      async ({ notification }: { notification: NotificationType }): Promise<any> => {
+        return markNotificationAsRead(
+          notification.id,
+          props.cookieUserToken
+        );
+      },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries(["allNotifications"]);
+        },
+      });
+
   const handleNotificationClick = (notification: NotificationType) => {
-    markNotificationAsRead(
-      notification.id,
-      props.cookieUserToken
-    );
+    mutateNotificationClick({ notification: notification });
     setCurrentNotification(notification);
     switch (notification.type) {
       case "ROADMAP_RESOURCE_SUGGESTED": {
@@ -81,6 +89,7 @@ const NotificationPane = (props: NotificationPaneType) => {
         break;
       }
       case "ROADMAP_FAVORITED": {
+        router.push(`/explore/${notification.roadmapMetaId}`, { scroll: false });
         break;
       }
       default: {
