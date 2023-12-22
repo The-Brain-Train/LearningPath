@@ -16,6 +16,7 @@ type NotificationPaneType = {
   currentUser: User | null | undefined;
   cookieUserToken: string;
   notificationsVisible: boolean;
+  onIconClick: () => void;
 };
 
 export type NotificationType = {
@@ -120,19 +121,15 @@ const NotificationPane = (props: NotificationPaneType) => {
 
   return (
     <>
-      <div className="relative" >
-        {/* <div className="flex flex-row items-center"> */}
-        <NotificationsIcon className="my-5" />
-        {/* <p className="pl-2">Notifications</p> */}
-        {/* </div> */}
+      <div className="relative mx-1 md:mx-6" >
+        <NotificationsIcon className="my-5 cursor-pointer hover:bg-gray-100" onMouseDown={props.onIconClick} />
         {props.notificationsVisible &&
-          <div onBlur={handleCloseSuggestedResourseBox} className="absolute w-96 right-0 bg-white rounded-md shadow-xl z-10 overflow-y-auto max-h-80">
+          <div onBlur={handleCloseSuggestedResourseBox} className="absolute w-72 md:w-96 right-0 bg-white rounded-md shadow-xl z-10 overflow-y-auto max-h-80">
             {allNotifications &&
               allNotifications.map((n, index) => (
                 <div
-                  // onClick={() => handleNotificationClick(n)}
                   key={index}
-                  className="block px-4 py-2 h-18 line-clamp-3 text-left whitespace-normal text-gray-700 hover:bg-gray-300"
+                  className="block px-4 py-2 md:h-18 line-clamp-3 text-left whitespace-normal text-gray-700 hover:bg-gray-300"
                 >
                   <div className="flex flex-row">
                     <div className="items-center pr-2 py-2">

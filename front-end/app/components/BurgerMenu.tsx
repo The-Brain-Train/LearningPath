@@ -15,7 +15,6 @@ import { useCookies } from "react-cookie";
 import { useState } from "react";
 import { BurgerMenuProps } from "../util/types";
 import { PromptMessage } from "./PromptMessage";
-import NotificationPane from "./NotificationPane";
 
 export default function BurgerMenu(props: BurgerMenuProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -25,7 +24,6 @@ export default function BurgerMenu(props: BurgerMenuProps) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleShut = () => setOpen(false);
-  const [notificationsVisible, setNotificationsVisible] = useState(false);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -84,15 +82,6 @@ export default function BurgerMenu(props: BurgerMenuProps) {
         </Menu>
       </div>
       <div className="hidden sm:flex">
-        {props.currentUser &&
-          <MenuItem onClick={() => { setNotificationsVisible(!notificationsVisible) }}>
-            <NotificationPane 
-              currentUser={props.currentUser}
-              cookieUserToken={cookies.user}
-              notificationsVisible={notificationsVisible}
-            />
-          </MenuItem>}
-
         <MenuItem onClick={() => router.push("/create")}>
           <CreateIcon /> <p className="pl-2">Create</p>
         </MenuItem>

@@ -7,10 +7,13 @@ import Image from "next/legacy/image";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getUserProfilePicture } from "../functions/httpRequests";
 import BurgerMenu from "./BurgerMenu";
+import NotificationPane from "./NotificationPane";
+import { useState } from "react";
 
 export default function Header() {
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
   const queryClient = useQueryClient();
+  const [notificationsVisible, setNotificationsVisible] = useState(false);
 
   const { data: currentUser } = useQuery<User | null>(
     ["currentUser"],
@@ -82,10 +85,19 @@ export default function Header() {
                 </p>
               </Link>
             ) : null}
+
+            <NotificationPane 
+              currentUser={currentUser}
+              cookieUserToken={cookies.user}
+              notificationsVisible={notificationsVisible}
+              onIconClick={() => { setNotificationsVisible(!notificationsVisible) }}
+            />
+
             <BurgerMenu
               handleSignOut={handleSignOut}
               currentUser={currentUser}
             />
+            
           </div>
         </div>
       </header>
