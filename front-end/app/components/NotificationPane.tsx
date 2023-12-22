@@ -1,6 +1,6 @@
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { User } from '../util/types';
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
 import {
   getAllNotificationsOfUser,
@@ -42,16 +42,32 @@ const NotificationPane = (props: NotificationPaneType) => {
   const handleCloseSuggestedResourseBox = () => setOpenSuggestedResourseBox(false);
   const [currentNotification, setCurrentNotification] = useState<NotificationType | null>(null);
   const queryClient = useQueryClient();
+  const [unreadCount, setUnreadCount] = useState(0);
 
-  const { data: allNotifications } = useQuery<NotificationType[]>(
-    ["allNotifications"],
-    () => getAllNotificationsOfUser(
-      props.currentUser?.email as string,
-      props.cookieUserToken),
-    {
-      enabled: !!props.currentUser,
+  const { data: allNotifications, isSuccess: allNotificationsRecieved } =
+    useQuery<NotificationType[]>(
+      ["allNotifications"],
+      () => getAllNotificationsOfUser(
+        props.currentUser?.email as string,
+        props.cookieUserToken),
+      {
+        enabled: !!props.currentUser,
+      }
+    );
+  // if (allNotificationsRecieved && allNotifications.length > 0) {
+  //   // allNotifications.filter(n => n.timestamp)
+  //   //allNotifications.forEach(n => console.log("timestamp" + n.timestamp))
+
+  //   const count = allNotifications.filter(n => !n.isRead).length;
+  //   setUnreadCount(count);
+  // };
+
+  useEffect(() => {
+    if (allNotificationsRecieved && allNotifications.length > 0) {
+      const count = allNotifications.filter(n => !n.isRead).length;
+      setUnreadCount(count);
     }
-  );
+  }, [allNotifications]);
 
   const handleNotificationClick = (notification: NotificationType) => {
     markNotificationAsRead(
@@ -122,6 +138,11 @@ const NotificationPane = (props: NotificationPaneType) => {
   return (
     <>
       <div className="relative mx-1 md:mx-6" >
+        {unreadCount > 0 &&
+          <div className="absolute top-8 left-4 bg-red-500 rounded-full w-4 h-4 text-center text-xs font-semibold text-white">
+            {unreadCount}
+          </div>
+        }
         <NotificationsIcon className="my-5 cursor-pointer hover:bg-gray-100" onMouseDown={props.onIconClick} />
         {props.notificationsVisible &&
           <div onBlur={handleCloseSuggestedResourseBox} className="absolute w-72 md:w-96 right-0 bg-white rounded-md shadow-xl z-10 overflow-y-auto max-h-80">
