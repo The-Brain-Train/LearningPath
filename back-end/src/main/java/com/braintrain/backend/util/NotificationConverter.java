@@ -57,10 +57,8 @@ public class NotificationConverter {
 
         if (days > 0) {
             timeDiffMessage = days + " day" + makePlural + " ago";
-            System.out.println("makePlural =" + makePlural);
         } else if (hours > 0) {
             timeDiffMessage = hours + " hour" + makePlural + " ago";
-            System.out.println("makePlural =" + makePlural);
         } else if (minutes > 0) {
             timeDiffMessage = minutes + " minute" + makePlural + " ago";
         } else if (seconds > 0) {
