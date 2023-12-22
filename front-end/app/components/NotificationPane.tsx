@@ -88,7 +88,10 @@ const NotificationPane = (props: NotificationPaneType) => {
         setOpenSuggestedResourseBox(true);
         break;
       }
-      case "ROADMAP_FAVORITED": {
+      case "ROADMAP_FAVORITED":
+      case "ROADMAP_UNFAVORITED":
+      case "ROADMAP_UPVOTED":
+      case "ROADMAP_DOWNVOTED": {
         router.push(`/explore/${notification.roadmapMetaId}`, { scroll: false });
         break;
       }
