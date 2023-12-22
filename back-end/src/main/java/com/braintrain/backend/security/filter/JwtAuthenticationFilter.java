@@ -2,7 +2,12 @@ package com.braintrain.backend.security.filter;
 
 import com.braintrain.backend.service.JwtServiceImpl;
 import com.braintrain.backend.service.UserServiceSpringSecurity;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,15 +27,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final UserServiceSpringSecurity userServiceSpringSecurity;
 
     @Override
-    protected void doFilterInternal(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response, jakarta.servlet.FilterChain filterChain) throws jakarta.servlet.ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
         String jwtToken = null;
         String userEmail = null;
 
-        if(StringUtils.isEmpty(authHeader) || !StringUtils.startsWith(authHeader,"Bearer ")){
-            filterChain.doFilter(request, response);
+        if (StringUtils.isEmpty(authHeader) || !StringUtils.startsWith(authHeader, "Bearer ")) {
+            sendUnauthorizedResponse(response);
             return;
         }
+
+//        if(StringUtils.isEmpty(authHeader) || !StringUtils.startsWith(authHeader,"Bearer ")){
+//            filterChain.doFilter(request, response);
+//            return;
+//        }
 
         jwtToken = authHeader.substring(7);
 
@@ -49,5 +59,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         }
         filterChain.doFilter(request, response);
+    }
+
+    private void sendUnauthorizedResponse(HttpServletResponse response) throws IOException {
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        response.getWriter().write("Unauthorized access");
     }
 }
