@@ -57,4 +57,8 @@ public class NotificationService {
         }
         throw new RuntimeException("Notification is not found.");
     }
+
+    public void deleteNotification(String id) {
+        repo.deleteById(id);
+    }
 }

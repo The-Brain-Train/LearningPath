@@ -77,4 +77,11 @@ public class NotificationController {
         NotificationResponseDTO notificationDTO = service.markNotificationAsUnRead(id);
         return ResponseEntity.ok(notificationDTO);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteNotification(
+            @PathVariable String id) {
+        service.deleteNotification(id);
+        return ResponseEntity.ok("Notification deleted successfully.");
+    }
 }
