@@ -1,27 +1,17 @@
-import {
-  Box,
-  FormLabel,
-  FormControl,
-  MenuItem,
-  Modal,
-  TextField
-} from "@mui/material";
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { ResourceType, User } from '../util/types';
 import { MouseEvent, useState } from "react";
 import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
-import { modalStyle } from "../create/createModalStyle";
 import {
-  addResourcesToRoadmap,
   getUnreadNotificationsOfUser,
   getAllNotificationsOfUser,
   markNotificationAsRead,
   markNotificationAsUnRead,
-  markNotificationAsProcessed,
   deleteNotification
 } from "../functions/httpRequests";
 import CircleIcon from '@mui/icons-material/Circle';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import ResourceSuggestionView from "./ResourceSuggestionView";
 
 type NotificationPaneType = {
   currentUser: User | null | undefined;
@@ -29,7 +19,7 @@ type NotificationPaneType = {
   notificationsVisible: boolean;
 };
 
-type NotificationType = {
+export type NotificationType = {
   id: string;
   message: string;
   body: string;
@@ -49,7 +39,6 @@ const NotificationPane = (props: NotificationPaneType) => {
 
   const [openSuggestedResourseBox, setOpenSuggestedResourseBox] = useState(false);
   const [curNotificationOption, setCurNotificationOption] = useState(-1);
-  const [curNotificationResourse, setCurNotificationResourse] = useState<ResourceType | null>(null);
   const handleCloseSuggestedResourseBox = () => setOpenSuggestedResourseBox(false);
   const [currentNotification, setCurrentNotification] = useState<NotificationType | null>(null);
   const queryClient = useQueryClient();
@@ -80,18 +69,17 @@ const NotificationPane = (props: NotificationPaneType) => {
       props.cookieUserToken
     );
     setCurrentNotification(notification);
-    setCurNotificationResourse(parseResourseJson(notification));
     switch (notification.type) {
-      case "ROADMAP_RESOURCE_SUGGESTED": { 
+      case "ROADMAP_RESOURCE_SUGGESTED": {
         setOpenSuggestedResourseBox(true);
-        break; 
-     } 
-     case "ROADMAP_FAVORITED": { 
-        break; 
-     } 
-     default: { 
-        break; 
-     } 
+        break;
+      }
+      case "ROADMAP_FAVORITED": {
+        break;
+      }
+      default: {
+        break;
+      }
     }
   };
 
@@ -139,39 +127,6 @@ const NotificationPane = (props: NotificationPaneType) => {
     e.stopPropagation();
     mutateNotificationDeleteClick({ notification: notification });
     setCurNotificationOption(-1);
-  };
-
-  const handleResourceSuggestionConfirm = () => {
-    if (!currentNotification) {
-      return;
-    }
-    addResourcesToRoadmap(
-      props.currentUser?.email,
-      currentNotification.roadmapMetaId,
-      JSON.stringify(currentNotification.body),
-      props.cookieUserToken,
-      false
-    );
-    markNotificationAsProcessed(
-      currentNotification.id,
-      props.cookieUserToken
-    );
-    handleCloseSuggestedResourseBox();
-  };
-
-  const handleResourceSuggestionReject = () => {
-    if (!currentNotification) {
-      return;
-    }
-    handleCloseSuggestedResourseBox();
-  };
-
-  const parseResourseJson = (notification: NotificationType) => {
-    const bodyString = notification.body;
-    const parsedBody = JSON.parse(bodyString);
-    const resourcesArray: ResourceType[] = parsedBody.resources;
-    const resource = resourcesArray[0];
-    return resource;
   };
 
   return (
@@ -241,61 +196,15 @@ const NotificationPane = (props: NotificationPaneType) => {
             }
           </div>}
       </div>
-
-      {currentNotification &&
-        currentNotification.type === "ROADMAP_RESOURCE_SUGGESTED" &&
-        <Modal
+      {currentNotification && props.currentUser &&
+        <ResourceSuggestionView
+          notification={currentNotification}
           open={openSuggestedResourseBox}
           onClose={handleCloseSuggestedResourseBox}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={modalStyle}>
-            <div>
-              {/* <FormLabel className="text-white">
-                {currentNotification.body}
-              </FormLabel> */}
-              <p className="mb-10">
-                Add suggested resource into your roadmap&nbsp;
-                <span className="font-bold">
-                  {currentNotification.roadmapName}
-                </span>.
-              </p>
-              <div>
-                <p>Name: {curNotificationResourse?.name}</p>
-                <p>Type: {curNotificationResourse?.type}</p>
-                <p>Link: {curNotificationResourse?.link}</p>
-              </div>
-
-              {!currentNotification.isProcessed ? (
-                <div className="flex flex-row justify-between">
-                  <button
-                    onClick={handleResourceSuggestionConfirm}
-                    className="w-2/6 mx-4 bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 border border-blue-700 rounded"
-                  >
-                    Confirm
-                  </button>
-                  <button
-                    onClick={handleResourceSuggestionReject}
-                    className="w-2/6 mx-4 bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 border border-blue-700 rounded"
-                  >
-                    Reject
-                  </button>
-                </div>) : (
-                <div>
-                  <p>This resourse is already added.</p>
-                  <button
-                    onClick={handleResourceSuggestionReject}
-                    className="w-2/6 mx-4 bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 border border-blue-700 rounded"
-                  >
-                    OK
-                  </button>
-                </div>
-              )}
-
-            </div>
-          </Box>
-        </Modal>}
+          userEmail={props.currentUser.email as string}
+          cookieUserToken={props.cookieUserToken}
+        />
+      }
     </>
   )
 }
