@@ -560,3 +560,24 @@ export const deleteNotification = async (
   const data = await response.text();
   return data;
 };
+
+export const markNotificationAsProcessed = async (
+  notificationId: string,
+  token: string
+) => {
+  const response = await fetch(
+    `${BACKEND_URL}/api/notification/${notificationId}/processed`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Failed to update notification status as unread.");
+  }
+  const data = await response.json();
+  return data;
+};
