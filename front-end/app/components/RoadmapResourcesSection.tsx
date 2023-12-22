@@ -76,14 +76,18 @@ export const RoadmapResourcesSection = (
                       {r.type}
                     </td>
 
-                    <td className="md:w-5/6 hover:text-blue-500 hover:font-bold align-middle py-4 underline">
-                      {r.link &&
+                    {r.link ? (
+                      <td className="md:w-5/6 hover:text-blue-500 hover:font-bold align-middle py-4 underline">
                         <Link
                           href={r.link} target="_blank" rel="noopener noreferrer">
                           {r.name}
                         </Link>
-                      }
-                    </td>
+                      </td>
+                    ) : (
+                      <td className="md:w-5/6 hover:text-blue-500 hover:font-bold align-middle py-4 underline">
+                        {r.name}
+                      </td>
+                    )}
                   </tr>
                 </tbody>
               </table>
