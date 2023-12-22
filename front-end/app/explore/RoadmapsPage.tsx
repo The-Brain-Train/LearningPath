@@ -15,7 +15,14 @@ import {
   upVoteRoadmap,
   downVoteRoadmap,
   removeRoadmapMetaFromUserFavorites,
+  postNotification,
 } from "../functions/httpRequests";
+import { 
+  roadmapFavoritedMessage, 
+  roadmapUnfavoritedMessage, 
+  roadmapUpVotedMessage, 
+  roadmapDownVotedMessage, 
+} from "../../util/constants";
 
 type RoadmapsPageProps = {
   paginatedRoadmaps: RoadmapMeta[];
@@ -74,6 +81,15 @@ export const RoadmapsPage = (props: RoadmapsPageProps) => {
       await addRoadmapMetaToUserFavorites(
         props.currentUser?.email,
         roadmapMeta,
+        cookies.user
+      );
+      await postNotification(
+        roadmapFavoritedMessage,
+        null,
+        props.currentUser?.email,
+        roadmapMeta?.userEmail,
+        roadmapMeta?.id,
+        "ROADMAP_FAVORITED",
         cookies.user
       );
     },
