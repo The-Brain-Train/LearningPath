@@ -39,8 +39,12 @@ const ProfilePageAuthUser = ({ currentUser }: UserProps) => {
     () => getUserFavorites(currentUser?.email as string, cookies.user),
     {
       enabled: !!currentUser,
+      onSuccess: () => {
+        queryClient.invalidateQueries(["favorites"]);
+      },
     }
   );
+  
 
   const { data: roadmapCount } = useQuery<number>(
     ["roadmapCount"],
@@ -54,13 +58,20 @@ const ProfilePageAuthUser = ({ currentUser }: UserProps) => {
     deleteRoadmap(roadmapMeta.id, cookies.user)
   );
 
-  const removeFavoriteMutation = useMutation((roadmapMeta: RoadmapMeta) =>
-    removeRoadmapMetaFromUserFavorites(
-      currentUser?.email,
-      roadmapMeta,
-      cookies.user
-    )
+  const removeFavoriteMutation = useMutation(
+    (roadmapMeta: RoadmapMeta) =>
+      removeRoadmapMetaFromUserFavorites(
+        currentUser?.email,
+        roadmapMeta,
+        cookies.user
+      ),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["favorites"]);
+      },
+    }
   );
+  
 
   const handleDelete = async (roadmapMeta: RoadmapMeta) => {
     try {
