@@ -85,7 +85,6 @@ export const RoadmapMenu = ({
         matchingRoadmapMeta,
         cookies.user
       );
-      console.log("before creating favorited notification");
       await postNotification(
         roadmapFavoritedMessage,
         null,
@@ -95,7 +94,6 @@ export const RoadmapMenu = ({
         "ROADMAP_FAVORITED",
         cookies.user
       );
-      console.log("after creating favorited notification");
     }
     refetchFavorites();
   };
