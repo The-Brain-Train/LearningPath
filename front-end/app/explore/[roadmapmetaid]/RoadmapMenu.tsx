@@ -109,20 +109,14 @@ export const RoadmapMenu = ({
         matchingRoadmapMeta,
         cookies.user
       );
-      setSnackbarMessage("Roadmap removed from favorites!");
-      setSnackbarSeverity("info");
     } else {
       await addRoadmapMetaToUserFavorites(
         currentUser?.email,
         matchingRoadmapMeta,
         cookies.user
       );
-      setSnackbarMessage("Roadmap added to favorites!");
-      setSnackbarSeverity("success");
     }
-
     refetchFavorites();
-    setOpenSnackbar(true);
   };
 
   const fetchUserFavorites = async () => {
@@ -237,6 +231,7 @@ export const RoadmapMenu = ({
         open={openSnackbar}
         autoHideDuration={5000}
         onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
         <MuiAlert
           elevation={6}
