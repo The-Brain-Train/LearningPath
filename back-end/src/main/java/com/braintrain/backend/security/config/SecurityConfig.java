@@ -40,7 +40,7 @@ public class SecurityConfig {
                                 "/api/auth/**",
                                 "/api/roadmaps",
                                 "/api/roadmaps/{id}",
-                                "/api/roadmaps/findByMeta/{metaId}",
+                                "/api/roadmaps/findRoadmapByMeta/{metaId}",
                                 "/api/roadmaps/{userEmail}/resource/{roadmapMetaId}"
                         )
                         .permitAll().anyRequest().authenticated())
