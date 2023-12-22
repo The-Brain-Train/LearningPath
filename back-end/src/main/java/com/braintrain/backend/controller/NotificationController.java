@@ -78,6 +78,13 @@ public class NotificationController {
         return ResponseEntity.ok(notificationDTO);
     }
 
+    @PutMapping("/{id}/processed")
+    public ResponseEntity<NotificationResponseDTO> markAsProcessed(
+            @PathVariable String id) {
+        NotificationResponseDTO notificationDTO = service.markNotificationAsProcessed(id);
+        return ResponseEntity.ok(notificationDTO);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteNotification(
             @PathVariable String id) {

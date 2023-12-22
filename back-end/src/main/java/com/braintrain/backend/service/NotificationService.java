@@ -58,7 +58,18 @@ public class NotificationService {
         throw new RuntimeException("Notification is not found.");
     }
 
+    public NotificationResponseDTO markNotificationAsProcessed(String id) {
+        Optional<Notification> notification = repo.findById(id);
+        if (notification.isPresent()) {
+            notification.get().setProcessed(true);
+            repo.save(notification.get());
+            return converter.toNotificationResponseDTO(notification.get());
+        }
+        throw new RuntimeException("Notification is not found to process.");
+    }
+
     public void deleteNotification(String id) {
         repo.deleteById(id);
     }
+
 }

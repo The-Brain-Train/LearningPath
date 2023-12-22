@@ -24,6 +24,7 @@ public class Notification {
     private NotificationType type;
     private LocalDateTime timestamp;
     private boolean isRead;
+    private boolean isProcessed;
 
     public Notification(
             String message,
@@ -41,5 +42,6 @@ public class Notification {
         this.type = type;
         this.timestamp = LocalDateTime.now();
         this.isRead = false;
+        this.isProcessed = false;
     }
 }

@@ -16,5 +16,6 @@ public record NotificationResponseDTO(
         NotificationType type,
         LocalDateTime timestamp,
         String timeDiffMessage,
-        boolean isRead) {
+        boolean isRead,
+        boolean isProcessed) {
 }

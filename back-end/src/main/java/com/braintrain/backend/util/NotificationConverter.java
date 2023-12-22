@@ -79,7 +79,8 @@ public class NotificationConverter {
             notification.getType(),
             notification.getTimestamp(),
             timeDiffMessage,
-            notification.isRead()
+            notification.isRead(),
+            notification.isProcessed()
         );
     }
 
