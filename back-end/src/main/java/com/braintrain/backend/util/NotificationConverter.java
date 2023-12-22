@@ -50,14 +50,21 @@ public class NotificationConverter {
 
         String timeDiffMessage = "";
 
+        String makePlural = "s";
+        if (days == 1 || hours == 1 || minutes == 1 || seconds == 1) {
+            makePlural = "";
+        }
+
         if (days > 0) {
-            timeDiffMessage = days + " days ago";
+            timeDiffMessage = days + " day" + makePlural + " ago";
+            System.out.println("makePlural =" + makePlural);
         } else if (hours > 0) {
-            timeDiffMessage = hours + " hours ago";
+            timeDiffMessage = hours + " hour" + makePlural + " ago";
+            System.out.println("makePlural =" + makePlural);
         } else if (minutes > 0) {
-            timeDiffMessage = minutes + " minutes ago";
+            timeDiffMessage = minutes + " minute" + makePlural + " ago";
         } else if (seconds > 0) {
-            timeDiffMessage = seconds + " seconds ago";
+            timeDiffMessage = seconds + " second" + makePlural + " ago";
         } else {
             timeDiffMessage = "Just now";
         }
