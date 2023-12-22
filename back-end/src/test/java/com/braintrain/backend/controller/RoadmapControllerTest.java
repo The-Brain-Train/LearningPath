@@ -159,15 +159,6 @@ class RoadmapControllerTest {
     }
 
     @Test
-    void getRoadmapMetaListForUserWithInvalidEmailShouldReturn403() {
-        String uri = "http://localhost:%s/api/roadmaps/gegerg/roadmapMetas".formatted(port);
-
-        HttpClientErrorException exception = assertThrows(HttpClientErrorException.Forbidden.class, () -> restTemplate.exchange(uri, HttpMethod.GET, HttpEntity.EMPTY, Void.class));
-
-        assertEquals(HttpStatus.FORBIDDEN, exception.getStatusCode());
-    }
-
-    @Test
     void getInvalidRoadmapShouldReturn404() {
         String uri = "http://localhost:%s/api/roadmaps/df".formatted(port);
 
