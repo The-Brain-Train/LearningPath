@@ -70,6 +70,15 @@ export const RoadmapsPage = (props: RoadmapsPageProps) => {
         roadmapMeta,
         cookies.user
       );
+      await postNotification(
+        roadmapUnfavoritedMessage,
+        null,
+        props.currentUser?.email,
+        roadmapMeta?.userEmail,
+        roadmapMeta?.id,
+        "ROADMAP_UNFAVORITED",
+        cookies.user
+      );
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["favorites"]);

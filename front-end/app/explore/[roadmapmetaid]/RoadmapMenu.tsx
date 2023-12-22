@@ -21,8 +21,6 @@ import { useCookies } from "react-cookie";
 import { 
   roadmapFavoritedMessage, 
   roadmapUnfavoritedMessage, 
-  roadmapUpVotedMessage, 
-  roadmapDownVotedMessage, 
 } from "../../util/constants";
 
 type RoadmapMenuProps = {
@@ -77,6 +75,15 @@ export const RoadmapMenu = ({
       await removeRoadmapMetaFromUserFavorites(
         currentUser?.email,
         matchingRoadmapMeta,
+        cookies.user
+      );
+      await postNotification(
+        roadmapUnfavoritedMessage,
+        null,
+        currentUser?.email,
+        matchingRoadmapMeta?.userEmail,
+        matchingRoadmapMeta?.id,
+        "ROADMAP_UNFAVORITED",
         cookies.user
       );
     } else {
