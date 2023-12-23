@@ -42,15 +42,17 @@ export const RoadmapsPage = (props: RoadmapsPageProps) => {
         roadmapMetaId,
         cookies.user
       );
-      await postNotification(
-        roadmapUpVotedMessage,
-        null,
-        props.currentUser?.email,
-        roadmapOwnerEmail,
-        roadmapMetaId,
-        "ROADMAP_UPVOTED",
-        cookies.user
-      );
+      if (props.currentUser?.email !== roadmapOwnerEmail) {
+        await postNotification(
+          roadmapUpVotedMessage,
+          null,
+          props.currentUser?.email,
+          roadmapOwnerEmail,
+          roadmapMetaId,
+          "ROADMAP_UPVOTED",
+          cookies.user
+        );
+      };
     },
     {
       onSuccess: () => {
@@ -66,15 +68,17 @@ export const RoadmapsPage = (props: RoadmapsPageProps) => {
         roadmapMetaId,
         cookies.user
       );
-      await postNotification(
-        roadmapDownVotedMessage,
-        null,
-        props.currentUser?.email,
-        roadmapOwnerEmail,
-        roadmapMetaId,
-        "ROADMAP_DOWNVOTED",
-        cookies.user
-      );
+      if (props.currentUser?.email !== roadmapOwnerEmail) {
+        await postNotification(
+          roadmapDownVotedMessage,
+          null,
+          props.currentUser?.email,
+          roadmapOwnerEmail,
+          roadmapMetaId,
+          "ROADMAP_DOWNVOTED",
+          cookies.user
+        );
+      };
     },
     {
       onSuccess: () => {
