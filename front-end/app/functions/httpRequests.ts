@@ -194,7 +194,6 @@ export const upVoteRoadmap = async (
         `Failed to upVote roadmap. Status code: ${response.status}`
       );
     }
-
     return response.text();
   } catch (error) {
     console.error("Error upVoting roadmap:", error);
@@ -223,6 +222,7 @@ export const downVoteRoadmap = async (
         `Failed to downVote roadmap. Status code: ${response.status}`
       );
     }
+    return response.text();
   } catch (error) {
     console.error("Error downVoting roadmap:", error);
   }

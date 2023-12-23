@@ -37,15 +37,18 @@ export const RoadmapsPage = (props: RoadmapsPageProps) => {
 
   const { mutateAsync: handleUpVotes } = useMutation(
     async (
-      { roadmapMetaId, roadmapOwnerEmail }:
-        { roadmapMetaId: string, roadmapOwnerEmail: string }
+      { roadmapMetaId, roadmapOwnerEmail, upVoteCount }:
+        { roadmapMetaId: string, roadmapOwnerEmail: string, upVoteCount: number }
     ) => {
-      await upVoteRoadmap(
+      const newUpVoteCountText = await upVoteRoadmap(
         props.currentUser?.email,
         roadmapMetaId,
         cookies.user
       );
-      if (props.currentUser?.email !== roadmapOwnerEmail) {
+      const newUpVoteCount = Number(newUpVoteCountText);
+      const upVoteDiff = newUpVoteCount - upVoteCount;
+      console.log(upVoteCount + " - " + newUpVoteCount + " - " + upVoteDiff);
+      if (props.currentUser?.email !== roadmapOwnerEmail && upVoteDiff > 0) {
         await postNotification(
           roadmapUpVotedMessage,
           null,
@@ -66,15 +69,18 @@ export const RoadmapsPage = (props: RoadmapsPageProps) => {
 
   const { mutateAsync: handleDownVotes } = useMutation(
     async (
-      { roadmapMetaId, roadmapOwnerEmail }:
-        { roadmapMetaId: string, roadmapOwnerEmail: string }
+      { roadmapMetaId, roadmapOwnerEmail, downVoteCount }:
+        { roadmapMetaId: string, roadmapOwnerEmail: string, downVoteCount: number }
     ) => {
-      await downVoteRoadmap(
+      const newDownVoteCountText = await downVoteRoadmap(
         props.currentUser?.email,
         roadmapMetaId,
         cookies.user
       );
-      if (props.currentUser?.email !== roadmapOwnerEmail) {
+      const newDownVoteCount = Number(newDownVoteCountText);
+      const downVoteDiff = newDownVoteCount - downVoteCount;
+      console.log(downVoteCount + " * " + newDownVoteCount + " * " + downVoteDiff);
+      if (props.currentUser?.email !== roadmapOwnerEmail && downVoteDiff > 0) {
         await postNotification(
           roadmapDownVotedMessage,
           null,
@@ -195,7 +201,8 @@ export const RoadmapsPage = (props: RoadmapsPageProps) => {
                       onClick={() => handleUpVotes(
                         {
                           roadmapMetaId: roadmap.id,
-                          roadmapOwnerEmail: roadmap.userEmail
+                          roadmapOwnerEmail: roadmap.userEmail,
+                          upVoteCount: roadmap.upVotes
                         }
                       )}
                     >
@@ -231,7 +238,8 @@ export const RoadmapsPage = (props: RoadmapsPageProps) => {
                     onClick={() => handleDownVotes(
                       {
                         roadmapMetaId: roadmap.id,
-                        roadmapOwnerEmail: roadmap.userEmail
+                        roadmapOwnerEmail: roadmap.userEmail,
+                        downVoteCount: roadmap.downVotes
                       }
                     )}
                   >
