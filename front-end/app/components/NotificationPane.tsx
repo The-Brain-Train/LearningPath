@@ -92,7 +92,10 @@ const NotificationPane = (props: NotificationPaneType) => {
       case "ROADMAP_UNFAVORITED":
       case "ROADMAP_UPVOTED":
       case "ROADMAP_DOWNVOTED": {
-        router.push(`/explore/${notification.roadmapMetaId}`, { scroll: false });
+        router.push(
+          `/explore/${notification.roadmapMetaId}`,
+          { scroll: false }
+        );
         break;
       }
       default: {
@@ -124,11 +127,12 @@ const NotificationPane = (props: NotificationPaneType) => {
         },
       });
 
-  const handleNotificationStatusClick = (e: MouseEvent, notification: NotificationType) => {
-    e.stopPropagation();
-    mutateNotificationStatusClick({ notification: notification });
-    setCurNotificationOption(-1);
-  };
+  const handleNotificationStatusClick =
+    (e: MouseEvent, notification: NotificationType) => {
+      e.stopPropagation();
+      mutateNotificationStatusClick({ notification: notification });
+      setCurNotificationOption(-1);
+    };
 
   const { mutateAsync: mutateNotificationDeleteClick } =
     useMutation(
@@ -141,11 +145,12 @@ const NotificationPane = (props: NotificationPaneType) => {
         },
       });
 
-  const handleNotificationDeleteClick = (e: MouseEvent, notification: NotificationType) => {
-    e.stopPropagation();
-    mutateNotificationDeleteClick({ notification: notification });
-    setCurNotificationOption(-1);
-  };
+  const handleNotificationDeleteClick =
+    (e: MouseEvent, notification: NotificationType) => {
+      e.stopPropagation();
+      mutateNotificationDeleteClick({ notification: notification });
+      setCurNotificationOption(-1);
+    };
 
   return (
     <>
@@ -155,7 +160,10 @@ const NotificationPane = (props: NotificationPaneType) => {
             {unreadCount}
           </div>
         }
-        <NotificationsIcon className="my-5 cursor-pointer hover:bg-gray-100" onMouseDown={props.onIconClick} />
+        <NotificationsIcon
+          className="my-5 cursor-pointer hover:bg-gray-100"
+          onMouseDown={props.onIconClick}
+        />
         {props.notificationsVisible &&
           <div onBlur={handleCloseSuggestedResourseBox} className="absolute w-72 md:w-96 right-0 bg-white rounded-md shadow-xl z-10 overflow-y-auto max-h-80">
             {allNotifications &&
@@ -164,14 +172,14 @@ const NotificationPane = (props: NotificationPaneType) => {
                   key={index}
                   className="block px-4 py-2 md:h-18 line-clamp-3 text-left whitespace-normal text-gray-700 hover:bg-gray-300"
                 >
-                  <div className="flex flex-row">
+                  <div className="flex flex-row justify-between">
                     <div className="items-center pr-2 py-2">
                       <p className="text-base">💡</p>
                     </div>
                     <div
                       onClick={() => handleNotificationClick(n)}
                     >
-                      <p className={`text-sm ${n.isRead ? 'text-gray-500' : 'text-gray-800'}`}>
+                      <p className={`text-sm mr-2 md:w-64 ${n.isRead ? 'text-gray-500' : 'text-gray-800'}`}>
                         <span className="font-bold">{n.senderName}</span>
                         {` ${n.message} `}
                         <span className="font-bold">{n.roadmapName}</span>
@@ -204,7 +212,7 @@ const NotificationPane = (props: NotificationPaneType) => {
                       }
                     </div>
                   </div>
-                  <div className="pl-7 pr-1 pt-2 flex flex-row justify-between">
+                  <div className="pl-7 md:pl-10 pr-1 pt-2 flex flex-row justify-between">
                     <p className={`text-left text-xs ${n.isRead ? 'text-gray-500' : 'text-sky-700'}`}>
                       {n.timeDiffMessage}
                     </p>
