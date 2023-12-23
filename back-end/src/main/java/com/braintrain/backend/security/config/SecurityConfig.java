@@ -1,5 +1,6 @@
 package com.braintrain.backend.security.config;
 
+import static com.braintrain.backend.security.config.CorsConfig.withLearningPathDefaults;
 import static org.springframework.security.config.Customizer.withDefaults;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
@@ -19,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 
 @Configuration
 @EnableWebSecurity
@@ -28,6 +30,7 @@ public class SecurityConfig {
     private JwtAuthenticationFilter authFilter;
     private UserServiceSpringSecurity userServiceSpringSecurity;
     private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+    private final WebsiteProperties websiteProperties;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -37,17 +40,18 @@ public class SecurityConfig {
                                 "/api/auth/**",
                                 "/api/roadmaps",
                                 "/api/roadmaps/{id}",
-                                "/api/roadmaps/findByMeta/{metaId}",
+                                "/api/roadmaps/findRoadmapByMeta/{metaId}",
                                 "/api/roadmaps/{userEmail}/resource/{roadmapMetaId}",
                                 "/api/notification/**"
                         )
                         .permitAll().anyRequest().authenticated())
-                .cors(withDefaults())
+                .cors(withLearningPathDefaults(websiteProperties.frontend()))
+                .authenticationProvider(authenticationProvider()).addFilterBefore(
+                        authFilter, UsernamePasswordAuthenticationFilter.class)
+                .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .oauth2Login(oauth2 -> oauth2
                         .successHandler(customAuthenticationSuccessHandler))
-                .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
-                .authenticationProvider(authenticationProvider()).addFilterBefore(
-                        authFilter, UsernamePasswordAuthenticationFilter.class);
+                .csrf(CsrfConfigurer::disable);
         return http.build();
     }
 

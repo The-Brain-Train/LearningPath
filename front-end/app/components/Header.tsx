@@ -7,6 +7,8 @@ import Image from "next/legacy/image";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getUserProfilePicture } from "../functions/httpRequests";
 import BurgerMenu from "./BurgerMenu";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 import NotificationPane from "./NotificationPane";
 import { useState } from "react";
 
@@ -14,6 +16,25 @@ export default function Header() {
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
   const queryClient = useQueryClient();
   const [notificationsVisible, setNotificationsVisible] = useState(false);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
+
+  useEffect(() => {
+    if (token) {
+      const tokenString = Array.isArray(token) ? token[0] : token;
+      const expirationDate = new Date();
+      expirationDate.setDate(expirationDate.getDate() + 1);
+
+      setCookie("user", tokenString, {
+        path: "/",
+        sameSite: "none",
+        secure: true,
+        expires: expirationDate
+      });
+      router.push("/");
+    }
+  }, [token, setCookie, router]);
 
   const { data: currentUser } = useQuery<User | null>(
     ["currentUser"],
@@ -38,6 +59,7 @@ export default function Header() {
     removeCookie("user");
     queryClient.removeQueries(["currentUser"]);
     queryClient.removeQueries(["profilePictureUrl"]);
+    router.push("/");
   };
 
   return (
@@ -56,7 +78,7 @@ export default function Header() {
           </Link>
           <div className="flex flex-row">
             {currentUser ? (
-              <Link href="/profile" className="flex gap-1 mr-3 items-center">
+              <Link href="/profile" className="flex gap-1 sm:mr-0 mr-3 items-center">
                 <div className="h-8 w-8 relative rounded-full overflow-hidden">
                   {profilePictureUrl ? (
                     <Image

@@ -9,6 +9,7 @@ export type RoadmapMeta = {
   hours: number;
   upVotes: number;
   downVotes: number;
+  originalOwner: boolean;
 };
 
 export type PersonalRoadmapCardProps = {

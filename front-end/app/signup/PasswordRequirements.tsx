@@ -16,7 +16,7 @@ const PasswordRequirements: React.FC<PasswordRequirementsProps> = ({
   validationChecks,
 }) => {
   return (
-    <div>
+    <div className=" mb-9" >
       <Typography variant="body2" className="text-white font-semibold">
         Password Requirements
       </Typography>

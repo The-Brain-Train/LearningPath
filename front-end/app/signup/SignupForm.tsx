@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -14,9 +13,10 @@ import Container from "@mui/material/Container";
 import { useRouter } from "next/navigation";
 import { validateSignUpForm } from "../functions/validations";
 import { signUp } from "../functions/httpRequests";
-import { Alert } from "@mui/material";
 import PasswordRequirements from "./PasswordRequirements";
 import SignupFormFields from "./SignupFormFields";
+import { useCookies } from "react-cookie";
+import AuthenticationFormError from "../components/AuthenticationFormError";
 
 export type SignUpFormType = {
   name: string;
@@ -33,6 +33,9 @@ type SignUpErrorsType = {
 };
 
 const SignupForm = () => {
+  const [cookies, setCookie] = useCookies(["user"]);
+  const router = useRouter();
+  const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [formData, setFormData] = useState<SignUpFormType>({
     name: "",
     email: "",
@@ -45,9 +48,6 @@ const SignupForm = () => {
     passwordConfirmation: null,
     generic: null,
   });
-
-  const router = useRouter();
-  const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [validationChecks, setValidationChecks] = useState({
     uppercase: false,
     lowercase: false,
@@ -92,14 +92,17 @@ const SignupForm = () => {
 
     try {
       validateSignUpForm(formData, passwordConfirmation);
-      await signUp(formData);
-      toast.success("Successful! Being redirected to the login page", {
-        position: "top-center",
-        autoClose: 3000,
-        onClose: () => {
-          router.push("/signin?source=signup");
-        },
+      const token: string = await signUp(formData);
+      const expirationDate = new Date();
+
+      expirationDate.setDate(expirationDate.getDate() + 1);
+      setCookie("user", token, {
+        path: "/",
+        sameSite: "none",
+        secure: true, 
+        expires: expirationDate
       });
+      router.push("/");
     } catch (error: any) {
       if (error.message.includes("|")) {
         const [fieldName, errorMessage] = error.message.split("|");
@@ -133,7 +136,7 @@ const SignupForm = () => {
   return (
     <Container className="main-background m-0 min-w-full " component="main">
       <CssBaseline />
-      <Box className="mt-20 flex flex-col items-center">
+      <Box className="mt-16 flex flex-col items-center">
         <Avatar sx={{ m: 1, bgcolor: "#141832" }}>
           <LockOutlinedIcon />
         </Avatar>
@@ -161,20 +164,17 @@ const SignupForm = () => {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2, bgcolor: "#1976d2 !important" }}
+            sx={{ mt: 1, marginBottom: validationErrors.generic ? "0" : "36px", bgcolor: "#1976d2 !important" }}
           >
             Sign Up
           </Button>
           {validationErrors.generic && (
-            <Alert severity="error" variant="filled">
-              {validationErrors.generic}
-            </Alert>
+            <AuthenticationFormError errorMessage={validationErrors.generic || ""}/>
           )}
-          <ToastContainer />
           <Grid container justifyContent="flex-start">
             <Grid item>
               <Link
-                href="/signin?source=signup"
+                href="/signin"
                 className="text-lg hover:underline text-white"
                 sx={{
                   color: "white !important",

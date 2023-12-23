@@ -1,7 +1,7 @@
 import React from "react";
 import TextField from "@mui/material/TextField";
-import { Alert } from "@mui/material";
 import { SignUpFormType } from "./SignupForm";
+import AuthenticationFormError from "../components/AuthenticationFormError";
 
 type SignUpErrorProps = {
   name: string | null;
@@ -27,10 +27,13 @@ const SignupFormFields: React.FC<SignupFormFieldsProps> = ({
   handlePasswordChange,
   handlePasswordConfirmationChange,
 }) => {
+
+  const hasError = (fieldName: keyof SignUpErrorProps) => Boolean(validationErrors[fieldName]);
+
+
   return (
-    <>
+    <div >
       <TextField
-        margin="normal"
         autoComplete="given-name"
         name="name"
         required
@@ -51,22 +54,13 @@ const SignupFormFields: React.FC<SignupFormFieldsProps> = ({
           "& .MuiOutlinedInput-notchedOutline": {
             borderColor: "white",
           },
+          marginBottom: hasError('name') ? '0' : '36px',
         }}
       />
-      {validationErrors.name && (
-        <Alert
-          severity="error"
-          variant="filled"
-          sx={{
-            width: "100%",
-            display: "inline-flex",
-          }}
-        >
-          {validationErrors.name}
-        </Alert>
+      {hasError('name') && (
+        <AuthenticationFormError errorMessage={validationErrors.name || ""}/>
       )}
       <TextField
-        margin="normal"
         required
         fullWidth
         id="email"
@@ -86,22 +80,13 @@ const SignupFormFields: React.FC<SignupFormFieldsProps> = ({
           "& .MuiOutlinedInput-notchedOutline": {
             borderColor: "white",
           },
+          marginBottom: hasError('email') ? '0' : '36px',
         }}
       />
-      {validationErrors.email && (
-        <Alert
-          severity="error"
-          variant="filled"
-          sx={{
-            width: "100%",
-            display: "inline-flex",
-          }}
-        >
-          {validationErrors.email}
-        </Alert>
+      {hasError('email') && (
+        <AuthenticationFormError errorMessage={validationErrors.email || ""}/>
       )}
       <TextField
-        margin="normal"
         required
         fullWidth
         name="password"
@@ -122,22 +107,13 @@ const SignupFormFields: React.FC<SignupFormFieldsProps> = ({
           "& .MuiOutlinedInput-notchedOutline": {
             borderColor: "white",
           },
+          marginBottom: hasError('password') ? '0' : '36px',
         }}
       />
-      {validationErrors.password && (
-        <Alert
-          severity="error"
-          variant="filled"
-          sx={{
-            width: "100%",
-            display: "inline-flex",
-          }}
-        >
-          {validationErrors.password}
-        </Alert>
+      {hasError('password') && (
+       <AuthenticationFormError errorMessage={validationErrors.password || ""}/>
       )}
       <TextField
-        margin="normal"
         required
         fullWidth
         name="passwordConfirmation"
@@ -158,21 +134,13 @@ const SignupFormFields: React.FC<SignupFormFieldsProps> = ({
           "& .MuiOutlinedInput-notchedOutline": {
             borderColor: "white",
           },
+          marginBottom: hasError('passwordConfirmation') ? '0' : '36px',
         }}
       />
-      {validationErrors.passwordConfirmation && (
-        <Alert
-          severity="error"
-          variant="filled"
-          sx={{
-            width: "100%",
-            display: "inline-flex",
-          }}
-        >
-          {validationErrors.passwordConfirmation}
-        </Alert>
+      {hasError('passwordConfirmation') && (
+        <AuthenticationFormError errorMessage={validationErrors.passwordConfirmation || ""}/>
       )}
-    </>
+    </div>
   );
 };
 

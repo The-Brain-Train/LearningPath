@@ -11,10 +11,11 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useCookies } from "react-cookie";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { signIn } from "../functions/httpRequests";
 import { validateSignInForm } from "../functions/validations";
-import { Alert } from "@mui/material";
+import { ProviderSignin } from "./ProviderSignin";
+import AuthenticationFormError from "../components/AuthenticationFormError";
 
 export type SignInFormType = {
   email: string;
@@ -38,11 +39,11 @@ const SigninForm = () => {
     generic: null,
   });
 
+  const hasError = (fieldName: keyof SignInErrorsType) =>
+    Boolean(validationErrors[fieldName]);
+
   const [cookies, setCookie] = useCookies(["user"]);
   const router = useRouter();
-
-  const searchParams = useSearchParams();
-  const directedFromSignup = searchParams.get("source");
 
   const handleInputChange = (e: {
     target: { name: string; value: string };
@@ -57,14 +58,16 @@ const SigninForm = () => {
     try {
       validateSignInForm(formData);
       const token = await signIn(formData);
+      const expirationDate = new Date();
+      expirationDate.setDate(expirationDate.getDate() + 1);
+
       setCookie("user", token, {
         path: "/",
+        sameSite: "none",
+        secure: true,
+        expires: expirationDate,
       });
-      if (directedFromSignup) {
-        router.push("/");
-      } else {
-        router.back();
-      }
+      router.back();
     } catch (error: any) {
       if (error.message.includes("|")) {
         const [fieldName, errorMessage] = error.message.split("|");
@@ -97,7 +100,7 @@ const SigninForm = () => {
   return (
     <Container component="main" className="main-background m-0 min-w-full">
       <CssBaseline />
-      <Box className="mt-20 flex flex-col items-center">
+      <Box className="mt-16 flex flex-col items-center">
         <Avatar sx={{ m: 1, bgcolor: "#141832" }}>
           <LockOutlinedIcon />
         </Avatar>
@@ -105,14 +108,8 @@ const SigninForm = () => {
           Sign in
         </Typography>
         <Box sx={{ mt: 1, width: "100%", maxWidth: 575 }}>
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            
-          >
+          <Box component="form" onSubmit={handleSubmit} noValidate>
             <TextField
-              margin="normal"
               required
               fullWidth
               id="email"
@@ -133,22 +130,13 @@ const SigninForm = () => {
                 "& .MuiOutlinedInput-notchedOutline": {
                   borderColor: "white",
                 },
+                marginBottom: hasError("email") ? "0" : "36px",
               }}
             />
-            {validationErrors.email && (
-              <Alert
-                severity="error"
-                variant="filled"
-                sx={{
-                  width: "100%",
-                  display: "inline-flex",
-                }}
-              >
-                {validationErrors.email}
-              </Alert>
+            {hasError("email") && (
+              <AuthenticationFormError errorMessage={validationErrors.email|| ""}/>
             )}
             <TextField
-              margin="normal"
               required
               fullWidth
               name="password"
@@ -169,43 +157,23 @@ const SigninForm = () => {
                 "& .MuiOutlinedInput-notchedOutline": {
                   borderColor: "white",
                 },
+                marginBottom: hasError("password") ? "0" : "36px",
               }}
             />
-            {validationErrors.password && (
-              <Alert
-                severity="error"
-                variant="filled"
-                className="min-w-full inline-flex"
-                sx={{
-                  width: "100%",
-                  display: "inline-flex",
-                }}
-              >
-                {validationErrors.password}
-              </Alert>
+            {hasError("password") && (
+              <AuthenticationFormError errorMessage={validationErrors.password || ""}/>
             )}
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2, bgcolor: "#1976d2 !important" }}
+              sx={{ mt: 1, marginBottom: hasError("generic") ? "0" : "36px", bgcolor: "#1976d2 !important" }}
             >
               Sign In
             </Button>
-            {validationErrors.generic && (
-              <Alert
-                severity="error"
-                variant="filled"
-                className="min-w-full inline-flex"
-                sx={{
-                  width: "100%",
-                  display: "inline-flex",
-                }}
-              >
-                {validationErrors.generic}
-              </Alert>
+            {hasError("generic") && (
+              <AuthenticationFormError errorMessage={validationErrors.generic || ""}/>
             )}
-
             <Grid container>
               <Grid item>
                 <Link
@@ -223,7 +191,7 @@ const SigninForm = () => {
               </Grid>
             </Grid>
           </Box>
-          {/* <ProviderSignin /> */}
+          <ProviderSignin />
         </Box>
       </Box>
     </Container>

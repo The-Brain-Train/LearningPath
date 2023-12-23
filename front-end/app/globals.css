@@ -16,6 +16,10 @@ main {
   padding-bottom: 30px;
 }
 
+details summary::-webkit-details-marker {
+  display:none;
+}
+
 .main-background {
   background: linear-gradient(151deg, rgba(81, 85, 133, 1) 0%, rgba(0, 32, 74, 1) 50%, rgba(81, 85, 133, 1) 100%);
   min-height: 100vh;
@@ -72,7 +76,6 @@ h2 {
   .pagination {
     margin-bottom: 20px;
   }
-
   .pagination a {
     padding: 6px;
   }

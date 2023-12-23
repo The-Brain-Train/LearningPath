@@ -15,11 +15,11 @@ import {
   AccordionHeader,
   AccordionBody,
 } from "@material-tailwind/react";
-import PersonalRoadmapCard from "./PersonalRoadmapCard";
 import FavoriteRoadmapCard from "./FavoriteRoadmapCard";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCookies } from "react-cookie";
 import { Icon } from "../components/AccordionIcon";
+import PersonalRoadmapCard from "./PersonalRoadmapCard";
 
 const ProfilePageAuthUser = ({ currentUser }: UserProps) => {
   const [open, setOpen] = useState(0);
@@ -34,13 +34,14 @@ const ProfilePageAuthUser = ({ currentUser }: UserProps) => {
     }
   );
 
-  const { data: favorites } = useQuery<RoadmapMeta[]>(
+  const { data: favorites, refetch: refetchFavorites } = useQuery<RoadmapMeta[]>(
     ["favorites"],
     () => getUserFavorites(currentUser?.email as string, cookies.user),
     {
       enabled: !!currentUser,
     }
   );
+  
 
   const { data: roadmapCount } = useQuery<number>(
     ["roadmapCount"],
@@ -51,16 +52,19 @@ const ProfilePageAuthUser = ({ currentUser }: UserProps) => {
   );
 
   const deleteRoadmapMutation = useMutation((roadmapMeta: RoadmapMeta) =>
-    deleteRoadmap(roadmapMeta.id)
+    deleteRoadmap(roadmapMeta.id, cookies.user)
   );
 
-  const removeFavoriteMutation = useMutation((roadmapMeta: RoadmapMeta) =>
-    removeRoadmapMetaFromUserFavorites(
-      currentUser?.email,
-      roadmapMeta,
-      cookies.user
-    )
+  const removeFavoriteMutation = useMutation(
+    (roadmapMeta: RoadmapMeta) =>
+      removeRoadmapMetaFromUserFavorites(
+        currentUser?.email,
+        roadmapMeta,
+        cookies.user
+      ),
   );
+
+  
 
   const handleDelete = async (roadmapMeta: RoadmapMeta) => {
     try {
@@ -81,8 +85,12 @@ const ProfilePageAuthUser = ({ currentUser }: UserProps) => {
     }
   };
 
-  const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
-
+  const handleOpen = (value: number) => {
+    setOpen(open === value ? 0 : value);
+    if (value === 2) {
+      refetchFavorites();
+    }
+  };
   return (
     <main className="main-background min-h-max ">
       <section className="flex items-center flex-col pb-3">

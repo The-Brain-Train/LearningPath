@@ -144,7 +144,7 @@ function RoadMapId(props: Props) {
   return (
     <main className="main-background">
       <div className="flex flex-col px-3 justify-center items-center">
-        <div className="max-w-screen-xl parent-roadmap-container">
+        <div className="max-w-screen-lg parent-roadmap-container">
           <div className="flex items-center justify-between my-5">
             <div>
               <ArrowBack
