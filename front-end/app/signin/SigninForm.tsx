@@ -15,7 +15,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "../functions/httpRequests";
 import { validateSignInForm } from "../functions/validations";
 import { Alert } from "@mui/material";
-import { ProviderSignin } from "./ProviderSignin";
 
 export type SignInFormType = {
   email: string;

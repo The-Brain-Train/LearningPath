@@ -104,7 +104,9 @@ const ResourceSuggestionView = (props: ResourceSuggestionViewProps) => {
           </div>
           {!props.notification.isProcessed ? (
             <div className="flex flex-col mt-10">
-              <p className="text-center">Do you accept this resource suggestion?</p>
+              <p className="text-center">
+                Do you accept this resource suggestion?
+              </p>
               <div className="flex flex-row justify-between">
                 <button
                   onClick={handleResourceSuggestionConfirm}

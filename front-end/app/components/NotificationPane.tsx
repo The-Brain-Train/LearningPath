@@ -68,7 +68,8 @@ const NotificationPane = (props: NotificationPaneType) => {
 
   const { mutateAsync: mutateNotificationClick } =
     useMutation(
-      async ({ notification }: { notification: NotificationType }): Promise<any> => {
+      async ({ notification }: { notification: NotificationType }):
+        Promise<any> => {
         return markNotificationAsRead(
           notification.id,
           props.cookieUserToken
@@ -116,7 +117,8 @@ const NotificationPane = (props: NotificationPaneType) => {
 
   const { mutateAsync: mutateNotificationStatusClick } =
     useMutation(
-      async ({ notification }: { notification: NotificationType }): Promise<any> => {
+      async ({ notification }: { notification: NotificationType }):
+        Promise<any> => {
         return notification.isRead
           ? markNotificationAsUnRead(notification.id, props.cookieUserToken)
           : markNotificationAsRead(notification.id, props.cookieUserToken);
@@ -136,7 +138,8 @@ const NotificationPane = (props: NotificationPaneType) => {
 
   const { mutateAsync: mutateNotificationDeleteClick } =
     useMutation(
-      async ({ notification }: { notification: NotificationType }): Promise<any> => {
+      async ({ notification }: { notification: NotificationType }):
+        Promise<any> => {
         return deleteNotification(notification.id, props.cookieUserToken);
       },
       {
@@ -193,7 +196,8 @@ const NotificationPane = (props: NotificationPaneType) => {
                       {curNotificationOption === index &&
                         <div
                           className="absolute w-32 right-0 z-10 bg-white my-6 shadow-md text-wrap mr-5"
-                          onMouseLeave={() => handleNotificationMoreMouseLeaveClick(index)}>
+                          onMouseLeave={() => handleNotificationMoreMouseLeaveClick(index)}
+                        >
                           <ul className="text-sm">
                             <li
                               className="hover:bg-slate-300 p-1"
@@ -216,7 +220,13 @@ const NotificationPane = (props: NotificationPaneType) => {
                     <p className={`text-left text-xs ${n.isRead ? 'text-gray-500' : 'text-sky-700'}`}>
                       {n.timeDiffMessage}
                     </p>
-                    {!n.isRead && <CircleIcon color="primary" fontSize="inherit" className="pb-1" />}
+                    {!n.isRead &&
+                      <CircleIcon
+                        color="primary"
+                        fontSize="inherit"
+                        className="pb-1"
+                      />
+                    }
                   </div>
                 </div>
               ))

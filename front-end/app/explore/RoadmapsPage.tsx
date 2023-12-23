@@ -36,7 +36,10 @@ export const RoadmapsPage = (props: RoadmapsPageProps) => {
   const [cookies] = useCookies(["user"]);
 
   const { mutateAsync: handleUpVotes } = useMutation(
-    async ({ roadmapMetaId, roadmapOwnerEmail }: { roadmapMetaId: string, roadmapOwnerEmail: string }) => {
+    async (
+      { roadmapMetaId, roadmapOwnerEmail }:
+        { roadmapMetaId: string, roadmapOwnerEmail: string }
+    ) => {
       await upVoteRoadmap(
         props.currentUser?.email,
         roadmapMetaId,
@@ -62,7 +65,10 @@ export const RoadmapsPage = (props: RoadmapsPageProps) => {
     });
 
   const { mutateAsync: handleDownVotes } = useMutation(
-    async ({ roadmapMetaId, roadmapOwnerEmail }: { roadmapMetaId: string, roadmapOwnerEmail: string }) => {
+    async (
+      { roadmapMetaId, roadmapOwnerEmail }:
+        { roadmapMetaId: string, roadmapOwnerEmail: string }
+    ) => {
       await downVoteRoadmap(
         props.currentUser?.email,
         roadmapMetaId,

@@ -1,5 +1,3 @@
-// File: PasswordRequirements.tsx
-
 import React from "react";
 import Typography from "@mui/material/Typography";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";

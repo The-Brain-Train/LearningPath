@@ -49,7 +49,7 @@ function RoadMapId(props: Props) {
     ["roadmapMetas"],
     getRoadmaps,
     {
-      onSuccess: (data) => {onRoadMapMetasFetch(data)}
+      onSuccess: (data) => { onRoadMapMetasFetch(data) }
     }
   );
 
@@ -68,8 +68,8 @@ function RoadMapId(props: Props) {
   });
 
   const userOwnsRoadmap = () => {
-    const roadmapMeta = queryClient.getQueryData<RoadmapMeta>([`roadmapMeta-${roadmapMetaId}`]);
-    //const roadmapMeta = findRoadmapMeta(roadmapMetaId, roadmapMetas);
+    const roadmapMeta =
+      queryClient.getQueryData<RoadmapMeta>([`roadmapMeta-${roadmapMetaId}`]);
     if (
       currentUser &&
       roadmapMeta &&
@@ -180,7 +180,12 @@ function RoadMapId(props: Props) {
                   />
                 </div>
               ))}
-            <RoadmapMenu currentUser={currentUser} roadmap={roadmap} roadmapMetaId={roadmapMetaId} roadmapMetaList={roadmapMetas}/>
+            <RoadmapMenu
+              currentUser={currentUser}
+              roadmap={roadmap}
+              roadmapMetaId={roadmapMetaId}
+              roadmapMetaList={roadmapMetas}
+            />
           </div>
           <IndentedTreeWithData
             data={roadmapToTreeNode(roadmap)}

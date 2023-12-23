@@ -1,6 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useFilterContext } from "./FilterProvider";
-import { Alert } from "@mui/material";
 
 export default function DesktopFilter() {
   const queryClient = useQueryClient();

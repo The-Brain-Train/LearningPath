@@ -90,7 +90,9 @@ export default function Header() {
                 currentUser={currentUser}
                 cookieUserToken={cookies.user}
                 notificationsVisible={notificationsVisible}
-                onIconClick={() => { setNotificationsVisible(!notificationsVisible) }}
+                onIconClick={() => {
+                  setNotificationsVisible(!notificationsVisible)
+                }}
               />
             }
             <BurgerMenu
