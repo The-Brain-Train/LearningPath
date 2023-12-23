@@ -47,7 +47,6 @@ export const RoadmapsPage = (props: RoadmapsPageProps) => {
       );
       const newUpVoteCount = Number(newUpVoteCountText);
       const upVoteDiff = newUpVoteCount - upVoteCount;
-      console.log(upVoteCount + " - " + newUpVoteCount + " - " + upVoteDiff);
       if (props.currentUser?.email !== roadmapOwnerEmail && upVoteDiff > 0) {
         await postNotification(
           roadmapUpVotedMessage,
@@ -79,7 +78,6 @@ export const RoadmapsPage = (props: RoadmapsPageProps) => {
       );
       const newDownVoteCount = Number(newDownVoteCountText);
       const downVoteDiff = newDownVoteCount - downVoteCount;
-      console.log(downVoteCount + " * " + newDownVoteCount + " * " + downVoteDiff);
       if (props.currentUser?.email !== roadmapOwnerEmail && downVoteDiff > 0) {
         await postNotification(
           roadmapDownVotedMessage,
