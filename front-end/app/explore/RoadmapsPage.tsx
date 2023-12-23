@@ -17,12 +17,12 @@ import {
   removeRoadmapMetaFromUserFavorites,
   postNotification,
 } from "../functions/httpRequests";
-import { 
-  roadmapFavoritedMessage, 
-  roadmapUnfavoritedMessage, 
-  roadmapUpVotedMessage, 
-  roadmapDownVotedMessage, 
-} from "../../util/constants";
+import {
+  roadmapFavoritedMessage,
+  roadmapUnfavoritedMessage,
+  roadmapUpVotedMessage,
+  roadmapDownVotedMessage,
+} from "../util/constants";
 
 type RoadmapsPageProps = {
   paginatedRoadmaps: RoadmapMeta[];
@@ -35,33 +35,53 @@ export const RoadmapsPage = (props: RoadmapsPageProps) => {
   const queryClient = useQueryClient();
   const [cookies] = useCookies(["user"]);
 
-  const { mutateAsync: handleUpVotes } = useMutation({
-    mutationFn: async (roadmapMetaId: string) => {
+  const { mutateAsync: handleUpVotes } = useMutation(
+    async ({ roadmapMetaId, roadmapOwnerEmail }: { roadmapMetaId: string, roadmapOwnerEmail: string }) => {
       await upVoteRoadmap(
         props.currentUser?.email,
         roadmapMetaId,
         cookies.user
       );
+      await postNotification(
+        roadmapUpVotedMessage,
+        null,
+        props.currentUser?.email,
+        roadmapOwnerEmail,
+        roadmapMetaId,
+        "ROADMAP_UPVOTED",
+        cookies.user
+      );
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries(["upVotesDownVotes"]);
-      queryClient.invalidateQueries(["roadmaps"]);
-    },
-  });
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["upVotesDownVotes"]);
+        queryClient.invalidateQueries(["roadmaps"]);
+      },
+    });
 
-  const { mutateAsync: handleDownVotes } = useMutation({
-    mutationFn: async (roadmapMetaId: string) => {
+  const { mutateAsync: handleDownVotes } = useMutation(
+    async ({ roadmapMetaId, roadmapOwnerEmail }: { roadmapMetaId: string, roadmapOwnerEmail: string }) => {
       await downVoteRoadmap(
         props.currentUser?.email,
         roadmapMetaId,
         cookies.user
       );
+      await postNotification(
+        roadmapDownVotedMessage,
+        null,
+        props.currentUser?.email,
+        roadmapOwnerEmail,
+        roadmapMetaId,
+        "ROADMAP_DOWNVOTED",
+        cookies.user
+      );
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries(["upVotesDownVotes"]);
-      queryClient.invalidateQueries(["roadmaps"]);
-    },
-  });
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["upVotesDownVotes"]);
+        queryClient.invalidateQueries(["roadmaps"]);
+      },
+    });
 
   const { mutateAsync: handleRemoveFromFavorites } = useMutation({
     mutationFn: async (roadmapMeta: RoadmapMeta) => {
@@ -70,15 +90,17 @@ export const RoadmapsPage = (props: RoadmapsPageProps) => {
         roadmapMeta,
         cookies.user
       );
-      await postNotification(
-        roadmapUnfavoritedMessage,
-        null,
-        props.currentUser?.email,
-        roadmapMeta?.userEmail,
-        roadmapMeta?.id,
-        "ROADMAP_UNFAVORITED",
-        cookies.user
-      );
+      if (props.currentUser?.email !== roadmapMeta?.userEmail) {
+        await postNotification(
+          roadmapUnfavoritedMessage,
+          null,
+          props.currentUser?.email,
+          roadmapMeta?.userEmail,
+          roadmapMeta?.id,
+          "ROADMAP_UNFAVORITED",
+          cookies.user
+        );
+      };
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["favorites"]);
@@ -92,15 +114,17 @@ export const RoadmapsPage = (props: RoadmapsPageProps) => {
         roadmapMeta,
         cookies.user
       );
-      await postNotification(
-        roadmapFavoritedMessage,
-        null,
-        props.currentUser?.email,
-        roadmapMeta?.userEmail,
-        roadmapMeta?.id,
-        "ROADMAP_FAVORITED",
-        cookies.user
-      );
+      if (props.currentUser?.email !== roadmapMeta?.userEmail) {
+        await postNotification(
+          roadmapFavoritedMessage,
+          null,
+          props.currentUser?.email,
+          roadmapMeta?.userEmail,
+          roadmapMeta?.id,
+          "ROADMAP_FAVORITED",
+          cookies.user
+        );
+      };
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["favorites"]);
@@ -123,7 +147,7 @@ export const RoadmapsPage = (props: RoadmapsPageProps) => {
               <div className="flex justify-between flex-row">
                 <p
                   className="overflow-ellipsis overflow-hidden whitespace-nowrap text-xl capitalize"
-                  style={{maxWidth: "200px" }}
+                  style={{ maxWidth: "200px" }}
                 >
                   {roadmap.name}
                 </p>
@@ -154,11 +178,16 @@ export const RoadmapsPage = (props: RoadmapsPageProps) => {
               <div className="flex justify-between flex-row p-1 w-31">
                 <div className="flex flex-row items-center">
                   {props.currentUser &&
-                  props.upVotesDownVotes &&
-                  props.upVotesDownVotes.upVotes ? (
+                    props.upVotesDownVotes &&
+                    props.upVotesDownVotes.upVotes ? (
                     <span
                       className="cursor-pointer ml-2"
-                      onClick={() => handleUpVotes(roadmap.id)}
+                      onClick={() => handleUpVotes(
+                        {
+                          roadmapMetaId: roadmap.id,
+                          roadmapOwnerEmail: roadmap.userEmail
+                        }
+                      )}
                     >
                       {props.upVotesDownVotes.upVotes.some(
                         (upVoteRoadmapId: string) =>
@@ -185,11 +214,16 @@ export const RoadmapsPage = (props: RoadmapsPageProps) => {
                   )}
                 </div>
                 {props.currentUser &&
-                props.upVotesDownVotes &&
-                props.upVotesDownVotes.downVotes ? (
+                  props.upVotesDownVotes &&
+                  props.upVotesDownVotes.downVotes ? (
                   <span
                     className="cursor-pointer mr-2"
-                    onClick={() => handleDownVotes(roadmap.id)}
+                    onClick={() => handleDownVotes(
+                      {
+                        roadmapMetaId: roadmap.id,
+                        roadmapOwnerEmail: roadmap.userEmail
+                      }
+                    )}
                   >
                     {props.upVotesDownVotes.downVotes.some(
                       (downVoteRoadmapId: string) =>
