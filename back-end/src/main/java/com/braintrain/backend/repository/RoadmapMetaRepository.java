@@ -7,13 +7,13 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface RoadmapMetaRepository extends MongoRepository<RoadmapMeta, String> {
 
-    Page<RoadmapMeta> findAllByNameContainingIgnoreCaseAndExperienceLevelContainingAndHoursBetween(
-            String name, String experienceLevel, int fromHour, int toHour, Pageable pageable);
+    Page<RoadmapMeta> findAllByNameContainingIgnoreCaseAndExperienceLevelContainingAndHoursBetweenAndOriginalOwner(
+            String name, String experienceLevel, int fromHour, int toHour, boolean originalOwner, Pageable pageable);
 
     default Page<RoadmapMeta> findAllFilteredPaged(
             String name, String experienceLevel, int fromHour, int toHour, Pageable pageable) {
-        return findAllByNameContainingIgnoreCaseAndExperienceLevelContainingAndHoursBetween(
-                name, experienceLevel, fromHour, toHour, pageable);
+        return findAllByNameContainingIgnoreCaseAndExperienceLevelContainingAndHoursBetweenAndOriginalOwner(
+                name, experienceLevel, fromHour, toHour, true, pageable);
 
     }
 

@@ -13,10 +13,9 @@ public class RoadmapMetaConverter {
 
     public static Page<RoadmapMetaDTO> toRoadmapMetaDtoList(Page<RoadmapMeta> roadmapMetas) {
         List<RoadmapMetaDTO> dtos = roadmapMetas.stream()
-                .filter(RoadmapMeta::isOriginalOwner)
                 .map(RoadmapMetaConverter::toRoadmapMetaDto)
                 .toList();
-        return new PageImpl<>(dtos, roadmapMetas.getPageable(), dtos.size());
+        return new PageImpl<>(dtos, roadmapMetas.getPageable(), roadmapMetas.getTotalElements());
     }
     public static RoadmapMetaDTO toRoadmapMetaDto(RoadmapMeta roadmapMeta) {
         return new RoadmapMetaDTO(

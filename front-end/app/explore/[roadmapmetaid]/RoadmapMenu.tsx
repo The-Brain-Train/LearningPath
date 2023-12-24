@@ -17,13 +17,17 @@ import {
   getRoadmapMeta,
   getUserFavorites,
   removeRoadmapMetaFromUserFavorites,
+  postNotification,
 } from "@/app/functions/httpRequests";
 import { useQuery } from "@tanstack/react-query";
 import { useCookies } from "react-cookie";
 import { PromptMessage } from "@/app/components/PromptMessage";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertColor } from "@mui/material/Alert";
-
+import {
+  roadmapFavoritedMessage,
+  roadmapUnfavoritedMessage,
+} from "../../util/constants";
 
 type RoadmapMenuProps = {
   currentUser: User | null | undefined;
@@ -109,10 +113,28 @@ export const RoadmapMenu = ({
         matchingRoadmapMeta,
         cookies.user
       );
+      await postNotification(
+        roadmapUnfavoritedMessage,
+        null,
+        currentUser?.email,
+        matchingRoadmapMeta?.userEmail,
+        matchingRoadmapMeta?.id,
+        "ROADMAP_UNFAVORITED",
+        cookies.user
+      );
     } else {
       await addRoadmapMetaToUserFavorites(
         currentUser?.email,
         matchingRoadmapMeta,
+        cookies.user
+      );
+      await postNotification(
+        roadmapFavoritedMessage,
+        null,
+        currentUser?.email,
+        matchingRoadmapMeta?.userEmail,
+        matchingRoadmapMeta?.id,
+        "ROADMAP_FAVORITED",
         cookies.user
       );
     }
@@ -159,7 +181,7 @@ export const RoadmapMenu = ({
     );
     shareRoadmap(roadmapMeta?.name);
   };
-  
+
   return (
     <div>
       {currentUser && (
