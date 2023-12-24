@@ -78,9 +78,11 @@ export const shareRoadmap = async (roadmapName: string | undefined) => {
   }
 }
 
-export const findRoadmapMeta = (roadmapId: string, roadmapMetas: RoadmapMetaList | undefined): RoadmapMeta | undefined => {
-  if (roadmapMetas == undefined) return;
-  return roadmapMetas.roadmapMetaList.find(
-    (roadmapMeta: RoadmapMeta) => roadmapMeta.id === roadmapId
-  );
-};
+export const findRoadmapMeta =
+  (roadmapId: string, roadmapMetas: RoadmapMetaList | undefined):
+    RoadmapMeta | undefined => {
+    if (roadmapMetas == undefined) return;
+    return roadmapMetas.roadmapMetaList.find(
+      (roadmapMeta: RoadmapMeta) => roadmapMeta.id === roadmapId
+    );
+  };

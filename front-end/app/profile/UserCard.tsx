@@ -91,7 +91,11 @@ export default function Card({ currentUser }: UserProps) {
             required
           />
         </label>
-        {errorMessage && <Alert className="mt-3" severity="error" variant="filled">{errorMessage}</Alert>}
+        {errorMessage &&
+          <Alert className="mt-3" severity="error" variant="filled">
+            {errorMessage}
+          </Alert>
+        }
       </div>
     </div>
   );
