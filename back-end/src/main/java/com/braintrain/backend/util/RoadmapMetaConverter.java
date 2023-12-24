@@ -15,7 +15,7 @@ public class RoadmapMetaConverter {
         List<RoadmapMetaDTO> dtos = roadmapMetas.stream()
                 .map(RoadmapMetaConverter::toRoadmapMetaDto)
                 .toList();
-        return new PageImpl<>(dtos, roadmapMetas.getPageable(), dtos.size());
+        return new PageImpl<>(dtos, roadmapMetas.getPageable(), roadmapMetas.getTotalElements());
     }
     public static RoadmapMetaDTO toRoadmapMetaDto(RoadmapMeta roadmapMeta) {
         return new RoadmapMetaDTO(
