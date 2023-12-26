@@ -15,8 +15,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +32,8 @@ public class RoadmapService {
     private final UserRepository userRepo;
     private final UserService userService;
     private ObjectMapper objectMapper;
+    private final MongoOperations mongoOperations;
+
 
     public RoadmapMeta createRoadmap(RoadmapDTO roadmapDTO) {
         validateDTONameInput(roadmapDTO.name());
@@ -82,14 +87,22 @@ public class RoadmapService {
         metaRepo.delete(roadmapMeta);
     }
 
+//    public void removeRoadmapFromFavorites(RoadmapMeta roadmapMeta) {
+//        List<User> users = userRepo.findAll();
+//        for (User user : users) {
+//            if(user.getFavorites() != null){
+//                user.getFavorites().remove(roadmapMeta);
+//                userRepo.save(user);
+//            }
+//        }
+//    }
+
     public void removeRoadmapFromFavorites(RoadmapMeta roadmapMeta) {
-        List<User> users = userRepo.findAll();
-        for (User user : users) {
-            if(user.getFavorites() != null){
-                user.getFavorites().remove(roadmapMeta);
-                userRepo.save(user);
-            }
-        }
+        Query query = new Query();
+        query.addCriteria(Criteria.where("favorites").is(roadmapMeta));
+        Update update = new Update();
+        update.pull("favorites", roadmapMeta);
+        mongoOperations.updateMulti(query, update, User.class);
     }
 
     public void deleteRoadmapMeta(String id) {
