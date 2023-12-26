@@ -131,9 +131,9 @@ const SuggestResourceForm = (props: SuggestResourceFormType) => {
               label="Type: "
               className="border-white"
             >
-              <MenuItem value={"book"}>Book</MenuItem>
-              <MenuItem value={"website"}>Website</MenuItem>
-              <MenuItem value={"course"}>Online Course</MenuItem>
+              <MenuItem value={"Book"}>Book</MenuItem>
+              <MenuItem value={"Website"}>Website</MenuItem>
+              <MenuItem value={"Online Course"}>Online Course</MenuItem>
             </Select>
           </FormControl>
 
