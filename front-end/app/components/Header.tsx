@@ -9,10 +9,13 @@ import { getUserProfilePicture } from "../functions/httpRequests";
 import BurgerMenu from "./BurgerMenu";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
+import NotificationPane from "./NotificationPane";
+import { useState } from "react";
 
 export default function Header() {
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
   const queryClient = useQueryClient();
+  const [notificationsVisible, setNotificationsVisible] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
@@ -26,7 +29,7 @@ export default function Header() {
       setCookie("user", tokenString, {
         path: "/",
         sameSite: "none",
-        secure: true, 
+        secure: true,
         expires: expirationDate
       });
       router.push("/");
@@ -104,7 +107,20 @@ export default function Header() {
                 </p>
               </Link>
             ) : null}
-            <BurgerMenu handleSignOut={handleSignOut} />
+            {currentUser &&
+              <NotificationPane
+                currentUser={currentUser}
+                cookieUserToken={cookies.user}
+                notificationsVisible={notificationsVisible}
+                onIconClick={() => {
+                  setNotificationsVisible(!notificationsVisible)
+                }}
+              />
+            }
+            <BurgerMenu
+              handleSignOut={handleSignOut}
+              currentUser={currentUser}
+            />
           </div>
         </div>
       </header>

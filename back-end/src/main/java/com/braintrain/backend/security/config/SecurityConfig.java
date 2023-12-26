@@ -41,7 +41,8 @@ public class SecurityConfig {
                                 "/api/roadmaps",
                                 "/api/roadmaps/{id}",
                                 "/api/roadmaps/findRoadmapByMeta/{metaId}",
-                                "/api/roadmaps/{userEmail}/resource/{roadmapMetaId}"
+                                "/api/roadmaps/{userEmail}/resource/{roadmapMetaId}",
+                                "/api/notification/**"
                         )
                         .permitAll().anyRequest().authenticated())
                 .cors(withLearningPathDefaults(websiteProperties.frontend()))
