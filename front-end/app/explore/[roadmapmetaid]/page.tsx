@@ -58,14 +58,13 @@ function RoadMapId(props: Props) {
     queryClient.setQueryData<RoadmapMeta>([`roadmapMeta-${roadmapMetaId}`], roadmapMeta);
   }
 
-  const {
-    data: roadmap,
-    isLoading,
-    isError,
-  } = useQuery<Roadmap>(["roadmap", roadmapMetaId], async () => {
-    const roadmap = await getRoadmapByMetaId(roadmapMetaId);
-    return JSON.parse(roadmap.obj);
-  });
+  const { data: roadmap, isLoading, isError } = useQuery<Roadmap>(
+    ["roadmap", roadmapMetaId],
+    async () => {
+      const roadmap = await getRoadmapByMetaId(roadmapMetaId);
+      return JSON.parse(roadmap.obj);
+    }
+  );
 
   const userOwnsRoadmap = () => {
     const roadmapMeta =
