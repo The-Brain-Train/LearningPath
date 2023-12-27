@@ -72,13 +72,14 @@ const SuggestResourceForm = (props: SuggestResourceFormType) => {
       setTimeout(() => setLinkError(null), 3000);
     }
 
-    const body: ResourceListType = { 
-      resources: [{ name: name, type: type, link: link }]};
+    const body: ResourceListType = {
+      resources: [{ name: name, type: type, link: link }]
+    };
     const roadmapMeta =
       queryClient.getQueryData<RoadmapMeta>(
         [`roadmapMeta-${props.roadmapMetaId}`]
       );
-   
+
     postNotification(
       resourceSuggestedMessage,
       JSON.stringify(body),
@@ -104,23 +105,23 @@ const SuggestResourceForm = (props: SuggestResourceFormType) => {
       <Box sx={modalStyle}>
         <div>
           <InputLabel
-            className="ml-3 form-control"
+            className="ml-3 form-control text-center mb-4"
             id="demo-simple-topic-autowidth-label"
           >
-            Name:
+            Suggest Resource
           </InputLabel>
           <TextField
             type="text"
             value={name}
             onChange={(e) => setName(capitalizeFirstLetter(e.target.value))}
-            placeholder="Enter Name!"
+            placeholder="Enter Resource Name!"
             sx={{ m: 1, minWidth: "90%" }}
             className="pt-0 rounded-l-md focus:outline-none focus:placeholder-gray-400 text-center placeholder-gray-60 form-control"
           />
 
           <FormControl sx={{ m: 1, minWidth: "90%" }}>
             <InputLabel id="demo-simple-select-autowidth-label">
-              Type:
+              Type of Resource
             </InputLabel>
             <Select
               labelId="demo-simple-select-autowidth-label"
@@ -143,7 +144,7 @@ const SuggestResourceForm = (props: SuggestResourceFormType) => {
             type="text"
             value={link}
             onChange={(e) => setLink(e.target.value)}
-            placeholder="Enter Link!"
+            placeholder="Enter Resource Link!"
             sx={{ m: 1, minWidth: "90%" }}
             className="pt-0 rounded-l-md focus:outline-none focus:placeholder-gray-400 text-center placeholder-gray-60 form-control"
           />
@@ -159,7 +160,7 @@ const SuggestResourceForm = (props: SuggestResourceFormType) => {
         </div>
       </Box>
     </Modal>
-  )
-}
+  );
+};
 
-export default SuggestResourceForm
+export default SuggestResourceForm;
