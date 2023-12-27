@@ -1,13 +1,10 @@
-import {
-  Box,
-  Modal
-} from "@mui/material";
+import { Box, Modal } from "@mui/material";
 import { modalStyle } from "../util/modalStyle";
 import { NotificationType } from "../components/NotificationPane";
 import { ResourceType } from "../util/types";
 import {
   addResourcesToRoadmap,
-  markNotificationAsProcessed
+  markNotificationAsProcessed,
 } from "../functions/httpRequests";
 import Link from "next/link";
 import { useMutation } from "@tanstack/react-query";
@@ -34,26 +31,26 @@ const ResourceSuggestionView = (props: ResourceSuggestionViewProps) => {
     return resource;
   };
 
-  const { mutateAsync: mutateResourceSuggestionConfirm } =
-    useMutation(
-      async (): Promise<any> => {
-        await addResourcesToRoadmap(
-          props.userEmail,
-          props.notification.roadmapMetaId,
-          JSON.stringify(props.notification.body),
-          props.cookieUserToken,
-          false
-        );
-        return markNotificationAsProcessed(
-          props.notification.id,
-          props.cookieUserToken
-        );
+  const { mutateAsync: mutateResourceSuggestionConfirm } = useMutation(
+    async (): Promise<any> => {
+      await addResourcesToRoadmap(
+        props.userEmail,
+        props.notification.roadmapMetaId,
+        JSON.stringify(props.notification.body),
+        props.cookieUserToken,
+        false
+      );
+      return markNotificationAsProcessed(
+        props.notification.id,
+        props.cookieUserToken
+      );
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["allNotifications"]);
       },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries(["allNotifications"]);
-        },
-      });
+    }
+  );
 
   const handleResourceSuggestionConfirm = () => {
     mutateResourceSuggestionConfirm();
@@ -79,13 +76,13 @@ const ResourceSuggestionView = (props: ResourceSuggestionViewProps) => {
             Suggested resource into your roadmap&nbsp;
             <span className="font-bold">
               {props.notification.roadmapName}
-            </span>.
+            </span>
+            .
           </p>
           <div className="border-2 border-dotted border-inherit rounded">
             <p className="text-center italic my-4">
               {curNotificationResourse?.type}
             </p>
-
             {curNotificationResourse?.link ? (
               <Link
                 href={curNotificationResourse?.link}
@@ -121,7 +118,8 @@ const ResourceSuggestionView = (props: ResourceSuggestionViewProps) => {
                   Reject
                 </button>
               </div>
-            </div>) : (
+            </div>
+          ) : (
             <div className="flex flex-col mt-10">
               <p className="text-center">
                 This resourse is already added into roadmap&nbsp;
@@ -142,7 +140,7 @@ const ResourceSuggestionView = (props: ResourceSuggestionViewProps) => {
         </div>
       </Box>
     </Modal>
-  )
-}
+  );
+};
 
-export default ResourceSuggestionView
+export default ResourceSuggestionView;
