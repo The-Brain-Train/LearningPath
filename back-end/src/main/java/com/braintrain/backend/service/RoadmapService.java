@@ -85,23 +85,31 @@ public class RoadmapService {
         if(roadmapMeta == null) return;
         repo.deleteById(roadmapMeta.getRoadmapReferenceId());
         metaRepo.delete(roadmapMeta);
+        removeRoadmapFromDownVotes(roadmapMeta);
+        removeRoadmapFromUpVotes(roadmapMeta);
     }
-
-//    public void removeRoadmapFromFavorites(RoadmapMeta roadmapMeta) {
-//        List<User> users = userRepo.findAll();
-//        for (User user : users) {
-//            if(user.getFavorites() != null){
-//                user.getFavorites().remove(roadmapMeta);
-//                userRepo.save(user);
-//            }
-//        }
-//    }
 
     public void removeRoadmapFromFavorites(RoadmapMeta roadmapMeta) {
         Query query = new Query();
         query.addCriteria(Criteria.where("favorites").is(roadmapMeta));
         Update update = new Update();
         update.pull("favorites", roadmapMeta);
+        mongoOperations.updateMulti(query, update, User.class);
+    }
+
+    private void removeRoadmapFromUpVotes(RoadmapMeta roadmapMeta) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("upVotes").is(roadmapMeta));
+        Update update = new Update();
+        update.pull("upVotes", roadmapMeta);
+        mongoOperations.updateMulti(query, update, User.class);
+    }
+
+    private void removeRoadmapFromDownVotes(RoadmapMeta roadmapMeta) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("downVotes").is(roadmapMeta));
+        Update update = new Update();
+        update.pull("downVotes", roadmapMeta);
         mongoOperations.updateMulti(query, update, User.class);
     }
 
