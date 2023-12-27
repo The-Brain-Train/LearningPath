@@ -76,13 +76,15 @@ export const shareRoadmap = async (roadmapName: string | undefined) => {
   } else {
     prompt("Copy the following URL:", window.location.href);
   }
-}
+};
 
-export const findRoadmapMeta =
-  (roadmapId: string, roadmapMetas: RoadmapMetaList | undefined):
-    RoadmapMeta | undefined => {
-    if (roadmapMetas == undefined) return;
-    return roadmapMetas.roadmapMetaList.find(
-      (roadmapMeta: RoadmapMeta) => roadmapMeta.id === roadmapId
-    );
-  };
+export const findRoadmapMeta = (
+  roadmapId: string,
+  roadmapMetas: RoadmapMetaList | undefined
+): RoadmapMeta | undefined => {
+  if (roadmapMetas == undefined)
+    return;
+  return roadmapMetas.roadmapMetaList.find(
+    (roadmapMeta: RoadmapMeta) => roadmapMeta.id === roadmapId
+  );
+};

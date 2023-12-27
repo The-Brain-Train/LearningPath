@@ -10,7 +10,7 @@ import {
   downloadRoadmapAsSvg,
   findRoadmapMeta,
   shareRoadmap,
-} from "./roadmapIdUtils";
+} from "../../functions/roadmapMenuFunctions";
 import {
   addRoadmapMetaToUserFavorites,
   createCopyOfRoadmapForCurrentUser,

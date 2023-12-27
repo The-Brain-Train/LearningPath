@@ -28,7 +28,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import CircularProgressWithLabel from "../../components/CircularProgressWithLabel";
 import {
   findRoadmapMeta,
-} from "./roadmapIdUtils";
+} from "../../functions/roadmapMenuFunctions";
 import { RoadmapMenu } from "./RoadmapMenu";
 
 type Props = {
