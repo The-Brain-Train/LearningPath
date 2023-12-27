@@ -49,10 +49,10 @@ public class RoadmapService {
 
     public Page<RoadmapMetaDTO> getFilteredRoadmapsMetas(
             String name, String experienceLevel,
-            int fromHour, int toHour, Pageable pageable) {
+            int fromHour, int toHour, Pageable pageable, String createdDate) {
         Page<RoadmapMeta> filteredPagedRoadmaps =
                 metaRepo.findAllFilteredPaged(name, experienceLevel,
-                        fromHour, toHour, pageable);
+                        fromHour, toHour, pageable, createdDate);
         return RoadmapMetaConverter.toRoadmapMetaDtoList(filteredPagedRoadmaps);
     }
 
