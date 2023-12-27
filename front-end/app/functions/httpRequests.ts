@@ -62,12 +62,14 @@ export const getRoadmapsFilteredPaged = async (
   fromHour: number | null | undefined,
   toHour: number | null | undefined,
   page: number,
-  size: number
+  size: number,
+  createdDate: string | null | undefined
 ) => {
   const response = await fetch(
     `${BACKEND_URL}/api/roadmaps/filter?` +
       `name=${name}&experienceLevel=${experienceLevel}&` +
       `fromHour=${fromHour}&toHour=${toHour}&` +
+      `createdDate=${createdDate}&` +
       `page=${page}&size=${size}`
   );
   if (!response.ok) {
@@ -87,13 +89,13 @@ export const getRoadmap = async (roadMapId: string) => {
 };
 
 export const getRoadmapMeta = async (roadmapMetaId: string, token: string) => {
-  const response = await fetch(`${BACKEND_URL}/api/roadmaps/findRoadmapMeta/${roadmapMetaId}/roadmapMeta`,
-  {
-    headers: {
-      Authorization: "Bearer " + token,
-    },
-  }
-  
+  const response = await fetch(
+    `${BACKEND_URL}/api/roadmaps/findRoadmapMeta/${roadmapMetaId}/roadmapMeta`,
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }
   );
 
   if (!response.ok) {
@@ -291,7 +293,7 @@ export const addResourcesToRoadmap = async (
   roadmapMetaId: string | null | undefined,
   chatGptResourceResponse: string,
   token: string,
-  fromGpt: boolean = true,
+  fromGpt: boolean = true
 ) => {
   try {
     const response = await fetch(
@@ -302,8 +304,9 @@ export const addResourcesToRoadmap = async (
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
         },
-        body: fromGpt ? JSON.stringify(chatGptResourceResponse) :
-          JSON.parse(chatGptResourceResponse),
+        body: fromGpt
+          ? JSON.stringify(chatGptResourceResponse)
+          : JSON.parse(chatGptResourceResponse),
       }
     );
     if (!response.ok) {
@@ -490,19 +493,16 @@ export const postNotification = async (
     senderEmail: senderEmail,
     receiverEmail: receiverEmail,
     roadmapMetaId: roadmapMetaId,
-    type: type
+    type: type,
   };
-  const response = await fetch(
-    `${BACKEND_URL}/api/notification`,
-    {
-      method: "POST",
-      body: JSON.stringify(requestBody),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      },
-    }
-  );
+  const response = await fetch(`${BACKEND_URL}/api/notification`, {
+    method: "POST",
+    body: JSON.stringify(requestBody),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+  });
   if (!response.ok) {
     throw new Error("Failed to create Notification");
   }

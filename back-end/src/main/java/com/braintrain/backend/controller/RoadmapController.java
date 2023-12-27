@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,11 +36,18 @@ public class RoadmapController {
             @RequestParam(defaultValue = "0") int fromHour,
             @RequestParam(defaultValue = "500") int toHour,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "9") int size) {
-        Pageable pageable = PageRequest.of(page, size);
+            @RequestParam(defaultValue = "9") int size,
+            @RequestParam(defaultValue = "latest") String createdDate) {
+        Sort sort = Sort.by("createdDate");
+        if ("latest".equalsIgnoreCase(createdDate)) {
+            sort = sort.descending();
+        } else {
+            sort = sort.ascending();
+        }
+        Pageable pageable = PageRequest.of(page, size, sort);
         Page<RoadmapMetaDTO> filteredRoadmapPage =
                 service.getFilteredRoadmapsMetas(
-                        name, experienceLevel, fromHour, toHour, pageable);
+                        name, experienceLevel,  fromHour, toHour, pageable, createdDate);
         return ResponseEntity.ok(filteredRoadmapPage);
     }
 

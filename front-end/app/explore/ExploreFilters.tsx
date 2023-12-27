@@ -37,10 +37,12 @@ export default function ExploreFilters() {
     hoursToFilter,
     setHoursToFilter,
     validateHours,
+    createdDateFilter,
+    setCreatedDateFilter,
   } = filterContext;
 
   return (
-    <div className="mb-5 md:mb-0">
+    <div className="my-2 md:mb-0">
       <details className="group" {...setOpenAttribute()}>
         <summary
           className={`text-white text-xs flex justify-between items-center font-medium cursor-pointer list-none border-b md:border-none ${
@@ -64,7 +66,11 @@ export default function ExploreFilters() {
             </svg>
           </span>
         </summary>
-        <div className={`${isLargeScreen ? "md:flex flex-col md:flex-row md:gap-3" : ""}`}>
+        <div
+          className={`${
+            isLargeScreen ? "md:flex flex-col md:flex-row md:gap-3" : ""
+          }`}
+        >
           <div>
             <label
               id="listbox-label"
@@ -82,9 +88,7 @@ export default function ExploreFilters() {
               id="experienceLevel_disabled"
               className="font-medium p-2.5 w-full rounded-md border-gray-200 shadow-sm h-[44px]"
             >
-              <option value="">
-                All
-              </option>
+              <option value="">All</option>
               <option value="beginner">Beginner</option>
               <option value="intermediate">Intermediate</option>
               <option value="expert">Expert</option>
@@ -133,8 +137,29 @@ export default function ExploreFilters() {
                   queryClient.invalidateQueries(["roadmaps"]);
                 }}
               />
-            </div>
+            </div> 
           </div>
+          <div>
+              <label
+                id="listbox-label"
+                className="block text-xs font-medium leading-6 text-white mt-1 md:mt-0"
+              >
+                Sort by Date
+              </label>
+              <select
+                value={createdDateFilter || ""}
+                onChange={(e) => {
+                  setCreatedDateFilter(e.target.value || null);                 
+                  queryClient.setQueryData(["createdDate"], e.target.value);                  
+                  queryClient.invalidateQueries(["roadmaps"]);
+                }}
+                id="createdDate_disabled"
+                className="font-medium p-2.5 w-full rounded-md border-gray-200 shadow-sm h-[44px] md-w-24 "
+              >
+                <option value="latest">Latest</option>
+                <option value="earliest">Earliest</option>
+              </select>
+            </div>
         </div>
       </details>
     </div>
