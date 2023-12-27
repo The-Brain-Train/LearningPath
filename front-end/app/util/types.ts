@@ -10,6 +10,7 @@ export type RoadmapMeta = {
   upVotes: number;
   downVotes: number;
   originalOwner: boolean;
+  createdDate: Date;
 };
 
 export type PersonalRoadmapCardProps = {

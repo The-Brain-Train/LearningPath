@@ -2,8 +2,11 @@ package com.braintrain.backend.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.time.LocalDateTime;
 
 
 @Document(collection = "roadmap_meta")
@@ -20,6 +23,9 @@ public class RoadmapMeta {
     private Long upVotes = 0L;
     private Long downVotes = 0L;
     private boolean originalOwner;
+    @CreatedDate
+    private LocalDateTime createdDate;
+
 
     public RoadmapMeta(String name, String roadmapReferenceId, String userEmail, String experienceLevel, int hours) {
         this.name = name;
