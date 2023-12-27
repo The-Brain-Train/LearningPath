@@ -1,7 +1,6 @@
 import { Box, Modal } from "@mui/material";
 import { modalStyle } from "../util/modalStyle";
-import { NotificationType } from "../components/NotificationPane";
-import { ResourceType } from "../util/types";
+import { ResourceType, NotificationType } from "../util/types";
 import {
   addResourcesToRoadmap,
   markNotificationAsProcessed,
