@@ -114,4 +114,20 @@ export type BurgerMenuProps = {
   currentUser: User | null | undefined;
 }
 
+export type NotificationType = {
+  id: string;
+  message: string;
+  body: string;
+  senderEmail: string;
+  senderName: string;
+  receiverEmail: string;
+  roadmapMetaId: string | null;
+  roadmapName: string | null;
+  type: string;
+  timestamp: string;
+  timeDiffMessage: string;
+  isRead: boolean;
+  isProcessed: boolean;
+};
+
 

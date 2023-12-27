@@ -23,9 +23,9 @@ field:
 website:
   base-url:
     frontend: http://localhost:3000/
-    # frontend: ${FRONTEND_URL}
-    # backend: http://localhost:8080/
-    backend: ${BACKEND_URL}
+    #    frontend: ${FRONTEND_URL}
+    backend: http://localhost:8080/
+    #    backend: ${BACKEND_URL}
 gcp:
   config:
     file: ${GCP_SERVICE}

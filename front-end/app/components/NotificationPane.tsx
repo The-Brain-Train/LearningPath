@@ -1,39 +1,23 @@
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import { User } from "../util/types";
 import { MouseEvent, useEffect, useState } from "react";
 import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { NotificationType, User } from "../util/types";
 import {
   getAllNotificationsOfUser,
   markNotificationAsRead,
   markNotificationAsUnRead,
   deleteNotification,
 } from "../functions/httpRequests";
-import CircleIcon from "@mui/icons-material/Circle";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ResourceSuggestionView from "./ResourceSuggestionView";
-import { useRouter } from "next/navigation";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import CircleIcon from "@mui/icons-material/Circle";
 
 type NotificationPaneType = {
   currentUser: User | null | undefined;
   cookieUserToken: string;
   notificationsVisible: boolean;
   onIconClick: () => void;
-};
-
-export type NotificationType = {
-  id: string;
-  message: string;
-  body: string;
-  senderEmail: string;
-  senderName: string;
-  receiverEmail: string;
-  roadmapMetaId: string | null;
-  roadmapName: string | null;
-  type: string;
-  timestamp: string;
-  timeDiffMessage: string;
-  isRead: boolean;
-  isProcessed: boolean;
 };
 
 const NotificationPane = (props: NotificationPaneType) => {
@@ -51,11 +35,10 @@ const NotificationPane = (props: NotificationPaneType) => {
   const { data: allNotifications, isSuccess: allNotificationsRecieved } =
     useQuery<NotificationType[]>(
       ["allNotifications"],
-      () =>
-        getAllNotificationsOfUser(
-          props.currentUser?.email as string,
-          props.cookieUserToken
-        ),
+      () => getAllNotificationsOfUser(
+        props.currentUser?.email as string,
+        props.cookieUserToken
+      ),
       {
         enabled: !!props.currentUser,
       }
@@ -71,11 +54,8 @@ const NotificationPane = (props: NotificationPaneType) => {
   }, [allNotifications]);
 
   const { mutateAsync: mutateNotificationClick } = useMutation(
-    async ({
-      notification,
-    }: {
-      notification: NotificationType;
-    }): Promise<any> => {
+    async ({ notification }: { notification: NotificationType }):
+      Promise<any> => {
       return markNotificationAsRead(notification.id, props.cookieUserToken);
     },
     {
@@ -97,9 +77,10 @@ const NotificationPane = (props: NotificationPaneType) => {
       case "ROADMAP_UNFAVORITED":
       case "ROADMAP_UPVOTED":
       case "ROADMAP_DOWNVOTED": {
-        router.push(`/explore/${notification.roadmapMetaId}`, {
-          scroll: false,
-        });
+        router.push(
+          `/explore/${notification.roadmapMetaId}`,
+          { scroll: false }
+        );
         break;
       }
       default: {
@@ -111,7 +92,7 @@ const NotificationPane = (props: NotificationPaneType) => {
   const handleNotificationMoreButtonClick = (
     e: MouseEvent,
     notification: NotificationType,
-    index: number
+    index: number,
   ) => {
     e.stopPropagation();
     setCurNotificationOption(index);
@@ -122,11 +103,8 @@ const NotificationPane = (props: NotificationPaneType) => {
   };
 
   const { mutateAsync: mutateNotificationStatusClick } = useMutation(
-    async ({
-      notification,
-    }: {
-      notification: NotificationType;
-    }): Promise<any> => {
+    async ({ notification }: { notification: NotificationType }):
+      Promise<any> => {
       return notification.isRead
         ? markNotificationAsUnRead(notification.id, props.cookieUserToken)
         : markNotificationAsRead(notification.id, props.cookieUserToken);
@@ -140,7 +118,7 @@ const NotificationPane = (props: NotificationPaneType) => {
 
   const handleNotificationStatusClick = (
     e: MouseEvent,
-    notification: NotificationType
+    notification: NotificationType,
   ) => {
     e.stopPropagation();
     mutateNotificationStatusClick({ notification: notification });
@@ -148,11 +126,8 @@ const NotificationPane = (props: NotificationPaneType) => {
   };
 
   const { mutateAsync: mutateNotificationDeleteClick } = useMutation(
-    async ({
-      notification,
-    }: {
-      notification: NotificationType;
-    }): Promise<any> => {
+    async ({ notification }: { notification: NotificationType }):
+      Promise<any> => {
       return deleteNotification(notification.id, props.cookieUserToken);
     },
     {
@@ -164,7 +139,7 @@ const NotificationPane = (props: NotificationPaneType) => {
 
   const handleNotificationDeleteClick = (
     e: MouseEvent,
-    notification: NotificationType
+    notification: NotificationType,
   ) => {
     e.stopPropagation();
     mutateNotificationDeleteClick({ notification: notification });
@@ -200,9 +175,7 @@ const NotificationPane = (props: NotificationPaneType) => {
                     </div>
                     <div onClick={() => handleNotificationClick(n)}>
                       <p
-                        className={`text-sm mr-2 md:w-64 ${
-                          n.isRead ? "text-gray-500" : "text-gray-800"
-                        }`}
+                        className={`text-sm mr-2 md:w-64 ${n.isRead ? "text-gray-500" : "text-gray-800"}`}
                       >
                         <span className="font-bold">{n.senderName}</span>
                         {` ${n.message} `}
@@ -230,7 +203,7 @@ const NotificationPane = (props: NotificationPaneType) => {
                                 handleNotificationStatusClick(e, n)
                               }
                             >
-                              {n.isRead ? "Mark as unread" : "Mark as read"}
+                              {n.isRead ? 'Mark as unread' : 'Mark as read'}
                             </li>
                             <li
                               className="hover:bg-slate-300 p-1"
@@ -247,9 +220,7 @@ const NotificationPane = (props: NotificationPaneType) => {
                   </div>
                   <div className="pl-7 md:pl-10 pr-1 pt-2 flex flex-row justify-between">
                     <p
-                      className={`text-left text-xs ${
-                        n.isRead ? "text-gray-500" : "text-sky-700"
-                      }`}
+                      className={`text-left text-xs ${n.isRead ? 'text-gray-500' : 'text-sky-700'}`}
                     >
                       {n.timeDiffMessage}
                     </p>
@@ -262,7 +233,8 @@ const NotificationPane = (props: NotificationPaneType) => {
                     )}
                   </div>
                 </div>
-              ))}
+              ))
+            }
           </div>
         )}
       </div>
@@ -276,7 +248,7 @@ const NotificationPane = (props: NotificationPaneType) => {
         />
       )}
     </>
-  );
+  )
 };
 
 export default NotificationPane;
