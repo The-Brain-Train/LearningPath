@@ -26,13 +26,14 @@ public class RoadmapMeta {
     @CreatedDate
     private LocalDateTime createdDate;
 
-
     public RoadmapMeta(String name, String roadmapReferenceId, String userEmail, String experienceLevel, int hours) {
         this.name = name;
         this.roadmapReferenceId = roadmapReferenceId;
         this.userEmail = userEmail;
         this.experienceLevel = experienceLevel;
         this.hours = hours;
+        this.originalOwner = true;
+        this.createdDate = LocalDateTime.now();
     }
 
     public RoadmapMeta(String name, String roadmapReferenceId, String userEmail, String experienceLevel, int hours, boolean originalOwner) {
@@ -42,5 +43,6 @@ public class RoadmapMeta {
         this.experienceLevel = experienceLevel;
         this.hours = hours;
         this.originalOwner = originalOwner;
+        this.createdDate = LocalDateTime.now();
     }
 }
