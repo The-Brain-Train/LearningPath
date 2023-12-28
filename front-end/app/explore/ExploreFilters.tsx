@@ -37,8 +37,8 @@ export default function ExploreFilters() {
     hoursToFilter,
     setHoursToFilter,
     validateHours,
-    createdDateFilter,
-    setCreatedDateFilter,
+    sortByFilter,
+    setSortByFilter,
   } = filterContext;
 
   return (
@@ -144,20 +144,22 @@ export default function ExploreFilters() {
                 id="listbox-label"
                 className="block text-xs font-medium leading-6 text-white mt-1 md:mt-0"
               >
-                Sort by Date
+                Sort by:
               </label>
               <select
-                value={createdDateFilter || ""}
+                value={sortByFilter || ""}
                 onChange={(e) => {
-                  setCreatedDateFilter(e.target.value || null);                 
-                  queryClient.setQueryData(["createdDate"], e.target.value);                  
+                  setSortByFilter(e.target.value || null);                 
+                  queryClient.setQueryData(["sortBy"], e.target.value);                  
                   queryClient.invalidateQueries(["roadmaps"]);
                 }}
-                id="createdDate_disabled"
+                id="sortBy_disabled"
                 className="font-medium p-2.5 w-full rounded-md border-gray-200 shadow-sm h-[44px] md-w-24 "
               >
                 <option value="latest">Latest</option>
                 <option value="earliest">Earliest</option>
+                <option value="highestLikes">Highest Likes</option>
+                <option value="lowestDislikes">Lowest Dislikes</option>
               </select>
             </div>
         </div>

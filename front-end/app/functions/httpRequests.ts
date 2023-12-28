@@ -1,3 +1,4 @@
+import { sortBy } from "lodash";
 import { SignUpFormType } from "../signup/SignupForm";
 import {
   RoadmapMetaList,
@@ -61,7 +62,7 @@ export const getRoadmapsFilteredPaged = async (
   experienceLevel: string | null | undefined,
   fromHour: number | null | undefined,
   toHour: number | null | undefined,
-  createdDate: string | null | undefined,
+  sortBy: string | null | undefined,
   page: number,
   size: number,
   
@@ -70,7 +71,7 @@ export const getRoadmapsFilteredPaged = async (
     `${BACKEND_URL}/api/roadmaps/filter?` +
       `name=${name}&experienceLevel=${experienceLevel}&` +
       `fromHour=${fromHour}&toHour=${toHour}&` +
-      `sortedDate=${createdDate}&` +
+      `sortedBy=${sortBy}&` +
       `page=${page}&size=${size}`
   );
   if (!response.ok) {

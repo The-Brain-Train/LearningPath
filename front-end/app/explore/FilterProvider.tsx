@@ -10,8 +10,8 @@ interface FilterContextProps {
   hourValidationMessage: string | null;
   setHourValidationMessage: React.Dispatch<React.SetStateAction<string | null>>;
   validateHours: (from: number | null, to: number | null) => boolean;
-  createdDateFilter: string | null;
-  setCreatedDateFilter: React.Dispatch<React.SetStateAction<string | null>>;
+  sortByFilter: string | null;
+  setSortByFilter: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const FilterContext = createContext<FilterContextProps | undefined>(undefined);
@@ -25,7 +25,7 @@ export function FilterProvider({ children }: { children: React.ReactNode }) {
   const [hoursFromFilter, setHoursFromFilter] = useState<number | null>(0);
   const [hoursToFilter, setHoursToFilter] = useState<number | null>(500);
   const [hourValidationMessage, setHourValidationMessage] = useState<string | null>(null);
-  const [createdDateFilter, setCreatedDateFilter] = useState<string | null>(null);
+  const [sortByFilter, setSortByFilter] = useState<string | null>(null);
 
 
   const validateHours = (from: number | null, to: number | null): boolean => {
@@ -52,8 +52,8 @@ export function FilterProvider({ children }: { children: React.ReactNode }) {
     hourValidationMessage,
     setHourValidationMessage,
     validateHours,
-    createdDateFilter,
-    setCreatedDateFilter,
+    sortByFilter,
+    setSortByFilter,
   };
 
   return (

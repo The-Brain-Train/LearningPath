@@ -48,8 +48,8 @@ export default function Explore() {
 
     const experienceLevel =
       queryClient.getQueryData<string>(["experienceLevel"]) || "";
-    const createdDate =
-      queryClient.getQueryData<string>(["createdDate"]) || "";
+    const sortBy =
+      queryClient.getQueryData<string>(["sortBy"]) || "";
     const searchText = queryClient.getQueryData<string>(["searchText"]) || "";
     const hoursFromFilter =
       queryClient.getQueryData<number>(["hoursFromFilter"]) || 0;
@@ -58,8 +58,8 @@ export default function Explore() {
 
     const prevExperienceLevel =
       queryClient.getQueryData<string>(["prevExperienceLevel"]) || "";
-    const prevCreatedDate =
-      queryClient.getQueryData<string>(["prevCreatedDate"]) || "";
+    const prevSortBy =
+      queryClient.getQueryData<string>(["prevSortBy"]) || "";
     const prevSearchText =
       queryClient.getQueryData<string>(["prevSearchText"]) || "";
     const prevHoursFromFilter =
@@ -72,7 +72,7 @@ export default function Explore() {
       searchText.length !== prevSearchText.length ||
       hoursFromFilter !== prevHoursFromFilter ||
       hoursToFilter !== prevHoursToFilter ||
-      createdDate.length !== prevCreatedDate.length
+      sortBy.length !== prevSortBy.length
     ) {
       page = 0;
       queryClient.setQueryData(["thisPage"], 0);
@@ -83,17 +83,16 @@ export default function Explore() {
       experienceLevel || "",
       hoursFromFilter || 0,
       hoursToFilter || 500,
-      createdDate || "latest",
+      sortBy || "latest",
       page,
       itemsPerPage,
     );
 
     queryClient.setQueryData<string>(["prevExperienceLevel"], experienceLevel);
-    queryClient.setQueryData<string>(["prevCreatedDate"], createdDate);
+    queryClient.setQueryData<string>(["prevSortBy"], sortBy);
     queryClient.setQueryData<string>(["prevSearchText"], searchText);
     queryClient.setQueryData<number>(["prevHoursFromFilter"], hoursFromFilter);
     queryClient.setQueryData<number>(["prevHoursToFilter"], hoursToFilter);
-
     return result;
   });
 
