@@ -27,7 +27,8 @@ public class RoadmapMetaConverter {
                 roadmapMeta.getHours(),
                 roadmapMeta.getUpVotes() != null ? roadmapMeta.getUpVotes() : 0,
                 roadmapMeta.getDownVotes() != null ? roadmapMeta.getDownVotes() : 0,
-                roadmapMeta.isOriginalOwner()
+                roadmapMeta.isOriginalOwner(),
+                roadmapMeta.getCreatedDate()
         );
     }
 }
