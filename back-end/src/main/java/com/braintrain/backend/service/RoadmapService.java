@@ -40,7 +40,7 @@ public class RoadmapService {
         validateDTORoadmapInput(roadmapDTO.roadmap());
         validateRoadmapCount(roadmapDTO.userEmail());
         Roadmap roadmap = repo.save(new Roadmap(roadmapDTO.roadmap(), roadmapDTO.userEmail(), roadmapDTO.experienceLevel(), roadmapDTO.hours()));
-        return metaRepo.save(new RoadmapMeta(roadmapDTO.name(), roadmap.getId(), roadmapDTO.userEmail(), roadmapDTO.experienceLevel(), roadmapDTO.hours()));
+        return metaRepo.save(new RoadmapMeta(roadmapDTO.name(), roadmap.getId(), roadmapDTO.userEmail(), roadmapDTO.experienceLevel(), roadmapDTO.hours(), true));
     }
 
     public RoadmapMetaListDTO getAllRoadmapsMeta() {
@@ -49,10 +49,10 @@ public class RoadmapService {
 
     public Page<RoadmapMetaDTO> getFilteredRoadmapsMetas(
             String name, String experienceLevel,
-            int fromHour, int toHour, String sortLatest, Pageable pageable) {
+            int fromHour, int toHour, Pageable pageable, String createdDate) {
         Page<RoadmapMeta> filteredPagedRoadmaps =
                 metaRepo.findAllFilteredPaged(name, experienceLevel,
-                        fromHour, toHour, sortLatest, pageable);
+                        fromHour, toHour, pageable, createdDate);
         return RoadmapMetaConverter.toRoadmapMetaDtoList(filteredPagedRoadmaps);
     }
 
