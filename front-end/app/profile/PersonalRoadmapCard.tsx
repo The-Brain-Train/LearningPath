@@ -29,16 +29,18 @@ export default function PersonalRoadmapCard({
 
   const { data: progressPercentage } = useQuery<number>(
     [`progressPercentage-${roadmapMeta.id}`],
-    () => getRoadmapProgressOfUser(
-      currentUser?.email,
-      roadmapMeta.id,
-      cookies.user
-    ),
+    () =>
+      getRoadmapProgressOfUser(currentUser?.email, roadmapMeta.id, cookies.user)
   );
 
+  const cardBackgroundColorClass = roadmapMeta.originalOwner
+    ? "bg-[#42465a]"
+    : "bg-[#5e627a]";
+
   return (
-    <li className="shadow-md w-full border-t-2 border-opacity-100 dark:border-opacity-50 
-    bg-[#42465a] text-white border-[#141832]">
+    <li
+      className={`shadow-md w-full border-t-2 border-opacity-100 dark:border-opacity-50 ${cardBackgroundColorClass} text-white border-[#141832]`}
+    >
       <div className="flex items-center p-2 h-16">
         <Link
           className="text-left overflow-hidden flex flex-1 justify-center items-center"
@@ -52,13 +54,18 @@ export default function PersonalRoadmapCard({
               <p>Progress: {progressPercentage}%</p>
               <LinearProgress
                 variant="determinate"
-                value={progressPercentage !== undefined ? progressPercentage : 0}
+                value={
+                  progressPercentage !== undefined ? progressPercentage : 0
+                }
                 className="w-full"
               />
-            </div>) : (
+            </div>
+          ) : (
             <div className="items-center justify-center mx-6">
               <CircularProgressWithLabel
-                value={progressPercentage !== undefined ? progressPercentage : 0}
+                value={
+                  progressPercentage !== undefined ? progressPercentage : 0
+                }
                 size={50}
               />
             </div>

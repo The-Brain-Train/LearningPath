@@ -64,8 +64,6 @@ const ProfilePageAuthUser = ({ currentUser }: UserProps) => {
       ),
   );
 
-  
-
   const handleDelete = async (roadmapMeta: RoadmapMeta) => {
     try {
       await deleteRoadmapMutation.mutateAsync(roadmapMeta);
