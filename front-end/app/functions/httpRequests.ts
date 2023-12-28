@@ -61,15 +61,16 @@ export const getRoadmapsFilteredPaged = async (
   experienceLevel: string | null | undefined,
   fromHour: number | null | undefined,
   toHour: number | null | undefined,
+  createdDate: string | null | undefined,
   page: number,
   size: number,
-  createdDate: string | null | undefined
+  
 ) => {
   const response = await fetch(
     `${BACKEND_URL}/api/roadmaps/filter?` +
       `name=${name}&experienceLevel=${experienceLevel}&` +
       `fromHour=${fromHour}&toHour=${toHour}&` +
-      `createdDate=${createdDate}&` +
+      `sortLatest=${createdDate}&` +
       `page=${page}&size=${size}`
   );
   if (!response.ok) {

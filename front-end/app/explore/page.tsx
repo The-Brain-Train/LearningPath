@@ -83,13 +83,13 @@ export default function Explore() {
       experienceLevel || "",
       hoursFromFilter || 0,
       hoursToFilter || 500,
+      createdDate || "latest",
       page,
       itemsPerPage,
-      createdDate || "latest",
     );
 
     queryClient.setQueryData<string>(["prevExperienceLevel"], experienceLevel);
-    queryClient.setQueryData<string>(["prevCreatedDatel"], createdDate);
+    queryClient.setQueryData<string>(["prevCreatedDate"], createdDate);
     queryClient.setQueryData<string>(["prevSearchText"], searchText);
     queryClient.setQueryData<number>(["prevHoursFromFilter"], hoursFromFilter);
     queryClient.setQueryData<number>(["prevHoursToFilter"], hoursToFilter);
