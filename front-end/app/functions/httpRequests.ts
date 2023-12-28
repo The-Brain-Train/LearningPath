@@ -70,7 +70,7 @@ export const getRoadmapsFilteredPaged = async (
     `${BACKEND_URL}/api/roadmaps/filter?` +
       `name=${name}&experienceLevel=${experienceLevel}&` +
       `fromHour=${fromHour}&toHour=${toHour}&` +
-      `sortLatest=${createdDate}&` +
+      `sortedDate=${createdDate}&` +
       `page=${page}&size=${size}`
   );
   if (!response.ok) {

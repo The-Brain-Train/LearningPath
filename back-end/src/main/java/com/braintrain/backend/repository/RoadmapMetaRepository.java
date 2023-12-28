@@ -17,11 +17,11 @@ public interface RoadmapMetaRepository extends MongoRepository<RoadmapMeta, Stri
             String name, String experienceLevel, int fromHour, int toHour, boolean originalOwner, Pageable pageable);
 
     default Page<RoadmapMeta> findAllFilteredPaged(
-            String name, String experienceLevel, int fromHour, int toHour, String sortLatest, Pageable pageable) {
-        if (sortLatest.equals("latest")) {
+            String name, String experienceLevel, int fromHour, int toHour, String sortedDate, Pageable pageable) {
+        if (sortedDate.equals("latest")) {
             return findAllByNameContainingIgnoreCaseAndExperienceLevelContainingAndHoursBetweenAndOriginalOwnerOrderByCreatedDateDesc(
                     name, experienceLevel, fromHour, toHour, true, pageable);
-        } else if (sortLatest.equals("earliest")) {
+        } else if (sortedDate.equals("earliest")) {
             return findAllByNameContainingIgnoreCaseAndExperienceLevelContainingAndHoursBetweenAndOriginalOwnerOrderByCreatedDate(
                     name, experienceLevel, fromHour, toHour, true, pageable);
         } else {
