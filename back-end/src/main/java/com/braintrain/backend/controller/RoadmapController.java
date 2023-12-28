@@ -35,19 +35,13 @@ public class RoadmapController {
             @RequestParam(defaultValue = "") String experienceLevel,
             @RequestParam(defaultValue = "0") int fromHour,
             @RequestParam(defaultValue = "500") int toHour,
+            @RequestParam(defaultValue = "latest") String sortLatest,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "9") int size,
-            @RequestParam(defaultValue = "latest") String createdDate) {
-        Sort sort = Sort.by("createdDate");
-        if ("latest".equalsIgnoreCase(createdDate)) {
-            sort = sort.descending();
-        } else {
-            sort = sort.ascending();
-        }
-        Pageable pageable = PageRequest.of(page, size, sort);
+            @RequestParam(defaultValue = "9") int size) {
+        Pageable pageable = PageRequest.of(page, size);
         Page<RoadmapMetaDTO> filteredRoadmapPage =
                 service.getFilteredRoadmapsMetas(
-                        name, experienceLevel,  fromHour, toHour, pageable, createdDate);
+                        name, experienceLevel,  fromHour, toHour, sortLatest, pageable);
         return ResponseEntity.ok(filteredRoadmapPage);
     }
 
