@@ -16,18 +16,33 @@ public interface RoadmapMetaRepository extends MongoRepository<RoadmapMeta, Stri
     Page<RoadmapMeta> findAllByNameContainingIgnoreCaseAndExperienceLevelContainingAndHoursBetweenAndOriginalOwner(
             String name, String experienceLevel, int fromHour, int toHour, boolean originalOwner, Pageable pageable);
 
+    Page<RoadmapMeta> findAllByNameContainingIgnoreCaseAndExperienceLevelContainingAndHoursBetweenAndOriginalOwnerOrderByUpVotesDesc(
+            String name, String experienceLevel, int fromHour, int toHour, boolean originalOwner, Pageable pageable);
+
+    Page<RoadmapMeta> findAllByNameContainingIgnoreCaseAndExperienceLevelContainingAndHoursBetweenAndOriginalOwnerOrderByDownVotesAsc(
+            String name, String experienceLevel, int fromHour, int toHour, boolean originalOwner, Pageable pageable);
+
     default Page<RoadmapMeta> findAllFilteredPaged(
-            String name, String experienceLevel, int fromHour, int toHour, String sortedDate, Pageable pageable) {
-        if (sortedDate.equals("latest")) {
+            String name, String experienceLevel, int fromHour, int toHour, String sortedBy, Pageable pageable) {
+        if (sortedBy.equals("latest")) {
             return findAllByNameContainingIgnoreCaseAndExperienceLevelContainingAndHoursBetweenAndOriginalOwnerOrderByCreatedDateDesc(
                     name, experienceLevel, fromHour, toHour, true, pageable);
-        } else if (sortedDate.equals("earliest")) {
+        }
+        if (sortedBy.equals("earliest")) {
             return findAllByNameContainingIgnoreCaseAndExperienceLevelContainingAndHoursBetweenAndOriginalOwnerOrderByCreatedDate(
                     name, experienceLevel, fromHour, toHour, true, pageable);
-        } else {
-            return findAllByNameContainingIgnoreCaseAndExperienceLevelContainingAndHoursBetweenAndOriginalOwner(
+        }
+        if (sortedBy.equals("highestLikes")) {
+            return findAllByNameContainingIgnoreCaseAndExperienceLevelContainingAndHoursBetweenAndOriginalOwnerOrderByUpVotesDesc(
                     name, experienceLevel, fromHour, toHour, true, pageable);
         }
+        if (sortedBy.equals("lowestDislikes")) {
+            return findAllByNameContainingIgnoreCaseAndExperienceLevelContainingAndHoursBetweenAndOriginalOwnerOrderByDownVotesAsc(
+                    name, experienceLevel, fromHour, toHour, true, pageable);
+        }
+        return findAllByNameContainingIgnoreCaseAndExperienceLevelContainingAndHoursBetweenAndOriginalOwner(
+                    name, experienceLevel, fromHour, toHour, true, pageable);
+
     }
 }
 
