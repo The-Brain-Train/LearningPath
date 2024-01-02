@@ -68,7 +68,7 @@ export default function ExploreFilters() {
         </summary>
         <div
           className={`w-64 ${
-            isLargeScreen ? "md:flex flex-col md:flex-row md:gap-3" : ""
+            isLargeScreen ? "md:flex flex-col md:flex-row md:gap-3 w-full" : ""
           }`}
         >
           <div>
