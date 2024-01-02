@@ -45,7 +45,7 @@ export default function ExploreFilters() {
     <div className="my-2 md:mb-0">
       <details className="group" {...setOpenAttribute()}>
         <summary
-          className={`text-white text-xs flex justify-between items-center font-medium cursor-pointer list-none border-b md:border-none ${
+          className={`text-white text-xs flex justify-between items-center font-medium cursor-pointer list-none border-b md:border-none w-64 ${
             !isLargeScreen ? "md:hidden" : ""
           }`}
         >
@@ -67,8 +67,8 @@ export default function ExploreFilters() {
           </span>
         </summary>
         <div
-          className={`${
-            isLargeScreen ? "md:flex flex-col md:flex-row md:gap-3" : ""
+          className={`w-64 ${
+            isLargeScreen ? "md:flex flex-col md:flex-row md:gap-3 w-full" : ""
           }`}
         >
           <div>
@@ -101,14 +101,14 @@ export default function ExploreFilters() {
             >
               Hours
             </label>
-            <div className="flex items-center">
+            <div className="flex items-center justify-between">
               <input
                 type="number"
                 min="0"
                 step="10"
                 id="FilterHoursFrom"
                 placeholder="From"
-                className="font-medium p-2.5 w-32 rounded-md border-gray-200 shadow-sm"
+                className="font-medium p-2.5 w-28 rounded-md border-gray-200 shadow-sm"
                 value={hoursFromFilter === null ? "" : hoursFromFilter}
                 onChange={(e) => {
                   const newValue =
@@ -126,7 +126,7 @@ export default function ExploreFilters() {
                 min="0"
                 id="FilterHoursTo"
                 placeholder="To"
-                className="font-medium w-32 p-2.5 rounded-md border-gray-200 shadow-sm"
+                className="font-medium w-28 p-2.5 rounded-md border-gray-200 shadow-sm"
                 value={hoursToFilter === null ? "" : hoursToFilter}
                 onChange={(e) => {
                   const newValue =
