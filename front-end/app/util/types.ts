@@ -10,6 +10,7 @@ export type RoadmapMeta = {
   upVotes: number;
   downVotes: number;
   originalOwner: boolean;
+  createdDate: Date;
 };
 
 export type PersonalRoadmapCardProps = {
@@ -79,7 +80,11 @@ export type TreeNode = {
 export type ResourceType = {
   name: string;
   type: string;
-  link: string;
+  link: string | null;
+}
+
+export type ResourceListType = {
+  resources: ResourceType[];
 }
 
 export interface CustomNode extends d3.HierarchyPointNode<any> {
@@ -106,13 +111,23 @@ export type InputFormProps = {
 
 export type BurgerMenuProps = {
   handleSignOut: () => void;
+  currentUser: User | null | undefined;
 }
 
-export type ResourcesSectionProps = {
-  treeNode: TreeNode | null | undefined;
-  userOwnsRoadmap: boolean;
-  queriesToInvalidate: string[];
-  roadmapId: string | undefined;
-  userEmail: string | null | undefined;
-  cookiesUser: string;
+export type NotificationType = {
+  id: string;
+  message: string;
+  body: string;
+  senderEmail: string;
+  senderName: string;
+  receiverEmail: string;
+  roadmapMetaId: string | null;
+  roadmapName: string | null;
+  type: string;
+  timestamp: string;
+  timeDiffMessage: string;
+  isRead: boolean;
+  isProcessed: boolean;
 };
+
+

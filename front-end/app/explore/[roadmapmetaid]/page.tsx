@@ -19,6 +19,7 @@ import useCurrentUserQuery from "@/app/functions/useCurrentUserQuery";
 import { useCookies } from "react-cookie";
 import {
   Roadmap,
+  RoadmapMeta,
   RoadmapMetaList,
   TreeNode,
 } from "@/app/util/types";
@@ -27,7 +28,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import CircularProgressWithLabel from "../../components/CircularProgressWithLabel";
 import {
   findRoadmapMeta,
-} from "./roadmapIdUtils";
+} from "../../functions/roadmapMenuFunctions";
 import { RoadmapMenu } from "./RoadmapMenu";
 
 type Props = {
@@ -46,20 +47,28 @@ function RoadMapId(props: Props) {
 
   const { data: roadmapMetas } = useQuery<RoadmapMetaList>(
     ["roadmapMetas"],
-    getRoadmaps
+    getRoadmaps,
+    {
+      onSuccess: (data) => { onRoadMapMetasFetch(data) }
+    }
   );
 
-  const {
-    data: roadmap,
-    isLoading,
-    isError,
-  } = useQuery<Roadmap>(["roadmap", roadmapMetaId], async () => {
-    const roadmap = await getRoadmapByMetaId(roadmapMetaId);
-    return JSON.parse(roadmap.obj);
-  });
+  const onRoadMapMetasFetch = (data: RoadmapMetaList) => {
+    const roadmapMeta = findRoadmapMeta(roadmapMetaId, data);
+    queryClient.setQueryData<RoadmapMeta>([`roadmapMeta-${roadmapMetaId}`], roadmapMeta);
+  }
+
+  const { data: roadmap, isLoading, isError } = useQuery<Roadmap>(
+    ["roadmap", roadmapMetaId],
+    async () => {
+      const roadmap = await getRoadmapByMetaId(roadmapMetaId);
+      return JSON.parse(roadmap.obj);
+    }
+  );
 
   const userOwnsRoadmap = () => {
-    const roadmapMeta = findRoadmapMeta(roadmapMetaId, roadmapMetas);
+    const roadmapMeta =
+      queryClient.getQueryData<RoadmapMeta>([`roadmapMeta-${roadmapMetaId}`]);
     if (
       currentUser &&
       roadmapMeta &&
@@ -170,7 +179,12 @@ function RoadMapId(props: Props) {
                   />
                 </div>
               ))}
-            <RoadmapMenu currentUser={currentUser} roadmap={roadmap} roadmapMetaId={roadmapMetaId} roadmapMetaList={roadmapMetas}/>
+            <RoadmapMenu
+              currentUser={currentUser}
+              roadmap={roadmap}
+              roadmapMetaId={roadmapMetaId}
+              roadmapMetaList={roadmapMetas}
+            />
           </div>
           <IndentedTreeWithData
             data={roadmapToTreeNode(roadmap)}
@@ -182,7 +196,7 @@ function RoadMapId(props: Props) {
               treeNode={treeNode}
               userOwnsRoadmap={userOwnsRoadmap()}
               queriesToInvalidate={["roadmap"]}
-              roadmapId={roadmapMetaId}
+              roadmapMetaId={roadmapMetaId}
               userEmail={currentUser?.email}
               cookiesUser={cookies.user}
             />

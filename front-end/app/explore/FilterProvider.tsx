@@ -10,6 +10,8 @@ interface FilterContextProps {
   hourValidationMessage: string | null;
   setHourValidationMessage: React.Dispatch<React.SetStateAction<string | null>>;
   validateHours: (from: number | null, to: number | null) => boolean;
+  sortByFilter: string | null;
+  setSortByFilter: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const FilterContext = createContext<FilterContextProps | undefined>(undefined);
@@ -22,9 +24,9 @@ export function FilterProvider({ children }: { children: React.ReactNode }) {
   const [experienceFilter, setExperienceFilter] = useState<string | null>(null);
   const [hoursFromFilter, setHoursFromFilter] = useState<number | null>(0);
   const [hoursToFilter, setHoursToFilter] = useState<number | null>(500);
-  const [hourValidationMessage, setHourValidationMessage] = useState<
-    string | null
-  >(null);
+  const [hourValidationMessage, setHourValidationMessage] = useState<string | null>(null);
+  const [sortByFilter, setSortByFilter] = useState<string | null>(null);
+
 
   const validateHours = (from: number | null, to: number | null): boolean => {
     if (from === null || to === null) {
@@ -50,6 +52,8 @@ export function FilterProvider({ children }: { children: React.ReactNode }) {
     hourValidationMessage,
     setHourValidationMessage,
     validateHours,
+    sortByFilter,
+    setSortByFilter,
   };
 
   return (

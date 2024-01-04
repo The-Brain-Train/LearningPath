@@ -17,7 +17,7 @@ import { BurgerMenuProps } from "../util/types";
 import { PromptMessage } from "./PromptMessage";
 import Link from "next/link";
 
-export default function BurgerMenu({ handleSignOut }: BurgerMenuProps) {
+export default function BurgerMenu(props: BurgerMenuProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const router = useRouter();
   const isOpen = Boolean(anchorEl);
@@ -32,6 +32,7 @@ export default function BurgerMenu({ handleSignOut }: BurgerMenuProps) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   return (
     <Box className="flex items-center text-center">
       <div className="sm:hidden">
@@ -111,7 +112,7 @@ export default function BurgerMenu({ handleSignOut }: BurgerMenuProps) {
         onClose={handleShut}
         onConfirm={() => {
           handleShut();
-          handleSignOut();
+          props.handleSignOut();
         }}
         message="Sign out?"
         confirmText="YES"

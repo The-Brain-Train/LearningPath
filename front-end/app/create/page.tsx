@@ -128,7 +128,7 @@ export default function Create() {
               treeNode={data}
               userOwnsRoadmap={true}
               queriesToInvalidate={[""]}
-              roadmapId={undefined}
+              roadmapMetaId={undefined}
               userEmail={currentUser?.email}
               cookiesUser={cookies.user}
             />

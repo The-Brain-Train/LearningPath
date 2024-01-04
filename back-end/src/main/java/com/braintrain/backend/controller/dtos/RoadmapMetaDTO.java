@@ -1,5 +1,7 @@
 package com.braintrain.backend.controller.dtos;
 
+import java.time.LocalDateTime;
+
 public record RoadmapMetaDTO(String id,
                              String name,
                              String roadmapReferenceId,
@@ -8,5 +10,6 @@ public record RoadmapMetaDTO(String id,
                              int hours,
                              Long upVotes,
                              Long downVotes,
-                             boolean originalOwner) {
+                             boolean originalOwner,
+                             LocalDateTime createdDate) {
 }

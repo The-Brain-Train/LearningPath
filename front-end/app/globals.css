@@ -39,7 +39,8 @@ h2 {
   justify-content: space-between;
   list-style: none;
   cursor: pointer;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 .pagination a {
@@ -64,10 +65,15 @@ h2 {
   border: 1px solid rgb(198, 197, 202);
 }
 
+.line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+/* mobile */
 @media only screen and (max-width: 1000px) {
-  .pagination {
-    margin-bottom: 20px;
-  }
   .pagination a {
     padding: 6px;
   }

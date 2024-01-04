@@ -15,8 +15,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,13 +32,15 @@ public class RoadmapService {
     private final UserRepository userRepo;
     private final UserService userService;
     private ObjectMapper objectMapper;
+    private final MongoOperations mongoOperations;
+
 
     public RoadmapMeta createRoadmap(RoadmapDTO roadmapDTO) {
         validateDTONameInput(roadmapDTO.name());
         validateDTORoadmapInput(roadmapDTO.roadmap());
         validateRoadmapCount(roadmapDTO.userEmail());
         Roadmap roadmap = repo.save(new Roadmap(roadmapDTO.roadmap(), roadmapDTO.userEmail(), roadmapDTO.experienceLevel(), roadmapDTO.hours()));
-        return metaRepo.save(new RoadmapMeta(roadmapDTO.name(), roadmap.getId(), roadmapDTO.userEmail(), roadmapDTO.experienceLevel(), roadmapDTO.hours(), true));
+        return metaRepo.save(new RoadmapMeta(roadmapDTO.name(), roadmap.getId(), roadmapDTO.userEmail(), roadmapDTO.experienceLevel(), roadmapDTO.hours()));
     }
 
     public RoadmapMetaListDTO getAllRoadmapsMeta() {
@@ -44,10 +49,10 @@ public class RoadmapService {
 
     public Page<RoadmapMetaDTO> getFilteredRoadmapsMetas(
             String name, String experienceLevel,
-            int fromHour, int toHour, Pageable pageable) {
+            int fromHour, int toHour, String sortedBy, Pageable pageable) {
         Page<RoadmapMeta> filteredPagedRoadmaps =
                 metaRepo.findAllFilteredPaged(name, experienceLevel,
-                        fromHour, toHour, pageable);
+                        fromHour, toHour, sortedBy, pageable);
         return RoadmapMetaConverter.toRoadmapMetaDtoList(filteredPagedRoadmaps);
     }
 
@@ -80,16 +85,32 @@ public class RoadmapService {
         if(roadmapMeta == null) return;
         repo.deleteById(roadmapMeta.getRoadmapReferenceId());
         metaRepo.delete(roadmapMeta);
+        removeRoadmapFromDownVotes(roadmapMeta);
+        removeRoadmapFromUpVotes(roadmapMeta);
     }
 
     public void removeRoadmapFromFavorites(RoadmapMeta roadmapMeta) {
-        List<User> users = userRepo.findAll();
-        for (User user : users) {
-            if(user.getFavorites() != null){
-                user.getFavorites().remove(roadmapMeta);
-                userRepo.save(user);
-            }
-        }
+        Query query = new Query();
+        query.addCriteria(Criteria.where("favorites").is(roadmapMeta));
+        Update update = new Update();
+        update.pull("favorites", roadmapMeta);
+        mongoOperations.updateMulti(query, update, User.class);
+    }
+
+    private void removeRoadmapFromUpVotes(RoadmapMeta roadmapMeta) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("upVotes").is(roadmapMeta));
+        Update update = new Update();
+        update.pull("upVotes", roadmapMeta);
+        mongoOperations.updateMulti(query, update, User.class);
+    }
+
+    private void removeRoadmapFromDownVotes(RoadmapMeta roadmapMeta) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("downVotes").is(roadmapMeta));
+        Update update = new Update();
+        update.pull("downVotes", roadmapMeta);
+        mongoOperations.updateMulti(query, update, User.class);
     }
 
     public void deleteRoadmapMeta(String id) {
@@ -164,7 +185,11 @@ public class RoadmapService {
         Roadmap roadmap = findRoadmapByMetaId(roadmapMetaId);
         try {
             RoadmapContent roadmapContent = objectMapper.readValue(roadmap.getObj(), RoadmapContent.class);
-            roadmapContent.setResources(resources);
+            if (roadmapContent.getResources() == null || roadmapContent.getResources().isEmpty()) {
+                roadmapContent.setResources(resources);
+            } else {
+                roadmapContent.getResources().addAll(resources);
+            }
             String content = objectMapper.writeValueAsString(roadmapContent);
             roadmap.setObj(content);
             repo.save(roadmap);

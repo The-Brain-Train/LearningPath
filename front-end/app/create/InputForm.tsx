@@ -8,7 +8,7 @@ import Modal from "@mui/material/Modal";
 import { useState } from "react";
 import Slider from "@mui/material/Slider";
 import { InputFormProps } from "../util/types";
-import { modalStyle } from "./createModalStyle";
+import { modalStyle } from "../util/modalStyle";
 
 type FormValidationErrors = {
   topicError: string | null;

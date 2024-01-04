@@ -1,3 +1,4 @@
+import { sortBy } from "lodash";
 import { SignUpFormType } from "../signup/SignupForm";
 import {
   RoadmapMetaList,
@@ -61,13 +62,16 @@ export const getRoadmapsFilteredPaged = async (
   experienceLevel: string | null | undefined,
   fromHour: number | null | undefined,
   toHour: number | null | undefined,
+  sortBy: string | null | undefined,
   page: number,
-  size: number
+  size: number,
+  
 ) => {
   const response = await fetch(
     `${BACKEND_URL}/api/roadmaps/filter?` +
       `name=${name}&experienceLevel=${experienceLevel}&` +
       `fromHour=${fromHour}&toHour=${toHour}&` +
+      `sortedBy=${sortBy}&` +
       `page=${page}&size=${size}`
   );
   if (!response.ok) {
@@ -87,13 +91,13 @@ export const getRoadmap = async (roadMapId: string) => {
 };
 
 export const getRoadmapMeta = async (roadmapMetaId: string, token: string) => {
-  const response = await fetch(`${BACKEND_URL}/api/roadmaps/findRoadmapMeta/${roadmapMetaId}/roadmapMeta`,
-  {
-    headers: {
-      Authorization: "Bearer " + token,
-    },
-  }
-  
+  const response = await fetch(
+    `${BACKEND_URL}/api/roadmaps/findRoadmapMeta/${roadmapMetaId}/roadmapMeta`,
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }
   );
 
   if (!response.ok) {
@@ -226,7 +230,6 @@ export const upVoteRoadmap = async (
         `Failed to upVote roadmap. Status code: ${response.status}`
       );
     }
-
     return response.text();
   } catch (error) {
     console.error("Error upVoting roadmap:", error);
@@ -255,6 +258,7 @@ export const downVoteRoadmap = async (
         `Failed to downVote roadmap. Status code: ${response.status}`
       );
     }
+    return response.text();
   } catch (error) {
     console.error("Error downVoting roadmap:", error);
   }
@@ -288,9 +292,10 @@ export const getRoadmapProgressOfUser = async (
 
 export const addResourcesToRoadmap = async (
   userEmail: string | null | undefined,
-  roadmapMetaId: string | undefined,
+  roadmapMetaId: string | null | undefined,
   chatGptResourceResponse: string,
-  token: string
+  token: string,
+  fromGpt: boolean = true
 ) => {
   try {
     const response = await fetch(
@@ -301,7 +306,9 @@ export const addResourcesToRoadmap = async (
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
         },
-        body: JSON.stringify(chatGptResourceResponse),
+        body: fromGpt
+          ? JSON.stringify(chatGptResourceResponse)
+          : JSON.parse(chatGptResourceResponse),
       }
     );
     if (!response.ok) {
@@ -468,6 +475,160 @@ export const getRoadmapCountOfUser = async (
   );
   if (!response.ok) {
     throw new Error("Failed to fetch roadmap count");
+  }
+  const data = await response.json();
+  return data;
+};
+
+export const postNotification = async (
+  message: string,
+  body: string | null,
+  senderEmail: string | null | undefined,
+  receiverEmail: string | null | undefined,
+  roadmapMetaId: string | null | undefined,
+  type: string,
+  token: string
+) => {
+  const requestBody = {
+    message: message,
+    body: body,
+    senderEmail: senderEmail,
+    receiverEmail: receiverEmail,
+    roadmapMetaId: roadmapMetaId,
+    type: type,
+  };
+  const response = await fetch(`${BACKEND_URL}/api/notification`, {
+    method: "POST",
+    body: JSON.stringify(requestBody),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+  });
+  if (!response.ok) {
+    throw new Error("Failed to create Notification");
+  }
+  const data: string = await response.text();
+  return data;
+};
+
+export const getUnreadNotificationsOfUser = async (
+  userEmail: string | null,
+  token: string
+) => {
+  const response = await fetch(
+    `${BACKEND_URL}/api/notification/user/${userEmail}/unread`,
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch user notifications");
+  }
+  const data = await response.json();
+  return data;
+};
+
+export const getAllNotificationsOfUser = async (
+  userEmail: string | null,
+  token: string
+) => {
+  const response = await fetch(
+    `${BACKEND_URL}/api/notification/user/${userEmail}/all`,
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch user notifications");
+  }
+  const data = await response.json();
+  return data;
+};
+
+export const markNotificationAsRead = async (
+  notificationId: string,
+  token: string
+) => {
+  const response = await fetch(
+    `${BACKEND_URL}/api/notification/${notificationId}/read`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Failed to update notification status as read.");
+  }
+  const data = await response.json();
+  return data;
+};
+
+export const markNotificationAsUnRead = async (
+  notificationId: string,
+  token: string
+) => {
+  const response = await fetch(
+    `${BACKEND_URL}/api/notification/${notificationId}/unread`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Failed to update notification status as unread.");
+  }
+  const data = await response.json();
+  return data;
+};
+
+export const deleteNotification = async (
+  notificationId: string,
+  token: string
+) => {
+  const response = await fetch(
+    `${BACKEND_URL}/api/notification/${notificationId}`,
+    {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Failed to update notification status as unread.");
+  }
+  const data = await response.text();
+  return data;
+};
+
+export const markNotificationAsProcessed = async (
+  notificationId: string,
+  token: string
+) => {
+  const response = await fetch(
+    `${BACKEND_URL}/api/notification/${notificationId}/processed`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Failed to update notification status as unread.");
   }
   const data = await response.json();
   return data;

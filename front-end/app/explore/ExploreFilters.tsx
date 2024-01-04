@@ -37,13 +37,15 @@ export default function ExploreFilters() {
     hoursToFilter,
     setHoursToFilter,
     validateHours,
+    sortByFilter,
+    setSortByFilter,
   } = filterContext;
 
   return (
-    <div className="mb-5 md:mb-0">
+    <div className="my-2 md:mb-0">
       <details className="group" {...setOpenAttribute()}>
         <summary
-          className={`text-white text-xs flex justify-between items-center font-medium cursor-pointer list-none border-b md:border-none ${
+          className={`text-white text-xs flex justify-between items-center font-medium cursor-pointer list-none border-b md:border-none w-64 ${
             !isLargeScreen ? "md:hidden" : ""
           }`}
         >
@@ -64,7 +66,11 @@ export default function ExploreFilters() {
             </svg>
           </span>
         </summary>
-        <div className={`${isLargeScreen ? "md:flex flex-col md:flex-row md:gap-3" : ""}`}>
+        <div
+          className={`w-64 ${
+            isLargeScreen ? "md:flex flex-col md:flex-row md:gap-3 w-full" : ""
+          }`}
+        >
           <div>
             <label
               id="listbox-label"
@@ -82,9 +88,7 @@ export default function ExploreFilters() {
               id="experienceLevel_disabled"
               className="font-medium p-2.5 w-full rounded-md border-gray-200 shadow-sm h-[44px]"
             >
-              <option value="">
-                All
-              </option>
+              <option value="">All</option>
               <option value="beginner">Beginner</option>
               <option value="intermediate">Intermediate</option>
               <option value="expert">Expert</option>
@@ -97,14 +101,14 @@ export default function ExploreFilters() {
             >
               Hours
             </label>
-            <div className="flex items-center">
+            <div className="flex items-center justify-between">
               <input
                 type="number"
                 min="0"
                 step="10"
                 id="FilterHoursFrom"
                 placeholder="From"
-                className="font-medium p-2.5 w-32 rounded-md border-gray-200 shadow-sm"
+                className="font-medium p-2.5 w-28 rounded-md border-gray-200 shadow-sm"
                 value={hoursFromFilter === null ? "" : hoursFromFilter}
                 onChange={(e) => {
                   const newValue =
@@ -122,7 +126,7 @@ export default function ExploreFilters() {
                 min="0"
                 id="FilterHoursTo"
                 placeholder="To"
-                className="font-medium w-32 p-2.5 rounded-md border-gray-200 shadow-sm"
+                className="font-medium w-28 p-2.5 rounded-md border-gray-200 shadow-sm"
                 value={hoursToFilter === null ? "" : hoursToFilter}
                 onChange={(e) => {
                   const newValue =
@@ -133,8 +137,31 @@ export default function ExploreFilters() {
                   queryClient.invalidateQueries(["roadmaps"]);
                 }}
               />
-            </div>
+            </div> 
           </div>
+          <div>
+              <label
+                id="listbox-label"
+                className="block text-xs font-medium leading-6 text-white mt-1 md:mt-0"
+              >
+                Sort by:
+              </label>
+              <select
+                value={sortByFilter || ""}
+                onChange={(e) => {
+                  setSortByFilter(e.target.value || null);                 
+                  queryClient.setQueryData(["sortBy"], e.target.value);                  
+                  queryClient.invalidateQueries(["roadmaps"]);
+                }}
+                id="sortBy_disabled"
+                className="font-medium p-2.5 w-full rounded-md border-gray-200 shadow-sm h-[44px] md-w-24 "
+              >
+                <option value="latest">Latest</option>
+                <option value="earliest">Earliest</option>
+                <option value="highestLikes">Highest Likes</option>
+                <option value="lowestDislikes">Lowest Dislikes</option>
+              </select>
+            </div>
         </div>
       </details>
     </div>

@@ -48,6 +48,8 @@ export default function Explore() {
 
     const experienceLevel =
       queryClient.getQueryData<string>(["experienceLevel"]) || "";
+    const sortBy =
+      queryClient.getQueryData<string>(["sortBy"]) || "";
     const searchText = queryClient.getQueryData<string>(["searchText"]) || "";
     const hoursFromFilter =
       queryClient.getQueryData<number>(["hoursFromFilter"]) || 0;
@@ -56,6 +58,8 @@ export default function Explore() {
 
     const prevExperienceLevel =
       queryClient.getQueryData<string>(["prevExperienceLevel"]) || "";
+    const prevSortBy =
+      queryClient.getQueryData<string>(["prevSortBy"]) || "";
     const prevSearchText =
       queryClient.getQueryData<string>(["prevSearchText"]) || "";
     const prevHoursFromFilter =
@@ -67,7 +71,8 @@ export default function Explore() {
       experienceLevel.length !== prevExperienceLevel.length ||
       searchText.length !== prevSearchText.length ||
       hoursFromFilter !== prevHoursFromFilter ||
-      hoursToFilter !== prevHoursToFilter
+      hoursToFilter !== prevHoursToFilter ||
+      sortBy.length !== prevSortBy.length
     ) {
       page = 0;
       queryClient.setQueryData(["thisPage"], 0);
@@ -78,15 +83,16 @@ export default function Explore() {
       experienceLevel || "",
       hoursFromFilter || 0,
       hoursToFilter || 500,
+      sortBy || "latest",
       page,
-      itemsPerPage
+      itemsPerPage,
     );
 
     queryClient.setQueryData<string>(["prevExperienceLevel"], experienceLevel);
+    queryClient.setQueryData<string>(["prevSortBy"], sortBy);
     queryClient.setQueryData<string>(["prevSearchText"], searchText);
     queryClient.setQueryData<number>(["prevHoursFromFilter"], hoursFromFilter);
     queryClient.setQueryData<number>(["prevHoursToFilter"], hoursToFilter);
-
     return result;
   });
 
@@ -139,11 +145,11 @@ export default function Explore() {
   return (
     <FilterProvider>
       <main className="main-background min-h-max flex items-center flex-col">
-        <h1 className="text-white text-4xl md:text-5xl mt-5 mb-3 max-w-sm md:max-w-lg font-bold  text-center mx-3">Explore our Community Roadmaps</h1>
-        <div className="flex flex-col md:flex-row md:mt-5 mb-5 md:mb-12 md:items-center gap-3 md:gap-5 w-72 md:w-[780px]">
+        <h1 className="text-white text-3xl md:text-4xl mt-5 mb-3 max-w-sm md:max-w-xl font-bold text-center mx-3">Explore our Community Roadmaps</h1>
+        <div className="flex justify-center items-center flex-col">
           <Paper
             component="div"
-            className="py-2 px-4 flex w-15 max-h-12 mt-6 md:w-80"
+            className="py-2 px-4 flex w-15 max-h-12 md:w-80"
           >
             <InputBase
               sx={{ ml: 1, flex: 1 }}
