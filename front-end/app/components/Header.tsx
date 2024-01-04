@@ -76,7 +76,7 @@ export default function Header() {
               priority
             />
           </Link>
-          <div className="flex flex-row">
+          <div className="flex flex-row-reverse">
             {currentUser ? (
               <Link href="/profile" className="flex gap-1 sm:mr-0 mr-3 items-center">
                 <div className="h-8 w-8 relative rounded-full overflow-hidden">
@@ -98,13 +98,13 @@ export default function Header() {
                     />
                   )}
                 </div>
-                <p>
+                {/* <p>
                   {currentUser && currentUser.name
                     ? currentUser.name.length > 5
                       ? currentUser.name.substring(0, 5) + "..."
                       : currentUser.name
                     : "No name"}
-                </p>
+                </p> */}
               </Link>
             ) : null}
             {currentUser &&
