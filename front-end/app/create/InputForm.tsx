@@ -34,7 +34,7 @@ const InputForm = ({
     userTopic: "",
     hours: 30,
     experience: "",
-    resources: false,
+    resources: true,
   });
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -111,7 +111,7 @@ const InputForm = ({
         userTopic: "",
         hours: 30,
         experience: "",
-        resources: false,
+        resources: true,
       });
       handleClose();
     }
