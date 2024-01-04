@@ -98,13 +98,13 @@ export default function Header() {
                     />
                   )}
                 </div>
-                <p>
+                {/* <p>
                   {currentUser && currentUser.name
                     ? currentUser.name.length > 5
                       ? currentUser.name.substring(0, 5) + "..."
                       : currentUser.name
                     : "No name"}
-                </p>
+                </p> */}
               </Link>
             ) : null}
             {currentUser &&
