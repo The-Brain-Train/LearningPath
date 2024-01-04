@@ -162,11 +162,11 @@ const InputForm = ({
               value={inputDataForm.userTopic}
               onChange={handleTopicChange}
               placeholder="Enter Topic!"
-              sx={{ m: 1, minWidth: "90%" }}
+              sx={{ m: 1, minWidth: "90%", marginBottom: "25px"}}
               className="pt-0 rounded-l-md focus:outline-none focus:placeholder-gray-400 text-center placeholder-gray-60 form-control"
             />
             {formValidationErrors.topicError && (
-              <div className="text-red-500 ml-2">
+              <div className="text-red-500 ml-2 -mt-6">
                 {formValidationErrors.topicError}
               </div>
             )}
@@ -182,6 +182,7 @@ const InputForm = ({
                 autoWidth
                 label="Experience Level"
                 className="border-white"
+                sx={{marginBottom: "15px"}}
               >
                 <MenuItem value={"beginner"}>Beginner</MenuItem>
                 <MenuItem value={"intermediate"}>Intermediate</MenuItem>
@@ -189,7 +190,7 @@ const InputForm = ({
               </Select>
             </FormControl>
             {formValidationErrors.experienceError && (
-              <div className="text-red-500 ml-2">
+              <div className="text-red-500 ml-2 -mt-6">
                 {formValidationErrors.experienceError}
               </div>
             )}
@@ -210,7 +211,7 @@ const InputForm = ({
                   valueLabelDisplay="auto"
                   step={10}
                   marks
-                  min={0}
+                  min={10}
                   max={500}
                 />
               </Box>
