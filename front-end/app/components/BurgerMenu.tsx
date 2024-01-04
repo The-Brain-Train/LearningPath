@@ -10,7 +10,6 @@ import { useRouter } from "next/navigation";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import LogoutIcon from "@mui/icons-material/Logout";
-import LoginIcon from "@mui/icons-material/Login";
 import { useCookies } from "react-cookie";
 import { useState } from "react";
 import { BurgerMenuProps } from "../util/types";
@@ -70,7 +69,7 @@ export default function BurgerMenu(props: BurgerMenuProps) {
           </MenuItem>
           {cookies.user ? (
             <MenuItem onClick={handleOpen}>
-              <LoginIcon /> <p className="pl-2">Sign out</p>
+              <LogoutIcon /> <p className="pl-2">Sign out</p>
             </MenuItem>
           ) : (
             <div className="my-3 ml-7">
@@ -93,9 +92,7 @@ export default function BurgerMenu(props: BurgerMenuProps) {
           <ExploreIcon /> <p className="pl-2">Explore</p>
         </MenuItem>
         {cookies.user ? (
-          <MenuItem onClick={handleOpen}>
-            <LoginIcon /> <p className="pl-2">Sign out</p>
-          </MenuItem>
+          null
         ) : (
           <Link
             type="button"

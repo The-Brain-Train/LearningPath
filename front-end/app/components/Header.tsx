@@ -76,7 +76,7 @@ export default function Header() {
               priority
             />
           </Link>
-          <div className="flex flex-row">
+          <div className="flex flex-row-reverse">
             {currentUser ? (
               <Link href="/profile" className="flex gap-1 sm:mr-0 mr-3 items-center">
                 <div className="h-8 w-8 relative rounded-full overflow-hidden">

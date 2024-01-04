@@ -20,11 +20,17 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCookies } from "react-cookie";
 import { Icon } from "../components/AccordionIcon";
 import PersonalRoadmapCard from "./PersonalRoadmapCard";
+import { PromptMessage } from "../components/PromptMessage";
+import { useRouter } from "next/navigation";
 
 const ProfilePageAuthUser = ({ currentUser }: UserProps) => {
   const [open, setOpen] = useState(0);
   const queryClient = useQueryClient();
-  const [cookies] = useCookies(["user"]);
+  const [cookies, setCookies, removeCookie] = useCookies(["user"]);
+  const [openModal, setOpenModal] = useState(false);
+  const handleOpenModal = () => setOpenModal(true);
+  const handleShut = () => setOpenModal(false);
+  const router = useRouter();
 
   const { data: userRoadmaps } = useQuery<RoadmapMetaList | undefined>(
     ["userRoadmaps"],
@@ -34,14 +40,15 @@ const ProfilePageAuthUser = ({ currentUser }: UserProps) => {
     }
   );
 
-  const { data: favorites, refetch: refetchFavorites } = useQuery<RoadmapMeta[]>(
+  const { data: favorites, refetch: refetchFavorites } = useQuery<
+    RoadmapMeta[]
+  >(
     ["favorites"],
     () => getUserFavorites(currentUser?.email as string, cookies.user),
     {
       enabled: !!currentUser,
     }
   );
-  
 
   const { data: roadmapCount } = useQuery<number>(
     ["roadmapCount"],
@@ -55,13 +62,12 @@ const ProfilePageAuthUser = ({ currentUser }: UserProps) => {
     deleteRoadmap(roadmapMeta.id, cookies.user)
   );
 
-  const removeFavoriteMutation = useMutation(
-    (roadmapMeta: RoadmapMeta) =>
-      removeRoadmapMetaFromUserFavorites(
-        currentUser?.email,
-        roadmapMeta,
-        cookies.user
-      ),
+  const removeFavoriteMutation = useMutation((roadmapMeta: RoadmapMeta) =>
+    removeRoadmapMetaFromUserFavorites(
+      currentUser?.email,
+      roadmapMeta,
+      cookies.user
+    )
   );
 
   const handleDelete = async (roadmapMeta: RoadmapMeta) => {
@@ -83,6 +89,13 @@ const ProfilePageAuthUser = ({ currentUser }: UserProps) => {
     }
   };
 
+  const handleSignOut = () => {
+    removeCookie("user");
+    queryClient.removeQueries(["currentUser"]);
+    queryClient.removeQueries(["profilePictureUrl"]);
+    router.push("/");
+  };
+
   const handleOpen = (value: number) => {
     setOpen(open === value ? 0 : value);
     if (value === 2) {
@@ -90,7 +103,7 @@ const ProfilePageAuthUser = ({ currentUser }: UserProps) => {
     }
   };
   return (
-    <main className="main-background min-h-max ">
+    <main className="main-background min-h-max">
       <section className="flex items-center flex-col pb-3">
         {currentUser && <UserCard currentUser={currentUser} />}
       </section>
@@ -162,6 +175,26 @@ const ProfilePageAuthUser = ({ currentUser }: UserProps) => {
             )}
           </AccordionBody>
         </Accordion>
+      </div>
+      <div className="flex justify-center mt-3">
+      <button
+        onClick={handleOpenModal}
+        className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-semibold rounded-lg text-lg px-5 py-2 text-center"
+      >
+        SignOut
+      </button>
+      <PromptMessage
+        type="warning"
+        open={openModal}
+        onClose={handleShut}
+        onConfirm={() => {
+          handleShut();
+          handleSignOut();
+        }}
+        message="Sign out?"
+        confirmText="YES"
+        cancelText="NO"
+      />
       </div>
     </main>
   );
